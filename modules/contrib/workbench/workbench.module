@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * @file
+ * Workbench module file.
+ */
+
+use Drupal\Core\Url;
+use Drupal\Core\Menu\MenuTreeParameters;
+
+/**
+ * Implements hook_toolbar().
+ */
+function workbench_toolbar() {
+  // The 'Workbench' tab is a simple link, with no corresponding tray.
+  $user = \Drupal::currentUser();
+
+  $items = [];
+  if ($user->hasPermission('access workbench')) {
+    $items['workbench'] = [
+      '#type' => 'toolbar_item',
+      'tab' => [
+        '#type' => 'link',
+        '#title' => t('Workbench'),
+        '#url' => Url::fromRoute('workbench.content'),
+        '#attributes' => [
+          'title' => t('My personal editorial workspace'),
+          'class' => ['toolbar-icon', 'toolbar-icon-workbench-content-tab'],
+        ],
+      ],
+      'tray' => [
+        '#heading' => t('Your Workbench'),
+        'workbench_toolbar' => [
+          '#pre_render' => [
+            'workbench_toolbar_prerender_tray',
+          ],
+        ],
+        '#type' => 'container',
+      ],
+      '#attached' => [
+        'library' => [
+          'workbench/workbench.toolbar',
+        ],
+      ],
+      '#weight' => -18,
+    ];
+  }
+  return $items;
+}
+
+/**
+ * Render the Workbench toolbar tray.
+ *
+ * @param array $element
+ *   The tray render array.
+ *
+ * @return array
+ *   The tray render array with the Workbench items added.
+ *
+ * @see toolbar_prerender_toolbar_administration_tray()
+ * @see drupal_render()
+ */
+function workbench_toolbar_prerender_tray(array $element) {
+  $menu_tree = \Drupal::service('toolbar.menu_tree');
+
+  $parameters = new MenuTreeParameters();
+  $parameters->setMinDepth(1)->setMaxDepth(1);
+
+  $tree = $menu_tree->load('workbench', $parameters);
+
+  $manipulators = [
+    ['callable' => 'menu.default_tree_manipulators:checkAccess'],
+    ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
+    ['callable' => 'toolbar_menu_navigation_links'],
+  ];
+
+  $tree = $menu_tree->transform($tree, $manipulators);
+
+  $element['administration_menu'] = $menu_tree->build($tree);
+  return $element;
+}
