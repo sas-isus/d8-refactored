@@ -1,6 +1,3 @@
-# Ignore dev only modules [TESTING]
-modules/dev 
-
 # Ignore paths that contain user-generated content.
 sites/*/files
 sites/*/private
