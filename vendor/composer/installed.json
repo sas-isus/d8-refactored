@@ -7135,5 +7135,110 @@
             "testing",
             "xunit"
         ]
+    },
+    {
+        "name": "drupal/workbench_moderation",
+        "version": "1.2.0",
+        "version_normalized": "1.2.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupal.org/project/workbench_moderation",
+            "reference": "8.x-1.2"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/workbench_moderation-8.x-1.2.zip",
+            "reference": "8.x-1.2",
+            "shasum": "3d37b29ed1e7fbf398160fe2494abc4361e4341c"
+        },
+        "require": {
+            "drupal/core": "*"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "branch-alias": {
+                "dev-1.x": "1.x-dev"
+            },
+            "drupal": {
+                "version": "8.x-1.2",
+                "datestamp": "1483529942",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "Crell",
+                "homepage": "https://www.drupal.org/user/26398"
+            },
+            {
+                "name": "Dave Reid",
+                "homepage": "https://www.drupal.org/user/53892"
+            },
+            {
+                "name": "agentrickard",
+                "homepage": "https://www.drupal.org/user/20975"
+            },
+            {
+                "name": "becw",
+                "homepage": "https://www.drupal.org/user/81067"
+            },
+            {
+                "name": "caroltron",
+                "homepage": "https://www.drupal.org/user/171342"
+            },
+            {
+                "name": "colan",
+                "homepage": "https://www.drupal.org/user/58704"
+            },
+            {
+                "name": "das-peter",
+                "homepage": "https://www.drupal.org/user/762870"
+            },
+            {
+                "name": "josephdpurcell",
+                "homepage": "https://www.drupal.org/user/2944035"
+            },
+            {
+                "name": "larowlan",
+                "homepage": "https://www.drupal.org/user/395439"
+            },
+            {
+                "name": "robeano",
+                "homepage": "https://www.drupal.org/user/67660"
+            },
+            {
+                "name": "srjosh",
+                "homepage": "https://www.drupal.org/user/165878"
+            },
+            {
+                "name": "stevector",
+                "homepage": "https://www.drupal.org/user/179805"
+            },
+            {
+                "name": "tedbow",
+                "homepage": "https://www.drupal.org/user/240860"
+            },
+            {
+                "name": "timmillwood",
+                "homepage": "https://www.drupal.org/user/227849"
+            }
+        ],
+        "description": "Provides moderation states for content",
+        "homepage": "http://drupal.org/project/workbench_moderation",
+        "keywords": [
+            "Drupal"
+        ],
+        "support": {
+            "source": "http://cgit.drupalcode.org/workbench_moderation",
+            "issues": "http://drupal.org/project/issues/workbench_moderation"
+        }
     }
 ]
