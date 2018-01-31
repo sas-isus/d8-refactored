@@ -1,0 +1,19 @@
+gathercontent.admin_gathercontent:
+  title: 'GatherContent'
+  route_name: gathercontent.admin_gathercontent
+  parent: system.admin_config
+  description: 'Configure GatherContent.'
+  weight: 0
+
+gathercontent.config_form:
+  title: 'Authentication'
+  route_name: gathercontent.config_form
+  parent: gathercontent.admin_gathercontent
+  weight: 1
+
+gathercontent.import_config_form:
+  title: 'Import configuration'
+  route_name: gathercontent.import_config_form
+  description: 'Global configuration for the import process'
+  parent: gathercontent.admin_gathercontent
+  weight: 2

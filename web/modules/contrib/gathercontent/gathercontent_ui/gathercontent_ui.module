@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * GatherContent UI.
+ */
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function gathercontent_ui_entity_type_alter(array &$entity_types) {
+  if (isset($entity_types['gathercontent_mapping'])) {
+    $entity_types['gathercontent_mapping']->setListBuilderClass('Drupal\gathercontent_ui\MappingListBuilder');
+
+    $entity_types['gathercontent_mapping']->setFormClass('default', 'Drupal\gathercontent_ui\Form\MappingImportForm');
+    $entity_types['gathercontent_mapping']->setFormClass('add', 'Drupal\gathercontent_ui\Form\MappingImportForm');
+    $entity_types['gathercontent_mapping']->setFormClass('edit', 'Drupal\gathercontent_ui\Form\MappingEditForm');
+    $entity_types['gathercontent_mapping']->setFormClass('delete', 'Drupal\gathercontent_ui\Form\MappingDeleteForm');
+
+    $entity_types['gathercontent_mapping']->setHandlerClass('route_provider', [
+      'html' => 'Drupal\gathercontent_ui\MappingHtmlRouteProvider',
+    ]);
+
+    $entity_types['gathercontent_mapping']->set('admin_permission', 'administer site configuration');
+
+    $entity_types['gathercontent_mapping']->setLinkTemplate('canonical', '/admin/config/gathercontent/mapping/{gathercontent_mapping}');
+    $entity_types['gathercontent_mapping']->setLinkTemplate('add-form', '/admin/config/gathercontent/mapping/create');
+    $entity_types['gathercontent_mapping']->setLinkTemplate('edit-form', '/admin/config/gathercontent/mapping/{gathercontent_mapping}/edit');
+    $entity_types['gathercontent_mapping']->setLinkTemplate('delete-form', '/admin/config/gathercontent/mapping/{gathercontent_mapping}/delete');
+    $entity_types['gathercontent_mapping']->setLinkTemplate('collection', '/admin/config/gathercontent/mapping');
+  }
+
+  if (isset($entity_types['gathercontent_operation_item'])) {
+    $entity_types['gathercontent_operation_item']->setHandlerClass('views_data', 'Drupal\gathercontent_ui\Entity\OperationItemViewsData');
+  }
+
+  if (isset($entity_types['gathercontent_operation'])) {
+    $entity_types['gathercontent_operation']->setHandlerClass('views_data', 'Drupal\gathercontent_ui\Entity\OperationViewsData');
+  }
+}

@@ -18,6 +18,7 @@
     "drupal/config_installer": "^1.0",
     "drupal/console": "^1",
     "drupal/core": "^8",
+    "drupal/gathercontent": "^4.0",
     "drupal/workbench_moderation": "^1.2",
     "drush/drush": "~8",
     "rvtraveller/qs-composer-installer": "^1.1",
@@ -40,8 +41,8 @@
   "conflict": {
       "drupal/drupal": "*"
   },
-  "minimum-stability": "alpha",
-  "prefer-stable": true,
+  "minimum-stability": "beta",
+  "prefer-stable": false,
   "autoload": {
     "classmap": [
       "scripts/composer/ScriptHandler.php"

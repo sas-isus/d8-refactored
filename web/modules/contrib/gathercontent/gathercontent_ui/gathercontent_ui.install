@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Install and uninstall script for GatherContent UI module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function gathercontent_ui_requirements($phase) {
+  if ($phase !== 'runtime') {
+    return [];
+  }
+
+  $t = 't';
+  $requirements = [
+    'gathercontent_tablesorter' => [
+      'title' => $t('GatherContent: Tablesorter plugin'),
+      'value' => $t('Unavailable.'),
+      'description' => $t('Install <a href="@libraries-page">Libraries</a> module.',
+        [
+          '@libraries-page' => 'https://www.drupal.org/project/libraries',
+        ]),
+      'severity' => REQUIREMENT_INFO,
+    ],
+  ];
+
+  if (\Drupal::moduleHandler()->moduleExists('libraries')) {
+    $tablesorter_lib_info = libraries_detect('tablesorter-mottie');
+
+    if ($tablesorter_lib_info['installed'] && $tablesorter_lib_info['version']) {
+      $requirements['gathercontent_tablesorter']['value'] = $tablesorter_lib_info['version'];
+      $requirements['gathercontent_tablesorter']['severity'] = REQUIREMENT_OK;
+      unset($requirements['gathercontent_tablesorter']['description']);
+    }
+    else {
+      $requirements['gathercontent_tablesorter']['description'] = $t('Download <a href="@tablesorter-github">Mottie\'s tablesorter plugin</a> to <code>sites/all/libraries</code> toget sortable table headers at GatherContent admin UI. Rename it\'s folder to <code>tablesorter-mottie</code>.',
+        [
+          '@tablesorter-github' => 'https://github.com/Mottie/tablesorter/archive/v2.25.8.zip',
+        ]);
+    }
+  }
+
+  return $requirements;
+}

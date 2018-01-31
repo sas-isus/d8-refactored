@@ -129,6 +129,7 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
             'CommerceGuys\\Intl\\' => 18,
             'CommerceGuys\\Enum\\' => 18,
             'CommerceGuys\\Addressing\\' => 24,
+            'Cheppers\\GatherContent\\' => 23,
         ),
         'B' => 
         array (
@@ -430,6 +431,10 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'CommerceGuys\\Addressing\\' => 
         array (
             0 => __DIR__ . '/..' . '/commerceguys/addressing/src',
+        ),
+        'Cheppers\\GatherContent\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/cheppers/gathercontent-client/src',
         ),
         'Behat\\Mink\\Driver\\' => 
         array (
@@ -1261,6 +1266,30 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'Behat\\Testwork\\Translator\\ServiceContainer\\TranslatorExtension' => __DIR__ . '/..' . '/behat/behat/src/Behat/Testwork/Translator/ServiceContainer/TranslatorExtension.php',
         'Behat\\Transliterator\\SyncTool' => __DIR__ . '/..' . '/behat/transliterator/src/Behat/Transliterator/SyncTool.php',
         'Behat\\Transliterator\\Transliterator' => __DIR__ . '/..' . '/behat/transliterator/src/Behat/Transliterator/Transliterator.php',
+        'Cheppers\\GatherContent\\DataTypes\\Account' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/Account.php',
+        'Cheppers\\GatherContent\\DataTypes\\Announcement' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/Announcement.php',
+        'Cheppers\\GatherContent\\DataTypes\\Base' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/Base.php',
+        'Cheppers\\GatherContent\\DataTypes\\Date' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/Date.php',
+        'Cheppers\\GatherContent\\DataTypes\\Element' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/Element.php',
+        'Cheppers\\GatherContent\\DataTypes\\ElementCheckbox' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/ElementCheckbox.php',
+        'Cheppers\\GatherContent\\DataTypes\\ElementChoice' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/ElementChoice.php',
+        'Cheppers\\GatherContent\\DataTypes\\ElementFiles' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/ElementFiles.php',
+        'Cheppers\\GatherContent\\DataTypes\\ElementRadio' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/ElementRadio.php',
+        'Cheppers\\GatherContent\\DataTypes\\ElementSection' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/ElementSection.php',
+        'Cheppers\\GatherContent\\DataTypes\\ElementText' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/ElementText.php',
+        'Cheppers\\GatherContent\\DataTypes\\File' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/File.php',
+        'Cheppers\\GatherContent\\DataTypes\\Item' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/Item.php',
+        'Cheppers\\GatherContent\\DataTypes\\Project' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/Project.php',
+        'Cheppers\\GatherContent\\DataTypes\\Status' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/Status.php',
+        'Cheppers\\GatherContent\\DataTypes\\Tab' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/Tab.php',
+        'Cheppers\\GatherContent\\DataTypes\\Template' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/Template.php',
+        'Cheppers\\GatherContent\\DataTypes\\TemplateTab' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/TemplateTab.php',
+        'Cheppers\\GatherContent\\DataTypes\\Usage' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/Usage.php',
+        'Cheppers\\GatherContent\\DataTypes\\User' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/User.php',
+        'Cheppers\\GatherContent\\GatherContentClient' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/GatherContentClient.php',
+        'Cheppers\\GatherContent\\GatherContentClientException' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/GatherContentClientException.php',
+        'Cheppers\\GatherContent\\GatherContentClientInterface' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/GatherContentClientInterface.php',
+        'Cheppers\\GatherContent\\Utils\\NestedArray' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/Utils/NestedArray.php',
         'CommerceGuys\\Addressing\\Address' => __DIR__ . '/..' . '/commerceguys/addressing/src/Address.php',
         'CommerceGuys\\Addressing\\AddressFormat\\AddressField' => __DIR__ . '/..' . '/commerceguys/addressing/src/AddressFormat/AddressField.php',
         'CommerceGuys\\Addressing\\AddressFormat\\AddressFormat' => __DIR__ . '/..' . '/commerceguys/addressing/src/AddressFormat/AddressFormat.php',

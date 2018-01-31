@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_paragraph_radio_test
+    - paragraphs.paragraphs_type.paragraph_test_type
+    - taxonomy.vocabulary.radio_test_taxonomy
+id: paragraph.paragraph_test_type.field_paragraph_radio_test
+field_name: field_paragraph_radio_test
+entity_type: paragraph
+bundle: paragraph_test_type
+label: 'paragraph radio test'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      radio_test_taxonomy: radio_test_taxonomy
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

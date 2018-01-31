@@ -1,0 +1,7 @@
+name: GatherContent Upload
+description: 'GatherContent Upload module'
+package: GatherContent
+core: 8.x
+type: module
+dependencies:
+  - gathercontent

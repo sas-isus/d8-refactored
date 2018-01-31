@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.gathercontent_option_ids
+field_name: gathercontent_option_ids
+entity_type: taxonomy_term
+type: string
+settings:
+  is_ascii: false
+  case_sensitive: false
+  max_length: 255
+module: core
+locked: true
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: true
+custom_storage: false

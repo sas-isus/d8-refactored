@@ -1,0 +1,69 @@
+<?php
+
+/**
+ * @file
+ * GatherContent Upload UI.
+ */
+
+use Drupal\gathercontent\Entity\OperationItem;
+use Drupal\gathercontent_upload\Event\GatherUploadContentEvents;
+use Drupal\gathercontent_upload\Event\PostUploadEvent;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+/**
+ * Finished callback.
+ *
+ * @inheritdoc
+ */
+function gathercontent_upload_finished($success, $results, $operations) {
+  if ($success) {
+    // Select all items with uuid.
+    $result = \Drupal::entityQuery('gathercontent_operation_item')
+      ->condition('operation_uuid', $results['uuid'])
+      ->execute();
+    if (!empty($result)) {
+      $operation_items = OperationItem::loadMultiple($result);
+      $success_counter = 0;
+      $nids = ['success' => [], 'failed' => []];
+      foreach ($operation_items as $operation_item) {
+        /** @var \Drupal\gathercontent\Entity\OperationItem $operation_item */
+        if ($operation_item->getStatus() === 'Success') {
+          $success_counter++;
+          $nids['success'][] = [
+            'nid' => $operation_item->get('nid')->value,
+            'gc_id' => $operation_item->get('gc_id')->value,
+          ];
+        }
+        else {
+          $nids['failed'][] = [
+            'nid' => $operation_item->get('nid')->value,
+            'gc_id' => $operation_item->get('gc_id')->value,
+          ];
+        }
+      }
+      $unsuccessful = count($result) - $success_counter;
+      drupal_set_message(\Drupal::translation()
+        ->formatPlural($success_counter, '1 item was uploaded successfully.', '@count items were uploaded successfully.'));
+      if ($unsuccessful > 0) {
+        drupal_set_message(\Drupal::translation()
+          ->formatPlural($unsuccessful, '1 item was not uploaded. Check errors below.', '@count items were not uploaded. Check errors below.'), 'error');
+      }
+      \Drupal::service('event_dispatcher')
+        ->dispatch(GatherUploadContentEvents::POST_UPLOAD, new PostUploadEvent($nids['success'], $nids['failed'], $results['uuid']));
+    }
+    return new RedirectResponse('admin/config/gathercontent/upload/result/' . $results['uuid']);
+  }
+  else {
+    $error_operation = reset($operations);
+    drupal_set_message(
+      t('An error occurred while processing @operation with arguments : @args',
+        [
+          '@operation' => $error_operation[0],
+          '@args' => print_r($error_operation[0], TRUE),
+        ]
+      ),
+      'error'
+    );
+  }
+  return TRUE;
+}

@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_radio_test
+    - node.type.simple_test_type
+    - taxonomy.vocabulary.radio_test_taxonomy
+id: node.simple_test_type.field_radio_test
+field_name: field_radio_test
+entity_type: node
+bundle: simple_test_type
+label: 'radio test'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      radio_test_taxonomy: radio_test_taxonomy
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

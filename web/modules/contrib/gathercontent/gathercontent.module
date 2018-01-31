@@ -1,0 +1,198 @@
+<?php
+
+/**
+ * @file
+ * Main module file for GatherContent module.
+ */
+
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\gathercontent\Entity\OperationItem;
+use Drupal\gathercontent\Event\GatherContentEvents;
+use Drupal\gathercontent\Event\PostImportEvent;
+use Drupal\gathercontent\Import\ImportOptions;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+/**
+ * Implements hook_entity_base_field_info().
+ *
+ * Add a 'GC mapping ID' and 'GC ID fields' base field to all node types.
+ *
+ * {@inheritdoc}
+ */
+function gathercontent_entity_base_field_info(EntityTypeInterface $entity_type) {
+  $fields = [];
+  if ($entity_type->id() === 'node') {
+    $fields['gc_mapping_id'] = $storage_definition = BaseFieldDefinition::create('integer')
+      ->setLabel(t('GC mapping ID'))
+      ->setDescription(t('The ID of GatherContent mapping.'))
+      ->setReadOnly(TRUE);
+    $fields['gc_id'] = $storage_definition = BaseFieldDefinition::create('integer')
+      ->setLabel(t('GC ID'))
+      ->setDescription(t('The ID of GatherContent content.'))
+      ->setReadOnly(TRUE);
+  }
+  if ($entity_type->id() === 'file') {
+    $fields['gc_id'] = $storage_definition = BaseFieldDefinition::create('integer')
+      ->setLabel(t('GC ID'))
+      ->setDescription(t('The ID of GatherContent content.'))
+      ->setReadOnly(TRUE);
+  }
+
+  return $fields;
+}
+
+/**
+ * Batch operation callback for importing items.
+ */
+function gathercontent_import_process($gc_id, ImportOptions $import_options, &$context = []) {
+  /** @var \Drupal\gathercontent\Import\Importer $importer */
+  $importer = \Drupal::service('gathercontent.importer');
+
+  $client = $importer->getClient();
+  /** @var \Cheppers\GatherContent\DataTypes\Item $item */
+  $item = $client->itemGet($gc_id);
+  /** @var \Cheppers\GatherContent\DataTypes\Template $template */
+  $template = $client->templateGet($item->templateId);
+
+  $operation_item = \Drupal::entityTypeManager()
+    ->getStorage('gathercontent_operation_item')
+    ->create([
+      'operation_uuid' => $import_options->getOperationUuid(),
+      'item_status' => $item->status->name,
+      'item_status_color' => $item->status->color,
+      'template_name' => $template->name,
+      'item_name' => $item->name,
+      'gc_id' => $gc_id,
+    ]);
+
+  try {
+    $nid = $importer->import($item, $import_options);
+    $operation_item->nid = $nid;
+    $operation_item->status = 'Success';
+    $operation_item->save();
+  }
+  catch (\Exception $e) {
+    $operation_item->status = $e->getMessage();
+    $operation_item->save();
+  }
+
+  $context['results']['uuid'] = $import_options->getOperationUuid();
+}
+
+/**
+ * Finished callback.
+ *
+ * {@inheritdoc}
+ */
+function gathercontent_import_finished($success, $results, $operations) {
+  if ($success) {
+    // Select all items with uuid.
+    $result = \Drupal::entityQuery('gathercontent_operation_item')
+      ->condition('operation_uuid', $results['uuid'])
+      ->execute();
+    if (!empty($result)) {
+      $operation_items = OperationItem::loadMultiple($result);
+      $success_counter = 0;
+      $nids = ['success' => [], 'failed' => []];
+      foreach ($operation_items as $operation_item) {
+        /** @var \Drupal\gathercontent\Entity\OperationItem $operation_item */
+        if ($operation_item->getStatus() === 'Success') {
+          $success_counter++;
+          $nids['success'][] = [
+            'nid' => $operation_item->get('nid')->value,
+            'gc_id' => $operation_item->get('gc_id')->value,
+          ];
+        }
+        else {
+          $nids['failed'][] = [
+            'nid' => $operation_item->get('nid')->value,
+            'gc_id' => $operation_item->get('gc_id')->value,
+          ];
+        }
+      }
+      $unsuccessful = count($result) - $success_counter;
+      drupal_set_message(\Drupal::translation()
+        ->formatPlural($success_counter, '1 item was imported successfully.', '@count items were imported successfully.'));
+      if ($unsuccessful > 0) {
+        drupal_set_message(\Drupal::translation()
+          ->formatPlural($unsuccessful, '1 item was not imported. Check errors below.', '@count items were not imported. Check errors below.'), 'error');
+      }
+      \Drupal::service('event_dispatcher')
+        ->dispatch(GatherContentEvents::POST_IMPORT, new PostImportEvent($nids['success'], $nids['failed'], $results['uuid']));
+    }
+    return new RedirectResponse('admin/config/gathercontent/import/result/' . $results['uuid']);
+  }
+  else {
+    $error_operation = reset($operations);
+    drupal_set_message(
+      t('An error occurred while processing @operation with arguments : @args',
+        [
+          '@operation' => $error_operation[0],
+          '@args' => print_r($error_operation[0], TRUE),
+        ]
+      ),
+      'error'
+    );
+  }
+  return TRUE;
+}
+
+/**
+ * Finished callback.
+ *
+ * @inheritdoc
+ */
+function gathercontent_update_finished($success, $results, $operations) {
+  if ($success) {
+    // Select all items with uuid.
+    $result = \Drupal::entityQuery('gathercontent_operation_item')
+      ->condition('operation_uuid', $results['uuid'])
+      ->execute();
+    if (!empty($result)) {
+      $operation_items = OperationItem::loadMultiple($result);
+      $success_counter = 0;
+      $nids = ['success' => [], 'failed' => []];
+      foreach ($operation_items as $operation_item) {
+        /** @var \Drupal\gathercontent\Entity\OperationItem $operation_item */
+        if ($operation_item->getStatus() === 'Success') {
+          $success_counter++;
+          $nids['success'][] = [
+            'nid' => $operation_item->get('nid')->value,
+            'gc_id' => $operation_item->get('gc_id')->value,
+          ];
+        }
+        else {
+          $nids['failed'][] = [
+            'nid' => $operation_item->get('nid')->value,
+            'gc_id' => $operation_item->get('gc_id')->value,
+          ];
+        }
+      }
+      $unsuccessful = count($result) - $success_counter;
+      drupal_set_message(\Drupal::translation()
+        ->formatPlural($success_counter, '1 item was imported successfully.', '@count items were imported successfully.'));
+      if ($unsuccessful > 0) {
+        drupal_set_message(\Drupal::translation()
+          ->formatPlural($unsuccessful, '1 item was not imported. Check errors below.', '@count items were not imported. Check errors below.'), 'error');
+      }
+
+      \Drupal::service('event_dispatcher')
+        ->dispatch(GatherContentEvents::POST_IMPORT, new PostImportEvent($nids['success'], $nids['failed'], $results['uuid']));
+    }
+    return new RedirectResponse('admin/config/gathercontent/update/result/' . $results['uuid']);
+  }
+  else {
+    $error_operation = reset($operations);
+    drupal_set_message(
+      t('An error occurred while processing @operation with arguments : @args',
+        [
+          '@operation' => $error_operation[0],
+          '@args' => print_r($error_operation[0], TRUE),
+        ]
+      ),
+      'error'
+    );
+  }
+  return TRUE;
+}

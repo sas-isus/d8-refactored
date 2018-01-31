@@ -1,0 +1,27 @@
+gathercontent.settings:
+  type: mapping
+  label: Settings
+  mapping:
+    gathercontent_username:
+      type: string
+      label: 'GatherContent username'
+    gathercontent_api_key:
+      type: string
+      label: 'GatherContent API key'
+    gathercontent_account:
+      type: string
+      label: 'GatherContent Account'
+    gathercontent_urlkey:
+      type: string
+      label: 'GatherContent URL key'
+
+gathercontent.import:
+  type: mapping
+  label: 'Import configuration'
+  mapping:
+    node_default_status:
+      type: integer
+      label: 'Default node status'
+    node_update_method:
+      type: string
+      label: 'Content update method'

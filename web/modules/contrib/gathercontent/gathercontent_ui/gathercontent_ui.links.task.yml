@@ -1,0 +1,11 @@
+gathercontent_ui.mapping_controller_testConnectionPage:
+  route_name: gathercontent_ui.mapping_controller_testConnectionPage
+  title: 'Test connection'
+  base_route: gathercontent.config_form
+  weight: 2
+
+gathercontent_ui.update_select_form:
+  title: 'Update content from GatherContent'
+  route_name: gathercontent_ui.update_select_form
+  base_route: system.admin_content
+  weight: 98

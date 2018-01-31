@@ -1,0 +1,34 @@
+gathercontent.gathercontent_mapping.*:
+  type: config_entity
+  label: 'GatherContent Mapping config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    gathercontent_project_id:
+      type: integer
+      label: 'GC Project ID'
+    gathercontent_project:
+      type: string
+      label: 'GC Project'
+    gathercontent_template_id:
+      type: integer
+      label: 'GC Template ID'
+    gathercontent_template:
+      type: string
+      label: 'GC Template'
+    content_type:
+      type: string
+      label: 'Content type machine name'
+    content_type_name:
+      type: string
+      label: 'Content type name'
+    updated_drupal:
+      type: string
+      label: 'Updated (Drupal)'
+    data:
+      type: string
+      label: 'Data'
+    template:
+      type: string
+      label: 'Template'

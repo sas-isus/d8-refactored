@@ -1,0 +1,5 @@
+services:
+  my_event_subscriber:
+    class: '\Drupal\gathercontent_test\EventSubscriber\MockGcEventSubscriber'
+    tags:
+      - { name: 'event_subscriber' }

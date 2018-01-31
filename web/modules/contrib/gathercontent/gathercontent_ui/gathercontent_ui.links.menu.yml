@@ -1,0 +1,23 @@
+entity.gathercontent_mapping.collection:
+  title: 'Manage Mappings'
+  route_name: entity.gathercontent_mapping.collection
+  parent: gathercontent.admin_gathercontent
+  weight: 3
+
+gathercontent_ui.import_select_form:
+  title: 'Import content'
+  route_name: gathercontent_ui.import_select_form
+  parent: gathercontent.admin_gathercontent
+  weight: 4
+
+gathercontent_ui.remove_local_data_form:
+  title: 'Remove local data'
+  route_name: gathercontent_ui.remove_local_data_form
+  parent: gathercontent.admin_gathercontent
+  weight: 5
+
+gathercontent_ui.update_select_form:
+  title: 'Update content from GatherContent'
+  route_name: gathercontent_ui.update_select_form
+  parent: system.admin_content
+  weight: 99
