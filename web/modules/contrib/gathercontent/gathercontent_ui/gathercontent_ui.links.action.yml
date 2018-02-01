@@ -1,0 +1,5 @@
+entity.gathercontent_mapping.add_form:
+  route_name: 'entity.gathercontent_mapping.add_form'
+  title: 'Add new GatherContent template'
+  appears_on:
+    - entity.gathercontent_mapping.collection

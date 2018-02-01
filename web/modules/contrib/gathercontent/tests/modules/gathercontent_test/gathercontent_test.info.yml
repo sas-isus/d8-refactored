@@ -1,0 +1,9 @@
+name: 'GC Test'
+description: 'Tests of import functionality.'
+package: 'Testing'
+type: module
+core: 8.x
+dependencies:
+  - gathercontent
+  - paragraph
+  - metatag

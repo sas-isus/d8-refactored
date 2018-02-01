@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'checkbox test taxonomy'
+vid: checkbox_test_taxonomy
+description: ''
+hierarchy: 0
+weight: 0

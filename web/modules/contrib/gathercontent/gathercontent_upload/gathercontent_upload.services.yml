@@ -1,0 +1,4 @@
+services:
+  gathercontent_upload.exporter:
+    class: Drupal\gathercontent_upload\Export\Exporter
+    arguments: ['@gathercontent.client', '@gathercontent.metatag']

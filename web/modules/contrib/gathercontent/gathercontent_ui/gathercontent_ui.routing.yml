@@ -1,0 +1,49 @@
+gathercontent_ui.import_select_form:
+  path: '/admin/config/gathercontent/import'
+  defaults:
+    _form: '\Drupal\gathercontent_ui\Form\ContentImportSelectForm'
+    _title: 'Import content'
+  requirements:
+    _permission: 'administer gathercontent'
+  options:
+    _admin_route: TRUE
+
+gathercontent_ui.remove_local_data_form:
+  path: '/admin/config/gathercontent/remove'
+  defaults:
+    _form: '\Drupal\gathercontent_ui\Form\RemoveGatherContentLocalData'
+    _title: 'Remove local data'
+  requirements:
+    _permission: 'administer gathercontent'
+  options:
+    _admin_route: TRUE
+
+gathercontent_ui.update_select_form:
+  path: '/admin/content/update'
+  defaults:
+    _form: '\Drupal\gathercontent_ui\Form\ContentUpdateSelectForm'
+    _title: 'Update content from GatherContent'
+  requirements:
+    _permission: 'administer gathercontent'
+  options:
+    _admin_route: TRUE
+
+gathercontent_ui.update_confirm_form:
+  path: '/admin/content/update/confirm'
+  defaults:
+    _form: '\Drupal\gathercontent_ui\Form\ContentUpdateConfirmForm'
+    _title: 'Confirm update selection'
+  requirements:
+    _permission: 'administer gathercontent'
+  options:
+    _admin_route: TRUE
+
+gathercontent_ui.mapping_controller_testConnectionPage:
+  path: '/admin/config/gathercontent/config/test'
+  defaults:
+    _controller: '\Drupal\gathercontent_ui\Controller\MappingController::testConnectionPage'
+    _title: 'Test connection'
+  requirements:
+    _permission: 'administer gathercontent'
+  options:
+    _admin_route: TRUE

@@ -1,0 +1,53 @@
+<?php
+
+/**
+ * @file
+ * Main module file for GatherContent Upload module.
+ */
+
+use Drupal\node\NodeInterface;
+
+/**
+ * Upload batch operation callback.
+ *
+ * @param \Drupal\node\NodeInterface $entity
+ *   Object of entity we want to upload.
+ * @param string $uuid
+ *   UUID of \Drupal\gathercontent\Entity\Operation entity.
+ * @param array $context
+ *   Context of operation.
+ */
+function gathercontent_upload_process(NodeInterface $entity, $uuid, &$context) {
+  /** @var \Drupal\gathercontent_upload\Export\Exporter $exporter */
+  $exporter = \Drupal::service('gathercontent_upload.exporter');
+
+  $client = $exporter->getClient();
+  /** @var \Cheppers\GatherContent\DataTypes\Item $item */
+  $item = $client->itemGet($entity->get('gc_id')->getValue()[0]['value']);
+  /** @var \Cheppers\GatherContent\DataTypes\Template $template */
+  $template = $client->templateGet($item->templateId);
+
+  $operation_item = \Drupal::entityTypeManager()
+    ->getStorage('gathercontent_operation_item')
+    ->create([
+      'operation_uuid' => $uuid,
+      'item_status' => $item->status->name,
+      'item_status_color' => $item->status->color,
+      'template_name' => $template->name,
+      'item_name' => $item->name,
+      'gc_id' => $entity->get('gc_id'),
+      'nid' => $entity->id(),
+    ]);
+
+  try {
+    $exporter->export($item, $entity);
+    $operation_item->status = 'Success';
+    $operation_item->save();
+  }
+  catch (\Exception $e) {
+    $operation_item->status = $e->getMessage();
+    $operation_item->save();
+  }
+
+  $context['results']['uuid'] = $uuid;
+}

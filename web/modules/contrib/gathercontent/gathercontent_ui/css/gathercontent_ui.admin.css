@@ -1,0 +1,110 @@
+/**
+ * @file
+ * Styles Gather Content admin UI.
+ */
+
+/**
+ * Colored square in status column.
+ */
+.gc-item--status--color {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  float: left;
+}
+
+/**
+ * Themes client-side filters at Import Content.
+ */
+.form-item.gc-filter {
+  padding-right: 20px;
+  float: left;
+}
+
+/******************************************************************************
+ * Mapping.
+ ******************************************************************************/
+
+form.gathercontent-mapping-edit-form .form-item.inline-label label {
+  display: inline-block;
+}
+
+form.gathercontent-mapping-edit-form div[data-drupal-selector="edit-gathercontent"] > .form-item {
+  display: inline-block;
+  padding-right: 3em;
+}
+
+.gathercontent-mapping-edit-form details .form-type-select label {
+  min-width: 400px;
+  padding-right: 100px;
+  background: url(../images/arrow.png) no-repeat right center;
+}
+
+.gathercontent-mapping-edit-form details .form-type-select select {
+  min-width: 150px;
+  margin-left: 100px;
+}
+
+.gathercontent-mapping-edit-form details .form-type-select label,
+.gathercontent-mapping-edit-form details .form-type-select select {
+  display: inline-block;
+}
+
+.form-select--gc-import,
+.form-text-gc-import {
+  min-width: 145px;
+}
+
+.gather-content,
+.drupal-content-type {
+  display: inline-block;
+}
+
+.drupal-content-type {
+  padding-left: 100px;
+}
+
+.form-item.form-item-content-type {
+  display: inline-block;
+}
+
+.form-item.form-item-content-type label {
+  min-width: 0;
+  background: none;
+}
+
+.form-item.form-item-content-type select {
+  min-width: 150px;
+}
+
+/******************************************************************************
+ * Tablesorter
+ *
+ * Themes sortable table's header cells.
+ ******************************************************************************/
+
+.tablesorter-header {
+  padding-right: 20px;
+  background-image: url(../images/bg.gif);
+  background-position: right center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.tablesorter-header.sort-up {
+  background-image: url(../images/desc.gif);
+}
+
+.tablesorter-header.sort-down {
+  background-image: url(../images/asc.gif);
+}
+
+/**
+ * Tablesorter 2.10 > applies cssHeader class anyway which breaks CSS modularity.
+ * That's why we have to remove styling this ugly way.
+ */
+.tablesorter-header.sorter-false {
+  padding-right: 10px;
+  background-image: none;
+  cursor: auto;
+}

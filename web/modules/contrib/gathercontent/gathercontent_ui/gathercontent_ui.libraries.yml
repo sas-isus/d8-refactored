@@ -1,0 +1,42 @@
+tablesorter-mottie:
+  js:
+    /libraries/tablesorter-mottie/dist/js/jquery.tablesorter.combined.min.js: {}
+    js/gathercontent_ui.tablesorter.js: {}
+  css:
+    theme:
+      /libraries/tablesorter-mottie/dist/css/theme.default.min.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+    - core/drupalSettings
+
+theme:
+  version: 1.x
+  css:
+    theme:
+      css/gathercontent_ui.admin.css: {}
+
+filter:
+  version: 1.x
+  css:
+    theme:
+      css/gathercontent_ui.admin.css: {}
+  js:
+    js/gathercontent_ui.filter.js: {}
+
+template_counter:
+  js:
+    js/gathercontent_ui.counter.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+
+entity_references:
+  version: 1.x
+  js:
+    js/gathercontent_ui.entity_references.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

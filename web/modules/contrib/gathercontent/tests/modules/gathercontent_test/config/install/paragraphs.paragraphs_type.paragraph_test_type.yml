@@ -1,0 +1,6 @@
+langcode: en
+status: true
+dependencies: {  }
+id: paragraph_test_type
+label: 'paragraph test type'
+behavior_plugins: {  }

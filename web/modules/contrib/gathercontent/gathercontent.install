@@ -1,0 +1,128 @@
+<?php
+
+/**
+ * @file
+ * Install and uninstall script for GatherContent module.
+ */
+
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\gathercontent\Entity\Mapping;
+
+/**
+ * Implements hook_install().
+ */
+function gathercontent_install() {
+  /** @var \Drupal\Core\Entity\EntityFieldManager $entityFieldManager */
+  $entityFieldManager = \Drupal::service('entity_field.manager');
+  /** @var \Drupal\Core\Field\FieldStorageDefinitionListener $fieldStorageDefinitionListener */
+  $fieldStorageDefinitionListener = \Drupal::service('field_storage_definition.listener');
+  $definition = $entityFieldManager->getFieldStorageDefinitions('node')['gc_mapping_id'];
+  $fieldStorageDefinitionListener->onFieldStorageDefinitionCreate($definition);
+  $definition = $entityFieldManager->getFieldStorageDefinitions('node')['gc_id'];
+  $fieldStorageDefinitionListener->onFieldStorageDefinitionCreate($definition);
+
+  if (\Drupal::entityTypeManager()->hasDefinition('taxonomy_term')) {
+    $entityFieldManager = \Drupal::service('entity_field.manager');
+    $definitions = $entityFieldManager->getFieldStorageDefinitions('taxonomy_term');
+    if (!isset($definitions['gathercontent_option_ids'])) {
+      FieldStorageConfig::create([
+        'field_name' => 'gathercontent_option_ids',
+        'entity_type' => 'taxonomy_term',
+        'type' => 'string',
+        'cardinality' => FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED,
+        'locked' => TRUE,
+        'persist_with_no_fields' => TRUE,
+        'settings' => [
+          'is_ascii' => FALSE,
+          'case_sensitive' => FALSE,
+        ],
+      ])->save();
+    }
+  }
+}
+
+/**
+ * Create gathercontent_option_ids field if doesn't exist.
+ */
+function gathercontent_update_8301() {
+  /** @var \Drupal\Core\Entity\EntityFieldManager $entityFieldManager */
+  $entityFieldManager = \Drupal::service('entity_field.manager');
+  $definitions = $entityFieldManager->getFieldStorageDefinitions('taxonomy_term');
+  if (!isset($definitions['gathercontent_option_ids'])) {
+    FieldStorageConfig::create([
+      'field_name' => 'gathercontent_option_ids',
+      'entity_type' => 'taxonomy_term',
+      'type' => 'string',
+      'cardinality' => FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED,
+      'locked' => TRUE,
+      'persist_with_no_fields' => TRUE,
+      'settings' => [
+        'is_ascii' => FALSE,
+        'case_sensitive' => FALSE,
+      ],
+    ])->save();
+  }
+}
+
+/**
+ * Install default import configuration.
+ */
+function gathercontent_update_8302() {
+  $config = \Drupal::service('config.factory')->getEditable('gathercontent.import');
+  $config->set('node_default_status', 1);
+}
+
+/**
+ * Create fields for gathercontent_operation_item entity.
+ */
+function gathercontent_update_8303() {
+  $entity_manager = \Drupal::entityManager();
+  $definition = $entity_manager->getFieldStorageDefinitions('gathercontent_operation_item')['created'];
+  $entity_manager->onFieldStorageDefinitionCreate($definition);
+  $definition = $entity_manager->getFieldStorageDefinitions('gathercontent_operation_item')['changed'];
+  $entity_manager->onFieldStorageDefinitionCreate($definition);
+}
+
+/**
+ * Convert previous version mapping type to the new one.
+ */
+function gathercontent_update_8401() {
+  $mapping_ids = \Drupal::entityQuery('gathercontent_mapping')->execute();
+
+  if (empty($mapping_ids)) {
+    throw new Exception("Operation failed: Template not mapped.");
+  }
+
+  foreach ($mapping_ids as $mapping_id) {
+    $mapping = Mapping::load($mapping_id);
+    $mapping_data = unserialize($mapping->getData());
+
+    if (!empty($mapping_data)) {
+      foreach ($mapping_data as &$pane) {
+        if (!empty($pane['elements']) && (!isset($pane['type']) || $pane['type'] !== 'metatag')) {
+          foreach ($pane['elements'] as &$field) {
+            if ($field !== 'title') {
+              $config = FieldConfig::loadByName('node',
+                $mapping->getContentType(), $field);
+
+              if ($config) {
+                $id = $config->id();
+
+                if (!empty($id)) {
+                  $field = $id;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      $mapping->setData(serialize($mapping_data));
+      $mapping->setUpdatedDrupal(time());
+      $mapping->save();
+    }
+  }
+
+}

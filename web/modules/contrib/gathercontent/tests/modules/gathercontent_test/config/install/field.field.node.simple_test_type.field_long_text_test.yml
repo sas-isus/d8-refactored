@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_long_text_test
+    - node.type.simple_test_type
+  module:
+    - text
+id: node.simple_test_type.field_long_text_test
+field_name: field_long_text_test
+entity_type: node
+bundle: simple_test_type
+label: 'long text test'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

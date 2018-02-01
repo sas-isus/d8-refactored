@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ecfbee685613156aed28787dfcb8f5d9",
+    "content-hash": "0cba31d21c98dbe57121a0badbe43a2f",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -121,6 +121,45 @@
                 "stack"
             ],
             "time": "2017-04-11T20:03:41+00:00"
+        },
+        {
+            "name": "cheppers/gathercontent-client",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Cheppers/gathercontent-client.git",
+                "reference": "b730d4ebf35106c2986fb2116d8608ba16a5d06c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Cheppers/gathercontent-client/zipball/b730d4ebf35106c2986fb2116d8608ba16a5d06c",
+                "reference": "b730d4ebf35106c2986fb2116d8608ba16a5d06c",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.3"
+            },
+            "require-dev": {
+                "cheppers/git-hooks": "^0.0.9",
+                "cheppers/lint-report": "^0.0.5",
+                "cheppers/robo-git": "^0.0.5",
+                "cheppers/robo-phpcs": "^0.0.13",
+                "consolidation/robo": "^1.1",
+                "phpunit/phpunit": "^6.2",
+                "webmozart/path-util": "^2.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Cheppers\\GatherContent\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "GatherContent client",
+            "time": "2017-08-24T13:34:50+00:00"
         },
         {
             "name": "commerceguys/addressing",
@@ -1865,6 +1904,72 @@
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
             "time": "2017-12-06T22:45:30+00:00"
+        },
+        {
+            "name": "drupal/gathercontent",
+            "version": "dev-4.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/gathercontent",
+                "reference": "ef39918284263b6c955d8d840f19d329ffbffd05"
+            },
+            "require": {
+                "cheppers/gathercontent-client": "*",
+                "drupal/core": "*"
+            },
+            "require-dev": {
+                "drupal/gathercontent_upload": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-4.x": "4.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-4.0-beta1+2-dev",
+                    "datestamp": "1510050785",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Adam Hawes",
+                    "homepage": "https://www.drupal.org/user/3434691"
+                },
+                {
+                    "name": "Kova101",
+                    "homepage": "https://www.drupal.org/user/3528385"
+                },
+                {
+                    "name": "Mathew Chapman",
+                    "homepage": "https://www.drupal.org/user/2710699"
+                },
+                {
+                    "name": "Sweetchuck",
+                    "homepage": "https://www.drupal.org/user/23728"
+                },
+                {
+                    "name": "bendeguz.csirmaz",
+                    "homepage": "https://www.drupal.org/user/3528386"
+                },
+                {
+                    "name": "snufkin",
+                    "homepage": "https://www.drupal.org/user/58645"
+                }
+            ],
+            "description": "GatherContent for Drupal",
+            "homepage": "https://www.drupal.org/project/gathercontent",
+            "support": {
+                "source": "http://cgit.drupalcode.org/gathercontent"
+            },
+            "time": "2018-01-30T09:57:59+00:00"
         },
         {
             "name": "drupal/workbench_moderation",
@@ -7213,9 +7318,9 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "alpha",
+    "minimum-stability": "dev",
     "stability-flags": [],
-    "prefer-stable": true,
+    "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],

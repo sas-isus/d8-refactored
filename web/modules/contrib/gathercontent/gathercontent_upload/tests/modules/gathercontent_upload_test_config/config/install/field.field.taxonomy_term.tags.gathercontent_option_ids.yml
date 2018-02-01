@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.gathercontent_option_ids
+    - taxonomy.vocabulary.tags
+id: taxonomy_term.tags.gathercontent_option_ids
+field_name: gathercontent_option_ids
+entity_type: taxonomy_term
+bundle: tags
+label: 'GatherContent Option IDs'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

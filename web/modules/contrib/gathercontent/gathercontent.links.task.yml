@@ -1,0 +1,11 @@
+gathercontent.config_form:
+  route_name: gathercontent.config_form
+  title: 'Authentication'
+  base_route: gathercontent.config_form
+  weight: 0
+
+gathercontent.import_config_form:
+  route_name: gathercontent.import_config_form
+  title: 'Import configuration'
+  base_route: gathercontent.config_form
+  weight: 1

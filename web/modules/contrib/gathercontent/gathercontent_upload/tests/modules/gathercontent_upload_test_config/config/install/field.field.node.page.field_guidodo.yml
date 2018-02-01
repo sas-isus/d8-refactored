@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_guidodo
+    - node.type.page
+  module:
+    - text
+id: node.page.field_guidodo
+field_name: field_guidodo
+entity_type: node
+bundle: page
+label: Guidodo
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

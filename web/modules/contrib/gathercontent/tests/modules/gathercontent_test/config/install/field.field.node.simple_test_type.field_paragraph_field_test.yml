@@ -1,0 +1,35 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_paragraph_field_test
+    - node.type.simple_test_type
+    - paragraphs.paragraphs_type.paragraph_test_type
+  module:
+    - entity_reference_revisions
+id: node.simple_test_type.field_paragraph_field_test
+field_name: field_paragraph_field_test
+entity_type: node
+bundle: simple_test_type
+label: 'paragraph field test'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      paragraph_test_type: paragraph_test_type
+    target_bundles_drag_drop:
+      composite_2:
+        weight: 4
+        enabled: false
+      composite_type:
+        weight: 5
+        enabled: false
+      paragraph_test_type:
+        enabled: true
+        weight: 6
+field_type: entity_reference_revisions

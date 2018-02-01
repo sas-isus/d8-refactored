@@ -1,0 +1,12 @@
+name: GatherContent
+description: 'Imports items from GatherContent to your Drupal CMS'
+package: GatherContent
+core: 8.x
+type: module
+dependencies:
+  - node
+  - taxonomy
+  - menu_link_content
+  - image
+  - file
+  - field
