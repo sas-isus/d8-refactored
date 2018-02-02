@@ -19,6 +19,7 @@
     "drupal/console": "^1",
     "drupal/core": "^8",
     "drupal/gathercontent": "^4.0",
+    "drupal/libraries": "^3.0",
     "drupal/workbench_moderation": "^1.2",
     "drush/drush": "~8",
     "rvtraveller/qs-composer-installer": "^1.1",
@@ -41,7 +42,7 @@
   "conflict": {
       "drupal/drupal": "*"
   },
-  "minimum-stability": "beta",
+  "minimum-stability": "dev",
   "prefer-stable": false,
   "autoload": {
     "classmap": [
