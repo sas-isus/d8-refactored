@@ -22,6 +22,7 @@
     "drupal/libraries": "^3.0",
     "drupal/workbench_moderation": "^1.2",
     "drush/drush": "~8",
+    "guzzlehttp/guzzle": "^6.2@dev",
     "rvtraveller/qs-composer-installer": "^1.1",
     "webflo/drupal-core-strict": "^8"
   },
