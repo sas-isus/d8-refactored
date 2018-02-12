@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "828c6dc5dc2c2e62e4adff3f4b41b781",
+    "content-hash": "e12bb66c4019e4685f241f679f8c252e",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -2066,6 +2066,63 @@
                 "source": "http://cgit.drupalcode.org/menu_export"
             },
             "time": "2017-10-11T10:21:39+00:00"
+        },
+        {
+            "name": "drupal/views_bootstrap",
+            "version": "dev-3.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/views_bootstrap",
+                "reference": "ec4e7872315db6a7287014b029c3167962647588"
+            },
+            "require": {
+                "drupal/core": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-3.x": "3.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-3.0+2-dev",
+                    "datestamp": "1507398543",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "aburrows",
+                    "homepage": "https://www.drupal.org/user/577844"
+                },
+                {
+                    "name": "ericpugh",
+                    "homepage": "https://www.drupal.org/user/130084"
+                },
+                {
+                    "name": "ikeigenwijs",
+                    "homepage": "https://www.drupal.org/user/583238"
+                },
+                {
+                    "name": "mrded",
+                    "homepage": "https://www.drupal.org/user/556088"
+                }
+            ],
+            "description": "Integrate the Bootstrap framework with Views.",
+            "homepage": "https://www.drupal.org/project/views_bootstrap",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/views_bootstrap"
+            },
+            "time": "2017-10-07T17:46:52+00:00"
         },
         {
             "name": "drupal/workbench_moderation",

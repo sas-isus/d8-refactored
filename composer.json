@@ -21,6 +21,7 @@
     "drupal/gathercontent": "^4.0",
     "drupal/libraries": "^3.0",
     "drupal/menu_export": "^1.0",
+    "drupal/views_bootstrap": "^3.0",
     "drupal/workbench_moderation": "^1.2",
     "drush/drush": "~8",
     "guzzlehttp/guzzle": "^6.2@dev",
