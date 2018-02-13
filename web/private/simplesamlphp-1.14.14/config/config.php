@@ -13,7 +13,7 @@ if ((isset($_ENV)) && (isset($_ENV['PANTHEON_ENVIRONMENT']))) {
 	$ps = json_decode($_SERVER['PRESSFLOW_SETTINGS'], TRUE);
 	$drop_id = $ps['conf']['pantheon_binding'];
 	$db = $ps['databases']['default']['default'];
-    $certdir = '/srv/bindings/'. $drop_id .'/code/private/saml-cert/';
+    $certdir = '/srv/bindings/'. $drop_id .'/code/web/private/saml-cert/';
 	$tempdir = '/srv/bindings/'. $drop_id .'/tmp/simplesaml';
 } else {
 	include $_SERVER['DOCUMENT_ROOT'] . '/sites/default/settings.php';
