@@ -5,8 +5,8 @@
 
 if (isset($_SERVER['PANTHEON_ENVIRONMENT'])) {
     $ps = json_decode($_SERVER['PRESSFLOW_SETTINGS'], TRUE);
-    $settings['simplesamlphp_dir'] = '/srv/bindings/'. $ps['conf']['pantheon_binding'] .'/code/private/simplesamlphp';
-    $conf['simplesamlphp_auth_installdir'] = '/srv/bindings/'. $ps['conf']['pantheon_binding'] .'/code/private/simplesamlphp';
+    $settings['simplesamlphp_dir'] = '/srv/bindings/'. $ps['conf']['pantheon_binding'] .'/code/web/private/simplesamlphp';
+    $conf['simplesamlphp_auth_installdir'] = '/srv/bindings/'. $ps['conf']['pantheon_binding'] .'/code/web/private/simplesamlphp';
 }
 
 if((empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == "OFF") && (php_sapi_name() != "cli")) {
