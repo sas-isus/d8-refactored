@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<ruleset name="PSR2Custom">
+    <file>src/</file>
+    <file>src-dev/</file>
+    <file>RoboFile.php</file>
+
+    <arg
+        name="extensions"
+        value="inc/PHP,php/PHP"/>
+
+    <rule ref="PSR2"/>
+</ruleset>
