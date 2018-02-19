@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "525148d32cafdbc14d1bd4cb3be7e34e",
+    "content-hash": "6c060b3d20be2e92a9f23dbce0ed3008",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -2026,6 +2026,51 @@
             }
         },
         {
+            "name": "drupal/linkit",
+            "version": "dev-4.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/linkit",
+                "reference": "c03d1d7d91e536786db3741dfc504ce834c19f73"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-4.x": "4.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-4.3+0-dev",
+                    "datestamp": "1490127184",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Emil Stjerneman",
+                    "homepage": "https://stjerneman.com",
+                    "email": "emil@stjerneman.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Linkit - Enriched linking experience",
+            "homepage": "http://drupal.org/project/linkit",
+            "support": {
+                "source": "http://cgit.drupalcode.org/linkit",
+                "issues": "http://drupal.org/project/linkit"
+            },
+            "time": "2017-03-21T19:57:17+00:00"
+        },
+        {
             "name": "drupal/menu_export",
             "version": "dev-1.x",
             "source": {
@@ -2064,8 +2109,7 @@
             "homepage": "https://www.drupal.org/project/menu_export",
             "support": {
                 "source": "http://cgit.drupalcode.org/menu_export"
-            },
-            "time": "2017-10-11T10:21:39+00:00"
+            }
         },
         {
             "name": "drupal/views_bootstrap",
@@ -2121,8 +2165,7 @@
             ],
             "support": {
                 "source": "http://cgit.drupalcode.org/views_bootstrap"
-            },
-            "time": "2017-10-07T17:46:52+00:00"
+            }
         },
         {
             "name": "drupal/workbench_moderation",

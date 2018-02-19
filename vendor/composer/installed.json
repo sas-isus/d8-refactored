@@ -7716,5 +7716,51 @@
             "stdlib",
             "zf2"
         ]
+    },
+    {
+        "name": "drupal/linkit",
+        "version": "dev-4.x",
+        "version_normalized": "dev-4.x",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupal.org/project/linkit",
+            "reference": "c03d1d7d91e536786db3741dfc504ce834c19f73"
+        },
+        "require": {
+            "drupal/core": "~8.0"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "branch-alias": {
+                "dev-4.x": "4.x-dev"
+            },
+            "drupal": {
+                "version": "8.x-4.3+0-dev",
+                "datestamp": "1490127184",
+                "security-coverage": {
+                    "status": "not-covered",
+                    "message": "Dev releases are not covered by Drupal security advisories."
+                }
+            }
+        },
+        "installation-source": "source",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "Emil Stjerneman",
+                "homepage": "https://stjerneman.com",
+                "email": "emil@stjerneman.com",
+                "role": "Maintainer"
+            }
+        ],
+        "description": "Linkit - Enriched linking experience",
+        "homepage": "http://drupal.org/project/linkit",
+        "support": {
+            "source": "http://cgit.drupalcode.org/linkit",
+            "issues": "http://drupal.org/project/linkit"
+        }
     }
 ]
