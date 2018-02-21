@@ -1,0 +1,5 @@
+services:
+  penn403.route_subscriber:
+    class: Drupal\penn403\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }

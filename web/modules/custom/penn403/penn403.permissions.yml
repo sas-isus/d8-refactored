@@ -1,0 +1,4 @@
+administer penn403:
+  title: 'Administer Penn 403'
+  description: 'Alter configuration settings for the Penn 403 module.'
+  restrict access: true

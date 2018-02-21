@@ -1,0 +1,4 @@
+access_contact:
+auto_redirect: 1
+auth_login_route: 'simplesamlphp_auth.saml_login'
+authorized_roles:

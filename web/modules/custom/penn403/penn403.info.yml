@@ -1,0 +1,5 @@
+name: Penn 403
+type: module
+description: "Custom 403 behavior for use with SAML/Shibboleth authentication"
+core: 8.x
+package: 'UPenn CAS Custom'

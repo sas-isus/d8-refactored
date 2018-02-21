@@ -1,0 +1,5 @@
+penn403.configure_settings:
+  title: 'Penn 403'
+  parent: system.admin_config_system
+  description: 'Configure settings for the Penn 403 module'
+  route_name: 'penn403.settings'

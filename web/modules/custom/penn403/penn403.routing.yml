@@ -1,0 +1,16 @@
+penn403.system.403:
+  path: '/system/403'
+  defaults:
+    _controller: '\Drupal\penn403\Controller\PennAccessDeniedController:on403'
+    _title: 'Access Denied - 403'
+  options:
+     no_cache: TRUE
+  requirements:
+    _access: 'TRUE'
+penn403.settings:
+  path: '/admin/config/system/penn403'
+  defaults:
+    _form: '\Drupal\penn403\Form\Penn403Form'
+    _title: 'Penn 403 Configuration'
+  requirements:
+    _permission: 'administer penn403'
