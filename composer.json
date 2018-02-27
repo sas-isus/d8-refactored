@@ -23,6 +23,7 @@
     "drupal/libraries": "^3.0",
     "drupal/linkit": "^4.3",
     "drupal/menu_export": "^1.0",
+    "drupal/panelizer": "^4.0",
     "drupal/panels": "^4.2",
     "drupal/views_bootstrap": "^3.0",
     "drupal/workbench_moderation": "^1.2",
