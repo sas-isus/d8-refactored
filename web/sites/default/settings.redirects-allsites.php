@@ -40,12 +40,15 @@ if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
         header('Location: https://'. $primary_domain . $_SERVER['REQUEST_URI']);
         exit();
     }
+}
 
-    #
-    # From https://pantheon.io/docs/shibboleth-sso/
-    #  D7: $conf['simplesamlphp_auth_installdir'] = $_ENV['HOME'] .'/code/private/simplesamlphp';
-    #  D8: $settings['simplesamlphp_dir'] = $_ENV['HOME'] .'/code/web/private/simplesamlphp';
-    #
+#
+# From https://pantheon.io/docs/shibboleth-sso/
+#  D7: $conf['simplesamlphp_auth_installdir'] = $_ENV['HOME'] .'/code/private/simplesamlphp';
+#  D8-upstream: $settings['simplesamlphp_dir'] = $_ENV['HOME'] .'/code/private/simplesamlphp';
+#  D8-refactored: $settings['simplesamlphp_dir'] = $_ENV['HOME'] .'/code/web/private/simplesamlphp';
+#
+if (isset($_ENV['HOME'])) {
     if (file_exists($_ENV['HOME'] . '/code/web/private/simplesamlphp')) {
         $settings['simplesamlphp_dir'] = $_ENV['HOME'] . '/code/web/private/simplesamlphp';
     }
@@ -57,7 +60,7 @@ if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
 if (isset($RewriteMap) && (isset($_SERVER['argv'][1]) || isset($_SERVER['REQUEST_URI']))) {
     #
     # run as:
-    # php settings.rewrites.php /uniconn
+    # php settings.redirects-allsites.php /uniconn
     #
 
     $oldurl = (php_sapi_name() == "cli") ? $_SERVER['argv'][1] : $_SERVER['REQUEST_URI'];
