@@ -3532,6 +3532,64 @@
         }
     },
     {
+        "name": "drupal/permissions_by_term",
+        "version": "1.44.0",
+        "version_normalized": "1.44.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupal.org/project/permissions_by_term",
+            "reference": "8.x-1.44"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/permissions_by_term-8.x-1.44.zip",
+            "reference": "8.x-1.44",
+            "shasum": "66fc5cf02e2d7f47d0ac5a8b5262db01ad3ffc6c"
+        },
+        "require": {
+            "drupal/core": "*"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "branch-alias": {
+                "dev-1.x": "1.x-dev"
+            },
+            "drupal": {
+                "version": "8.x-1.44",
+                "datestamp": "1520364780",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "Peter Majmesku",
+                "homepage": "https://www.drupal.org/user/786132",
+                "email": "p.majmesku@gmail.com"
+            },
+            {
+                "name": "dakku",
+                "homepage": "https://www.drupal.org/user/97634"
+            },
+            {
+                "name": "rackberg",
+                "homepage": "https://www.drupal.org/user/2806873"
+            }
+        ],
+        "description": "Restricts access to nodes by taxonomy terms in relation to users and their roles.",
+        "homepage": "https://www.drupal.org/project/permissions_by_term",
+        "support": {
+            "source": "http://cgit.drupalcode.org/permissions_by_term"
+        }
+    },
+    {
         "name": "drupal/views_bootstrap",
         "version": "dev-3.x",
         "version_normalized": "dev-3.x",

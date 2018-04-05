@@ -1,0 +1,94 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the permissions_by_term module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function permissions_by_term_schema() {
+
+  $schema = [];
+
+  // Specifications for tabe 'permissions_by_term_user'.
+  $schema['permissions_by_term_user'] = [
+    'description' => "Stores the tid's to which a user has permission by his uid.",
+    'fields' => [
+      'tid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => [
+      'tid',
+      'uid',
+    ],
+  ];
+
+  // Specifications for tabe 'permissions_by_term_role'.
+  $schema['permissions_by_term_role'] = [
+    'description' => "Stores the tid's to which user's are allowed to by rid.",
+    'fields' => [
+      'tid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'rid' => [
+        'type' => 'varchar',
+        'length' => 60,
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => [
+      'tid',
+      'rid',
+    ],
+  ];
+
+  return $schema;
+
+}
+
+/**
+ * Implements hook_install().
+ */
+function permissions_by_term_install() {
+  node_access_rebuild(TRUE);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function permissions_by_term_uninstall() {
+  node_access_rebuild(TRUE);
+}
+
+/**
+ * Mandatory initial run of node_access_rebuild() Drupal core function.
+ */
+function permissions_by_term_update_8113() {
+  node_access_rebuild(TRUE);
+}
+
+/**
+ * Force a node access rebuild to fix node access grants.
+ */
+function permissions_by_term_update_8114() {
+  node_access_rebuild(TRUE);
+}
+
+/**
+ * Force a node access rebuild to fix multilingual node access grants.
+ */
+function permissions_by_term_update_8142() {
+  node_access_rebuild(TRUE);
+}

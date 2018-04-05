@@ -1,0 +1,33 @@
+permissions_by_term.autocomplete_multiple:
+  path: '/permissions-by-term/autocomplete'
+  defaults:
+    _title: ''
+    _controller: '\Drupal\permissions_by_term\Controller\PermissionsByTermController::autoCompleteMultiple'
+  requirements:
+    _permission: 'access user profiles'
+
+permissions_by_term.settings:
+  path: '/admin/permissions-by-term/settings'
+  defaults:
+    _form: 'Drupal\permissions_by_term\Form\SettingsForm'
+    _title: 'Permissions by Term Settings'
+  requirements:
+    _permission: 'administer site configuration'
+
+permissions_by_term.access_info_by_content_type:
+  path: '/admin/permissions-by-term/access-info-by-content-type/{nodeType}'
+  defaults:
+    _title: ''
+    _controller: '\Drupal\permissions_by_term\Controller\NodeEntityBundleController::getFormInfoByContentType'
+  requirements:
+    _permission: 'show term permissions on node edit page'
+    user: '^[a-zA-Z0-9_]+'
+
+permissions_by_term.access_info_by_url:
+  path: '/admin/permissions-by-term/access-info-by-url'
+  defaults:
+    _title: ''
+    _controller: '\Drupal\permissions_by_term\Controller\NodeEntityBundleController::getFormInfoByUrl'
+  requirements:
+    _permission: 'show term permissions on node edit page'
+    user: '^[a-zA-Z0-9_]+'

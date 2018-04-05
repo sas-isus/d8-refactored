@@ -27,6 +27,7 @@
     "drupal/menu_export": "^1.0",
     "drupal/panelizer": "^4.0",
     "drupal/panels": "^4.2",
+    "drupal/permissions_by_term": "^1.44",
     "drupal/views_bootstrap": "^3.0",
     "drupal/viewsreference": "^1.2",
     "drupal/workbench_moderation": "^1.2",

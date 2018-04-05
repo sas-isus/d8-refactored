@@ -1,0 +1,25 @@
+services:
+  permissions_by_entity.checked_entity_cache:
+    class: Drupal\permissions_by_entity\Service\CheckedEntityCache
+
+  permissions_by_entity.access_checker:
+    class: Drupal\permissions_by_entity\Service\AccessChecker
+    arguments:
+      - '@event_dispatcher'
+      - '@permissions_by_entity.checked_entity_cache'
+      - '@entity.manager'
+      - '@database'
+
+  permissions_by_entity.kernel_event_subscriber:
+    class: Drupal\permissions_by_entity\EventSubscriber\PermissionsByEntityKernelEventSubscriber
+    arguments:
+      - '@permissions_by_entity.access_checker'
+      - '@string_translation'
+      - '@permissions_by_entity.checked_entity_cache'
+    tags:
+      - { name: event_subscriber }
+
+  permissions_by_entity.remove_entity_from_view_event_subscriber:
+    class: Drupal\permissions_by_entity\EventSubscriber\RemoveEntityFromViewEventSubscriber
+    tags:
+      - { name: event_subscriber }

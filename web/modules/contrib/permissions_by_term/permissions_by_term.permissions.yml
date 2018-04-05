@@ -1,0 +1,9 @@
+show term permission form on term page:
+  title: 'Term permission form on term page'
+  description: 'Enables the specific role to edit the term permissions on the term edit page.'
+  restrict access: true
+
+show term permissions on node edit page:
+  title: 'Term permission information on node edit page'
+  description: 'Enables the specific role to see the term permissions on the node edit page.'
+  restrict access: true

@@ -1,0 +1,403 @@
+<?php
+
+/**
+ * @file
+ * Allows access to terms in a vocabulary to be limited by user or role.
+ */
+
+use Drupal\Core\Form\FormState;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_help().
+ */
+function permissions_by_term_help($route_name, RouteMatchInterface $arg) {
+  switch ($route_name) {
+    case 'help.page.permissions_by_term':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The "Permissions by Term" (PbT) module allows taxonomy administrators the
+        ability to restrict setting individual terms on nodes by user
+        or role. If a user is unable to set any terms for a required
+        vocabulary, they are blocked from adding or editing content with
+        that vocabulary. For more information, see the online documentation for <a href=":PbT-documentation" target="_blan" title="Online Documentation">Permissions by Term</a>.', [':PbT-documentation' => 'https://www.drupal.org/docs/8/modules/permissions-by-term']) . '</p>';
+      $output .= '<h3>' . t('Uses') . '</h3>';
+      $output .= '<dl>';
+      $output .= '<dt>' . t('General') . '</dt>';
+      $output .= '<dd>' . t('Use Permissions by Term to easily build access-restricted content areas on your websites.') . '</dd>';
+      $output .= '<dt>' . t('Lightweight Access Control') . '</dt>';
+      $output .= '<dd>' . t('Permissions by Term restricts user access to specified Drupal nodes based on taxonomy terms - a core part of Drupal’s functionality. PbT lets you restrict content access while relying on very little contributed code.') . '</dd>';
+      $output .= '<dt>' . t('Example use cases') . '</dt>';
+      $output .= '<dd>' . t('A club or service site with premium- or member-only content.') . '</dd>';
+      $output .= '<dd>' . t('School websites with content intended for teachers only and content aimed at individual classes within the school.') . '</dd>';
+      $output .= '<dd>' . t('Company intranets with sensitive or proprietary content alongside non-restricted content.') . '</dd>';
+      $output .= '</dl>';
+
+      return $output;
+  }
+}
+
+/**
+ * Validation handler for permissions_by_term_form_alter().
+ */
+function permissions_by_term_validate($form, FormState $oFormState) {
+  foreach ($form as $field) {
+    if (!is_object($field) && !empty($field['widget']['target_id']['#target_type']) && $field['widget']['target_id']['#target_type'] == 'taxonomy_term') {
+      $field_name = $field['widget']['#field_name'];
+      $terms = $oFormState->getValues()[$field_name]['target_id'];
+      $not_allowed_term_names = [];
+      if (!empty($terms)) {
+        foreach ($terms as $term) {
+          $term_id = $term['target_id'];
+          /* @var \Drupal\permissions_by_term\Service\AccessCheck $access_check_service */
+          $access_check_service = \Drupal::service('permissions_by_term.access_check');
+          if (!$access_check_service->isAccessAllowedByDatabase($term_id)) {
+            $term = Term::load($term_id);
+            $not_allowed_term_names[] = $term->getName();
+          }
+        }
+      }
+    }
+  }
+  if (!empty($not_allowed_term_names)) {
+    if (count($not_allowed_term_names) > 1) {
+      $term_names = implode(', ', $not_allowed_term_names);
+    }
+    else {
+      $term_names = $not_allowed_term_names['0'];
+    }
+    $oFormState->setErrorByName('field_tags', t('You are not allowed to use taxonomy terms like: "@termNames". Remove the restricted taxonomy terms from the form field and try again.',
+      ['@termNames' => $term_names]));
+  }
+}
+
+/**
+ * Submit handler for permissions_by_term_form_alter().
+ */
+function permissions_by_term_submit($form, FormState $formState) {
+  $termId = $formState->getFormObject()->getEntity()->id();
+  /* @var \Drupal\permissions_by_term\Service\AccessStorage $access_storage */
+  $access_storage = \Drupal::service('permissions_by_term.access_storage');
+  $access_update = $access_storage->saveTermPermissions($formState, $termId);
+
+  // Check if we need to rebuild node_access by term id
+  $invalidate_cache_tag = false;
+
+  // Has anything has changed?
+  foreach($access_update as $values) {
+    if(!empty($values)) {
+      $invalidate_cache_tag = true;
+      break;
+    }
+  }
+
+  // Do we need to flush the cache?
+  if($invalidate_cache_tag === true) {
+    Cache::invalidateTags(['search_index:node_search']);
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function permissions_by_term_form_taxonomy_term_form_alter(&$form, FormStateInterface $oFormState, $form_id) {
+  if (\Drupal::currentUser()->hasPermission('show term permission form on term page')) {
+    $iTermId = $oFormState->getFormObject()->getEntity()->id();
+
+    /* @var \Drupal\permissions_by_term\Service\AccessStorage $access_storage */
+    $access_storage = \Drupal::service('permissions_by_term.access_storage');
+
+    $description = <<<EOT
+To limit access to this term by user(s) or role(s), select users or roles above. 
+If left empty, all users will have access to content, related to this taxonomy term 
+and this taxonomy term itself.
+EOT;
+
+    $form['access'] = [
+      '#type' => 'fieldset',
+      '#title' => t('Permissions'),
+      '#description' => t($description),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#attributes' => ['id' => 'fieldset_term_access'],
+      '#weight' => -5,
+      '#tree' => TRUE,
+    ];
+
+    $aAllowedUsers = $access_storage->getAllowedUserIds($iTermId);
+    if (!empty($aAllowedUsers)) {
+      $aAllowedUsers = user_load_multiple($aAllowedUsers);
+      $sUserFormValue = $access_storage->getUserFormValue($aAllowedUsers);
+    }
+    else {
+      $sUserFormValue = NULL;
+    }
+
+    $description = <<<EOT
+Enter a comma-seperated list of user names who will be able to access content,
+related to this taxonomy term.
+EOT;
+
+    // Note that the autocomplete widget will only enable for users with the
+    // 'access profiles' permission. Other users will have to specify the name
+    // manually.
+    $form['access']['user'] = [
+      '#type' => 'entity_autocomplete',
+      '#target_type' => 'user',
+      '#title' => t('Allowed users'),
+      '#description' => t($description),
+      '#value' => $sUserFormValue,
+      '#size' => 60,
+      '#autocomplete_route_name' => 'permissions_by_term.autocomplete_multiple',
+      '#weight' => -10,
+    ];
+
+    $aAllowedRoles = $access_storage->getRoleTermPermissionsByTid($iTermId);
+
+    // Firstly fetch all translated allowed role names.
+    $aTranslatedAllowedRoleNames = [];
+    foreach ($aAllowedRoles as $role) {
+      $aTranslatedAllowedRoleNames[] = $role;
+    }
+
+    // Get all roles for the complete form and translate them.
+    $aTranslatedUserRoles = [];
+    $array_key_counter = 1;
+    foreach (user_roles() as $user_role_id => $user_role_name) {
+      $aTranslatedUserRoles[$user_role_id] = $user_role_name->label();
+      $array_key_counter++;
+    }
+
+    // Generate the default values for the form.
+    $aSetRoles = [];
+    if (!empty($aTranslatedAllowedRoleNames)) {
+      foreach ($aTranslatedAllowedRoleNames as $role_name) {
+        $aSetRoles[] = $role_name;
+      }
+    }
+
+    $description = <<<EOT
+Select user roles who will be able to access content, related to this taxonomy term.
+EOT;
+
+    // Now, lets do the Roles table.
+    $form['access']['role'] = [
+      '#type' => 'checkboxes',
+      '#title' => t('Allowed roles'),
+      '#description' => t($description),
+      '#default_value' => $aSetRoles,
+      '#options' => $aTranslatedUserRoles,
+      '#multiple' => FALSE,
+      '#weight' => 5,
+    ];
+
+    $form['#validate'][] = 'permissions_by_term_validate';
+    $form['actions']['submit']['#submit'][] = 'permissions_by_term_submit';
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function permissions_by_term_form_alter(&$form, FormStateInterface $oFormState, $form_id) {
+  $form['#validate'][] = 'permissions_by_term_validate';
+  if (isNodeEditForm()) {
+    $form['permissions_by_term_info'] = [
+      '#type' => 'details',
+      '#group' => 'advanced',
+      '#title' => t('Permissions by Term'),
+      '#access' => \Drupal::currentUser()->hasPermission('show term permissions on node edit page'),
+    ];
+
+    $nid = null;
+    if (!empty($node = \Drupal::routeMatch()->getParameter('node'))) {
+      $nid = $node->id();
+    }
+
+    $viewFilePath = drupal_get_path('module', 'permissions_by_term') . '/src/View/node-details.html.twig';
+    /**
+     * @var \Drupal\permissions_by_term\Service\NodeEntityBundleInfo $nodeEntityBundleInfo
+     */
+    $nodeEntityBundleInfo = \Drupal::service('permissions_by_term.node_entity_bundle_info');
+
+    $form['permissions_by_term_info']['revision'] = array(
+      '#type' => 'item',
+      '#markup' => $nodeEntityBundleInfo->renderNodeDetails($viewFilePath, $nid),
+    );
+
+    $form['#attached']['library'][] = 'permissions_by_term/nodeForm';
+  }
+}
+
+function isNodeEditForm() {
+  $currentPath = \Drupal::service('path.current')->getPath();
+  if (is_numeric(strpos($currentPath, '/node/'))
+    && (is_numeric(strpos($currentPath, '/edit')) || is_numeric(strpos($currentPath, '/add')))) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Implements hook_node_access().
+ *
+ * Forwards user by drupal_access_denied(); to an access denied page, if a
+ * single restricted node is called.
+ *
+ * This hook is not fired if admin is logged in. Users with the
+ * "bypass node access" permission may always view and edit content
+ * through the administrative interface.
+ */
+function permissions_by_term_node_access(NodeInterface $node, $op, AccountInterface $account) {
+  /* @var \Drupal\permissions_by_term\Service\AccessCheck $accessCheck */
+  $accessCheck = \Drupal::service('permissions_by_term.access_check');
+
+  return $accessCheck->handleNode($node->id());
+}
+
+/**
+ * Implements hook_node_grants().
+ */
+function permissions_by_term_node_grants(\Drupal\Core\Session\AccountInterface $account, $op)
+{
+    if ($op == 'view') {
+      /**
+       * @var \Drupal\permissions_by_term\Service\AccessStorage $accessStorage
+       */
+      $accessStorage = \Drupal::service('permissions_by_term.access_storage');
+      $grants = $accessStorage->getGids(\Drupal::currentUser());
+
+      return $grants;
+    }
+}
+
+/**
+ * Implements hook_node_access_records().
+ *
+ * Permissions can be rebuild at /admin/reports/status/rebuild.
+ */
+function permissions_by_term_node_access_records(\Drupal\node\NodeInterface $node) {
+  // Do not return any grants for nodes that this module doesn't manage.
+  if (!$node->isPublished()) {
+    return;
+  }
+  $has_term_access_restrictions = FALSE;
+  /* @var \Drupal\permissions_by_term\Service\AccessStorage $access_storage */
+  $access_storage = \Drupal::service('permissions_by_term.access_storage');
+  foreach ($access_storage->getTidsByNid($node->id()) as $tid) {
+    /* @var \Drupal\permissions_by_term\Service\AccessCheck $access_check_service */
+    $access_check_service = \Drupal::service('permissions_by_term.access_check');
+    if ($access_check_service->isAnyPermissionSetForTerm($tid)) {
+      $has_term_access_restrictions = TRUE;
+      break;
+    }
+  }
+  if (!$has_term_access_restrictions) {
+    return;
+  }
+
+  /**
+   * @var \Drupal\permissions_by_term\Service\NodeAccess $nodeAccess
+   */
+  $nodeAccess = \Drupal::service('permissions_by_term.node_access');
+  $grantObject = $nodeAccess->createGrant($node->id(), $node->id());
+
+  $grants[] = [
+    'realm' => $grantObject->realm,
+    'gid' => $grantObject->gid,
+    'grant_view' => $grantObject->grant_view,
+    'grant_update' => $grantObject->grant_update,
+    'grant_delete' => $grantObject->grant_delete,
+    'nid' => $node->id(),
+  ];
+
+  return $grants;
+}
+
+/**
+ * Implements hook_user_insert().
+ */
+function permissions_by_term_user_insert($user) {
+  Cache::invalidateTags(['search_index:node_search']);
+}
+
+/**
+ * Implements hook_user_update().
+ */
+function permissions_by_term_user_update($user) {
+  if (\Drupal::currentUser()->hasPermission('administer permissions')) {
+    Cache::invalidateTags(['search_index:node_search']);
+  }
+}
+
+/**
+ * Implements hook_node_insert().
+ */
+function permissions_by_term_node_insert($node) {
+  Cache::invalidateTags(['search_index:node_search']);
+}
+
+/**
+ * Implements hook_options_list_alter().
+ */
+function permissions_by_term_options_list_alter(array &$options, array $context) {
+  $fieldDefinitionSettings = $context['fieldDefinition']->getFieldStorageDefinition()->getSettings();
+  if (!empty($fieldDefinitionSettings['target_type']) && $fieldDefinitionSettings['target_type'] == 'taxonomy_term') {
+    foreach ($options as $id => $names) {
+      if ($id !== '_none') {
+        /**
+         * @var \Drupal\permissions_by_term\Service\Term $term
+         */
+        $term = \Drupal::service('permissions_by_term.term');
+
+        /**
+         * @var \Drupal\permissions_by_term\Service\AccessCheck $accessCheck
+         */
+        $accessCheck = \Drupal::service('permissions_by_term.access_check');
+
+        if (is_array($names)) {
+          foreach ($names as $name) {
+            if (!$accessCheck->isAccessAllowedByDatabase($term->getTermIdByName($name))) {
+              unset($options[$id]);
+            }
+          }
+        } elseif(is_string($names)) {
+          if (!$accessCheck->isAccessAllowedByDatabase($term->getTermIdByName($names))) {
+            unset($options[$id]);
+          }
+        }
+      }
+
+    }
+  }
+}
+
+/**
+ * Implements hook_user_cancel().
+ *
+ * Deletes all term permissions for a user when their account is cancelled.
+ */
+function permissions_by_term_user_cancel($edit, $account, $method) {
+  $deleted_user_id = $account->id();
+
+  /* @var \Drupal\permissions_by_term\Service\AccessStorage $access_storage */
+  $access_storage = \Drupal::service('permissions_by_term.access_storage');
+  $access_storage->deleteAllTermPermissionsByUserId($deleted_user_id);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ *
+ * Deletes all term permissions from storage when a term is deleted.
+ */
+function permissions_by_term_taxonomy_term_delete(EntityInterface $entity) {
+  /* @var \Drupal\permissions_by_term\Service\AccessStorage $access_storage */
+  $access_storage = \Drupal::service('permissions_by_term.access_storage');
+  $access_storage->deleteAllTermPermissionsByTid($entity->id());
+}

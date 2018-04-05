@@ -1,0 +1,5 @@
+permissions_by_term.settings:
+  title: 'Permissions by Term'
+  description: 'Manage settings for the Permissions by Term module.'
+  parent: system.admin_config_system
+  route_name: permissions_by_term.settings

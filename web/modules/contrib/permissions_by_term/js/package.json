@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "jasmine": "^2.8.0"
+  },
+  "scripts": {
+    "test": "jasmine $NODE_DEBUG_OPTION"
+  },
+  "license": "GPL-2.0+"
+}
