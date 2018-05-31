@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "35aadba88bf67becb27f7ad8d27b3919",
@@ -2930,11 +2930,17 @@
         },
         {
             "name": "drupal/views_bootstrap",
-            "version": "dev-3.x",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/views_bootstrap",
-                "reference": "ec4e7872315db6a7287014b029c3167962647588"
+                "reference": "8.x-3.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/views_bootstrap-8.x-3.0.zip",
+                "reference": "8.x-3.0",
+                "shasum": "65f6ebc231b28235d0404140cc8420580206e101"
             },
             "require": {
                 "drupal/core": "*"
@@ -2945,11 +2951,11 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.0+2-dev",
-                    "datestamp": "1507398543",
+                    "version": "8.x-3.0",
+                    "datestamp": "1507098244",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
