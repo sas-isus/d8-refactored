@@ -1,9 +1,7 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @see       http://github.com/zendframework/zend-diactoros for the canonical source repository
- * @copyright Copyright (c) 2015-2016 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/zendframework/zend-diactoros for the canonical source repository
+ * @copyright Copyright (c) 2015-2017 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md New BSD License
  */
 
@@ -13,6 +11,29 @@ use InvalidArgumentException;
 use Psr\Http\Message\UploadedFileInterface;
 use stdClass;
 use UnexpectedValueException;
+
+use function array_change_key_case;
+use function array_key_exists;
+use function array_keys;
+use function explode;
+use function implode;
+use function is_array;
+use function is_callable;
+use function ltrim;
+use function preg_match;
+use function preg_match_all;
+use function preg_replace;
+use function sprintf;
+use function strlen;
+use function strpos;
+use function strrpos;
+use function strtolower;
+use function strtr;
+use function substr;
+use function urldecode;
+
+use const CASE_LOWER;
+use const PREG_SET_ORDER;
 
 /**
  * Class for marshaling a request object from the current PHP environment.
@@ -246,9 +267,7 @@ abstract class ServerRequestFactory
         ) {
             $scheme = 'https';
         }
-        if (! empty($scheme)) {
-            $uri = $uri->withScheme($scheme);
-        }
+        $uri = $uri->withScheme($scheme);
 
         // Set the host
         $accumulator = (object) ['host' => '', 'port' => null];

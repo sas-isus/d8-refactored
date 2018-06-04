@@ -2,11 +2,10 @@
 
 namespace Drupal\permissions_by_term\Service;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Template\TwigEnvironment;
 use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
-use Drupal\Core\Database\Connection;
-use PDO;
 
 /**
  * Class Info

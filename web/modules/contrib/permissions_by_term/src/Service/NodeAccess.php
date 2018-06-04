@@ -2,10 +2,10 @@
 
 namespace Drupal\permissions_by_term\Service;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\permissions_by_term\Factory\NodeAccessRecordFactory;
-use Drupal\node\Entity\Node;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\node\Entity\Node;
+use Drupal\permissions_by_term\Factory\NodeAccessRecordFactory;
 use Drupal\permissions_by_term\Model\NodeAccessRecordModel;
 use Drupal\user\Entity\User;
 

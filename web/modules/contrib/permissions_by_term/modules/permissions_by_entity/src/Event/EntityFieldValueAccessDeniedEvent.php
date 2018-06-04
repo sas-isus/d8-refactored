@@ -2,7 +2,7 @@
 
 namespace Drupal\permissions_by_entity\Event;
 
-use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Symfony\Component\EventDispatcher\Event;
 
@@ -14,16 +14,16 @@ use Symfony\Component\EventDispatcher\Event;
 class EntityFieldValueAccessDeniedEvent extends Event {
 
   /**
-   * The field that contains the content entity.
+   * The field that contains the fieldable entity.
    *
    * @var \Drupal\Core\Field\FieldItemListInterface
    */
   private $field;
 
   /**
-   * The content entity.
+   * A fieldable entity.
    *
-   * @var \Drupal\Core\Entity\ContentEntityInterface
+   * @var \Drupal\Core\Entity\FieldableEntityInterface
    */
   private $entity;
 
@@ -45,7 +45,7 @@ class EntityFieldValueAccessDeniedEvent extends Event {
    * Sets the field.
    *
    * @param \Drupal\Core\Field\FieldItemListInterface $field
-   *   The field that contains the content entity.
+   *   The field that contains the fieldable entity.
    */
   public function setField(FieldItemListInterface $field) {
     $this->field = $field;
@@ -55,27 +55,27 @@ class EntityFieldValueAccessDeniedEvent extends Event {
    * Returns the field.
    *
    * @return \Drupal\Core\Field\FieldItemListInterface
-   *   The field that contains the content entity.
+   *   The field that contains the fieldable entity.
    */
   public function getField() {
     return $this->field;
   }
 
   /**
-   * Sets the content entity.
+   * Sets the fieldable entity.
    *
-   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
-   *   The content entity.
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
+   *   A fieldable entity.
    */
-  public function setEntity(ContentEntityInterface $entity) {
+  public function setEntity(FieldableEntityInterface $entity) {
     $this->entity = $entity;
   }
 
   /**
    * Returns the entity.
    *
-   * @return \Drupal\Core\Entity\ContentEntityInterface
-   *   The content entity.
+   * @return \Drupal\Core\Entity\FieldableEntityInterface
+   *   A fieldable entity.
    */
   public function getEntity() {
     return $this->entity;

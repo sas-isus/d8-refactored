@@ -129,7 +129,11 @@ function find_wrapper_or_launcher_at_location($location) {
  * Determine whether current OS is a Windows variant.
  */
 function drush_is_windows($os = NULL) {
-  return strtoupper(substr($os ?: PHP_OS, 0, 3)) === 'WIN';
+  // The _drush_get_os() function may not be available, so resolve "LOCAL"
+  if (!$os || $os == "LOCAL") {
+    $os = PHP_OS;
+  }
+  return strtoupper(substr($os, 0, 3)) === 'WIN';
 }
 
 function drush_escapeshellarg($arg, $os = NULL, $raw = FALSE) {
@@ -409,6 +413,9 @@ function drush_startup($argv) {
   if ($use_pcntl_exec) {
     // Get the current environment for pnctl_exec.
     $env = drush_env();
+
+    // Make sure Drush can locates original working directory. https://github.com/drush-ops/drush/issues/2285
+    chdir($cwd);
 
     // Launch the new script in the same process.
     // If the launch succeeds, then it will not return.

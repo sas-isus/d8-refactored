@@ -2,8 +2,8 @@
 
 namespace Drupal\permissions_by_term\Controller;
 
+use Drupal\Component\Utility\Tags;
 use Drupal\Core\Controller\ControllerBase;
-use \Drupal\Component\Utility\Tags;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**

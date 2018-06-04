@@ -1,5 +1,8 @@
 <?php
 
+use Drupal\Core\Database\Connection;
+use Drupal\taxonomy\Entity\Term;
+
 /**
  * @file
  * Install, update and uninstall functions for the permissions_by_term module.
@@ -26,6 +29,12 @@ function permissions_by_term_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ],
+      'langcode' => [
+        'type' => 'varchar_ascii',
+        'length' => 12,
+        'not null' => TRUE,
+        'default' => '',
+      ],
     ],
     'primary key' => [
       'tid',
@@ -46,6 +55,12 @@ function permissions_by_term_schema() {
         'type' => 'varchar',
         'length' => 60,
         'not null' => TRUE,
+      ],
+      'langcode' => [
+        'type' => 'varchar_ascii',
+        'length' => 12,
+        'not null' => TRUE,
+        'default' => '',
       ],
     ],
     'primary key' => [
@@ -91,4 +106,65 @@ function permissions_by_term_update_8114() {
  */
 function permissions_by_term_update_8142() {
   node_access_rebuild(TRUE);
+}
+
+/**
+ * Add field for langcode in user and role permission tables.
+ */
+function permissions_by_term_update_8145() {
+  $database = \Drupal::database();
+  $schema = $database->schema();
+
+  $spec = [
+    'type'     => 'varchar_ascii',
+    'length'   => 12,
+    'not null' => TRUE,
+    'default'  => '',
+  ];
+  $schema->addField('permissions_by_term_role', 'langcode', $spec);
+  $schema->addField('permissions_by_term_user', 'langcode', $spec);
+}
+
+/**
+ * Add langcode to each permission restriction dataset. Cleanup dangling datasets, with no relation to any taxonomy term.
+ */
+function permissions_by_term_update_8152() {
+  /**
+   * @var Connection $database
+   */
+  $database = \Drupal::service('database');
+  $userTerms = $database->query("SELECT tid FROM {permissions_by_term_user} WHERE langcode = '' OR langcode IS NULL")->fetchAll();
+  $roleTerms = $database->query("SELECT tid FROM {permissions_by_term_role} WHERE langcode = '' OR langcode IS NULL")->fetchAll();
+
+  foreach ($roleTerms as $roleTerm) {
+    if (!empty($term = Term::load($roleTerm->tid))) {
+      $termLangcode = $term->get('langcode')->getLangcode();
+      if (!empty($termLangcode)) {
+        $database->query("UPDATE {permissions_by_term_role} SET langcode = :langcode WHERE tid = :tid", [
+          ':langcode' => $termLangcode,
+          ':tid'      => $roleTerm->tid,
+        ]);
+      }
+    } else {
+      $database->query("DELETE FROM {permissions_by_term_role} WHERE tid = :tid", [
+        ':tid' => $roleTerm->tid,
+      ]);
+    }
+  }
+
+  foreach ($userTerms as $userTerm) {
+    if (!empty($term = Term::load($userTerm->tid))) {
+      $termLangcode = $term->get('langcode')->getLangcode();
+      if (!empty($termLangcode)) {
+        $database->query("UPDATE {permissions_by_term_user} SET langcode = :langcode WHERE tid = :tid", [
+          ':langcode' => $termLangcode,
+          ':tid'      => $userTerm->tid
+        ]);
+      }
+    } else {
+      $database->query("DELETE FROM {permissions_by_term_user} WHERE tid = :tid", [
+        ':tid' => $userTerm->tid,
+      ]);
+    }
+  }
 }
