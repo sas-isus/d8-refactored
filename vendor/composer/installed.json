@@ -6806,23 +6806,23 @@
     },
     {
         "name": "symfony/css-selector",
-        "version": "v2.8.32",
-        "version_normalized": "2.8.32.0",
+        "version": "v2.8.41",
+        "version_normalized": "2.8.41.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/css-selector.git",
-            "reference": "b7b041487197fb6d803b7edbcaae7f00a793b1c4"
+            "reference": "3cdc270724e4666006118283c700a4d7f9cbe264"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/css-selector/zipball/b7b041487197fb6d803b7edbcaae7f00a793b1c4",
-            "reference": "b7b041487197fb6d803b7edbcaae7f00a793b1c4",
+            "url": "https://api.github.com/repos/symfony/css-selector/zipball/3cdc270724e4666006118283c700a4d7f9cbe264",
+            "reference": "3cdc270724e4666006118283c700a4d7f9cbe264",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.9"
         },
-        "time": "2017-11-05T15:25:56+00:00",
+        "time": "2018-03-10T18:19:36+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
