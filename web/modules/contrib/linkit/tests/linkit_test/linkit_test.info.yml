@@ -1,0 +1,10 @@
+name: 'Linkit test module'
+description: 'Support module for Linkit testing.'
+package: Testing
+type: module
+# version: VERSION
+core: 8.x
+dependencies:
+  - linkit
+  - field
+  - text
