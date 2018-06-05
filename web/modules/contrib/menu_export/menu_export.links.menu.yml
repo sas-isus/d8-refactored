@@ -1,0 +1,5 @@
+menu_export.menu_link:
+  title: 'Menu Export'
+  description: 'Export and Import Menu Links'
+  route_name: menu_export.config_form
+  parent: system.admin_structure

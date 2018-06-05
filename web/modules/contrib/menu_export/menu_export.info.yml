@@ -1,0 +1,6 @@
+name: Menu Export
+type: module
+description: 'This module exports and imports menus and menu links.'
+package: Development
+core: 8.x
+#configure: maintenance_notifications.form

@@ -1,0 +1,27 @@
+menu_export.config_form:
+  path: 'admin/config/development/menu_export'
+  defaults:
+    _title: 'Menu Export Configuration'
+    _form: '\Drupal\menu_export\Form\MenuExportConfigurationForm'
+  requirements:
+    _permission: 'export and import menu links'
+  options:
+    _admin_route: 'TRUE'
+menu_export.import:
+  path: 'admin/config/development/menu_export/import'
+  defaults:
+    _title: 'Import Menus'
+    _form: '\Drupal\menu_export\Form\MenuImportForm'
+  requirements:
+    _permission: 'export and import menu links'
+  options:
+    _admin_route: 'TRUE'
+menu_export.export:
+  path: 'admin/config/development/menu_export/export'
+  defaults:
+    _title: 'Export Menus'
+    _form: '\Drupal\menu_export\Form\MenuExportForm'
+  requirements:
+    _permission: 'export and import menu links'
+  options:
+    _admin_route: 'TRUE'

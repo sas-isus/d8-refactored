@@ -1,0 +1,17 @@
+<?php
+
+
+/**
+ * Implements hook_help().
+ */
+function menu_export_help($route_name, $route_match) {
+  switch ($route_name) {
+    // Main module help for the menu_export module.
+    case 'help.page.menu_export':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Exports and Imports menu links.') . '</p>';
+      return $output;
+    default:
+  }
+}

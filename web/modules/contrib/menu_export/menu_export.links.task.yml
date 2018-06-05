@@ -1,0 +1,15 @@
+menu_export.config_form_tab:
+  route_name : menu_export.config_form
+  title: Menu List
+  base_route: menu_export.config_form
+  weight: 1
+menu_export.export:
+  route_name: menu_export.export
+  title: Export
+  base_route: menu_export.config_form
+  weight: 2
+menu_export.import:
+  route_name: menu_export.import
+  title: Import
+  base_route: menu_export.config_form
+  weight: 3
