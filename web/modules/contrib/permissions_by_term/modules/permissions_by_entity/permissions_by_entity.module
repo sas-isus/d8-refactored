@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Module file for Permission by Entity.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Session\AccountInterface;
+
+/**
+ * Implements hook_entity_access().
+ */
+function permissions_by_entity_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  /** @var \Drupal\permissions_by_entity\Service\AccessChecker $accessChecker */
+  if ($operation === 'view' && $entity instanceof FieldableEntityInterface) {
+    $accessChecker = \Drupal::service('permissions_by_entity.access_checker');
+    // Do not just return a neutral result if access allowed by the module.
+    return $accessChecker->isAccessAllowed($entity, $account->id()) ? AccessResult::allowed() : AccessResult::forbidden('Access revoked by permissions_by_entity module.');
+  }
+
+  return AccessResult::neutral();
+}

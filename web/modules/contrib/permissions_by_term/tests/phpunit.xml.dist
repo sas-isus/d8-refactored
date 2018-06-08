@@ -14,20 +14,26 @@
     <!-- Example SIMPLETEST_BASE_URL value: http://localhost -->
     <env name="SIMPLETEST_BASE_URL" value="http://pbt"/>
     <!-- Example SIMPLETEST_DB value: mysql://username:password@localhost/databasename#table_prefix -->
-    <env name="SIMPLETEST_DB" value="sqlite://localhost//home/jepster/PhpstormProjects/permissions-by-term-behat/sites/default/db.sqlite"/>
+    <env name="SIMPLETEST_DB" value="sqlite://localhost//Users/peter/Dev/mamp/permissions-by-term/sites/default/files/db.sqlite"/>
     <!-- Example BROWSERTEST_OUTPUT_DIRECTORY value: /path/to/webroot/sites/simpletest/browser_output -->
     <env name="BROWSERTEST_OUTPUT_DIRECTORY" value="/tmp"/>
   </php>
 
   <testsuites>
-    <testsuite name="Unit Test Suite">
+    <testsuite name="Permissions by Term - Unit Test Suite">
       <directory>./src/Unit</directory>
     </testsuite>
   </testsuites>
 
   <testsuites>
-    <testsuite name="Kernel Test Suite">
+    <testsuite name="Permissions by Term - Kernel Test Suite">
       <directory>./src/Kernel</directory>
+    </testsuite>
+  </testsuites>
+
+  <testsuites>
+    <testsuite name="Permissions by Entity - Kernel Test Suite">
+      <directory>./../modules/permissions_by_entity/tests/src/Kernel</directory>
     </testsuite>
   </testsuites>
 

@@ -14,6 +14,9 @@ class ConfigInstallerTarballTest extends ConfigInstallerTestBase {
    */
   protected function setUpSyncForm() {
     // Test some error situations.
+    $this->drupalPostForm(NULL, ['files[import_tarball]' => ''], 'Save and continue');
+    $this->assertText('No file upload provided and the sync directory is empty');
+
     $this->drupalPostForm(NULL, ['files[import_tarball]' => $this->versionTarball('broken.tar.gz')], 'Save and continue');
     $this->assertText('Could not extract the contents of the tar file.');
 

@@ -13,7 +13,7 @@ class PermissionsByEntityEvents {
    * Entity Field Value Access Denied event.
    *
    * This event occurs when the access to a referenced
-   * content entity is denied for a user.
+   * fieldable entity is denied for a user.
    *
    * @Event('Drupal/booking/Event/CreateTourbookBookingIframeUrlEvent')
    */

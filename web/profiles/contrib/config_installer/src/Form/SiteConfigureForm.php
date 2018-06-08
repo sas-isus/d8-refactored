@@ -165,7 +165,21 @@ class SiteConfigureForm extends FormBase {
     ];
 
     // Use default drush options if available whilst running a site install.
-    if (function_exists('drush_get_option') && function_exists('drush_generate_password')) {
+    // Targets Drush 9 or higher.
+    if (class_exists('\Drush\Drush')) {
+      $input = \Drush\Drush::redispatchOptions();
+      $input += [
+        'account-name' => 'admin',
+        'account-pass' => \Drush\Utils\StringUtils::generatePassword(),
+        'account-mail' => 'admin@example.com',
+      ];
+      $form['admin_account']['account']['name']['#default_value'] = $input['account-name'];
+      $form['admin_account']['account']['pass']['#type'] = 'textfield';
+      $form['admin_account']['account']['pass']['#default_value'] = $input['account-pass'];
+      $form['admin_account']['account']['mail']['#default_value'] = $input['account-mail'];
+    }
+    // Targets Drush 8 or lower.
+    elseif (function_exists('drush_get_option') && function_exists('drush_generate_password')) {
       $form['admin_account']['account']['name']['#default_value'] = drush_get_option('account-name', 'admin');
       $form['admin_account']['account']['pass']['#type'] = 'textfield';
       $form['admin_account']['account']['pass']['#default_value'] = drush_get_option('account-pass', drush_generate_password());

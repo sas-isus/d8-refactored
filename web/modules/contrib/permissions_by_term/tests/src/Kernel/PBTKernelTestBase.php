@@ -8,11 +8,11 @@ use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
+use Drupal\permissions_by_term\Service\AccessCheck;
+use Drupal\permissions_by_term\Service\AccessStorage;
+use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\user\Entity\User;
-use Drupal\permissions_by_term\Service\AccessCheck;
-use Drupal\taxonomy\Entity\Term;
-use Drupal\permissions_by_term\Service\AccessStorage;
 
 /**
  * Class PBTKernelTestBase
@@ -44,7 +44,7 @@ abstract class PBTKernelTestBase extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['taxonomy', 'node', 'user', 'text', 'field', 'system', 'permissions_by_term'];
+  public static $modules = ['taxonomy', 'node', 'user', 'text', 'field', 'system', 'permissions_by_term', 'language'];
 
   /**
    * @var AccessStorage
@@ -67,6 +67,7 @@ abstract class PBTKernelTestBase extends KernelTestBase {
     $this->installEntitySchema('node');
     $this->installEntitySchema('taxonomy_term');
     $this->installConfig(['permissions_by_term']);
+    $this->installConfig(['language']);
     $this->installSchema('node', 'node_access');
     $this->installSchema('permissions_by_term', 'permissions_by_term_user');
     $this->installSchema('permissions_by_term', 'permissions_by_term_role');

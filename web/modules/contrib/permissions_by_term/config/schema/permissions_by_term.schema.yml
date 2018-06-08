@@ -1,5 +1,3 @@
-# Schema for the configuration files of the Config Entity Example module.
-
 # This schema tells the config system how to read our config YML files.
 # See for example the file config/config_entity_example.robot.marvin.yml, which
 # contains our default config entity.

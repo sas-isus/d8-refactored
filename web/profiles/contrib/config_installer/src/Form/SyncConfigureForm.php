@@ -68,12 +68,13 @@ class SyncConfigureForm extends FormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     global $config_directories;
+    global $install_state;
 
-    $file_upload = $this->getRequest()->files->get('files[import_tarball]', NULL, TRUE);
+    $file_upload = $this->getRequest()->files->get('files', NULL, TRUE);
     $has_upload = FALSE;
-    if ($file_upload && $file_upload->isValid()) {
+    if (!empty($file_upload['import_tarball']) && $file_upload['import_tarball']->isValid()) {
       // The sync directory must be empty if we are doing an upload.
-      $form_state->setValue('import_tarball', $file_upload->getRealPath());
+      $form_state->setValue('import_tarball', $file_upload['import_tarball']->getRealPath());
       $has_upload = TRUE;
     }
     $sync_directory = $form_state->getValue('sync_directory');
@@ -179,6 +180,9 @@ class SyncConfigureForm extends FormBase {
       \Drupal::service('string_translation')
     );
 
+    // Change $install_state profile to find profile modules during validation.
+    $install_state['parameters']['profile'] = _config_installer_get_original_install_profile();
+
     try {
       $config_importer->validate();
     }
@@ -198,6 +202,8 @@ class SyncConfigureForm extends FormBase {
       $form_state->setErrorByName($field_name, \Drupal::service('renderer')->renderPlain($error_message));
     }
 
+    // Revert $install_state profie to continue with the regular process.
+    $install_state['parameters']['profile'] = 'config_installer';
   }
 
   /**

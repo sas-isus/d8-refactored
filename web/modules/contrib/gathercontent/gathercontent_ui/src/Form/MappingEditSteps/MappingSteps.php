@@ -5,6 +5,7 @@ namespace Drupal\gathercontent_ui\Form\MappingEditSteps;
 use Cheppers\GatherContent\DataTypes\Element;
 use Cheppers\GatherContent\DataTypes\ElementText;
 use Cheppers\GatherContent\DataTypes\Template;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\gathercontent\Entity\MappingInterface;
@@ -342,7 +343,7 @@ abstract class MappingSteps {
     $fields = [];
     // Fields.
     foreach ($instances as $name => $instance) {
-      if (substr_compare($name, 'field', 0, 5) <> 0 && !in_array($name, ['body'])) {
+      if ($instance instanceof BaseFieldDefinition) {
         continue;
       }
       if (in_array($instance->getType(), $mapping_array[$gc_field->type])) {

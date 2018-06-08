@@ -3,10 +3,8 @@
 namespace Drupal\permissions_by_entity\Service;
 
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Database\Database;
-use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\permissions_by_entity\Event\EntityFieldValueAccessDeniedEvent;
 use Drupal\permissions_by_entity\Event\PermissionsByEntityEvents;
 use Drupal\permissions_by_term\Service\AccessCheck;
@@ -70,7 +68,7 @@ class AccessChecker extends AccessCheck implements AccessCheckerInterface {
   /**
    * {@inheritdoc}
    */
-  public function isAccessAllowed(ContentEntityInterface $entity, $uid = FALSE) {
+  public function isAccessAllowed(FieldableEntityInterface $entity, $uid = FALSE) {
     // Iterate over the fields the entity contains.
     foreach ($entity->getFields() as $field) {
 
@@ -87,7 +85,7 @@ class AccessChecker extends AccessCheck implements AccessCheckerInterface {
           // Let "Permissions By Term" do the actual check.
           if (
             !empty($item['target_id']) &&
-            !$this->isAccessAllowedByDatabase($item['target_id'], $uid)
+            !$this->isAccessAllowedByDatabase($item['target_id'], $uid, $entity->language()->getId())
           ) {
             // Return that the user is not allowed to access this entity.
             return FALSE;
@@ -95,9 +93,9 @@ class AccessChecker extends AccessCheck implements AccessCheckerInterface {
         }
       }
 
-      // Check if the field contains another content entity,
+      // Check if the field contains another fieldable entity,
       // that we need to check.
-      if ($field->entity && $field->entity instanceof ContentEntityInterface) {
+      if ($field->entity && $field->entity instanceof FieldableEntityInterface) {
 
         // We need to iterate over the entities.
         $num_values = $field->count();

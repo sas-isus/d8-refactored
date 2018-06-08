@@ -12,7 +12,7 @@ permissions_by_term.settings:
     _form: 'Drupal\permissions_by_term\Form\SettingsForm'
     _title: 'Permissions by Term Settings'
   requirements:
-    _permission: 'administer site configuration'
+    _permission: 'access pbt settings'
 
 permissions_by_term.access_info_by_content_type:
   path: '/admin/permissions-by-term/access-info-by-content-type/{nodeType}'

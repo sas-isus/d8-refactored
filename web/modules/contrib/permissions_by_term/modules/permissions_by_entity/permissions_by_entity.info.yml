@@ -5,8 +5,8 @@ type: module
 dependencies:
   - permissions_by_term
 package: 'Permissions by Term (Experimental)'
-# Information added by Drupal.org packaging script on 2018-03-06
-version: '8.x-1.44'
+# Information added by Drupal.org packaging script on 2018-05-18
+version: '8.x-1.53'
 core: '8.x'
 project: 'permissions_by_term'
-datestamp: 1520364794
+datestamp: 1526672886

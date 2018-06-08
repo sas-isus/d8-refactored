@@ -76,7 +76,7 @@ class Writer
      */
     public static function getExtensionManager()
     {
-        if (!isset(static::$extensionManager)) {
+        if (! isset(static::$extensionManager)) {
             static::setExtensionManager(new ExtensionManager());
         }
         return static::$extensionManager;
@@ -192,6 +192,7 @@ class Writer
         static::registerExtension('WellFormedWeb');
         static::registerExtension('Threading');
         static::registerExtension('ITunes');
+        static::registerExtension('GooglePlayPodcast');
     }
 
     public static function lcfirst($str)
