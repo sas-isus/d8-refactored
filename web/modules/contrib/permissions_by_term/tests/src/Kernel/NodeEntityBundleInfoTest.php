@@ -2,10 +2,10 @@
 
 namespace Drupal\Tests\permissions_by_term\Kernel;
 
+use Drupal\permissions_by_term\Service\NodeEntityBundleInfo;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
-use Drupal\permissions_by_term\Service\NodeEntityBundleInfo;
 
 /**
  * Class AccessStorageTest

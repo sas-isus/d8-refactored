@@ -6,8 +6,8 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityFieldManager;
 use Drupal\permissions_by_term\Service\AccessStorage;
 use Drupal\permissions_by_term\Service\NodeEntityBundleInfo;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class NodeEntityBundleController
@@ -22,25 +22,12 @@ class NodeEntityBundleController extends ControllerBase {
   private $entityFieldManager;
 
   /**
-   * @var AccessStorage
-   */
-  private $accessStorage;
-
-  /**
    * @var NodeEntityBundleInfo
    */
   private $nodeEntityBundleInfo;
 
-  /**
-   * NodeBundleInfoController constructor.
-   *
-   * @param EntityFieldManager   $entityFieldManager
-   * @param AccessStorage        $accessStorage
-   * @param NodeEntityBundleInfo $nodeEntityBundleInfo
-   */
-  public function __construct(EntityFieldManager $entityFieldManager, AccessStorage $accessStorage, NodeEntityBundleInfo $nodeEntityBundleInfo) {
+  public function __construct(EntityFieldManager $entityFieldManager, NodeEntityBundleInfo $nodeEntityBundleInfo) {
     $this->entityFieldManager = $entityFieldManager;
-    $this->accessStorage = $accessStorage;
     $this->nodeEntityBundleInfo = $nodeEntityBundleInfo;
   }
 
@@ -50,7 +37,6 @@ class NodeEntityBundleController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity_field.manager'),
-      $container->get('permissions_by_term.access_storage'),
       $container->get('permissions_by_term.node_entity_bundle_info')
     );
   }

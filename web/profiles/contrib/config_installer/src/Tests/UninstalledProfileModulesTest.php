@@ -26,7 +26,7 @@ class UninstalledProfileModulesTest extends ConfigInstallerTestBase {
    */
   protected function getTarball() {
     // Exported configuration after a minimal profile install.
-    return $this->versionTarball('standard-without-config.tar.gz');
+    return $this->versionTarball('standard-without-contact.tar.gz');
   }
 
   /**

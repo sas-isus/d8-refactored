@@ -2,11 +2,12 @@
 
 namespace Drupal\permissions_by_term\Service;
 
+use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Database\Connection;
-use Drupal\user\Entity\User;
-use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Drupal\permissions_by_term\Event\PermissionsByTermDeniedEvent;
+use Drupal\user\Entity\User;
+use Drupal\taxonomy\Entity\Term;
 
 /**
  * AccessCheckService class.
@@ -37,9 +38,19 @@ class AccessCheck {
   }
 
   /**
-   * @return bool
+   * @param int $nid
+   * @param bool $uid
+   * @param string $langcode
+   *
+   * @return array|bool
    */
-  public function canUserAccessByNodeId($nid, $uid = FALSE) {
+  public function canUserAccessByNodeId($nid, $uid = FALSE, $langcode = '') {
+		$langcode = ($langcode === '') ? \Drupal::languageManager()->getCurrentLanguage()->getId() : $langcode;
+
+    if (\Drupal::currentUser()->hasPermission('bypass node access')) {
+      return TRUE;
+    }
+
     if (!$singleTermRestriction = \Drupal::config('permissions_by_term.settings.single_term_restriction')->get('value')) {
       $access_allowed = TRUE;
     } else {
@@ -55,15 +66,19 @@ class AccessCheck {
     }
 
     foreach ($terms as $term) {
-      $access_allowed = $this->isAccessAllowedByDatabase($term->tid, $uid);
-      if (!$access_allowed) {
-        if ($singleTermRestriction) {
+      $termInfo = Term::load($term->tid);
+
+      if ($termInfo->get('langcode')->getLangcode() == $langcode) {
+        $access_allowed = $this->isAccessAllowedByDatabase($term->tid, $uid, $termInfo->get('langcode')->getLangcode());
+        if (!$access_allowed) {
+          if ($singleTermRestriction) {
+            return $access_allowed;
+          }
+        }
+
+        if ($access_allowed && !$singleTermRestriction) {
           return $access_allowed;
         }
-      }
-
-      if ($access_allowed && !$singleTermRestriction) {
-        return $access_allowed;
       }
 
     }
@@ -74,24 +89,21 @@ class AccessCheck {
   /**
    * @param int      $tid
    * @param bool|int $uid
-   * @return array
+   * @param string   $langcode
+   * @return bool
    */
-  public function isAccessAllowedByDatabase($tid, $uid = FALSE) {
+  public function isAccessAllowedByDatabase($tid, $uid = FALSE, $langcode = '') {
+		$langcode = ($langcode === '') ? \Drupal::languageManager()->getCurrentLanguage()->getId() : $langcode;
 
-    if ($uid === FALSE) {
+    if ($uid === FALSE || (int) $uid === 0) {
       $user = \Drupal::currentUser();
     } elseif (is_numeric($uid)) {
       $user = User::load($uid);
     }
 
-    // Admin can access everything (user id "1").
-    if ($user->id() == 1) {
-      return TRUE;
-    }
+    $tid = (int) $tid;
 
-    $tid = intval($tid);
-
-    if (!$this->isAnyPermissionSetForTerm($tid)) {
+    if (!$this->isAnyPermissionSetForTerm($tid, $langcode)) {
       return TRUE;
     }
 
@@ -102,7 +114,7 @@ class AccessCheck {
 
     foreach ($aUserRoles as $sUserRole) {
 
-      if ($this->isTermAllowedByUserRole($tid, $sUserRole)) {
+      if ($this->isTermAllowedByUserRole($tid, $sUserRole, $langcode)) {
         return TRUE;
       }
 
@@ -110,7 +122,7 @@ class AccessCheck {
 
     $iUid = intval($user->id());
 
-    if ($this->isTermAllowedByUserId($tid, $iUid)) {
+    if ($this->isTermAllowedByUserId($tid, $iUid, $langcode)) {
       return TRUE;
     }
 
@@ -119,14 +131,15 @@ class AccessCheck {
   }
 
   /**
-   * @param int $tid
-   * @param int $iUid
+   * @param int    $tid
+   * @param int    $iUid
+   * @param string $langcode
    *
    * @return bool
    */
-  private function isTermAllowedByUserId($tid, $iUid) {
-    $query_result = $this->database->query("SELECT uid FROM {permissions_by_term_user} WHERE tid = :tid AND uid = :uid",
-      [':tid' => $tid, ':uid' => $iUid])->fetchField();
+  private function isTermAllowedByUserId($tid, $iUid, $langcode) {
+    $query_result = $this->database->query("SELECT uid FROM {permissions_by_term_user} WHERE tid = :tid AND uid = :uid AND langcode = :langcode",
+      [':tid' => $tid, ':uid' => $iUid, ':langcode' => $langcode])->fetchField();
 
     if (!empty($query_result)) {
       return TRUE;
@@ -139,12 +152,13 @@ class AccessCheck {
   /**
    * @param int    $tid
    * @param string $sUserRole
+   * @param string $langcode
    *
    * @return bool
    */
-  public function isTermAllowedByUserRole($tid, $sUserRole) {
-    $query_result = $this->database->query("SELECT rid FROM {permissions_by_term_role} WHERE tid = :tid AND rid IN (:user_roles)",
-      [':tid' => $tid, ':user_roles' => $sUserRole])->fetchField();
+  public function isTermAllowedByUserRole($tid, $sUserRole, $langcode) {
+    $query_result = $this->database->query("SELECT rid FROM {permissions_by_term_role} WHERE tid = :tid AND rid IN (:user_roles) AND langcode = :langcode",
+      [':tid' => $tid, ':user_roles' => $sUserRole, ':langcode' => $langcode])->fetchField();
 
     if (!empty($query_result)) {
       return TRUE;
@@ -156,17 +170,19 @@ class AccessCheck {
   }
 
   /**
-   * @param int $tid
+   * @param int    $tid
+   * @param string $langcode
    *
    * @return bool
    */
-  public function isAnyPermissionSetForTerm($tid) {
+  public function isAnyPermissionSetForTerm($tid, $langcode = '') {
+		$langcode = ($langcode === '') ? \Drupal::languageManager()->getCurrentLanguage()->getId() : $langcode;
 
-    $iUserTableResults = intval($this->database->query("SELECT COUNT(1) FROM {permissions_by_term_user} WHERE tid = :tid",
-      [':tid' => $tid])->fetchField());
+    $iUserTableResults = intval($this->database->query("SELECT COUNT(1) FROM {permissions_by_term_user} WHERE tid = :tid AND langcode = :langcode",
+      [':tid' => $tid, ':langcode' => $langcode])->fetchField());
 
-    $iRoleTableResults = intval($this->database->query("SELECT COUNT(1) FROM {permissions_by_term_role} WHERE tid = :tid",
-      [':tid' => $tid])->fetchField());
+    $iRoleTableResults = intval($this->database->query("SELECT COUNT(1) FROM {permissions_by_term_role} WHERE tid = :tid AND langcode = :langcode",
+      [':tid' => $tid, ':langcode' => $langcode])->fetchField());
 
     if ($iUserTableResults > 0 ||
       $iRoleTableResults > 0) {
@@ -176,10 +192,13 @@ class AccessCheck {
   }
 
   /**
+   * @param string $nodeId
+   * @param string $langcode
+   *
    * @return AccessResult
    */
-  public function handleNode($nodeId) {
-    if ($this->canUserAccessByNodeId($nodeId) === TRUE) {
+  public function handleNode($nodeId, $langcode) {
+    if ($this->canUserAccessByNodeId($nodeId, false, $langcode) === TRUE) {
       return AccessResult::neutral();
     }
     else {

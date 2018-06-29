@@ -5,14 +5,14 @@
  * Allows access to terms in a vocabulary to be limited by user or role.
  */
 
-use Drupal\Core\Form\FormState;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\node\NodeInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\taxonomy\Entity\Term;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormState;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\node\NodeInterface;
+use Drupal\taxonomy\Entity\Term;
 
 /**
  * Implements hook_help().
@@ -54,12 +54,14 @@ function permissions_by_term_validate($form, FormState $oFormState) {
       $not_allowed_term_names = [];
       if (!empty($terms)) {
         foreach ($terms as $term) {
-          $term_id = $term['target_id'];
-          /* @var \Drupal\permissions_by_term\Service\AccessCheck $access_check_service */
-          $access_check_service = \Drupal::service('permissions_by_term.access_check');
-          if (!$access_check_service->isAccessAllowedByDatabase($term_id)) {
-            $term = Term::load($term_id);
-            $not_allowed_term_names[] = $term->getName();
+          if (!empty($term['target_id'])) {
+            $term_id = $term['target_id'];
+            /* @var \Drupal\permissions_by_term\Service\AccessCheck $access_check_service */
+            $access_check_service = \Drupal::service('permissions_by_term.access_check');
+            if (!$access_check_service->isAccessAllowedByDatabase($term_id)) {
+              $term = Term::load($term_id);
+              $not_allowed_term_names[] = $term->getName();
+            }
           }
         }
       }
@@ -114,17 +116,15 @@ function permissions_by_term_form_taxonomy_term_form_alter(&$form, FormStateInte
     $access_storage = \Drupal::service('permissions_by_term.access_storage');
 
     $description = <<<EOT
-To limit access to this term by user(s) or role(s), select users or roles above. 
-If left empty, all users will have access to content, related to this taxonomy term 
+To limit access to this term by user(s) or role(s), select users or roles above.
+If left empty, all users will have access to content, related to this taxonomy term
 and this taxonomy term itself.
 EOT;
 
     $form['access'] = [
-      '#type' => 'fieldset',
+      '#type' => 'details',
       '#title' => t('Permissions'),
       '#description' => t($description),
-      '#collapsible' => TRUE,
-      '#collapsed' => TRUE,
       '#attributes' => ['id' => 'fieldset_term_access'],
       '#weight' => -5,
       '#tree' => TRUE,
@@ -140,7 +140,7 @@ EOT;
     }
 
     $description = <<<EOT
-Enter a comma-seperated list of user names who will be able to access content,
+Enter a comma-separated list of user names who will be able to access content,
 related to this taxonomy term.
 EOT;
 
@@ -258,7 +258,7 @@ function permissions_by_term_node_access(NodeInterface $node, $op, AccountInterf
   /* @var \Drupal\permissions_by_term\Service\AccessCheck $accessCheck */
   $accessCheck = \Drupal::service('permissions_by_term.access_check');
 
-  return $accessCheck->handleNode($node->id());
+  return $accessCheck->handleNode($node->id(), $node->language()->getId());
 }
 
 /**
@@ -293,7 +293,14 @@ function permissions_by_term_node_access_records(\Drupal\node\NodeInterface $nod
   foreach ($access_storage->getTidsByNid($node->id()) as $tid) {
     /* @var \Drupal\permissions_by_term\Service\AccessCheck $access_check_service */
     $access_check_service = \Drupal::service('permissions_by_term.access_check');
-    if ($access_check_service->isAnyPermissionSetForTerm($tid)) {
+    if($node->language()->getId() == 'und'){
+      // Current system default language
+      $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    }
+    else {
+      $language = $node->language()->getId();
+    }
+    if ($access_check_service->isAnyPermissionSetForTerm($tid, $language)) {
       $has_term_access_restrictions = TRUE;
       break;
     }
@@ -352,23 +359,18 @@ function permissions_by_term_options_list_alter(array &$options, array $context)
     foreach ($options as $id => $names) {
       if ($id !== '_none') {
         /**
-         * @var \Drupal\permissions_by_term\Service\Term $term
-         */
-        $term = \Drupal::service('permissions_by_term.term');
-
-        /**
          * @var \Drupal\permissions_by_term\Service\AccessCheck $accessCheck
          */
         $accessCheck = \Drupal::service('permissions_by_term.access_check');
 
         if (is_array($names)) {
-          foreach ($names as $name) {
-            if (!$accessCheck->isAccessAllowedByDatabase($term->getTermIdByName($name))) {
+          foreach ($names as $group_id => $name) {
+            if (!$accessCheck->isAccessAllowedByDatabase($group_id)) {
               unset($options[$id]);
             }
           }
         } elseif(is_string($names)) {
-          if (!$accessCheck->isAccessAllowedByDatabase($term->getTermIdByName($names))) {
+          if (!$accessCheck->isAccessAllowedByDatabase($id)) {
             unset($options[$id]);
           }
         }

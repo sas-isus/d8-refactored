@@ -15,7 +15,7 @@ services:
     arguments: ['@string_translation', '@workbench_moderation.moderation_information', '@entity_type.manager']
   workbench_moderation.entity_operations:
     class: Drupal\workbench_moderation\EntityOperations
-    arguments: ['@workbench_moderation.moderation_information', '@entity_type.manager', '@form_builder', '@event_dispatcher', '@workbench_moderation.revision_tracker']
+    arguments: ['@workbench_moderation.moderation_information', '@entity_type.manager', '@form_builder', '@event_dispatcher', '@workbench_moderation.revision_tracker', '@current_user']
   workbench_moderation.inline_editing_disabler:
     class: \Drupal\workbench_moderation\InlineEditingDisabler
     arguments: ['@workbench_moderation.moderation_information']

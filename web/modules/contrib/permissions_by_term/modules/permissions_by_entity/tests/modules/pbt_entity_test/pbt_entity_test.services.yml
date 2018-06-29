@@ -1,0 +1,6 @@
+services:
+  mocked_dynamic_page_cache_subscriber:
+    class: Drupal\pbt_entity_test\EventSubscriber\MockedDynamicPageCacheSubscriber
+    arguments: ['@dynamic_page_cache_request_policy', '@dynamic_page_cache_response_policy', '@render_cache', '%renderer.config%']
+    tags:
+      - { name: event_subscriber }

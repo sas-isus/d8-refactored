@@ -7,3 +7,8 @@ show term permissions on node edit page:
   title: 'Term permission information on node edit page'
   description: 'Enables the specific role to see the term permissions on the node edit page.'
   restrict access: true
+
+access pbt settings:
+  title: 'Settings form'
+  description: 'Enables the specific role to access the settings.'
+  restrict access: true

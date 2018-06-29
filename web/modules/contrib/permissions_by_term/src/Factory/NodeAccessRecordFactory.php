@@ -6,7 +6,9 @@ use Drupal\permissions_by_term\Model\NodeAccessRecordModel;
 
 class NodeAccessRecordFactory {
 
-  public function create($realm, $gid, $nid, $langcode = 'en', $grantUpdate, $grantDelete) {
+  public function create($realm, $gid, $nid, $langcode = '', $grantUpdate, $grantDelete) {
+		$langcode = ($langcode === '') ? \Drupal::languageManager()->getCurrentLanguage()->getId() : $langcode;
+
     $nodeAccessRecord = new NodeAccessRecordModel();
     $nodeAccessRecord->setNid($nid);
     $nodeAccessRecord->setFallback(1);

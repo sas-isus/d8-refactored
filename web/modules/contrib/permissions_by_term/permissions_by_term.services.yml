@@ -9,15 +9,15 @@ services:
         arguments: ['@database', '@event_dispatcher']
     permissions_by_term.access_storage:
         class: Drupal\permissions_by_term\Service\AccessStorage
-        arguments: ['@database',  '@permissions_by_term.term', '@permissions_by_term.access_check']
+        arguments: ['@database',  '@permissions_by_term.term_handler', '@permissions_by_term.access_check']
     permissions_by_term.node_access_record_factory:
         class: \Drupal\permissions_by_term\Factory\NodeAccessRecordFactory
     permissions_by_term.node_access:
         class: \Drupal\permissions_by_term\Service\NodeAccess
         arguments: ['@permissions_by_term.access_storage', '@permissions_by_term.node_access_record_factory', '@entity_type.manager', '@permissions_by_term.access_check', '@database']
-    permissions_by_term.term:
-        class: \Drupal\permissions_by_term\Service\Term
+    permissions_by_term.term_handler:
+        class: \Drupal\permissions_by_term\Service\TermHandler
         arguments: ['@database']
     permissions_by_term.node_entity_bundle_info:
         class: \Drupal\permissions_by_term\Service\NodeEntityBundleInfo
-        arguments: ['@permissions_by_term.access_storage', '@permissions_by_term.term', '@twig', '@database']
+        arguments: ['@permissions_by_term.access_storage', '@permissions_by_term.term_handler', '@twig', '@database']

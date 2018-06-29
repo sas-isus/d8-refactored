@@ -2,11 +2,10 @@
 
 namespace Drupal\permissions_by_term\Service;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Template\TwigEnvironment;
 use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
-use Drupal\Core\Database\Connection;
-use PDO;
 
 /**
  * Class Info
@@ -21,7 +20,7 @@ class NodeEntityBundleInfo {
   private $accessStorage;
 
   /**
-   * @var Term
+   * @var TermHandler
    */
   private $term;
 
@@ -39,13 +38,13 @@ class NodeEntityBundleInfo {
    * Info constructor.
    *
    * @param AccessStorage   $accessStorage
-   * @param Term            $term
+   * @param TermHandler            $term
    * @param TwigEnvironment $twig
    * @param Connection      $database
    */
   public function __construct(
     AccessStorage $accessStorage,
-    Term $term,
+    TermHandler $term,
     TwigEnvironment $twig,
     Connection $database
   ) {

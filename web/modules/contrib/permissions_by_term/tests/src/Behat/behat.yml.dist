@@ -8,7 +8,7 @@ default:
         - Drupal\DrupalExtension\Context\DrushContext
         - Drupal\Tests\permissions_by_term\Behat\Context\PermissionsByTermContext
       paths:
-        features: '/home/jepster/PhpstormProjects/permissions-by-term-behat/modules/permissions_by_term/tests/src/Behat/Features'
+        features: '%paths.base%/modules/permissions_by_term/tests/src/Behat/Features'
   extensions:
     Behat\MinkExtension:
       javascript_session: 'selenium2'
@@ -16,12 +16,17 @@ default:
       show_cmd: "open %s"
       selenium2:
         wd_host: 'http://localhost:4444/wd/hub'
-        browser: 'chrome'
-      base_url: http://pbt
+      base_url: http://localhost:8000
+      sessions:
+          default:
+            goutte: ~
+          javascript:
+            selenium2:
+              browser: phantomjs
     Drupal\DrupalExtension:
       blackbox: ~
       api_driver: 'drupal'
       drush:
         alias: 'local'
       drupal:
-        drupal_root: '/home/jepster/PhpstormProjects/permissions-by-term-behat'
+        drupal_root: '%paths.base%'

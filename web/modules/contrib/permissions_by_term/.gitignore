@@ -6,3 +6,5 @@ js/node_modules
 npm-debug.log
 # Ignore Mac DS_Store files
 .DS_Store
+js/babel-compiled
+js/babel-compiled-test

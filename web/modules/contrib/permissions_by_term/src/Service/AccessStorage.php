@@ -2,11 +2,12 @@
 
 namespace Drupal\permissions_by_term\Service;
 
-use Drupal\Core\Database\Connection;
 use Drupal\Component\Utility\Tags;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\user\Entity\User;
+use Drupal\user\Entity\Role;
 
 /**
  * Class AccessStorage.
@@ -44,7 +45,7 @@ class AccessStorage {
   protected $aSubmittedRolesGrantedAccess;
 
   /**
-   * @var Term
+   * @var TermHandler
    */
   protected $term;
 
@@ -62,10 +63,10 @@ class AccessStorage {
    * AccessStorageService constructor.
    *
    * @param Connection  $database
-   * @param Term        $term
+   * @param TermHandler        $term
    * @param AccessCheck $accessCheck
    */
-  public function __construct(Connection $database, Term $term, AccessCheck $accessCheck) {
+  public function __construct(Connection $database, TermHandler $term, AccessCheck $accessCheck) {
     $this->database  = $database;
     $this->term = $term;
     $this->accessCheck = $accessCheck;
@@ -291,29 +292,44 @@ class AccessStorage {
   }
 
   /**
-   * @param array $aUserIdsGrantedAccess
-   * @param int   $term_id
+   * @param array  $aUserIdsGrantedAccess
+   * @param int    $term_id
+   * @param string $langcode
    *
    * @throws \Exception
    */
-  public function addTermPermissionsByUserIds($aUserIdsGrantedAccess, $term_id) {
+  public function addTermPermissionsByUserIds($aUserIdsGrantedAccess, $term_id, $langcode = '') {
+		$langcode = ($langcode === '') ? \Drupal::languageManager()->getCurrentLanguage()->getId() : $langcode;
+
     foreach ($aUserIdsGrantedAccess as $iUserIdGrantedAccess) {
       $this->database->insert('permissions_by_term_user')
-        ->fields(['tid', 'uid'], [$term_id, $iUserIdGrantedAccess])
+        ->fields(['tid', 'uid', 'langcode'], [$term_id, $iUserIdGrantedAccess, $langcode])
         ->execute();
     }
   }
 
   /**
-   * @param array $aRoleIdsGrantedAccess
-   * @param int   $term_id
+   * @param array  $aRoleIdsGrantedAccess
+   * @param int    $term_id
+   * @param string $langcode
    *
    * @throws \Exception
    */
-  public function addTermPermissionsByRoleIds($aRoleIdsGrantedAccess, $term_id) {
+  public function addTermPermissionsByRoleIds($aRoleIdsGrantedAccess, $term_id, $langcode = '') {
+  	$langcode = ($langcode === '') ? \Drupal::languageManager()->getCurrentLanguage()->getId() : $langcode;
+
+    $roles = Role::loadMultiple();
+    foreach ($roles as $role => $roleObj) {
+      if ($roleObj->hasPermission('bypass node access')) {
+        $aRoleIdsGrantedAccess[] = $roleObj->id();
+      }
+    }
+
+    $aRoleIdsGrantedAccess = array_unique($aRoleIdsGrantedAccess);
+
     foreach ($aRoleIdsGrantedAccess as $sRoleIdGrantedAccess) {
       $this->database->insert('permissions_by_term_role')
-        ->fields(['tid', 'rid'], [$term_id, $sRoleIdGrantedAccess])
+        ->fields(['tid', 'rid', 'langcode'], [$term_id, $sRoleIdGrantedAccess, $langcode])
         ->execute();
     }
   }
@@ -350,17 +366,12 @@ class AccessStorage {
     return $aUserIds;
   }
 
-  /**
-   * Saves term permissions by users.
-   *
-   * Opposite to save term permission by roles.
-   *
-   * @param FormState $form_state
-   * @param int       $term_id
-   *
-   * @return array
-   *   Data for database queries.
-   */
+	/**
+	 * @param FormState $form_state
+	 * @param int $term_id
+	 * @return array
+	 * @throws \Exception
+	 */
   public function saveTermPermissions(FormState $form_state, $term_id) {
     $aExistingUserPermissions       = $this->getUserTermPermissionsByTid($term_id);
     $aSubmittedUserIdsGrantedAccess = $this->getSubmittedUserIds();
@@ -372,12 +383,16 @@ class AccessStorage {
       $aSubmittedUserIdsGrantedAccess, $aExistingRoleIdsGrantedAccess,
       $aSubmittedRolesGrantedAccess);
 
-    // Run the database queries.
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    if (!empty($form_state->getValue('langcode'))) {
+      $langcode = $form_state->getValue('langcode')['0']['value'];
+    }
+
     $this->deleteTermPermissionsByUserIds($aRet['UserIdPermissionsToRemove'], $term_id);
-    $this->addTermPermissionsByUserIds($aRet['UserIdPermissionsToAdd'], $term_id);
+    $this->addTermPermissionsByUserIds($aRet['UserIdPermissionsToAdd'], $term_id, $langcode);
 
     $this->deleteTermPermissionsByRoleIds($aRet['UserRolePermissionsToRemove'], $term_id);
-    $this->addTermPermissionsByRoleIds($aRet['aRoleIdPermissionsToAdd'], $term_id);
+    $this->addTermPermissionsByRoleIds($aRet['aRoleIdPermissionsToAdd'], $term_id, $langcode);
 
     return $aRet;
   }
@@ -610,7 +625,7 @@ class AccessStorage {
     if (\Drupal::config('permissions_by_term.settings.single_term_restriction')->get('value')) {
       $permittedNids = [];
       foreach ($nidsByTids as $nid) {
-        if($this->accessCheck->canUserAccessByNodeId($nid)) {
+        if($this->accessCheck->canUserAccessByNodeId($nid, $user->id(), $this->getLangCode($nid))) {
           $permittedNids[] = $nid;
         }
       }

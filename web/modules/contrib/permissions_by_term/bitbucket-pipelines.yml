@@ -1,0 +1,53 @@
+# This is a sample build configuration for PHP.
+# Check our guides at https://confluence.atlassian.com/x/e8YWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: derh4nnes/pipeline-behat:latest
+clone:
+  depth: full
+
+pipelines:
+  default:
+    - step:
+        name: Build and test
+        caches:
+          - composer
+        script:
+          - apt-get update
+          - apt-get install -y screen php7.1-sqlite libsqlite3-dev sqlite3
+          - curl -sL https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh -o install_nvm.sh
+          - bash install_nvm.sh
+          - source ~/.profile
+          - nvm install 9.11.1
+          - export PATH="$HOME/.composer/vendor/bin:$PATH"
+          - cd ..
+          - mkdir permissions_by_term/
+          - mv build/* permissions_by_term/
+          - mv permissions_by_term/ build/
+          - cd build
+          - composer create-project drupal-composer/drupal-project:8.x-dev drupal --stability dev --no-interaction
+          - (cd drupal && composer require behat/behat:^3.0 behat/mink-extension:^2.2 drupal/drupal-extension:^3.2 --dev)
+          - mv permissions_by_term drupal/web/modules/
+          - (cd drupal/web/modules/permissions_by_term/tests/ && ../../../../vendor/bin/phpunit)
+          - (cd drupal/web/modules/permissions_by_term/js/ && npm install && npm run bat)
+          - (cd drupal/web && ../vendor/drush/drush/drush si standard --db-url=sqlite://sites/default/files/db.sqlite -y && ../vendor/drush/drush/drush en permissions_by_term -y)
+          - (cd drupal && cp web/modules/permissions_by_term/tests/src/Behat/composer-require-namespace.php . && php composer-require-namespace.php && composer dump-autoload)
+          - (cd drupal && cat composer.json)
+          - screen -dmS php-server php -S localhost:8000 -t ./drupal/web
+          - (cd drupal/web && cp modules/permissions_by_term/tests/src/Behat/behat.yml.dist behat.yml && ../vendor/bin/behat)
+        services:
+          - testing
+    - step:
+        name: Deploy
+        script:
+          - apt-get update && apt-get install -y unzip git
+          - git remote add d.o jepSter@git.drupal.org:project/permissions_by_term.git
+          - git config --global push.default simple
+          - git config --global user.name "Peter Majmesku"
+          - git push -u d.o
+          - git push --tags
+definitions:
+  services:
+    testing:
+      image: darksolar/selenium-chrome-headless
