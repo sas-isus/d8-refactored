@@ -25,18 +25,6 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class InlineFragmentRendererTest extends TestCase
 {
-    private $originalTrustedHeaderName;
-
-    protected function setUp()
-    {
-        $this->originalTrustedHeaderName = Request::getTrustedHeaderName(Request::HEADER_CLIENT_IP);
-    }
-
-    protected function tearDown()
-    {
-        Request::setTrustedHeaderName(Request::HEADER_CLIENT_IP, $this->originalTrustedHeaderName);
-    }
-
     public function testRender()
     {
         $strategy = new InlineFragmentRenderer($this->getKernel($this->returnValue(new Response('foo'))));
@@ -109,10 +97,12 @@ class InlineFragmentRendererTest extends TestCase
 
     public function testRenderWithTrustedHeaderDisabled()
     {
-        Request::setTrustedHeaderName(Request::HEADER_CLIENT_IP, '');
+        Request::setTrustedProxies(array(), 0);
 
         $strategy = new InlineFragmentRenderer($this->getKernelExpectingRequest(Request::create('/')));
         $this->assertSame('foo', $strategy->render('/', Request::create('/'))->getContent());
+
+        Request::setTrustedProxies(array(), -1);
     }
 
     /**
@@ -198,7 +188,7 @@ class InlineFragmentRendererTest extends TestCase
         $expectedSubRequest = Request::create('/');
         $expectedSubRequest->headers->set('Surrogate-Capability', 'abc="ESI/1.0"');
 
-        if (Request::getTrustedHeaderName(Request::HEADER_CLIENT_IP)) {
+        if (Request::HEADER_X_FORWARDED_FOR & Request::getTrustedHeaderSet()) {
             $expectedSubRequest->headers->set('x-forwarded-for', array('127.0.0.1'));
             $expectedSubRequest->server->set('HTTP_X_FORWARDED_FOR', '127.0.0.1');
         }
@@ -212,25 +202,41 @@ class InlineFragmentRendererTest extends TestCase
 
     public function testESIHeaderIsKeptInSubrequestWithTrustedHeaderDisabled()
     {
-        $trustedHeaderName = Request::getTrustedHeaderName(Request::HEADER_CLIENT_IP);
-        Request::setTrustedHeaderName(Request::HEADER_CLIENT_IP, '');
+        Request::setTrustedProxies(array(), 0);
 
         $this->testESIHeaderIsKeptInSubrequest();
 
-        Request::setTrustedHeaderName(Request::HEADER_CLIENT_IP, $trustedHeaderName);
+        Request::setTrustedProxies(array(), -1);
     }
 
     public function testHeadersPossiblyResultingIn304AreNotAssignedToSubrequest()
     {
         $expectedSubRequest = Request::create('/');
-        if (Request::getTrustedHeaderName(Request::HEADER_CLIENT_IP)) {
-            $expectedSubRequest->headers->set('x-forwarded-for', array('127.0.0.1'));
-            $expectedSubRequest->server->set('HTTP_X_FORWARDED_FOR', '127.0.0.1');
-        }
+        $expectedSubRequest->headers->set('x-forwarded-for', array('127.0.0.1'));
+        $expectedSubRequest->server->set('HTTP_X_FORWARDED_FOR', '127.0.0.1');
 
         $strategy = new InlineFragmentRenderer($this->getKernelExpectingRequest($expectedSubRequest));
         $request = Request::create('/', 'GET', array(), array(), array(), array('HTTP_IF_MODIFIED_SINCE' => 'Fri, 01 Jan 2016 00:00:00 GMT', 'HTTP_IF_NONE_MATCH' => '*'));
         $strategy->render('/', $request);
+    }
+
+    public function testFirstTrustedProxyIsSetAsRemote()
+    {
+        Request::setTrustedProxies(array('1.1.1.1'), -1);
+
+        $expectedSubRequest = Request::create('/');
+        $expectedSubRequest->headers->set('Surrogate-Capability', 'abc="ESI/1.0"');
+        $expectedSubRequest->server->set('REMOTE_ADDR', '1.1.1.1');
+        $expectedSubRequest->headers->set('x-forwarded-for', array('127.0.0.1'));
+        $expectedSubRequest->server->set('HTTP_X_FORWARDED_FOR', '127.0.0.1');
+
+        $strategy = new InlineFragmentRenderer($this->getKernelExpectingRequest($expectedSubRequest));
+
+        $request = Request::create('/');
+        $request->headers->set('Surrogate-Capability', 'abc="ESI/1.0"');
+        $strategy->render('/', $request);
+
+        Request::setTrustedProxies(array(), -1);
     }
 
     /**
