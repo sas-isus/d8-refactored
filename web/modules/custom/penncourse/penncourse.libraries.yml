@@ -1,0 +1,13 @@
+penncourse-table:
+  css:
+    theme:
+      css/penncourse_table.css: {}
+  js:
+    js/penncourse_course_table.js: {}
+  dependencies:
+    - core/jquery
+penncourse-form:
+  js:
+    js/penncourse_filter_form.js: {}
+  dependencies:
+    - core/jquery

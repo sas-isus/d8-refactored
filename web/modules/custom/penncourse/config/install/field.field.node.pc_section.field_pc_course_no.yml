@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_pc_course_no
+    - node.type.pc_section
+_core:
+  default_config_hash: dvfvBPwIQEvH8oPcfuJRod3GRTk7T0aAdhS0NX2AZ2M
+id: node.pc_section.field_pc_course_no
+field_name: field_pc_course_no
+entity_type: node
+bundle: pc_section
+label: 'Course number only'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

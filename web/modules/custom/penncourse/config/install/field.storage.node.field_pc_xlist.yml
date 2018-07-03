@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - text
+_core:
+  default_config_hash: YnHgn75ZWv2TUN8-r-rEc-gf7Mt5TdYcN57qoKY6LbM
+id: node.field_pc_xlist
+field_name: field_pc_xlist
+entity_type: node
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

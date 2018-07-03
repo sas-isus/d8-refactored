@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_pc_local_descr
+    - node.type.pc_section
+id: node.pc_section.field_pc_local_descr
+field_name: field_pc_local_descr
+entity_type: node
+bundle: pc_section
+label: 'Use local description'
+description: 'Check this box to override the section description with a with a custom description for this course section.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

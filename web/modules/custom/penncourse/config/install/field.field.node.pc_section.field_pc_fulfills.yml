@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_pc_fulfills
+    - node.type.pc_section
+  module:
+    - text
+id: node.pc_section.field_pc_fulfills
+field_name: field_pc_fulfills
+entity_type: node
+bundle: pc_section
+label: Fulfills
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text

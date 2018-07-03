@@ -1,0 +1,5 @@
+name: 'PennCourse'
+type: module
+description: 'Displays course information from the Penn-In-Touch web service.'
+core: 8.x
+package: 'Penn'

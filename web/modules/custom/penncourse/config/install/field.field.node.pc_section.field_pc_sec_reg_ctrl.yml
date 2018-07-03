@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_pc_sec_reg_ctrl
+    - node.type.pc_section
+  module:
+    - text
+_core:
+  default_config_hash: Y-OWP0iI1xjjvDAe-VZfhgjYSzOM4wv9oTMyiDkmXr8
+id: node.pc_section.field_pc_sec_reg_ctrl
+field_name: field_pc_sec_reg_ctrl
+entity_type: node
+bundle: pc_section
+label: 'Registration notes'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

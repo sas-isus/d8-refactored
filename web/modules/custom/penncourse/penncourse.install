@@ -1,0 +1,106 @@
+<?php
+/**
+ * @file
+ * Install file for penncourse module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function penncourse_install() {
+    penncourse_create_role();
+    penncourse_create_user();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function penncourse_uninstall() {
+  // Delete pc_section nodes when uninstalling
+  $query = \Drupal::entityQuery('node')
+    ->condition('type', 'pc_section');
+  $nids = $query->execute();
+  debug($nids);
+  foreach ($nids as $nid) {
+    \Drupal\node\Entity\Node::load($nid)->delete();
+  }
+
+  $section_type = \Drupal::entityTypeManager()->getStorage('node_type')->load('pc_section');
+  if ($section_type) {
+    $section_type->delete();
+  }
+
+  $penncourse_user = \Drupal::entityTypeManager()
+    ->getStorage('user')
+    ->loadByProperties(['name' => 'penncourse_user']
+  );
+  foreach ($penncourse_user as $user) {
+    $user->delete();
+  }
+
+  $role = \Drupal\user\Entity\Role::load('penncourse_user');
+  if ($role) {
+    $role->delete();
+  }
+}
+
+
+/**
+ * create role for use by the penncourse_user
+ */
+function penncourse_create_role() {
+  // try to load role first
+  $role = \Drupal\user\Entity\Role::load('penncourse_user');
+
+  //if role doesn't exist, create it
+  if (!$role) {
+    $role = \Drupal\user\Entity\Role::create(array('id' => 'penncourse_user', 'label' => 'Penncourse user'));
+    $role->save();
+  }
+}
+
+function penncourse_create_user() {
+    // create and save new user who will author content associated with this module
+    // first try to load the penncourse_user
+    $penncourse_user = \Drupal::entityTypeManager()
+      ->getStorage('user')
+      ->loadByProperties(['name' => 'penncourse_user']
+    );
+
+    // if user does not exist, create the user
+    if (empty($penncourse_user)) {
+      $penncourse_user = \Drupal\user\Entity\User::create();
+      $penncourse_user->setPassword(penncourse_rand_password());
+      $penncourse_user->enforceIsNew();
+      $penncourse_user->setEmail('penncourse_user@upenn.edu');
+      $penncourse_user->setUsername('penncourse_user');
+      $penncourse_user->activate();
+      $penncourse_user->save();
+    }
+
+    $penncourse_user->addRole('penncourse_user');
+    $penncourse_user->save();
+}
+
+/**
+ * @param integer
+ * generate a random password to save as a drupal native password
+ */
+function penncourse_rand_password($length = 16) {
+    $vowels = 'aeuyAEUY';
+    $consonants = 'bdghjmnpqrstvzBDGHJLMNPQRSTVWXZ23456789@#$%';
+
+    $password = '';
+    $alt = time() % 2;
+    for ($i = 0; $i < $length; $i++) {
+        if ($alt == 1) {
+            $password .= $consonants[(rand() % strlen($consonants))];
+            $alt = 0;
+        }
+        else {
+            $password .= $vowels[(rand() % strlen($vowels))];
+            $alt = 1;
+        }
+    }
+    return $password;
+}

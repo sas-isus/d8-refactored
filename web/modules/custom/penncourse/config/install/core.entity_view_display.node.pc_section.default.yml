@@ -1,0 +1,219 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.pc_section.field_pc_activity
+    - field.field.node.pc_section.field_pc_course_int
+    - field.field.node.pc_section.field_pc_course_no
+    - field.field.node.pc_section.field_pc_descr
+    - field.field.node.pc_section.field_pc_fulfills
+    - field.field.node.pc_section.field_pc_instructors
+    - field.field.node.pc_section.field_pc_level
+    - field.field.node.pc_section.field_pc_local_descr
+    - field.field.node.pc_section.field_pc_location
+    - field.field.node.pc_section.field_pc_meeting
+    - field.field.node.pc_section.field_pc_sec_reg_ctrl
+    - field.field.node.pc_section.field_pc_section_id
+    - field.field.node.pc_section.field_pc_section_int
+    - field.field.node.pc_section.field_pc_section_no
+    - field.field.node.pc_section.field_pc_status
+    - field.field.node.pc_section.field_pc_subj_area
+    - field.field.node.pc_section.field_pc_syllabus
+    - field.field.node.pc_section.field_pc_syllabus_url
+    - field.field.node.pc_section.field_pc_term
+    - field.field.node.pc_section.field_pc_term_session
+    - field.field.node.pc_section.field_pc_title
+    - field.field.node.pc_section.field_pc_xlist
+    - node.type.pc_section
+  module:
+    - file
+    - link
+    - text
+    - user
+id: node.pc_section.default
+targetEntityType: node
+bundle: pc_section
+mode: default
+content:
+  field_pc_activity:
+    type: string
+    weight: 2
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_pc_course_int:
+    type: number_integer
+    weight: 12
+    region: content
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+  field_pc_course_no:
+    type: string
+    weight: 19
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_pc_descr:
+    type: basic_string
+    weight: 18
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+  field_pc_fulfills:
+    weight: 21
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_pc_instructors:
+    type: text_default
+    weight: 17
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+  field_pc_level:
+    type: string
+    weight: 16
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_pc_local_descr:
+    weight: 22
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_pc_location:
+    type: text_default
+    weight: 15
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+  field_pc_meeting:
+    type: text_default
+    weight: 14
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+  field_pc_sec_reg_ctrl:
+    type: text_default
+    weight: 13
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+  field_pc_section_id:
+    type: string
+    weight: 11
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_pc_section_int:
+    type: number_integer
+    weight: 3
+    region: content
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+  field_pc_section_no:
+    type: string
+    weight: 10
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_pc_status:
+    weight: 1
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_pc_subj_area:
+    type: string
+    weight: 9
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_pc_syllabus:
+    type: file_default
+    weight: 8
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+  field_pc_syllabus_url:
+    type: link
+    weight: 7
+    region: content
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+  field_pc_term:
+    type: string
+    weight: 6
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_pc_term_session:
+    type: string
+    weight: 5
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_pc_title:
+    type: string
+    weight: 4
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_pc_xlist:
+    type: text_default
+    weight: 20
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+  links:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden: {  }

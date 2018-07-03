@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @file
+ * Contains penncourse.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function penncourse_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the penncourse module.
+    case 'help.page.penncourse':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Displays course information from the Penn-In-Touch web service.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function penncourse_theme() {
+  return [
+    'penncourse' => [
+      'render element' => 'children',
+    ],
+  ];
+}
+
+/**
+ * Implementation of hook_cron
+ */
+function penncourse_cron() {
+  $penncourse = \Drupal::service('penncourse.service');
+  $penncourse_config = \Drupal::config('penncourse.penncourseconfig');
+
+  // update the section search parameters (includes currently open terms and subject area mappings)
+  $penncourse->updateSectionParams();
+
+  // get the subjects to process for this site
+  $subject_array = explode(' ', trim($penncourse_config->get('penncourse_subject_areas')));
+
+  // process each subject area as set on the penncourse system settings form
+  foreach ($subject_array as $subject) {
+    $penncourse->processSubjectArea($subject);
+  }
+}

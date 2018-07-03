@@ -1,0 +1,50 @@
+
+penncourse.penncourse_config_form:
+  path: '/admin/config/penncourse/settings'
+  defaults:
+    _form: '\Drupal\penncourse\Form\PenncourseConfigForm'
+    _title: 'PenncourseConfigForm'
+  requirements:
+    _permission: 'access administration pages'
+  options:
+    _admin_route: TRUE
+
+#penncourse.penncourse_controller_test:
+#  path: '/course-list/test'
+#  defaults:
+#    _controller: '\Drupal\penncourse\Controller\PenncourseController::test'
+#    _title: 'test'
+#  requirements:
+#    _permission: 'access content'
+
+penncourse.default:
+  # redirects to display most current term.
+  path: '/course-list'
+  defaults:
+    _controller: '\Drupal\penncourse\Controller\PenncourseController::viewCourseDefault'
+  requirements:
+    _permission: 'access content'
+
+penncourse.view:
+  # This path takes dynamic arguments, which are enclosed in { }.
+  path: '/course-list/{term}/{subj_code}/{level}'
+  defaults:
+    # Because this route does not return HTML, use _controller.
+    _controller: '\Drupal\penncourse\Controller\PenncourseController::viewCourseTable'
+    term: NULL
+    subj_code: 'all'
+    level: 'all'
+    _title_callback: '\Drupal\penncourse\Controller\PenncourseController::viewCourseTableTitle'
+    term: NULL
+    subj_code: 'all'
+    level: 'all'
+  requirements:
+    _permission: 'access content'
+
+penncourse.penncourse_filter_form:
+  path: '/penncourse/form/penncourse_filter'
+  defaults:
+    _form: '\Drupal\penncourse\Form\PenncourseFilterForm'
+    _title: 'PenncourseFilterForm'
+  requirements:
+    _access: 'TRUE'

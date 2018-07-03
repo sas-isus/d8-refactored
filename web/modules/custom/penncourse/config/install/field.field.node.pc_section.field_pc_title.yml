@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_pc_title
+    - node.type.pc_section
+_core:
+  default_config_hash: 8p42wRv9lb0yndB8nFgJ_HWxVLhEgLFEbObl3M9cPbs
+id: node.pc_section.field_pc_title
+field_name: field_pc_title
+entity_type: node
+bundle: pc_section
+label: 'Title (text only)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

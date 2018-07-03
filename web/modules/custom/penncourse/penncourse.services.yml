@@ -1,0 +1,4 @@
+services:
+  penncourse.service:
+    class: Drupal\penncourse\Service\PenncourseService
+    arguments: ['@config.factory']

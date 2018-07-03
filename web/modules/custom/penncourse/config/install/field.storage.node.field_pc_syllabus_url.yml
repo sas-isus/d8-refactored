@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - link
+    - node
+_core:
+  default_config_hash: 5JN0OhDmJDrZpHrBAG4nVyv_GILO04i3lH0x8qcP8qk
+id: node.field_pc_syllabus_url
+field_name: field_pc_syllabus_url
+entity_type: node
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

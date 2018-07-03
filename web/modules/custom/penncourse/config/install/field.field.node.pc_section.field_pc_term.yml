@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_pc_term
+    - node.type.pc_section
+_core:
+  default_config_hash: OYHKvkKVQ6HwVrfXWPVFCCkSCsUH3f94wvfIpVHuSpI
+id: node.pc_section.field_pc_term
+field_name: field_pc_term
+entity_type: node
+bundle: pc_section
+label: Term
+description: 'The term code for the term in which this course is offered.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

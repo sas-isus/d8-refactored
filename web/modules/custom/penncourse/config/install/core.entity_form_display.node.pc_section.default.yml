@@ -1,0 +1,280 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.pc_section.field_pc_activity
+    - field.field.node.pc_section.field_pc_course_int
+    - field.field.node.pc_section.field_pc_course_no
+    - field.field.node.pc_section.field_pc_descr
+    - field.field.node.pc_section.field_pc_fulfills
+    - field.field.node.pc_section.field_pc_instructors
+    - field.field.node.pc_section.field_pc_level
+    - field.field.node.pc_section.field_pc_local_descr
+    - field.field.node.pc_section.field_pc_location
+    - field.field.node.pc_section.field_pc_meeting
+    - field.field.node.pc_section.field_pc_sec_reg_ctrl
+    - field.field.node.pc_section.field_pc_section_id
+    - field.field.node.pc_section.field_pc_section_int
+    - field.field.node.pc_section.field_pc_section_no
+    - field.field.node.pc_section.field_pc_status
+    - field.field.node.pc_section.field_pc_subj_area
+    - field.field.node.pc_section.field_pc_syllabus
+    - field.field.node.pc_section.field_pc_syllabus_url
+    - field.field.node.pc_section.field_pc_term
+    - field.field.node.pc_section.field_pc_term_session
+    - field.field.node.pc_section.field_pc_title
+    - field.field.node.pc_section.field_pc_xlist
+    - node.type.pc_section
+  module:
+    - file
+    - link
+    - path
+    - text
+id: node.pc_section.default
+targetEntityType: node
+bundle: pc_section
+mode: default
+content:
+  created:
+    type: datetime_timestamp
+    weight: 7
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_pc_activity:
+    type: string_textfield
+    weight: 3
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_pc_course_int:
+    type: number
+    weight: 5
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_pc_course_no:
+    type: string_textfield
+    weight: 27
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_pc_descr:
+    type: string_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_pc_fulfills:
+    weight: 28
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textfield
+    region: content
+  field_pc_instructors:
+    type: text_textfield
+    weight: 26
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_pc_level:
+    type: string_textfield
+    weight: 25
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_pc_local_descr:
+    weight: 2
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_pc_location:
+    type: text_textfield
+    weight: 24
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_pc_meeting:
+    type: text_textfield
+    weight: 23
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_pc_sec_reg_ctrl:
+    type: text_textarea
+    weight: 22
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_pc_section_id:
+    type: string_textfield
+    weight: 21
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_pc_section_int:
+    type: number
+    weight: 4
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_pc_section_no:
+    type: string_textfield
+    weight: 20
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_pc_status:
+    weight: 12
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_pc_subj_area:
+    type: string_textfield
+    weight: 19
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_pc_syllabus:
+    type: file_generic
+    weight: 18
+    region: content
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
+  field_pc_syllabus_url:
+    type: link_default
+    weight: 17
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_pc_term:
+    type: string_textfield
+    weight: 16
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_pc_term_session:
+    type: string_textfield
+    weight: 15
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_pc_title:
+    type: string_textfield
+    weight: 14
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_pc_xlist:
+    type: text_textarea
+    weight: 13
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  promote:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 8
+    region: content
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 11
+    region: content
+    third_party_settings: {  }
+  sticky:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 9
+    region: content
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 6
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    region: content
+    third_party_settings: {  }
+hidden:
+  field_pc_activity: true
+  field_pc_course_int: true
+  field_pc_course_no: true
+  field_pc_fulfills: true
+  field_pc_instructors: true
+  field_pc_level: true
+  field_pc_location: true
+  field_pc_meeting: true
+  field_pc_sec_reg_ctrl: true
+  field_pc_section_id: true
+  field_pc_section_int: true
+  field_pc_section_no: true
+  field_pc_status: true
+  field_pc_subj_area: true
+  field_pc_syllabus: true
+  field_pc_syllabus_url: true
+  field_pc_term: true
+  field_pc_term_session: true
+  field_pc_title: true
+  field_pc_xlist: true

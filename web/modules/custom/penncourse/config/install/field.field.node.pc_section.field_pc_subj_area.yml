@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_pc_subj_area
+    - node.type.pc_section
+_core:
+  default_config_hash: dSe37xxyFcvbg0_hujR0E6UEPmVcYkFMbQxxZPFe6Ec
+id: node.pc_section.field_pc_subj_area
+field_name: field_pc_subj_area
+entity_type: node
+bundle: pc_section
+label: 'Subject area'
+description: 'The subject area code (eg, ANTH).'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

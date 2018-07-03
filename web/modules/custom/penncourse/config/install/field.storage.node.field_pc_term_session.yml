@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+_core:
+  default_config_hash: YauGfn3mtchSqLCie1JvcF434smuBYfX_73rrHcixOg
+id: node.field_pc_term_session
+field_name: field_pc_term_session
+entity_type: node
+type: string
+settings:
+  max_length: 10
+  is_ascii: false
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

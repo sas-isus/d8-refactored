@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_pc_location
+    - node.type.pc_section
+  module:
+    - text
+_core:
+  default_config_hash: 8qsWII2AJleKF1ZteufC44YwU1KMJTjNkyTgpX-80hM
+id: node.pc_section.field_pc_location
+field_name: field_pc_location
+entity_type: node
+bundle: pc_section
+label: 'Meeting location'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text

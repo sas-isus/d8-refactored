@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+_core:
+  default_config_hash: YS7A5qSSAKmHgSWOnntS1i_RhUCMFRwtZF8CxO7mrLg
+id: node.field_pc_section_int
+field_name: field_pc_section_int
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
