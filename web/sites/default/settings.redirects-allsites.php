@@ -47,9 +47,10 @@ if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
 #
 # Above document says to use _ENV[HOME], but _SERVER[DOCUMENT_ROOT] handles whether there is a web directory
 #
-if (isset($_ENV['HOME']) && php_sapi_name() != 'cli') {
+#if (isset($_ENV['HOME']) && php_sapi_name() != 'cli') {
+if (isset($_ENV['HOME'])) {
     if (isD8()) {
-        $settings['simplesamlphp_dir'] = $_SERVER['DOCUMENT_ROOT'] . '/private/simplesamlphp';
+        $settings['simplesamlphp_dir'] = $_ENV['HOME'] . '/code/web/private/simplesamlphp';
     }
     else {
         $conf['simplesamlphp_auth_installdir'] = $_SERVER['DOCUMENT_ROOT'] . '/private/simplesamlphp';

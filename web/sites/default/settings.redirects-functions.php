@@ -14,7 +14,7 @@ function isD7() {
 }
 
 function isD8() {
-	return(isset($_ENV['HOME']) && (file_exists($_ENV['HOME'].'/web') || file_exists($_SERVER['DOCUMENT_ROOT'].'/modules/contrib')));
+	return(isset($_ENV['HOME']) && (file_exists($_ENV['HOME'].'/code/web') || file_exists($_ENV['HOME'].'/modules/contrib')));
 }
 
 function isProxied() {
