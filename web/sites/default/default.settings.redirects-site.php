@@ -1,8 +1,14 @@
 <?php
 // Site specific custom redirects
 
+/**
+ * We shouldn't need this anymore
+ */
 //global $primary_domain;
-//$primary_domain = 'www.UPDATEME.upenn.edu';
+
+/**
+ * This should not go here!
+ */
 
 //global $drupal_hash_salt;
 //$drupal_hash_salt = 'abc';

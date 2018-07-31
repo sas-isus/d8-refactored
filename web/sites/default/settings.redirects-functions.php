@@ -9,13 +9,6 @@ function isPantheonSite () {
 	return(preg_match('@pantheonsite.io@',$_SERVER['HTTP_HOST']));
 }
 
-function isD7() {
-	return(file_exists($_SERVER['DOCUMENT_ROOT']. '/sites/all/modules'));
-}
-
-function isD8() {
-	return(isset($_ENV['HOME']) && (file_exists($_ENV['HOME'].'/code/web') || file_exists($_ENV['HOME'].'/code/modules/contrib')));
-}
 
 function getDocRoot() {
 	if (isset($_ENV['HOME']) && (file_exists($_ENV['HOME'].'/code/web'))) {
