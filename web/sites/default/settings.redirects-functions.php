@@ -5,37 +5,6 @@ if (file_exists(__DIR__ . '/settings.redirects-site.php')) {
 }
 
 
-function isPantheonSite () {
-	return(preg_match('@pantheonsite.io@',$_SERVER['HTTP_HOST']));
-}
-
-
-function getDocRoot() {
-	if (isset($_ENV['HOME']) && (file_exists($_ENV['HOME'].'/code/web'))) {
-		return($_ENV['HOME'].'/code/web');
-	}
-
-	return($_ENV['HOME'].'/code');
-}
-
-function isProxied() {
-    // What does a site need to do differently if its proxied?
-
-	// HTTP_X_FORWARDED_HOST is undefined when coming in through the load-balancer
-	// HTTP_HOST == HTTP_X_FORWARDED_HOST for direct access to pantheon + via CDN
-	// via proxy, HTTP_HOST -> 'live-sas-school.pantheonsite.io' while
-	//   HTTP_X_FORWARDED_HOST -> 'www.sas.upenn.edu, live-sas-school.pantheonsite.io'
-	
-	//return(	   isset($_SERVER['HTTP_X_FORWARDED_HOST']) 
-    //    	&& ($_SERVER['HTTP_HOST'] != $_SERVER['HTTP_X_FORWARDED_HOST']));
-    if(isset($SERVER['HTTP_X_FORWARDED_HOST'])) {
-    	return 1;
-    } else {
-    	return 0;
-    }
-}
-
-
 function getCanonicalHost() {
     // The outside URL, e.g. for TLS and Shib
     // Pantheon robots.txt disallows things

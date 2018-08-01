@@ -1,14 +1,13 @@
 <?php
 
-/**
- * NEW SITES:
+/*
+ * Don't put any custom code in settings.php
+ * - settings.php only includes this file so we must use it
+ *
+ * New sites:
  * - rename this file to settings.local.php
- * - update the primary domain setting below
+ * - modify any settings below, e.g. reverse_proxy
  */
-
-// Initialize only, DO NOT SET!
-// TODO: TEST THIS
-global $primary_domain;
 
 /**
  * If the site will be proxied by our proxy server then
@@ -17,44 +16,28 @@ global $primary_domain;
 //$settings['reverse_proxy'] = TRUE;
 //$settings['reverse_proxy_addresses'] = array('128.91.219.96');
 
-/**
- * Set simplesamlphp library directory
+
+/*
+ * Include SAS specific settings (for all sites)
+ * - this is how settings.php does it so following suit
  */
-if (isset($_ENV['HOME'])) {
-    $settings['simplesamlphp_dir'] = $_ENV['HOME'] . '/code/web/private/simplesamlphp';
+$sas_settings = __DIR__ . "/settings.sas.php";
+if (file_exists($sas_settings)) {
+    include $sas_settings;
 }
 
-/**
- * Pantheon recommended settings.
- * -
+
+/******************************************************************************
+ * Site specific settings should be included below
  */
-if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
-  // Redirect to https://$primary_domain in the Live environment
-  if ($_ENV['PANTHEON_ENVIRONMENT'] === 'live') {
-    /**
-     * If the site is not being proxied
-     *   replace example-pan-site.sas.upenn.edu with the registered domain name
-     * If the site IS being proxied
-     *   replace with the pan-site.sas.upenn.edu domain anem
-     */
-    $primary_domain = 'example-pan-site.sas.upenn.edu';
-  }
-  else {
-    // Redirect to HTTPS on every Pantheon environment except live.
-    $primary_domain = $_SERVER['HTTP_HOST'];
-  }
 
-  if ($_SERVER['HTTP_HOST'] != $primary_domain
-      || !isset($_SERVER['HTTP_USER_AGENT_HTTPS'])
-      || $_SERVER['HTTP_USER_AGENT_HTTPS'] != 'ON' ) {
-
-    # Name transaction "redirect" in New Relic for improved reporting (optional)
-    if (extension_loaded('newrelic')) {
-      newrelic_name_transaction("redirect");
-    }
-
-    header('HTTP/1.0 301 Moved Permanently');
-    header('Location: https://'. $primary_domain . $_SERVER['REQUEST_nURI']);
-    exit();
-  }
+/*
+ * Set canonical_host for shib. We can do this here and not worry about whether
+ * or not this site is being proxied by SAS or not. Just set it and forget it.
+ */
+setCanonicalHost() {
+    // just return what's being asked for
+    $canonical_host = 'www.site.upenn.edu';
+    return $canonical_host;
 }
+
