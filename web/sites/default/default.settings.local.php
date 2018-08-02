@@ -17,6 +17,21 @@
 //$settings['reverse_proxy_addresses'] = array('128.91.219.96');
 
 
+/**
+ * Site specific redirects.
+ * This must be set before sas_settings is processed.
+ * Including yet another file just adds cruft
+ */
+
+/**
+ * Uncomment when site specific redirects are required
+ */
+// global $RewriteMap;
+// $RewriteMap = array('@^/foo/bar.htm$@'        => '/node/1',
+//                     '@^/foo/index.html$@'     => '/node/1',
+// );
+//
+
 /*
  * Include SAS specific settings (for all sites)
  * - this is how settings.php does it so following suit
