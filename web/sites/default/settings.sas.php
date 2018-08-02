@@ -42,7 +42,6 @@ if (isset($_SERVER['PANTHEON_ENVIRONMENT']) && ($_SERVER['HTTPS'] === 'OFF') && 
  *  $ReWriteMap
  */
 
-
 /**
  * Implement RewriteMap code
  *
@@ -66,7 +65,11 @@ if (isset($RewriteMap) && (isset($_SERVER['argv'][1]) || isset($_SERVER['REQUEST
         if (preg_match($key, $oldurl)) {
             $newurl = preg_replace($key, $value, $oldurl);
             if (isset($_ENV['PANTHEON_ENVIRONMENT'])) {
-                redirectTo($newurl);
+                if (extension_loaded('newrelic')) {
+		            newrelic_name_transaction("redirect");
+	            }
+                header('HTTP/1.2 301 Moved Permanently');
+	            header('Location: '. $newurl);
             }
             else {
                 print("$oldurl => $newurl\n");
