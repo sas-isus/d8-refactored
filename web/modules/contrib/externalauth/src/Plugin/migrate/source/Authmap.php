@@ -9,7 +9,7 @@ use Drupal\migrate_drupal\Plugin\migrate\source\DrupalSqlBase;
  *
  * @MigrateSource(
  *   id = "authmap",
- *   source_provider = "user"
+ *   source_module = "user"
  * )
  */
 class Authmap extends DrupalSqlBase {
