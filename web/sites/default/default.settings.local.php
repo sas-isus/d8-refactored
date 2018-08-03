@@ -47,12 +47,17 @@ if (file_exists($sas_settings)) {
  */
 
 /*
- * Set canonical_host for shib. We can do this here and not worry about whether
- * or not this site is being proxied by SAS or not. Just set it and forget it.
+ * Set canonical_host for shib if we're on the live environment.
+ * If the live site is being proxied then we need this set
+ * If the live site is NOT being proxied then we're fine, just set it
  */
 setCanonicalHost() {
-    // just return what's being asked for
-    $canonical_host = 'www.site.upenn.edu';
-    return $canonical_host;
+    if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
+        // Redirect to https://$primary_domain in the Live environment
+        if ($_ENV['PANTHEON_ENVIRONMENT'] === 'live') {
+            /** Replace www.example.com with your registered domain name */
+            $canonical_host = 'site.sas.upenn.edu';
+        }
+    }
 }
 

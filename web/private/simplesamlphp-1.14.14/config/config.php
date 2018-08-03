@@ -12,6 +12,7 @@ if (!ini_get('session.save_handler')) {
 /*
  * If a site is being proxied by SAS we need can't use HTTP_HOST so we set this
  * manually in settings.local.php
+ *
  */
 if (file_exists($_SERVER['DOCUMENT_ROOT']. '/sites/default/settings.local.php')) {
     require_once($_SERVER['DOCUMENT_ROOT']. '/sites/default/settings.local.php');
