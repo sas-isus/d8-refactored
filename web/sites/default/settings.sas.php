@@ -21,19 +21,57 @@ if (isset($_ENV['HOME'])) {
  *
  * https://pantheon.io/docs/redirects/
  *
+ * We probably don't need this but leaving here for the time being.
  */
-if (isset($_SERVER['PANTHEON_ENVIRONMENT']) && ($_SERVER['HTTPS'] === 'OFF') && (php_sapi_name() != "cli")) {
-    if (!isset($_SERVER['HTTP_USER_AGENT_HTTPS']) || (isset($_SERVER['HTTP_USER_AGENT_HTTPS']) && $_SERVER['HTTP_USER_AGENT_HTTPS'] != 'ON')) {
+//if (isset($_SERVER['PANTHEON_ENVIRONMENT']) && ($_SERVER['HTTPS'] === 'OFF') && (php_sapi_name() != "cli")) {
+//    if (!isset($_SERVER['HTTP_USER_AGENT_HTTPS']) || (isset($_SERVER['HTTP_USER_AGENT_HTTPS']) 
+//        && $_SERVER['HTTP_USER_AGENT_HTTPS'] != 'ON')) {
+//
+//        // Name transaction "redirect" in New Relic for improved reporting (optional)
+//        if (extension_loaded('newrelic')) {
+//            newrelic_name_transaction("redirect");
+//        }
+//
+//        header('HTTP/1.1 301 Moved Permanently');
+//        header('Location: https://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+//        exit();
+//    }
+//}
 
-        // Name transaction "redirect" in New Relic for improved reporting (optional)
-        if (extension_loaded('newrelic')) {
-            newrelic_name_transaction("redirect");
-        }
 
-        header('HTTP/1.1 301 Moved Permanently');
-        header('Location: https://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-        exit();
+/*
+ * The following configuration will redirect HTTP to HTTPS and enforce use of a
+ * primary domain.
+ *
+ * If a site is being proxied then the hostname will be different from the name
+ * registered with the IdP for shib to work.
+ * 
+ */
+if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
+  // Redirect to https://$primary_domain in the Live environment
+  if ($_ENV['PANTHEON_ENVIRONMENT'] === 'live') {
+    /* Replace www.example.com with your registered domain name    */
+    /* Proxied sites should use pan-sitename or something similar  */ 
+    $primary_domain = 'pan-site.sas.upenn.edu';
+  }
+  else {
+    // Redirect to HTTPS on every Pantheon environment.
+    $primary_domain = $_SERVER['HTTP_HOST'];
+  }
+
+  if ($_SERVER['HTTP_HOST'] != $primary_domain
+      || !isset($_SERVER['HTTP_USER_AGENT_HTTPS'])
+      || $_SERVER['HTTP_USER_AGENT_HTTPS'] != 'ON' ) {
+
+    # Name transaction "redirect" in New Relic for improved reporting (optional)
+    if (extension_loaded('newrelic')) {
+      newrelic_name_transaction("redirect");
     }
+
+    header('HTTP/1.0 301 Moved Permanently');
+    header('Location: https://'. $primary_domain . $_SERVER['REQUEST_URI']);
+    exit();
+  }
 }
 
 
