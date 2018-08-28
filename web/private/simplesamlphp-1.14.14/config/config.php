@@ -15,8 +15,17 @@ if (!ini_get('session.save_handler')) {
  *
  */
 if (file_exists($_SERVER['DOCUMENT_ROOT']. '/sites/default/settings.local.php')) {
+    // settings.local.php has already been included so we may not need this test
+    // but leaving here just to be safe. The require_once will prevent it from
+    // be included a second time.
     require_once($_SERVER['DOCUMENT_ROOT']. '/sites/default/settings.local.php');
     $canonical_host = setCanonicalHost();
+    // $is_proxied should now be available for use
+    if ($is_proxied) {
+        // do things for shib if a site is being proxied
+        // echo to verify variable is set to TRUE
+        //echo "is_proxied == TRUE";
+    }
 }
 
 if ((isset($_ENV)) && (isset($_ENV['PANTHEON_ENVIRONMENT']))) {
