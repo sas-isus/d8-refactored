@@ -1,13 +1,13 @@
 <?php
 
-/*
+/******************************************************************************
  * NOTE: Don't put any custom code in settings.php
  * - settings.php only includes this file so we must use it
  *
  * NEW SITES:
  * - rename this file to settings.local.php
  * - modify any settings and hostnames below (SEE COMMENTS BELOW)
- */
+ *****************************************************************************/
 
 /**
  * TODO: VERIFY THIS REQUIREMENT
@@ -16,15 +16,6 @@
  */
 //$settings['reverse_proxy'] = TRUE;
 //$settings['reverse_proxy_addresses'] = array('128.91.219.96');
-
-/*
- * Include SAS specific settings (for all sites)
- *
- * NOTE: We could just drop this inside of settings.local.php and call it a day
- */
-//if (file_exists(__DIR__ . "/settings.sas.php")) {
-//    include __DIR__ . "/settings.sas.php";
-//}
 
 /**
  * Set simplesamlphp library directory
@@ -48,8 +39,10 @@ global $is_proxied = TRUE;
  * Set canonical_host for shib if we're on the live environment.
  * If the live site is being proxied then we need this set
  * If the live site is NOT being proxied then we're fine.
+ *
+ * TODO: verify that we actually need this
  */
-setCanonicalHost() {
+function setCanonicalHost() {
     if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
         // In the Live environment return the hostname registered with the IdP
         if ($_ENV['PANTHEON_ENVIRONMENT'] === 'live') {
@@ -76,6 +69,7 @@ if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
         /**
          * Replace primary_domain with your registered domain name
          * If being proxied use the pan-site domain name
+         * If NOT being proxied use the appropriate domain name
          */
         $primary_domain = 'PAN-SITE.sas.upenn.edu';
     }
@@ -100,14 +94,11 @@ if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
 }
 
 /******************************************************************************
- * Site specific redirects.
- * This must be set before sas_settings is processed.
- * Including yet another file just adds cruft
- */
-
-/**
+ * SITE SPECIFIC REDIRECTS
+ *
  * Uncomment when site specific redirects are required
  */
+
 // global $RewriteMap;
 // $RewriteMap = array('@^/foo/bar.htm$@'        => '/node/1',
 //                     '@^/foo/index.html$@'     => '/node/1',
@@ -116,6 +107,8 @@ if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
 
 /**
  * Implement RewriteMap code
+ *
+ * This code block can remain uncommented.
  *
  * TODO: - why/where would be run this using the php command?
  *

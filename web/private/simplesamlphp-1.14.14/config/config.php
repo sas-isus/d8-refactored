@@ -19,7 +19,10 @@ if (file_exists($_SERVER['DOCUMENT_ROOT']. '/sites/default/settings.local.php'))
     // but leaving here just to be safe. The require_once will prevent it from
     // be included a second time.
     require_once($_SERVER['DOCUMENT_ROOT']. '/sites/default/settings.local.php');
-    $canonical_host = setCanonicalHost();
+    if (!$canonical_host) {
+        //echo "config.php: canonical host not set, setting";
+        $canonical_host = setCanonicalHost();
+    }
     // $is_proxied should now be available for use
     if ($is_proxied) {
         // do things for shib if a site is being proxied
