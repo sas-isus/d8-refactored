@@ -1,12 +1,18 @@
 <?php
 
 /******************************************************************************
- * NOTE: Don't put any custom code in settings.php
+ * NOTES:
+ * Don't put any custom code in settings.php
  * - settings.php only includes this file so we must use it
+ * Order of variable settings and includes matters!!!
  *
- * NEW SITES:
- * - rename this file to settings.local.php
- * - modify any settings and hostnames below (SEE COMMENTS BELOW)
+ * NEW SITES: site specific settings should be included below
+ *
+ * YOU MUST UPDATE THE FOLLOWING:
+ * - RENAME this file to settings.local.php
+ * - SET $pan_domain in getCanonicalHost()
+ * - SET $primary_domain (around line 100)
+ * 
  *****************************************************************************/
 
 /**
@@ -17,40 +23,24 @@
 //$settings['reverse_proxy'] = TRUE;
 //$settings['reverse_proxy_addresses'] = array('128.91.219.96');
 
+
 /**
  * Set simplesamlphp library directory
  */
+echo "settings.local: setting simplesamlphp_dir<br>";
 if (isset($_ENV['HOME'])) {
     $settings['simplesamlphp_dir'] = $_ENV['HOME'] . '/code/web/private/simplesamlphp';
 }
 
-/******************************************************************************
- * Site specific settings should be included below
- * YOU MUST UPDATE THE FOLLOWING:
- * - the is_proxied variable
- * - the hostname returned in setCanonicalHost()
- * - the primary_domain variable
- */
 
-global $is_proxied = TRUE;
-
-/*
- * THIS IS ONLY USED BY/FOR SHIB FOR THE LIVE environment
- * Set canonical_host for shib if we're on the live environment.
- * If the live site is being proxied then we need this set
- * If the live site is NOT being proxied then we're fine.
- *
- * TODO: verify that we actually need this
+/**
+ * Place the config directory outside of the Drupal root.
+ * This overrides the setting in settings.pantheon.php
  */
-function setCanonicalHost() {
-    if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
-        // In the Live environment return the hostname registered with the IdP
-        if ($_ENV['PANTHEON_ENVIRONMENT'] === 'live') {
-            /** Replace www.example.com with your registered domain name */
-            return 'site.sas.upenn.edu';
-        }
-    }
-}
+$config_directories = array(
+    CONFIG_SYNC_DIRECTORY => dirname(DRUPAL_ROOT) . '/config',
+);
+
 
 /**
  * UPDATE PRIMARY DOMAIN below
@@ -62,7 +52,7 @@ function setCanonicalHost() {
  * registered with the IdP for shib to work.
  *
  */
- */
+
 if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
     // Redirect to https://$primary_domain in the Live environment
     if ($_ENV['PANTHEON_ENVIRONMENT'] === 'live') {
@@ -71,13 +61,14 @@ if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
          * If being proxied use the pan-site domain name
          * If NOT being proxied use the appropriate domain name
          */
-        $primary_domain = 'PAN-SITE.sas.upenn.edu';
+        $primary_domain = 'CHANGE.ME.upenn.edu';
     }
     else {
-        // Redirect to HTTPS on every Pantheon environment.
+        echo "settings.local: setting primary domain to " . $_SERVER['HTTP_HOST'] . "<br>";
         $primary_domain = $_SERVER['HTTP_HOST'];
     }
 
+    // This should be refactored
     if ($_SERVER['HTTP_HOST'] != $primary_domain
         || !isset($_SERVER['HTTP_USER_AGENT_HTTPS'])
         || $_SERVER['HTTP_USER_AGENT_HTTPS'] != 'ON' ) {
@@ -93,33 +84,59 @@ if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
     }
 }
 
-/******************************************************************************
- * SITE SPECIFIC REDIRECTS
- *
- * Uncomment when site specific redirects are required
- */
-
-// global $RewriteMap;
-// $RewriteMap = array('@^/foo/bar.htm$@'        => '/node/1',
-//                     '@^/foo/index.html$@'     => '/node/1',
-// );
-//
 
 /**
- * Implement RewriteMap code
+ * THIS IS ONLY USED BY/FOR SHIB FOR THE LIVE and proxied environment
+ * Set canonical_host for shib if we're on the live environment.
+ * If the live site is being proxied then we need this set
+ * If the live site is NOT being proxied then we're fine.
  *
- * This code block can remain uncommented.
- *
- * TODO: - why/where would be run this using the php command?
- *
- * What's the purpose in checking for $_SERVER['argv'][1] ?
- * What's the purpose in checking for $_SERVER['REQUEST_URI'] ?
- *
- * Current logic below, both sides of the && must be true..
- *   if Rewritemap is set and (argv is set or request uri is set)
- *     then do stuff
  */
-if (isset($RewriteMap) && (isset($_SERVER['argv'][1]) || isset($_SERVER['REQUEST_URI']))) {
+function isPantheonSite () {
+    return(preg_match('@pantheonsite.io@',$_SERVER['HTTP_HOST']));
+}
+
+function isProxied() {
+    // HTTP_HOST == HTTP_X_FORWARDED_HOST for direct access to pantheon + via CDN
+    // via proxy, HTTP_HOST -> 'live-sas-school.pantheonsite.io' while
+    //   HTTP_X_FORWARDED_HOST -> 'www.sas.upenn.edu, live-sas-school.pantheonsite.io'
+    if (isset($SERVER['HTTP_X_FORWARDED_HOST'])) {
+        return 1;
+    } else {
+        return 0;
+    }
+
+}
+
+function getCanonicalHost() {
+    global $primary_domain;
+    
+    $CanonicalHost = $_SERVER['HTTP_HOST']; 
+    
+    if ((isset($primary_domain)) && (isProxied())) {  
+        $CanonicalHost = $primary_domain;
+    }
+
+    return $CanonicalHost;
+}
+
+
+/*****************************************************************************
+ * SITE SPECIFIC REDIRECTS
+ * 
+ * RewriteMap example
+ * Uncomment the section below to enable site specific redirects
+ */
+
+ // $RewriteMap;
+ // $RewriteMap = array('@^/foo/bar.htm$@'        => '/node/1',
+ //                     '@^/foo/index.html$@'     => '/node/1',
+ //                    );
+
+// NOTE: The above $RewriteMap must be enabled above in order for the code below to run.
+// TODO: Can we test this?
+if (isset($RewriteMap) 
+    && (isset($_SERVER['argv'][1]) || isset($_SERVER['REQUEST_URI']))) {
     // run as:
     // php settings.redirects-allsites.php /uniconn
 
@@ -127,17 +144,14 @@ if (isset($RewriteMap) && (isset($_SERVER['argv'][1]) || isset($_SERVER['REQUEST
 
     foreach ($RewriteMap as $key => $value) {
         if (preg_match($key, $oldurl)) {
-            $newurl = preg_replace($key, $value, $oldurl);
+            $newurl = preg_replace($key,$value,$oldurl);
             if (isset($_ENV['PANTHEON_ENVIRONMENT'])) {
-                if (extension_loaded('newrelic')) {
-		            newrelic_name_transaction("redirect");
-	            }
-                header('HTTP/1.2 301 Moved Permanently');
-	            header('Location: '. $newurl);
+                redirectTo($newurl);
             }
             else {
                 print("$oldurl => $newurl\n");
             }
+
             exit();
         }
     }
