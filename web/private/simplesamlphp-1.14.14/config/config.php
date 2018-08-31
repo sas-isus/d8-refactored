@@ -14,22 +14,7 @@ if (!ini_get('session.save_handler')) {
  * manually in settings.local.php
  *
  */
-if (file_exists($_SERVER['DOCUMENT_ROOT']. '/sites/default/settings.local.php')) {
-    // settings.local.php has already been included so we may not need this test
-    // but leaving here just to be safe. The require_once will prevent it from
-    // be included a second time.
-    require_once($_SERVER['DOCUMENT_ROOT']. '/sites/default/settings.local.php');
-    if (!$canonical_host) {
-        //echo "config.php: canonical host not set, setting";
-        $canonical_host = setCanonicalHost();
-    }
-    // $is_proxied should now be available for use
-    if ($is_proxied) {
-        // do things for shib if a site is being proxied
-        // echo to verify variable is set to TRUE
-        //echo "is_proxied == TRUE";
-    }
-}
+$canonical_host = $_SERVER['HTTP_HOST']; // OK unless site is being proxied, see below
 
 if ((isset($_ENV)) && (isset($_ENV['PANTHEON_ENVIRONMENT']))) {
 	$ps = json_decode($_SERVER['PRESSFLOW_SETTINGS'], TRUE);
@@ -37,6 +22,12 @@ if ((isset($_ENV)) && (isset($_ENV['PANTHEON_ENVIRONMENT']))) {
 	$db = $ps['databases']['default']['default'];
 	$certdir = '/srv/bindings/'. $drop_id .'/code/web/private/saml-cert/';
 	$tempdir = '/srv/bindings/'. $drop_id .'/tmp/simplesaml';
+    if (file_exists($_SERVER['DOCUMENT_ROOT']. '/sites/default/settings.local.php')) {
+        require_once($_SERVER['DOCUMENT_ROOT']. '/sites/default/settings.local.php');
+        //echo "config.php: calling getCanonicalHost()<br>";
+        $canonical_host = getCanonicalHost();
+    }
+
 } else {
 	$certdir = 'cert/';
 	$tempdir = '/tmp/simplesaml';
