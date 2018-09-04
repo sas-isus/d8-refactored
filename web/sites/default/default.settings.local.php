@@ -34,15 +34,6 @@ if (isset($_ENV['HOME'])) {
 
 
 /**
- * Place the config directory outside of the Drupal root.
- * This overrides the setting in settings.pantheon.php
- */
-$config_directories = array(
-    CONFIG_SYNC_DIRECTORY => dirname(DRUPAL_ROOT) . '/config',
-);
-
-
-/**
  * UPDATE PRIMARY DOMAIN below
  *
  * The following configuration will redirect HTTP to HTTPS and enforce use of a
