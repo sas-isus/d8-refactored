@@ -8,7 +8,7 @@
  *
  * NEW SITES: site specific settings should be included below
  *
- * YOU MUST UPDATE THE FOLLOWING:
+ * ATTENTION: YOU MUST UPDATE THE FOLLOWING:
  * - RENAME this file to settings.local.php
  * - SET $pan_domain in getCanonicalHost()
  * - SET $primary_domain (around line 100)
@@ -27,7 +27,7 @@
 /**
  * Set simplesamlphp library directory
  */
-echo "settings.local: setting simplesamlphp_dir<br>";
+//echo "settings.local: setting simplesamlphp_dir<br>";
 if (isset($_ENV['HOME'])) {
     $settings['simplesamlphp_dir'] = $_ENV['HOME'] . '/code/web/private/simplesamlphp';
 }
@@ -49,6 +49,9 @@ if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
     if ($_ENV['PANTHEON_ENVIRONMENT'] === 'live') {
         /**
          * Replace primary_domain with your registered domain name
+         *
+         * IMPORTANT * IMPORTANT * IMPORTANT * IMPORTANT * IMPORTANT *
+         *
          * If being proxied use the pan-site domain name
          * If NOT being proxied use the appropriate domain name
          */
