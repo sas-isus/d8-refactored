@@ -24,15 +24,6 @@
 //$settings['reverse_proxy_addresses'] = array('128.91.219.96');
 
 /**
- * Set primary_domain
- *
- * This should be the domain name that a user would type as the URL and what
- * search engines should be spidering.
- */
-
-$primary_domain = 'www.CHANGE.upenn.edu';
-
-/**
  * Set simplesamlphp library directory
  */
 //echo "settings.local: setting simplesamlphp_dir<br>";
