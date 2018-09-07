@@ -23,6 +23,14 @@
 //$settings['reverse_proxy'] = TRUE;
 //$settings['reverse_proxy_addresses'] = array('128.91.219.96');
 
+/**
+ * Set primary_domain
+ *
+ * This should be the domain name that a user would type as the URL and what
+ * search engines should be spidering.
+ */
+
+$primary_domain = 'www.CHANGE.upenn.edu';
 
 /**
  * Set simplesamlphp library directory
@@ -55,7 +63,7 @@ if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
          * If being proxied use the pan-site domain name
          * If NOT being proxied use the appropriate domain name
          */
-        $primary_domain = 'CHANGE.ME.upenn.edu';
+        $primary_domain = 'www.CHANGEME.upenn.edu';
     }
     else {
         //echo "settings.local: setting primary domain to " . $_SERVER['HTTP_HOST'] . "<br>";
