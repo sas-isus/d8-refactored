@@ -93,7 +93,7 @@ function isProxied() {
     // HTTP_HOST == HTTP_X_FORWARDED_HOST for direct access to pantheon + via CDN
     // via proxy, HTTP_HOST -> 'live-sas-school.pantheonsite.io' while
     //   HTTP_X_FORWARDED_HOST -> 'www.sas.upenn.edu, live-sas-school.pantheonsite.io'
-    if (isset($SERVER['HTTP_X_FORWARDED_HOST'])) {
+    if ($_SERVER['HTTP_HOST'] != $_SERVER['HTTP_X_FORWARDED_HOST']) {
         return 1;
     } else {
         return 0;
