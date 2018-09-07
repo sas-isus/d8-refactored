@@ -55,7 +55,7 @@ if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
         $primary_domain = 'CHANGE.ME.upenn.edu';
     }
     else {
-        echo "settings.local: setting primary domain to " . $_SERVER['HTTP_HOST'] . "<br>";
+        //echo "settings.local: setting primary domain to " . $_SERVER['HTTP_HOST'] . "<br>";
         $primary_domain = $_SERVER['HTTP_HOST'];
     }
 
