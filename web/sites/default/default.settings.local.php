@@ -102,6 +102,10 @@ function isProxied() {
 }
 
 function getCanonicalHost() {
+    // This hasn't been set anywhere yet and is only called from config.php for shib
+    // In the if block below this won't be set therefore the if block will never
+    // evaluate as true and CanonicalHost will always be set to HTTP_HOST.
+    // This needs to be refactored.
     global $primary_domain;
     
     $CanonicalHost = $_SERVER['HTTP_HOST']; 
