@@ -10,8 +10,8 @@
  *
  * ATTENTION: YOU MUST UPDATE THE FOLLOWING:
  * - RENAME this file to settings.local.php
- * - SET $pan_domain in getCanonicalHost()
- * - SET $primary_domain (around line 100)
+ * - SET $primary_domain (~line 57)
+ * - SET $primary_domain in getCanonicalHost() (~line 110) - for shib!
  * 
  *****************************************************************************/
 
@@ -101,16 +101,20 @@ function isProxied() {
 
 }
 
+/**
+ * This function is only called from config.php for use with shib.
+ */
 function getCanonicalHost() {
-    // This hasn't been set anywhere yet and is only called from config.php for shib
+    $primary_domain = 'www.CHANGEME.upenn.edu';
+    // This hadn't been set anywhere yet and is only called from config.php for shib
     // In the if block below this won't be set therefore the if block will never
     // evaluate as true and CanonicalHost will always be set to HTTP_HOST.
-    // This needs to be refactored.
-    global $primary_domain;
-    
+    // This needs to be refactored. 
+    // - removing the check to see if primary domain is set
+    // All we should be concerned about is whether or not this site is being proxied
     $CanonicalHost = $_SERVER['HTTP_HOST']; 
     
-    if ((isset($primary_domain)) && (isProxied())) {  
+    if (isProxied()) {  
         $CanonicalHost = $primary_domain;
     }
 
