@@ -1,27 +1,15 @@
 <?php
 
-/******************************************************************************
- * NOTES:
- * Don't put any custom code in settings.php
- * - settings.php only includes this file so we must use it
- * Order of variable settings and includes matters!!!
- *
- * NEW SITES: site specific settings should be included below
- *
- * ATTENTION: YOU MUST UPDATE THE FOLLOWING:
- * - RENAME this file to settings.local.php
- * - SET $primary_domain (~line 57)
- * - SET $primary_domain in getCanonicalHost() (~line 110) - for shib!
- * 
- *****************************************************************************/
-
 /**
- * TODO: VERIFY THIS REQUIREMENT
- * If the site will be proxied by our proxy server then
- *   uncomment the following settings['...'] lines
+ * Include site specific 'data'
+ * 
+ * New sites must copy default.settings.site.php to settings.site.php and edit.
  */
-//$settings['reverse_proxy'] = TRUE;
-//$settings['reverse_proxy_addresses'] = array('128.91.219.96');
+$site_data = __DIR__ . "/settings.site.php";
+if (file_exists($site_data)) {
+    require_once('settings.site.php');
+}
+
 
 /**
  * Set simplesamlphp library directory
@@ -33,35 +21,22 @@ if (isset($_ENV['HOME'])) {
 
 
 /**
- * UPDATE PRIMARY DOMAIN below
- *
  * The following configuration will redirect HTTP to HTTPS and enforce use of a
  * primary domain.
  *
- * If a site is being proxied then the hostname will be different from the name
- * registered with the IdP for shib to work.
- *
+ * https://pantheon.io/docs/domains/
  */
-
 if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
-    // Redirect to https://$primary_domain in the Live environment
-    if ($_ENV['PANTHEON_ENVIRONMENT'] === 'live') {
-        /**
-         * Replace primary_domain with your registered domain name
-         *
-         * IMPORTANT * IMPORTANT * IMPORTANT * IMPORTANT * IMPORTANT *
-         *
-         * If being proxied use the pan-site domain name
-         * If NOT being proxied use the appropriate domain name
-         */
-        $primary_domain = 'www.CHANGEME.upenn.edu';
-    }
-    else {
+    // primary_domain is already set so this code has been refactored.
+    if (! $_ENV['PANTHEON_ENVIRONMENT'] === 'live') {
         //echo "settings.local: setting primary domain to " . $_SERVER['HTTP_HOST'] . "<br>";
         $primary_domain = $_SERVER['HTTP_HOST'];
     }
 
-    // This should be refactored
+    /** 
+     * It's a best practice for SEO and security to standardize all traffic on
+     * HTTPS and choose a primary domain.
+     */
     if ($_SERVER['HTTP_HOST'] != $primary_domain
         || !isset($_SERVER['HTTP_USER_AGENT_HTTPS'])
         || $_SERVER['HTTP_USER_AGENT_HTTPS'] != 'ON' ) {
@@ -105,17 +80,17 @@ function isProxied() {
  * This function is only called from config.php for use with shib.
  */
 function getCanonicalHost() {
-    $primary_domain = 'www.CHANGEME.upenn.edu';
+    global $proxied_domain;
     // This hadn't been set anywhere yet and is only called from config.php for shib
     // In the if block below this won't be set therefore the if block will never
     // evaluate as true and CanonicalHost will always be set to HTTP_HOST.
     // This needs to be refactored. 
     // - removing the check to see if primary domain is set
     // All we should be concerned about is whether or not this site is being proxied
-    $CanonicalHost = $_SERVER['HTTP_HOST']; 
+    $CanonicalHost = $_SERVER['HTTP_HOST'];
     
-    if (isProxied()) {  
-        $CanonicalHost = $primary_domain;
+    if (isProxied()) {
+        $CanonicalHost = $proxied_domain;
     }
 
     return $CanonicalHost;
@@ -129,13 +104,7 @@ function getCanonicalHost() {
  * Uncomment the section below to enable site specific redirects
  */
 
- // $RewriteMap;
- // $RewriteMap = array('@^/foo/bar.htm$@'        => '/node/1',
- //                     '@^/foo/index.html$@'     => '/node/1',
- //                    );
-
 // NOTE: The above $RewriteMap must be enabled above in order for the code below to run.
-// TODO: Can we test this?
 if (isset($RewriteMap) 
     && (isset($_SERVER['argv'][1]) || isset($_SERVER['REQUEST_URI']))) {
     // run as:
