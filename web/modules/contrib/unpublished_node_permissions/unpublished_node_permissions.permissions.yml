@@ -1,0 +1,2 @@
+permission_callbacks:
+  - \Drupal\unpublished_node_permissions\UnpublishedNodePermissions::nodeTypePermissions

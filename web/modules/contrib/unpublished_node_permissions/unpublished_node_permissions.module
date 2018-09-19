@@ -1,0 +1,24 @@
+<?php
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\node\NodeInterface;
+
+function unpublished_node_permissions_views_data_alter(array &$data) {
+  // Switch out the original status_extra filter with our own.
+  if (isset($data['node_field_data']['status_extra']['filter']['id']) && $data['node_field_data']['status_extra']['filter']['id'] == 'node_status') {
+    $data['node_field_data']['status_extra']['filter']['id'] = 'node_unpublished_status';
+  }
+}
+
+/**
+ * Implements hook_node_access().
+ */
+function unpublished_node_permissions_node_access(NodeInterface $node, $op, $account) {
+  $type = $node->bundle();
+
+  if ($op == 'view' && !$node->isPublished()) {
+    return AccessResult::allowedIfHasPermission($account, 'view ' . $type . ' unpublished content');
+  }
+
+  return AccessResult::neutral();
+}
