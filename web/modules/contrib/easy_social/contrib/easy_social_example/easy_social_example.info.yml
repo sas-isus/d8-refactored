@@ -1,0 +1,14 @@
+name: Easy Social Example
+type: module
+description: 'Example module that demonstrates how to create a custom Easy Social widget.'
+dependencies:
+  - easy_social
+package: 'Examples'
+# core: 8.x
+configure: admin/config/services/easy-social/example
+
+# Information added by Drupal.org packaging script on 2016-06-26
+version: '8.x-3.0'
+core: '8.x'
+project: 'easy_social'
+datestamp: 1466956140

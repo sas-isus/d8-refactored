@@ -3223,6 +3223,71 @@
         }
     },
     {
+        "name": "drupal/easy_social",
+        "version": "3.0.0",
+        "version_normalized": "3.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupal.org/project/easy_social",
+            "reference": "8.x-3.0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/easy_social-8.x-3.0.zip",
+            "reference": "8.x-3.0",
+            "shasum": "4f9848a0056738cc058f6a5a44088606644d5c52"
+        },
+        "require": {
+            "drupal/core": "~8.0"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "branch-alias": {
+                "dev-3.x": "3.x-dev"
+            },
+            "drupal": {
+                "version": "8.x-3.0",
+                "datestamp": "1466956139",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "alexweber",
+                "homepage": "https://www.drupal.org/user/850856"
+            },
+            {
+                "name": "camoa",
+                "homepage": "https://www.drupal.org/user/2448054"
+            },
+            {
+                "name": "develCuy",
+                "homepage": "https://www.drupal.org/user/125473"
+            },
+            {
+                "name": "lnunesbr",
+                "homepage": "https://www.drupal.org/user/324393"
+            },
+            {
+                "name": "rhormens",
+                "homepage": "https://www.drupal.org/user/195603"
+            }
+        ],
+        "description": "Easily add social sharing widgets to your site.",
+        "homepage": "https://www.drupal.org/project/easy_social",
+        "support": {
+            "source": "http://cgit.drupalcode.org/easy_social"
+        }
+    },
+    {
         "name": "drupal/entity_reference_revisions",
         "version": "1.5.0",
         "version_normalized": "1.5.0.0",

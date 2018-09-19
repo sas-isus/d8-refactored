@@ -1,0 +1,11 @@
+Notable TODOs for Drupal 8 version
+-----------------------------------
+
+* Allow attaching widgets as a pseudofield to all known entity types.
+
+* Leverage config contexts to allow conditionally overidding settings
+    * Figure out an elegant way to re-use the Form classes for overrides
+
+* Allow re-ordering the widgets (play nice with contexts & overrides)
+
+* Allow creating groups of widgets

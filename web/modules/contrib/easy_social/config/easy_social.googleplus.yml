@@ -1,0 +1,5 @@
+size: 'large' # One of: 'small', 'medium', 'large' or 'tall'
+annotation: 'bubble' # One of: 'inline', 'bubble', or 'none'
+lang: '' # String. Empty uses content or page default language
+width: '300' # Integer
+callback: '' # String

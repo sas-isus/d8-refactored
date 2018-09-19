@@ -1,0 +1,6 @@
+easy_social_example.settings:
+  path: '/admin/config/services/easy-social/example'
+  defaults:
+    _form: '\Drupal\easy_social_example\SettingsForm'
+  requirements:
+    _permission: 'administer easy_social'

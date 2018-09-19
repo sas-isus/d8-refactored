@@ -1,0 +1,5 @@
+easy_social.overview:
+  title: 'Easy Social'
+  parent: system.admin_config_services
+  description: 'Provides configuration options for the Easy Social comment system.'
+  route_name: easy_social.settings

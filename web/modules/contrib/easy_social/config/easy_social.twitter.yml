@@ -1,0 +1,7 @@
+via: 'alexweber15' # String
+related: 'alexweber15:Alex Weber' # String
+dnt: '1' # Boolean
+count: vertical # One of: 'none', 'horizontal' and 'vertical'
+lang: '' # String. Empty uses content or page default language
+hashtags: 'easy_social,drupal' # String
+size: '0' # This is treated as a boolean; medium = '0' and large = '1'

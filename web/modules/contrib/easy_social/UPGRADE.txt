@@ -1,0 +1,19 @@
+There is actually NO upgrade path from the Drupal 7 to the Drupal 8 versions for
+now and for the forseeable future too.
+
+The main reason for this is that the module was actually completely re-written
+from scratch for Drupal 8 and significant changes have been made to pretty much
+every part of it.
+
+Notable changes
+---------------
+
+* All configuration has been moved to the new YML format.
+
+* All widgets are now expected to define a theme function to handle returning
+  their markup. What this means is that the output of all widgets can now be
+  easily altered in the same way as any other theme function.
+
+* We now include a Pinterest widget by default.
+
+* We now include an example module that shows how to create a custom widget.

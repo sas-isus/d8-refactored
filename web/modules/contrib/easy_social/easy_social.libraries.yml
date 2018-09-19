@@ -1,0 +1,25 @@
+twitter:
+  version: VERSION
+  js:
+   js/twitter.js: { }
+facebook:
+  version: VERSION
+  js:
+   js/facebook.js: { }
+googleplus:
+  version: VERSION
+  js:
+    //apis.google.com/js/plusone.js: { type: external }
+pinterest:
+  version: VERSION
+  js:
+    //assets.pinterest.com/js/pinit.js: { type: external }
+linkedin:
+  version: VERSION
+  js:
+    //platform.linkedin.com/in.js: { type: external }
+easysocial-css:
+  version:  VERSION
+  css:
+    theme:
+      css/easy_social.css: {}

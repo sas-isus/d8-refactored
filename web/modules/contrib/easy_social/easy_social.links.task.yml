@@ -1,0 +1,30 @@
+easy_social.show_settings:
+  route_name: easy_social.settings
+  title: Settings
+  base_route: easy_social.show_settings
+  weight: 0
+easy_social.facebook:
+  route_name: easy_social.settings_facebook
+  title: Facebook
+  base_route: easy_social.show_settings
+  weight: 2
+easy_social.twitter:
+  route_name: easy_social.settings_twitter
+  title: Twitter
+  base_route: easy_social.show_settings
+  weight: 1
+easy_social.googleplus:
+  route_name: easy_social.settings_googleplus
+  title: Google Plus
+  base_route: easy_social.show_settings
+  weight: 3
+easy_social.pinterest:
+  route_name: easy_social.settings_pinterest
+  title: Pinterest
+  base_route: easy_social.show_settings
+  weight: 4
+easy_social.linkedin:
+  route_name: easy_social.settings_linkedin
+  title: LinkedIn
+  base_route: easy_social.show_settings
+  weight: 5

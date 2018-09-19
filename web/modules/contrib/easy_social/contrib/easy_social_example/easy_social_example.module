@@ -1,0 +1,72 @@
+<?php
+/**
+ * @file
+ * Easy Social Example module.
+ */
+
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_easy_social_widget().
+ */
+function easy_social_example_easy_social_widget() {
+  $widgets = array();
+
+  // The key is going to be the widget's machine_name.
+  $widgets['example'] = array(
+    'name' => t('Example'),
+    // If we wanted to add some additional css or js for our widet, we can do
+    // so here. Refer to easy_social.api.php for more information on how to
+    // implement hook_easy_social_widget().
+    // 'js' => array(),
+    // 'css' => array(),
+  );
+
+  return $widgets;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function easy_social_example_theme() {
+  $return = array();
+
+  // The theme function should be named "easy_social_$WIDGET", where $WIDGET is
+  // the widget's machine_name.
+  $return['easy_social_example'] = array(
+    'variables' => array(),
+  );
+
+  return $return;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for easy_social_example theme.
+ *
+ * @see easy_social_theme()
+ * @see theme_easy_social_example()
+ */
+function easy_social_example_preprocess_easy_social_example(&$variables) {
+  // You can still pre-process this as usual.
+  // Notice that the config settings have been automatically added.
+
+  $options = array();
+  $options['attributes']['class'] = array(
+    'class' => 'example-share-button',
+  );
+
+  $url = Url::fromUri('http://www.example.com/share', $options);
+  $example_share_link = \Drupal::l(t('Example share'), $url);
+
+  $variables['example_share_link'] = $example_share_link;
+}
+
+/**
+ * Implements hook_process_HOOK() for easy_social_example theme.
+ *
+ * @see easy_social_theme()
+ * @see theme_easy_social_example()
+ */
+function easy_social_example_process_easy_social_example(&$variables) {
+  // You can still process this as usual.
+}

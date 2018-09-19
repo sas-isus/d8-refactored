@@ -1,0 +1,504 @@
+<?php
+/**
+ * @file
+ * Easy Social module.
+ */
+
+use Drupal\easy_social\EasySocialException;
+use Drupal\Core\Url;
+
+
+/**
+ * Return the available widgets.
+ *
+ * @return array
+ *   An array of widget names, keyed by their machine_name.
+ */
+function easy_social_get_widgets() {
+  // Use the advanced drupal_static() pattern.
+  static $drupal_static_fast;
+  if (!isset($drupal_static_fast)) {
+    $drupal_static_fast['widgets'] = &drupal_static(__FUNCTION__);
+  }
+  $widgets = &$drupal_static_fast['widgets'];
+
+  if (!isset($widgets)) {
+    // Allow modules to define widgets.
+    $widgets = \Drupal::moduleHandler()->invokeAll('easy_social_widget');
+
+    // Allow modules to alter the defined widgets.
+    \Drupal::moduleHandler()->alter('easy_social_widget', $widgets);
+  }
+
+  return $widgets;
+}
+
+/**
+ * Implements hook_easy_social_widget().
+ *
+ * Define default Easy Social widgets.
+ */
+function easy_social_easy_social_widget() {
+  $widgets = array();
+
+  // Twitter.
+  $widgets['twitter'] = array(
+    'name' => t('Twitter'),
+    'js' => 'easy_social/twitter',
+  );
+
+  // Facebook.
+  $widgets['facebook'] = array(
+    'name' => t('Facebook'),
+    'js' => 'easy_social/facebook',
+  );
+
+  // Google+.
+  $widgets['googleplus'] = array(
+    'name' => t('Google+'),
+    'js' => 'easy_social/googleplus',
+  );
+
+  // LinkedIn,
+  $widgets['linkedin'] = array(
+    'name' => t('LinkedIn'),
+    'js' => 'easy_social/linkedin',
+    // This widget has some specific requirements when dealing with multiple
+    // languages so we handle the js in it's pre-process callback instead.
+  );
+
+  // Pinterest.
+  $widgets['pinterest'] = array(
+    'name' => t('Pinterest'),
+    'js' => 'easy_social/pinterest',
+  );
+
+  return $widgets;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function easy_social_theme($existing, $type, $theme, $path) {
+
+  return array(
+    'easy_social' => array(
+      'variables' => array(),
+      'file' => 'easy_social.theme.inc',
+    ),
+    'easy_social_twitter' => array(
+      'variables' => array(),
+      'file' => 'easy_social.theme.inc',
+    ),
+    'easy_social_facebook' => array(
+      'variables' => array(),
+      'file' => 'easy_social.theme.inc',
+    ),
+    'easy_social_googleplus' => array(
+      'variables' => array(),
+      'file' => 'easy_social.theme.inc',
+    ),
+    'easy_social_linkedin' => array(
+      'variables' => array(),
+      'file' => 'easy_social.theme.inc',
+    ),
+    'easy_social_pinterest' => array(
+      'variables' => array(),
+    ),
+  );
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for block.html.twig.
+ */
+function easy_social_preprocess_block(&$variables) {
+  // Derive the base plugin ID.
+  list($plugin_id) = explode(':', $variables['plugin_id'] . ':');
+  switch ($plugin_id) {
+    case 'easy_social_block':
+      $variables['attributes']['role'] = 'complementary';
+      break;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for easy_social theme.
+ *
+ * @see easy_social_theme()
+ * @see theme_easy_social()
+ */
+function easy_social_preprocess_easy_social(&$variables) {
+
+  $config = Drupal::config('easy_social.settings');
+  // Load widget definitions.
+  $definitions = easy_social_get_widgets();
+
+  //Add the CSS
+  $variables['#attached']['library'][] = 'easy_social/easysocial-css';
+
+  // Filter active widgets.
+  $settings_widgets = $config->get('global.widgets');
+  $settings_widgets = array_filter($settings_widgets);
+  $widgets = array();
+
+  foreach ($settings_widgets as $widget) {
+    if (!array_key_exists($widget, $definitions)) {
+      throw new EasySocialException(t('No definition found for the widget: @name', array('@name' => $widget)));
+//      watchdog('easy_social', 'No definition found for widget: @widget', array('@widget' => $widget), WATCHDOG_ERROR);
+    }
+
+    // Handle css includes.
+    $attached = array();
+
+    if (array_key_exists('css', $definitions[$widget])) {
+      $attached['library'][] = $definitions[$widget]['css'];
+    }
+
+    // Determine how to handle js.
+    if (array_key_exists('js', $definitions[$widget])) {
+      $attached['library'][] = $definitions[$widget]['js'];
+    }
+
+
+    $widgets[$widget] = array(
+      '#theme' => "easy_social_{$widget}",
+      // @TODO pass in some kind of context?
+      // @TODO #weight ?,
+      '#attached' => $attached,
+    );
+  }
+  $variables['widgets'] = $widgets;
+
+}
+
+
+/**
+ * Implements hook_preprocess_HOOK() for easy_social_facebook theme.
+ *
+ * @see easy_social_theme()
+ * @see theme_easy_social_facebook()
+ */
+function easy_social_preprocess_easy_social_twitter(&$variables, $hook) {
+  // Incidentally, the hook name is almost what we expect the config name to be.
+  $hook = str_replace('easy_social_', 'easy_social.', $hook);
+
+  $attributes = array(
+    'class' => array('twitter-share-button'),
+  );
+
+  if ($config = \Drupal::config($hook)) {
+    // @TODO load contextual config.
+    $widget_params = $config->get();
+
+
+    if (!empty($widget_params['via'])) {
+      $attributes['data-via'] = $widget_params['via'];
+    }
+
+    if (!empty($widget_params['related'])) {
+      $attributes['data-related'] = $widget_params['related'];
+    }
+
+    if (isset($widget_params['size'])) {
+      $attributes['data-size'] = ($widget_params['size'] == 1) ? 'large' : 'medium';
+    }
+
+    if (!empty($widget_params['count'])) {
+      $attributes['data-count'] = $widget_params['count'];
+    }
+
+    if (!empty($widget_params['lang'])) {
+      $attributes['data-lang'] = $widget_params['lang'];
+    }
+
+    if (!empty($widget_params['hashtags'])) {
+      $attributes['data-hashtags'] = $widget_params['hashtags'];
+    }
+
+    if (isset($widget_params['dnt']) && $widget_params['dnt'] == 1) {
+      $attributes['data-dnt'] = 'true';
+    }
+  }
+  $variables['attributes'] = $attributes;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for easy_social_facebook theme.
+ *
+ * @see easy_social_theme()
+ * @see theme_easy_social_facebook()
+ */
+function easy_social_preprocess_easy_social_facebook(&$variables, &$hook) {
+  // @TODO implement this.
+  $lang = 'en_US';
+  // Incidentally, the hook name is almost what we expect the config name to be.
+  $hook = str_replace('easy_social_', 'easy_social.', $hook);
+
+  $attributes = array(
+    'class' => array('fb-like'),
+  );
+
+  if ($config = \Drupal::config($hook)) {
+    // @TODO load contextual config.
+    $widget_params = $config->get();
+
+
+    if (!empty($variables['url'])) {
+      $attributes['data-href'] = $variables['url'];
+    }
+
+    if (isset($widget_params['send']) && $widget_params['send'] == 1) {
+      $attributes['data-send'] = 'true';
+    }
+
+    if (isset($widget_params['share']) && $widget_params['share'] == 1) {
+      $attributes['data-share'] = 'true';
+    }
+
+    if (isset($widget_params['show_faces']) && $widget_params['show_faces'] == 1) {
+      $attributes['data-show-faces'] = 'true';
+    }
+
+    if (!empty($widget_params['width'])) {
+      $attributes['data-width'] = $widget_params['width'];
+    }
+
+    if (isset($widget_params['layout']) && $widget_params['layout'] !== 'standard') {
+      $attributes['data-layout'] = $widget_params['layout'];
+    }
+
+    if (!empty($widget_params['font'])) {
+      $attributes['data-font'] = $widget_params['font'];
+    }
+
+    if (isset($widget_params['colorscheme']) && $widget_params['colorscheme'] !== 'light') {
+      $attributes['data-colorscheme'] = $widget_params['colorscheme'];
+    }
+
+    if (isset($widget_params['action']) && $widget_params['action'] !== 'like') {
+      $attributes['data-action'] = $widget_params['action'];
+    }
+
+  }
+  $variables['attributes'] = $attributes;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for easy_social_googleplus theme.
+ *
+ * @see easy_social_theme()
+ * @see theme_easy_social_googleplus()
+ */
+function easy_social_preprocess_easy_social_googleplus(&$variables, &$hook) {
+
+//ToDo: Figure out how to pass variables to the JS using DrupalSettings
+  if ($variables['lang'] !== 'en') {
+    $script = <<<JS
+window.___gcfg = {lang: '{$variables['lang']}'};
+JS;
+  }
+  $hook = str_replace('easy_social_', 'easy_social.', $hook);
+
+  $attributes = array(
+    'class' => array('g-plus'),
+    'data-action' => 'share',
+  );
+
+  if ($config = \Drupal::config($hook)) {
+    // @TODO load contextual config.
+    $widget_params = $config->get();
+
+    if (!empty($variables['url'])) {
+      $attributes['data-href'] = $variables['url'];
+    }
+
+    if (isset($widget_params['annotation']) && $widget_params['annotation'] !== 'inline') {
+      $attributes['data-annotation'] = $widget_params['annotation'];
+    }
+
+    if (!empty($widget_params['width'])) {
+      $attributes['data-width'] = $widget_params['width'];
+    }
+  }
+  $variables['attributes'] = $attributes;
+
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for easy_social_linkedin theme.
+ *
+ * @see easy_social_theme()
+ * @see theme_easy_social_linkedin()
+ */
+function easy_social_preprocess_easy_social_linkedin(&$variables, &$hook) {
+//ToDo: Figure out how to pass variables to the JS using DrupalSettings
+  if ($variables['lang'] !== 'en') {
+    $script = <<<JS
+window.___gcfg = {lang: '{$variables['lang']}'};
+JS;
+  }
+  $hook = str_replace('easy_social_', 'easy_social.', $hook);
+
+  $attributes = array(
+    'type' => 'IN/Share',
+  );
+
+  if ($config = \Drupal::config($hook)) {
+    // @TODO load contextual config.
+    $widget_params = $config->get();
+
+
+    if (!empty($variables['url'])) {
+      $attributes['data-url'] = $variables['url'];
+    }
+
+    if (isset($widget_params['counter']) && $widget_params['counter'] !== 'none') {
+      $attributes['data-counter'] = $widget_params['counter'];
+    }
+  }
+  $variables['attributes'] = $attributes;}
+
+/**
+ * Implements hook_theme_registry_alter().
+ *
+ * Adds our custom preprocess to all widget's theme functions.
+ *
+ * @see _easy_social_preprocess_widget()
+ */
+function easy_social_theme_registry_alter(&$theme_registry) {
+  foreach ($theme_registry as $key => $value) {
+    if (strpos($key, 'easy_social_') === 0) {
+      array_unshift($theme_registry[$key]['preprocess functions'], '_easy_social_preprocess_widget');
+    }
+  }
+}
+
+/**
+ * Custom pre-process function, used to add settings for widgets.
+ *
+ * @see easy_social_theme_registry_alter()
+ */
+function _easy_social_preprocess_widget(&$variables, $hook) {
+  global $base_url;
+
+  $widget = str_replace("easy_social_", "", $hook);
+
+  $config = Drupal::config('easy_social.settings');
+  $variables['async'] = $config->get('global.async');
+  $definitions = easy_social_get_widgets();
+
+
+  $variables['url'] = $base_url . Url::fromRoute('<current>')->toString();
+
+
+
+  // @TODO get current title.
+  //$variables['title'] = 'Test';
+
+  // @TODO get current language from context or fallback to site default.
+  if (!isset($variables['lang']) || empty($variables['lang'])) {
+    $variables['lang'] = 'en';
+  }
+}
+
+/**
+ * Returns entity types we want to attach an extra Easy Social pseudo-field to.
+ *
+ * @return array
+ *   An array of entity types.
+ */
+function easy_social_get_supported_entities() {
+  static $supported_entity_types;
+
+  if (!isset($supported_entity_types)) {
+    // Support only core by default.
+    $supported_entity_types = array(
+      'comment',
+      'file',
+      'node',
+      'taxonomy_term',
+      'user',
+    );
+
+    // Other modules can easily enable support for others.
+    // @TODO add API documentation if we end up keeping this.
+    \Drupal::moduleHandler()
+      ->alter('easy_social_supported_entity', $supported_entity_types);
+  }
+
+  return $supported_entity_types;
+}
+
+/**
+ * Implements hook_field_extra_fields().
+ */
+function easy_social_field_extra_fields() {
+  $return = array();
+
+  $supported_entity_types = easy_social_get_supported_entities();
+  $entity_info = Drupal::entityManager()->getDefinitions();
+
+//  foreach ($supported_entity_types as $entity_type) {
+//    if (array_key_exists($entity_type, $entity_info)) {
+//      foreach ($entity_info[$entity_type]['bundles'] as $bundle) {
+//        $return[$entity_type][$bundle]['display']['easy_social'] = array(
+//          'label' => t('Easy Social widgets'),
+//          'weight' => 0,
+//        );
+//      }
+//    }
+//  }
+
+  return $return;
+}
+
+/**
+ * Implements hook_entity_view().
+ */
+function easy_social_entity_view($entity, $type, $view_mode, $langcode) {
+  $supported_entity_types = easy_social_get_supported_entities();
+
+  if (in_array($type, $supported_entity_types)) {
+    $entity->content['easy_social'] = array(
+      // @TODO pass in some kind of context?
+      '#theme' => 'easy_social',
+      // @TODO enable caching? see Block implementation
+    );
+  }
+}
+
+/**
+ * Helper function that adds javscript includes for widgets asynchronously.
+ *
+ * @param array
+ *   The variables passed to the theme function.
+ * @param string
+ *   Any extra markup to append to the script tag. This is used by some
+ *   widgets to pass extra configuration.
+ *
+ * @see theme_easy_social()
+ *
+ * @TODO this assumes script are external and might break if otherwise.
+ */
+function _easy_social_add_js($variables, $extra = '') {
+  $script = <<<JS
+(function() {
+  !x
+})();
+JS;
+
+  $includes = '';
+
+  foreach ($variables as $var) {
+    $url = $var['data'];
+    $includes .= <<<EOT
+var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+po.src = '{$url}'; {$extra}
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+EOT;
+  }
+
+  $script = str_replace('!x', $includes, $script);
+
+  // drupal_add_js($script, 'inline');
+}

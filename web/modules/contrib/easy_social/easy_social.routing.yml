@@ -1,0 +1,48 @@
+easy_social.settings:
+  path: '/admin/config/services/easy-social'
+  defaults:
+    _form: '\Drupal\easy_social\Form\EasySocialSettingsForm'
+    _title: 'Easy Social'
+  requirements:
+    _permission: 'administer easy_social'
+
+easy_social.settings_twitter:
+  path: '/admin/config/services/easy-social/twitter'
+  defaults:
+    _form: '\Drupal\easy_social\Form\TwitterSettingsForm'
+    _title: 'Easy Social Twitter'
+  requirements:
+    _permission: 'administer easy_social'
+
+easy_social.settings_facebook:
+  path: '/admin/config/services/easy-social/facebook'
+  defaults:
+    _form: '\Drupal\easy_social\Form\FacebookSettingsForm'
+    _title: 'Easy Social FaceBook'
+  requirements:
+    _permission: 'administer easy_social'
+
+easy_social.settings_googleplus:
+  path: '/admin/config/services/easy-social/googleplus'
+  defaults:
+    _form: '\Drupal\easy_social\Form\GooglePlusSettingsForm'
+    _title: 'Easy Social Google+'
+  requirements:
+    _permission: 'administer easy_social'
+
+easy_social.settings_linkedin:
+  path: '/admin/config/services/easy-social/linkedin'
+  defaults:
+    _form: '\Drupal\easy_social\Form\LinkedInSettingsForm'
+    _title: 'Easy Social LinkedIn'
+  requirements:
+    _permission: 'administer easy_social'
+
+easy_social.settings_pinterest:
+  path: '/admin/config/services/easy-social/pinterest'
+  defaults:
+    _form: '\Drupal\easy_social\Form\PinterestSettingsForm'
+    _title: 'Easy Social Pinerest'
+  requirements:
+    _permission: 'administer easy_social'
+

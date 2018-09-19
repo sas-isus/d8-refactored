@@ -1,0 +1,7 @@
+send: '1' # Boolean
+layout: 'standard' # One of: 'button_count', 'box_count' or 'standard'
+width: '450' # Integer
+show_faces: '1' # Boolean
+font: '' # One of: 'arial', 'lucida grande', 'segoe ui', 'tahoma', 'trebuchet ms', 'verdana' or '' (default)
+colorscheme: 'light' # One of: 'light' or 'dark'
+action: 'like' # One of: 'like' or 'recommend'

@@ -1,0 +1,30 @@
+.easy_social_box {
+    list-style: none;
+}
+.easy_social_box.vertical {
+    height: 68px;
+}
+
+.easy_social_box .easy_social-widget {
+    margin: 0 4px 0 0;
+    padding: 0;
+    overflow: hidden;
+    float: left;
+}
+
+.easy_social_box .easy_social-widget.last {
+    margin-right: 0;
+}
+
+.easy_social_box.vertical .easy_social-widget {
+    width: 58px;
+    height: 62px;
+}
+
+.easy_social_box.vertical .easy_social-widget.easy_social-widget-googleplus {
+    width: 52px;
+}
+
+.easy_social_box.vertical .easy_social-widget.easy_social-widget-facebook {
+    width: 50px;
+}

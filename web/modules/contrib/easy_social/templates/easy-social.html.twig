@@ -1,0 +1,19 @@
+{#
+/**
+ * @file
+ * Default theme implementation for a date / time element.
+ *
+ * Available variables
+ * - attributes: (optional) HTML attributes to apply to the block.
+ * - widgets: The widgets to be rendered.
+ * - async: If we want to render JS ASsynchronously.
+ * - config: The widget configuration.
+ *
+ */
+#}
+
+<ul class="easy_social_box clearfix {{ atributes.classes }}" {{ attributes }}>
+  {% for key, widget in widgets %}
+    <li class="easy_social-widget easy_social-widget-{{ key }}"> {{ widget }} </li>
+  {% endfor %}
+</ul>
