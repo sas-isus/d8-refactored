@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\State\StateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -52,9 +53,15 @@ class BlockVisibilityGroupedListBuilder extends BlockListBuilder {
    *   The theme manager.
    * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
    *   The form builder.
+   * @param \Drupal\Core\Entity\EntityStorageInterface $block_visibility_group_storage
+   *   The group entity storage.
+   * @param \Drupal\Core\State\StateInterface $state
+   *   The state system service.
+   * @param \Drupal\Core\Messenger\MessengerInterface|null $messenger
+   *   The messenger service.
    */
-  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, ThemeManagerInterface $theme_manager, FormBuilderInterface $form_builder, EntityStorageInterface $block_visibility_group_storage, StateInterface $state) {
-    parent::__construct($entity_type, $storage, $theme_manager, $form_builder);
+  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, ThemeManagerInterface $theme_manager, FormBuilderInterface $form_builder, EntityStorageInterface $block_visibility_group_storage, StateInterface $state, MessengerInterface $messenger) {
+    parent::__construct($entity_type, $storage, $theme_manager, $form_builder, $messenger);
 
     $this->group_storage = $block_visibility_group_storage;
     $this->state = $state;
@@ -70,7 +77,8 @@ class BlockVisibilityGroupedListBuilder extends BlockListBuilder {
       $container->get('theme.manager'),
       $container->get('form_builder'),
       $container->get('entity.manager')->getStorage('block_visibility_group'),
-      $container->get('state')
+      $container->get('state'),
+      $container->get('messenger')
     );
   }
 
@@ -98,37 +106,37 @@ class BlockVisibilityGroupedListBuilder extends BlockListBuilder {
       }
       $options[$group_option['path']] = $group_option['label'];
     }
-    $form['block_visibility_group'] = array(
+    $form['block_visibility_group'] = [
       '#weight' => -100,
-    );
-    $form['block_visibility_group']['select'] = array(
+    ];
+    $form['block_visibility_group']['select'] = [
       '#type' => 'select',
       '#title' => $this->t('Block Visibility Group'),
       '#options' => $options,
       '#default_value' => $default_value,
       // @todo Is there a better way to do this?
       '#attributes' => ['onchange' => 'this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value)'],
-    );
+    ];
     $description = $this->t('Block Visibility Groups allow you to control the visibility of multiple blocks in one place.');
 
     if (!$this->groupsExist()) {
       $description .= ' ' . $this->t('No Groups have been created yet.');
-      $form['block_visibility_group']['create'] = array(
+      $form['block_visibility_group']['create'] = [
         '#type' => 'link',
         '#title' => t('Create a Group'),
         '#url' => Url::fromRoute('entity.block_visibility_group.add_form'),
-      );
+      ];
     }
     else {
       if ($current_block_visibility_group) {
 
-        $form['block_visibility_group']['block_visibility_group_show_global'] = array(
+        $form['block_visibility_group']['block_visibility_group_show_global'] = [
           '#type' => 'checkbox',
           '#title' => $this->t('Show Global Blocks'),
           '#default_value' => $this->getShowGlobalWithGroup(),
           '#description' => $this->t('Show global blocks when viewing a visibility group.'),
           '#attributes' => ['onchange' => 'this.form.submit()'],
-        );
+        ];
 
         /** @var \Drupal\block_visibility_groups\Entity\BlockVisibilityGroup $group */
         $group = $this->group_storage->load($current_block_visibility_group);
@@ -219,7 +227,7 @@ class BlockVisibilityGroupedListBuilder extends BlockListBuilder {
     $form = parent::buildBlocksForm();
     $show_global_in_group = $this->getShowGlobalWithGroup();
     if ($block_visibility_group = $this->getBlockVisibilityGroup(TRUE)) {
-      foreach ($form as $row_key => &$row_info) {
+      foreach ($form as &$row_info) {
         if (isset($row_info['title']['#url'])) {
           /** @var \Drupal\Core\Url $url */
           $url = $row_info['title']['#url'];
@@ -232,20 +240,18 @@ class BlockVisibilityGroupedListBuilder extends BlockListBuilder {
             [
               'query' => $query,
             ]);
-$row_info['title']['#url'] = $url;
-// $query['block_visibility_group'] = $this->getBlockVisibilityGroup();
-// $url->setOption('query', $query);.
+          $row_info['title']['#url'] = $url;
+          // $query['block_visibility_group'] = $this->getBlockVisibilityGroup();
+          // $url->setOption('query', $query);.
         }
         if (isset($row_info['operations']['#links']) && $row_info['operations']['#links']) {
-          foreach ($row_info['operations']['#links'] as $op => &$op_info) {
+          foreach ($row_info['operations']['#links'] as &$op_info) {
             $url = $op_info['url'];
             $query = $url->getOption('query');
             $query['block_visibility_group'] = $block_visibility_group;
             $url->setOption('query', $query);
           }
-
         }
-
       }
     }
 
@@ -255,9 +261,7 @@ $row_info['title']['#url'] = $url;
     ) {
       $this->addGroupColumn($form);
     }
-
     return $form;
-
   }
 
   /**
@@ -364,7 +368,7 @@ $row_info['title']['#url'] = $url;
         }
       }
       // Adjust header.
-      array_splice($form['#header'], 2, 0, array($this->t('Visibility group')));
+      array_splice($form['#header'], 2, 0, [$this->t('Visibility group')]);
       // Increase colspan.
       foreach (Element::children($form) as $child) {
         foreach (Element::children($form[$child]) as $gchild) {

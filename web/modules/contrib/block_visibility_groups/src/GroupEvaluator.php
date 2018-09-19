@@ -72,7 +72,10 @@ class GroupEvaluator implements GroupEvaluatorInterface {
   }
 
   /**
+   * @param \Drupal\Core\Condition\ConditionPluginCollection $conditions
+   * @param string $logic
    *
+   * @return bool
    */
   protected function applyContexts(ConditionPluginCollection &$conditions, $logic) {
     $have_1_testable_condition = FALSE;

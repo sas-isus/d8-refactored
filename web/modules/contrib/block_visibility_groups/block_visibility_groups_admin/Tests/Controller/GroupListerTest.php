@@ -20,11 +20,11 @@ class GroupListerTest extends WebTestBase {
    * {@inheritdoc}
    */
   public static function getInfo() {
-    return array(
+    return [
       'name' => "block_visibility_groups_admin GroupLister's controller functionality",
       'description' => 'Test Unit for module block_visibility_groups_admin and controller GroupLister.',
       'group' => 'Other',
-    );
+    ];
   }
 
   /**

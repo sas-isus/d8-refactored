@@ -29,7 +29,7 @@ trait ConditionRedirectTrait {
 
       $form_state->setRedirect(
         'block.admin_display',
-        array(),
+        [],
         ['query' => $query]
 
       );

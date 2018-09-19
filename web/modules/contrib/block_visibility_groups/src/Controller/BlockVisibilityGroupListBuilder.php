@@ -32,7 +32,7 @@ class BlockVisibilityGroupListBuilder extends ConfigEntityListBuilder {
     $row += parent::buildRow($entity);
     $url = Url::fromRoute(
       'block.admin_display',
-      array(),
+      [],
       ['query' => ['block_visibility_group' => $row['id']]]
     );
     /*$row['manage_blocks'] = array(

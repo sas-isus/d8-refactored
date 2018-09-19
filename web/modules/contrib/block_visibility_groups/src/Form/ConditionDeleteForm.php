@@ -72,7 +72,7 @@ class ConditionDeleteForm extends ConfirmFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->block_visibility_group->removeCondition($this->condition->getConfiguration()['uuid']);
     $this->block_visibility_group->save();
-    drupal_set_message($this->t('The condition %name has been removed.', ['%name' => $this->condition->getPluginDefinition()['label']]));
+    $this->messenger()->addMessage($this->t('The condition %name has been removed.', ['%name' => $this->condition->getPluginDefinition()['label']]));
     $this->setConditionRedirect($form_state);
   }
 

@@ -40,19 +40,19 @@ function block_visibility_groups_admin_toolbar() {
   }
   $items['block_visibility_groups_admin'] = [
     '#type' => 'toolbar_item',
-    'tab' => array(
+    'tab' => [
       '#type' => 'link',
       '#title' => t('Block Visibility Groups'),
       '#url' => $url,
-      '#attributes' => array(
+      '#attributes' => [
         'title' => $link_title,
         'data-dialog-type' => 'modal',
         'data-dialog-options' => Json::encode([
           'width' => 700,
         ]),
-        'class' => array('toolbar-icon', 'use-ajax'),
-      ),
-    ),
+        'class' => ['toolbar-icon', 'use-ajax'],
+      ],
+    ],
     // @todo Fix caching
     '#cache' => [
       'max-age' => 0,

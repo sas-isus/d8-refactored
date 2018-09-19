@@ -32,7 +32,7 @@ class ConditionCreatorManager extends DefaultPluginManager {
    * @return object
    * @throws \Exception
    */
-  public function createInstance($plugin_id, array $configuration = array()) {
+  public function createInstance($plugin_id, array $configuration = []) {
     if (empty($configuration['route_name'])) {
       // @todo Also check for parameters?
       throw new \Exception('Route name is require configuration for GroupCreatorManager');

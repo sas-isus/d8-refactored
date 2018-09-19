@@ -140,7 +140,7 @@ abstract class ConditionFormBase extends FormBase {
     }
 
     // Set the submission message.
-    drupal_set_message($this->submitMessageText());
+    $this->messenger()->addMessage($this->submitMessageText());
 
     $configuration = $this->condition->getConfiguration();
     // If this condition is new, add it to the block_visibility_group.

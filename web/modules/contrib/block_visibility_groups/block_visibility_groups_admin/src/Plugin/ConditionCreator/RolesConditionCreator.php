@@ -30,12 +30,12 @@ class RolesConditionCreator extends ConditionCreatorBase {
       '#tree' => TRUE,
     ];
     // @todo Dynamically create condition for by call ConditionPluginBase::buildConfigurationForm?
-    $elements['condition_config']['roles'] = array(
+    $elements['condition_config']['roles'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('When the user has the following roles'),
       '#options' => array_map('\Drupal\Component\Utility\Html::escape', user_role_names()),
       // '#description' => $this->t('If you select no roles, the condition will evaluate to TRUE for all users.'),.
-    );
+    ];
     return $elements;
   }
 

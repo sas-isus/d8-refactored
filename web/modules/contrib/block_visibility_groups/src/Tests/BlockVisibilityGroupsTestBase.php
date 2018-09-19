@@ -48,18 +48,28 @@ abstract class BlockVisibilityGroupsTestBase extends WebTestBase {
   }
 
   /**
+   * Places a block in a block visibility group through the UI.
    *
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param string $group_id
+   *   The group id.
+   * @param string $title
+   *   The title for the block.
+   *
+   * @return string
+   *   The block ID.
    */
   protected function placeBlockInGroupUI($plugin_id, $group_id, $title) {
 
     // Enable a standard block.
     $default_theme = $this->config('system.theme')->get('default');
-    $edit = array(
+    $edit = [
       'id' => strtolower($this->randomMachineName(8)),
       'region' => 'sidebar_first',
       'settings[label]' => $title,
       'settings[label_display]' => 1,
-    );
+    ];
     $block_id = $edit['id'];
     if ($group_id) {
       $edit['visibility[condition_group][block_visibility_group]'] = $group_id;
@@ -71,8 +81,28 @@ abstract class BlockVisibilityGroupsTestBase extends WebTestBase {
     $this->assertText('The block configuration has been saved.', 'Block was saved');
 
     // Just for Debug message.
-    $this->drupalGet('admin/structure/block/manage/' . $edit['id']);
+    $this->drupalGet('admin/structure/block/manage/' . $block_id);
     $this->drupalGet('admin/structure/block/block-visibility-group/' . $group_id);
+
+    return $block_id;
+  }
+
+  /**
+   * Update a block which is already placed in a block visibility group.
+   *
+   * @param string $block_id
+   *   The block ID.
+   * @param string $group_id
+   *   The group id.
+   * @param array $settings
+   *   The array of settings.
+   */
+  protected function updateBlockInGroupUI($block_id, $group_id, array $settings = []) {
+    $this->drupalPostForm('admin/structure/block/manage/' . $block_id, $settings, 'Save block', [
+      'query' => [
+        'block_visibility_group' => $group_id,
+      ]
+    ]);
   }
 
 }

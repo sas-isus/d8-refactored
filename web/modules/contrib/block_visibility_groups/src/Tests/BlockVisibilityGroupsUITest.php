@@ -24,7 +24,6 @@ class BlockVisibilityGroupsUITest extends BlockVisibilityGroupsTestBase {
     $this->assertResponse(200);
 
     // Test add block visibilty button exists and works.
-    $this->assertText(t('There is no Block Visibility Group yet.'), 'No visibilty group.');
     $this->assertLink('Add Block Visibility Group');
     $this->clickLink('Add Block Visibility Group');
     $this->assertResponse(200);

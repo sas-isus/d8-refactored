@@ -62,7 +62,7 @@ class ConditionGroup extends ConditionPluginBase implements ContainerFactoryPlug
     if (empty($block_visibility_group_id)) {
       return TRUE;
     }
-    /** @var BlockVisibilityGroup $block_visibility_group */
+    /** @var \Drupal\block_visibility_groups\Entity\BlockVisibilityGroup $block_visibility_group */
     if ($block_visibility_group = $this->entityStorage->load($block_visibility_group_id)) {
       return $this->groupEvaluator->evaluateGroup($block_visibility_group);
     }
@@ -91,12 +91,12 @@ class ConditionGroup extends ConditionPluginBase implements ContainerFactoryPlug
       $options[$type->id()] = $type->label();
     }
 
-    $form['block_visibility_group'] = array(
+    $form['block_visibility_group'] = [
       '#title' => $this->t('Block Visibility Groups'),
       '#type' => 'select',
       '#options' => $options,
       // '#default_value' => $default,.
-    );
+    ];
     $default = isset($this->configuration['block_visibility_group']) ? $this->configuration['block_visibility_group'] : '';
 
     if (!$default) {

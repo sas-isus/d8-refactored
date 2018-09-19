@@ -3,6 +3,7 @@
 namespace Drupal\block_visibility_groups\Tests;
 
 use Drupal\block_visibility_groups\Entity\BlockVisibilityGroup;
+use Drupal\Core\Url;
 
 /**
  * Tests the block_visibility_groups Visibility Settings.
@@ -19,15 +20,15 @@ class VisibilityTest extends BlockVisibilityGroupsTestBase {
 
     // Create Basic page and Article node types.
     if ($this->profile != 'standard') {
-      $this->drupalCreateContentType(array(
+      $this->drupalCreateContentType([
         'type' => 'page',
         'name' => 'Basic page',
         'display_submitted' => FALSE,
-      ));
-      $this->drupalCreateContentType(array(
+      ]);
+      $this->drupalCreateContentType([
         'type' => 'article',
         'name' => 'Article',
-      ));
+      ]);
     }
   }
 
@@ -57,7 +58,7 @@ class VisibilityTest extends BlockVisibilityGroupsTestBase {
     $group = $this->createGroup($configs);
 
     $block_title = $this->randomMachineName();
-    $this->placeBlockInGroupUI('system_powered_by_block', $group->id(), $block_title);
+    $block_id = $this->placeBlockInGroupUI('system_powered_by_block', $group->id(), $block_title);
 
     $page_node = $this->drupalCreateNode();
     $this->drupalGet('node/' . $page_node->id());
@@ -66,11 +67,30 @@ class VisibilityTest extends BlockVisibilityGroupsTestBase {
     $this->drupalGet('user');
     $this->assertNoText($block_title, 'Block does not show up on user page when added via UI.');
 
+    // Try updating, verify that the user get's redirected to the block layout
+    // of the used visibility group.
+    $this->updateBlockInGroupUI($block_id, $group->id());
+    $default_theme = $this->config('system.theme')->get('default');
+    $option = Url::fromRoute(
+      'block.admin_display_theme',
+      ['theme' => $default_theme],
+      ['query' => ['block_visibility_group' => $group->id()]]
+    )->toString();
+    $this->assertOptionSelected('edit-select', $option, "User gets redirected to the selected group's block layout page.");
+
     $block = $this->placeBlockInGroup('system_powered_by_block', $group->id());
     $this->drupalGet('node/' . $page_node->id());
     $this->assertText($block->label(), 'Block shows up on page node.');
     $this->drupalGet('user');
     $this->assertNoText($block->label(), 'Block does not show up on user page.');
+
+    $this->container->get('module_installer')->uninstall(['block_visibility_groups']);
+
+    // After uninstall conditions will not apply.
+    $this->drupalGet('node/' . $page_node->id());
+    $this->assertText($block->label(), 'Block shows up on page node.');
+    $this->drupalGet('user');
+    $this->assertText($block->label(), 'Block shows up on user node.');
   }
 
   /**

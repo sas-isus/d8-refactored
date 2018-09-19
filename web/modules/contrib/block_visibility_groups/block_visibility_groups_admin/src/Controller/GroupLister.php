@@ -65,7 +65,7 @@ class GroupLister extends ControllerBase {
         ],
         'manage' => [
           '#type' => 'link',
-          '#title' => t('Manage Blocks'),
+          '#title' => $this->t('Manage Blocks'),
           '#url' => Url::fromRoute('block.admin_display_theme', [
             'theme' => \Drupal::theme()->getActiveTheme()->getName(),
           ],

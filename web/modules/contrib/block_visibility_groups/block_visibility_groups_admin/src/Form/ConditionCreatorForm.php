@@ -51,20 +51,20 @@ class ConditionCreatorForm extends FormBase {
     if (empty($route_name)) {
       // @todo Throw error
     }
-    $form['label'] = array(
+    $form['label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Label'),
       '#maxlength' => 255,
       '#description' => $this->t("Label for the Block Visibility Group."),
       '#required' => TRUE,
-    );
+    ];
 
-    $form['id'] = array(
+    $form['id'] = [
       '#type' => 'machine_name',
-      '#machine_name' => array(
+      '#machine_name' => [
         'exists' => '\Drupal\block_visibility_groups\Entity\BlockVisibilityGroup::load',
-      ),
-    );
+      ],
+    ];
 
     $form['conditions'] = [
       '#type' => 'fieldset',
@@ -108,8 +108,7 @@ class ConditionCreatorForm extends FormBase {
         ]
       );
 
-      if ($label = $creator->getNewConditionLabel()) {
-
+      if ($creator->getNewConditionLabel()) {
         $elements[$id] = $creator->createConditionElements();
       }
     }

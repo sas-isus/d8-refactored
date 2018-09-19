@@ -34,7 +34,7 @@ entity.block_visibility_group.delete_form:
 
 #### Conditions
 block_visibility_groups.condition_select:
-  path: 'admin/structure/block/block-visibility-group/{block_visibility_group}/condition/select/{redirect}'
+  path: '/admin/structure/block/block-visibility-group/{block_visibility_group}/condition/select/{redirect}'
   defaults:
     _controller: '\Drupal\block_visibility_groups\Controller\BlockVisibilityGroupController::selectCondition'
     _title: 'Select condition'
@@ -68,7 +68,7 @@ block_visibility_groups.condition_delete:
     _permission: 'administer blocks'
 
 block_visibility_groups.admin_library:
-  path: 'admin/structure/block/library/{theme}/{block_visibility_group}'
+  path: '/admin/structure/block/library/{theme}/{block_visibility_group}'
   defaults:
     _controller: '\Drupal\block_visibility_groups\Controller\BlockLibraryGroupsController::listBlocks'
     _title: 'Place block'

@@ -84,13 +84,13 @@ class NodeTypeConditionCreator extends ConditionCreatorBase implements Container
     foreach ($node_types as $type) {
       $options[$type->id()] = $type->label();
     }
-    $elements['condition_config']['bundles'] = array(
+    $elements['condition_config']['bundles'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('When the user has the following bundles'),
       '#options' => $options,
       '#default_value' => [$current_type],
       // '#description' => $this->t('If you select no roles, the condition will evaluate to TRUE for all users.'),.
-    );
+    ];
     return $elements;
   }
 
