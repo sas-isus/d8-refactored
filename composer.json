@@ -30,6 +30,7 @@
     "drupal/menu_trail_by_path": "^1.1",
     "drupal/panelizer": "^4.0",
     "drupal/panels": "^4.2",
+    "drupal/pantheon_advanced_page_cache": "^1.0",
     "drupal/permissions_by_term": "^1.44",
     "drupal/redirect": "^1.1",
     "drupal/views_bootstrap": "^3.0",
