@@ -35,6 +35,7 @@
     "drupal/permissions_by_term": "^1.44",
     "drupal/redirect": "^1.1",
     "drupal/unpublished_node_permissions": "^1.0",
+    "drupal/video_embed_field": "^2.0",
     "drupal/views_bootstrap": "^3.0",
     "drupal/views_custom_cache_tag": "^1.0",
     "drupal/viewsreference": "^1.2",
