@@ -223,29 +223,13 @@ class PenncourseService {
 
 
   /**
-   * return the term code for the most currently published course roster
-   *
-   * course rosters for the summer and fall are finalized on 2/19
-   * rosters for the spring are finalized on 10/1
+   * return the term code for the last (sequential) section term stored in the database
    * @return string term code.
-   *
    */
   public function getFinalTerm() {
-    if ((date('n', REQUEST_TIME) >= 10) && (date('j', REQUEST_TIME) >= 1)) {
-      // date is after 10/1 - final term is next spring term
-      $term = date('Y', REQUEST_TIME) + 1;
-      $term .= 'A';
-    }
-    elseif ((date('n', REQUEST_TIME) >= 2) && ((date('j', REQUEST_TIME) >= 19) || (date('n', REQUEST_TIME) >= 3))) {
-      // date is after 2/19 - final term is next (or current) fall term
-      $term = date('Y', REQUEST_TIME);
-      $term .= 'C';
-    }
-    else {
-      // date is before 2/19 - final term is current spring term
-      $term = date('Y', REQUEST_TIME);
-      $term .= 'A';
-    }
+    $terms = $this->getAllTerms();
+    reset($terms);
+    $term = key($terms);
     return $term;
   }
 
