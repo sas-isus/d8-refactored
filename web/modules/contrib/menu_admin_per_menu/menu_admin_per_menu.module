@@ -1,0 +1,97 @@
+<?php
+
+/**
+ * @file
+ * Module file for menu_admin_per_menu.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\menu_link_content\Form\MenuLinkContentForm;
+use Drupal\menu_ui\Form\MenuLinkEditForm;
+use Drupal\menu_ui\MenuForm;
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function menu_admin_per_menu_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form_object = $form_state->getFormObject();
+  if ($form_object instanceof MenuLinkEditForm
+    || $form_object instanceof MenuLinkContentForm) {
+    $account = \Drupal::currentUser();
+    if (!$account->hasPermission('administer menu')) {
+      $options = $form['menu_parent']['#options'];
+      $form['menu_parent']['#options'] = menu_admin_per_menu_filter_parent_options($account, $options);
+    }
+  }
+  if ($form_object instanceof MenuForm) {
+    $account = \Drupal::currentUser();
+    if (!$account->hasPermission('administer menu')) {
+      $form['id']['#access'] = FALSE;
+      $form['label']['#access'] = FALSE;
+      $form['description']['#access'] = FALSE;
+      $form['langcode']['#access'] = FALSE;
+    }
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter() for node_form.
+ */
+function menu_admin_per_menu_form_node_form_alter(&$form, FormStateInterface $form_state) {
+  $account = \Drupal::currentUser();
+  if (!$account->hasPermission('administer menu')) {
+    /** @var \Drupal\menu_admin_per_menu\MenuAdminPerMenuAccessInterface $allowedMenusService */
+    $allowedMenusService = \Drupal::service('menu_admin_per_menu.allowed_menus');
+    $allowed_menus = $allowedMenusService->getPerMenuPermissions($account);
+
+    $default_value = &$form['menu']['link']['menu_parent']['#default_value'];
+    list($current_menu, ) = explode(':', $default_value, 2);
+    // Disallow editing the menu item if there is a pre-existing menu item
+    // belonging to a menu the user does not have permission to access.
+    if (!empty($current_menu) && !in_array($current_menu, $allowed_menus)) {
+      $form['menu']['#access'] = FALSE;
+      return;
+    }
+
+    $options = &$form['menu']['link']['menu_parent']['#options'];
+    $options = menu_admin_per_menu_filter_parent_options($account, $options ? $options : []);
+    $form['menu']['#access'] = count($options) > 0;
+  }
+}
+
+/**
+ * Removes menu items for menus a user does not have permission to access.
+ *
+ * @param \Drupal\Core\Session\AccountInterface
+ *   The user to check for access.
+ * @param array $options
+ *   An array of menu item labels keyed by menu item ID.
+ *
+ * @return array
+ *   Filtered menu item labels keyed by menu item ID.
+ */
+function menu_admin_per_menu_filter_parent_options(AccountInterface $account, array $options) {
+  /** @var \Drupal\menu_admin_per_menu\MenuAdminPerMenuAccessInterface $allowedMenusService */
+  $allowedMenusService = \Drupal::service('menu_admin_per_menu.allowed_menus');
+  $allowed_menus = $allowedMenusService->getPerMenuPermissions($account);
+
+  foreach ($options as $key => $option) {
+    list($menu, ) = explode(':', $key, 2);
+    if (!in_array($menu, $allowed_menus)) {
+      unset($options[$key]);
+    }
+  }
+
+  return $options;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access() for entity type "menu_link_content".
+ */
+function menu_admin_per_menu_menu_link_content_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  /** @var \Drupal\menu_admin_per_menu\MenuAdminPerMenuAccessInterface $allowedMenusService */
+  $allowedMenusService = \Drupal::service('menu_admin_per_menu.allowed_menus');
+  return $allowedMenusService->menuItemAccess($account, $entity);
+}

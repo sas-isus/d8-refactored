@@ -1,0 +1,13 @@
+name: Menu Admin per Menu
+type: module
+description: Allows to give roles per menu admin permissions without giving them full administer menu permission.
+package: Administration
+# core: 8.x
+dependencies:
+  - menu_ui
+
+# Information added by Drupal.org packaging script on 2017-10-05
+version: '8.x-1.0'
+core: '8.x'
+project: 'menu_admin_per_menu'
+datestamp: 1507184951

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4704234203a4e369a9d640b1816dc70a",
+    "content-hash": "7e5cb5eb5396ead3dba20f2990c7c2f3",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -2895,6 +2895,57 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/linkit",
                 "issues": "http://drupal.org/project/linkit"
+            }
+        },
+        {
+            "name": "drupal/menu_admin_per_menu",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/menu_admin_per_menu",
+                "reference": "8.x-1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/menu_admin_per_menu-8.x-1.0.zip",
+                "reference": "8.x-1.0",
+                "shasum": "27dbef0025146a382feab67db5e93eaf280b8de4"
+            },
+            "require": {
+                "drupal/core": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0",
+                    "datestamp": "1507184944",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "anrikun",
+                    "homepage": "https://www.drupal.org/user/410199"
+                },
+                {
+                    "name": "mkdok",
+                    "homepage": "https://www.drupal.org/user/3308753"
+                }
+            ],
+            "description": "Allows to give roles per menu admin permissions without giving them full administer menu permission.",
+            "homepage": "https://www.drupal.org/project/menu_admin_per_menu",
+            "support": {
+                "source": "http://cgit.drupalcode.org/menu_admin_per_menu"
             }
         },
         {

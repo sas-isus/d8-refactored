@@ -3691,6 +3691,59 @@
         }
     },
     {
+        "name": "drupal/menu_admin_per_menu",
+        "version": "1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupal.org/project/menu_admin_per_menu",
+            "reference": "8.x-1.0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/menu_admin_per_menu-8.x-1.0.zip",
+            "reference": "8.x-1.0",
+            "shasum": "27dbef0025146a382feab67db5e93eaf280b8de4"
+        },
+        "require": {
+            "drupal/core": "*"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "branch-alias": {
+                "dev-1.x": "1.x-dev"
+            },
+            "drupal": {
+                "version": "8.x-1.0",
+                "datestamp": "1507184944",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "anrikun",
+                "homepage": "https://www.drupal.org/user/410199"
+            },
+            {
+                "name": "mkdok",
+                "homepage": "https://www.drupal.org/user/3308753"
+            }
+        ],
+        "description": "Allows to give roles per menu admin permissions without giving them full administer menu permission.",
+        "homepage": "https://www.drupal.org/project/menu_admin_per_menu",
+        "support": {
+            "source": "http://cgit.drupalcode.org/menu_admin_per_menu"
+        }
+    },
+    {
         "name": "drupal/menu_export",
         "version": "1.2.0",
         "version_normalized": "1.2.0.0",

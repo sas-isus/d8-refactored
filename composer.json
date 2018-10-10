@@ -29,6 +29,7 @@
     "drupal/imce": "^1.6",
     "drupal/libraries": "^3.0",
     "drupal/linkit": "^4.3",
+    "drupal/menu_admin_per_menu": "^1.0",
     "drupal/menu_export": "^1.0",
     "drupal/menu_trail_by_path": "^1.1",
     "drupal/panelizer": "^4.0",
