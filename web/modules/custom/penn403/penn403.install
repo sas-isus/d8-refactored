@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Penn403 module.
+ */
+
+/**
+ * Set a default Link Text value if one isn't found.
+ */
+function penn403_update_8001() {
+  $configFactory = \Drupal::configFactory();
+  $config = $configFactory->getEditable('penn403.settings');
+  $currentLinkText = $config->get('link_text');
+  if (!$currentLinkText) {
+    $config->set('link_text', 'Log In');
+    $config->save();
+  }
+}
