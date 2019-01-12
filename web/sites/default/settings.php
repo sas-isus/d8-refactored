@@ -24,6 +24,6 @@ if (file_exists($local_settings)) {
   include $local_settings;
 }
 
-if (file_exists(__DIR__ . '/settings.redirects-allsites.php')) {
-   include __DIR__ . '/settings.redirects-allsites.php';
+if (file_exists(__DIR__ . '/settings.sas.php')) {
+   include __DIR__ . '/settings.sas.php';
 }
