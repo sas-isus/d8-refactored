@@ -37,8 +37,6 @@ function permissions_by_term_schema() {
       ],
     ],
     'primary key' => [
-      'tid',
-      'uid',
     ],
   ];
 
@@ -64,8 +62,6 @@ function permissions_by_term_schema() {
       ],
     ],
     'primary key' => [
-      'tid',
-      'rid',
     ],
   ];
 
@@ -167,4 +163,15 @@ function permissions_by_term_update_8152() {
       ]);
     }
   }
+}
+
+/**
+ * Remove primary keys due language codes.
+ */
+function permissions_by_term_update_8153() {
+  $database = \Drupal::database();
+  $schema = $database->schema();
+
+  $schema->dropPrimaryKey('permissions_by_term_role');
+  $schema->dropPrimaryKey('permissions_by_term_user');
 }

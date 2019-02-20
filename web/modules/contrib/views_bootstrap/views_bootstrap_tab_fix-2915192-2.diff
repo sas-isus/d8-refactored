@@ -1,0 +1,12 @@
+diff --git a/src/Plugin/views/style/ViewsBootstrapTab.php b/src/Plugin/views/style/ViewsBootstrapTab.php
+index d2cbed9..1c85214 100755
+--- a/src/Plugin/views/style/ViewsBootstrapTab.php
++++ b/src/Plugin/views/style/ViewsBootstrapTab.php
+@@ -33,6 +33,7 @@ class ViewsBootstrapTab extends StylePluginBase {
+    * {@inheritdoc}
+    */
+   protected $usesOptions = TRUE;
++  protected $usesRowPlugin = TRUE;
+ 
+   /**
+    * Definition.

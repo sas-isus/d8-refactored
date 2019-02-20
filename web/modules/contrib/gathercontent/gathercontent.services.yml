@@ -4,7 +4,7 @@ services:
     arguments: ['@http_client']
   gathercontent.content_processor:
     class: Drupal\gathercontent\Import\ContentProcess\ContentProcessor
-    arguments: ['@gathercontent.client', '@gathercontent.metatag']
+    arguments: ['@gathercontent.client', '@gathercontent.metatag', '@datetime.time']
   gathercontent.importer:
     class: Drupal\gathercontent\Import\Importer
     arguments: ['@gathercontent.client', '@gathercontent.content_processor', '@event_dispatcher']

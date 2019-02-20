@@ -7,7 +7,7 @@ namespace Drupal\Tests\ds\Functional;
  *
  * @group ds
  */
-class TwigRenderTest extends FastTestBase {
+class TwigRenderTest extends TestBase {
 
   /**
    * Tests targeting the field in a twig template.

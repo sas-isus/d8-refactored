@@ -7,7 +7,7 @@ namespace Drupal\Tests\ds\Functional;
  *
  * @group ds
  */
-class FieldLayoutTest extends FastTestBase {
+class FieldLayoutTest extends TestBase {
 
   /**
    * Modules to install.
@@ -32,6 +32,7 @@ class FieldLayoutTest extends FastTestBase {
 
     $fields = [
       'fields[node_title][region]' => 'right',
+      'fields[body][region]' => 'right',
     ];
 
     $this->dsSelectLayout();
@@ -41,6 +42,10 @@ class FieldLayoutTest extends FastTestBase {
 
     // Assert that the title is visible.
     $elements = $this->xpath('//div[@class="field field--name-node-title field--type-ds field--label-hidden field__item"]/h2');
+    $this->assertEquals(count($elements), 1);
+
+    // Assert that the body is visible.
+    $elements = $this->xpath('//div[@class="clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item"]/p');
     $this->assertEquals(count($elements), 1);
   }
 

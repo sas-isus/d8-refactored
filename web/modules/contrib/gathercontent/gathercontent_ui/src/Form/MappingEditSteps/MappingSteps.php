@@ -8,6 +8,7 @@ use Cheppers\GatherContent\DataTypes\Template;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\gathercontent\Entity\MappingInterface;
 
 /**
@@ -16,6 +17,8 @@ use Drupal\gathercontent\Entity\MappingInterface;
  * @package Drupal\gathercontent_ui\Form
  */
 abstract class MappingSteps {
+
+  use StringTranslationTrait;
 
   /**
    * Mapping object.
@@ -156,11 +159,14 @@ abstract class MappingSteps {
       'updated',
       'gathercontent_project',
       'gathercontent_template',
+      'er_mapping_type',
+      'submit',
+      'close',
     ]);
 
     $mapping_data = [];
     foreach ($formState->getValues() as $key => $value) {
-      if (!in_array($key, $non_data_elements) && substr_compare($key, 'tab', 0, 3) === 0) {
+      if (!in_array($key, $non_data_elements)) {
         $mapping_data[$key] = $value;
       }
     }
@@ -173,6 +179,7 @@ abstract class MappingSteps {
     // for translatable content types.
     $content_lang = [];
     $metatag_lang = [];
+
     if ($translatable) {
       foreach ($mapping_data as $tab_id => $tab) {
         $tab_type = (isset($tab['type']) ? $tab['type'] : 'content');
@@ -191,6 +198,7 @@ abstract class MappingSteps {
     // Validate if each field is used only once.
     $content_fields = [];
     $metatag_fields = [];
+
     if ($translatable) {
       foreach ($content_lang as $lang) {
         $content_fields[$lang] = [];
@@ -200,15 +208,23 @@ abstract class MappingSteps {
       }
       $content_fields['und'] = $metatag_fields['und'] = [];
     }
+
     foreach ($mapping_data as $tab_id => $tab) {
       $tab_type = (isset($tab['type']) ? $tab['type'] : 'content');
+
       if (isset($tab['elements'])) {
         foreach ($tab['elements'] as $k => $element) {
           if (empty($element)) {
             continue;
           }
+
           if ($translatable) {
-            if (!in_array($element, ${$tab_type . '_fields'}[$tab['language']])) {
+            if (
+              ($tab_type == 'content' &&
+                in_array($this->template->config[$tab_id]->elements[$k]->type, ['text', 'section'])
+              ) ||
+              !in_array($element, ${$tab_type . '_fields'}[$tab['language']])
+            ) {
               ${$tab_type . '_fields'}[$tab['language']][] = $element;
             }
             else {
@@ -219,12 +235,18 @@ abstract class MappingSteps {
             }
           }
           else {
-            if (!in_array($element, ${$tab_type . '_fields'})) {
+            if (
+              ($tab_type == 'content' &&
+                in_array($this->template->config[$tab_id]->elements[$k]->type, ['text', 'section'])
+              ) ||
+              !in_array($element, ${$tab_type . '_fields'})
+            ) {
               ${$tab_type . '_fields'}[] = $element;
             }
             else {
               if (!strpos($element, '||')) {
-                $formState->setErrorByName($tab_id, $this->t('A GatherContent field can only be mapped to a single Drupal field. So each field can only be mapped to once.'));
+                $formState->setErrorByName($tab_id,
+                  $this->t('A GatherContent field can only be mapped to a single Drupal field. So each field can only be mapped to once.'));
               }
             }
           }

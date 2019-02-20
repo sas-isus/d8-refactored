@@ -251,6 +251,11 @@ class ContentImportSelectForm extends FormBase {
                 '#title' => $this->t('Publish'),
                 '#title_display' => 'invisible',
                 '#default_value' => isset($this->drupalStatus[$item->id]) ? $this->drupalStatus[$item->id] : $import_config->get('node_default_status'),
+                '#states' => [
+                  'disabled' => [
+                    ':input[name="items[' . $item->id . '][selected]"]' => ['checked' => FALSE],
+                  ],
+                ],
               ],
               'menu' => [
                 '#type' => 'select',
@@ -262,6 +267,11 @@ class ContentImportSelectForm extends FormBase {
                   ->getParentSelectOptions('', $available_menus),
                 '#title' => t('Menu'),
                 '#title_display' => 'invisible',
+                '#states' => [
+                  'disabled' => [
+                    ':input[name="items[' . $item->id . '][selected]"]' => ['checked' => FALSE],
+                  ],
+                ],
               ],
             ];
           }
@@ -359,6 +369,17 @@ class ContentImportSelectForm extends FormBase {
           NodeUpdateMethod::ALWAYS_CREATE => $this->t('Always create new Content'),
           NodeUpdateMethod::UPDATE_IF_NOT_CHANGED => $this->t('Create new Content if it has changed since the last import'),
           NodeUpdateMethod::ALWAYS_UPDATE => $this->t('Always update existing Content'),
+        ],
+      ];
+
+      $form['node_create_new_revision'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Create new revision'),
+        '#default_value' => $import_config->get('node_create_new_revision'),
+        '#states' => [
+          'visible' => [
+            ':input[name="node_update_method"]' => ['value' => NodeUpdateMethod::ALWAYS_UPDATE],
+          ],
         ],
       ];
 
@@ -469,6 +490,7 @@ class ContentImportSelectForm extends FormBase {
             $import_options = new ImportOptions(
               $form_state->getValue('node_update_method'),
               $drupal_status,
+              $form_state->getValue('node_create_new_revision'),
               $form_state->getValue('status'),
               $parent_menu_item,
               $operation->uuid()
@@ -498,6 +520,7 @@ class ContentImportSelectForm extends FormBase {
               $import_options = new ImportOptions(
                 $form_state->getValue('node_update_method'),
                 $drupal_status,
+                $form_state->getValue('node_create_new_revision'),
                 $form_state->getValue('status'),
                 $parent_menu_item,
                 $operation->uuid()

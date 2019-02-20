@@ -55,19 +55,24 @@ class NodeEntityBundleInfo {
   }
 
   /**
-   * @param string   $viewFilePath
-   * @param int|null $nid
+   * @param $viewFilePath
+   * @param null $nid
+   * @param string $langcode
+   *
    * @return string
+   * @throws \Twig_Error_Loader
+   * @throws \Twig_Error_Runtime
+   * @throws \Twig_Error_Syntax
    */
-  public function renderNodeDetails($viewFilePath, $nid = null) {
+  public function renderNodeDetails($viewFilePath, $langcode, $nid = null) {
     $roles = null;
     $users = null;
 
     if (!empty($nid)) {
       $tids = $this->term->getTidsByNid($nid);
       if (!empty($tids)) {
-        $uids = $this->accessStorage->getUserTermPermissionsByTids($tids);
-        $rids = $this->accessStorage->getRoleTermPermissionsByTids($tids);
+        $uids = $this->accessStorage->getUserTermPermissionsByTids($tids, $langcode);
+        $rids = $this->accessStorage->getRoleTermPermissionsByTids($tids, $langcode);
       }
     }
 

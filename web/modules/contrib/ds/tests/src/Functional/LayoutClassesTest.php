@@ -9,7 +9,7 @@ use Drupal\Core\Entity\Entity\EntityViewDisplay;
  *
  * @group ds
  */
-class LayoutClassesTest extends FastTestBase {
+class LayoutClassesTest extends TestBase {
 
   /**
    * {@inheritdoc}

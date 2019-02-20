@@ -25,3 +25,6 @@ gathercontent.import:
     node_update_method:
       type: string
       label: 'Content update method'
+    node_create_new_revision:
+      type: boolean
+      label: 'Create new revision'

@@ -7,7 +7,7 @@ namespace Drupal\Tests\ds\Functional;
  *
  * @group ds
  */
-class HiddenRegionTest extends FastTestBase {
+class HiddenRegionTest extends TestBase {
 
   /**
    * Tests hidden region functionality.

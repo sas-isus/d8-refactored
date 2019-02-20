@@ -184,11 +184,16 @@
     root.setPath('.');
     root.branchEl.className += ' root';
     imce.treeEl.appendChild(root.branchEl);
-    // Create predefined folders.
+    // Create predefined folders in alphabetical order.
+    var paths = [];
     for (path in folders) {
       if (imce.owns(folders, path)) {
-        imce.addFolder(path, folders[path]);
+        paths.push(path);
       }
+    }
+    paths.sort();
+    for (var i = 0; path = paths[i]; i++) {
+      imce.addFolder(path, folders[path]);
     }
   };
 

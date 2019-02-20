@@ -7,7 +7,7 @@ namespace Drupal\Tests\ds\Functional;
  *
  * @group ds
  */
-class UserTest extends FastTestBase {
+class UserTest extends TestBase {
 
   /**
    * Tests hook_ds_pre_render_alter() with user entities

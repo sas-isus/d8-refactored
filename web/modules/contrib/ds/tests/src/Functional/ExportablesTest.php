@@ -9,7 +9,7 @@ use Drupal\Core\Entity\Entity\EntityViewDisplay;
  *
  * @group ds
  */
-class ExportablesTest extends FastTestBase {
+class ExportablesTest extends TestBase {
 
   /**
    * Enables the exportables module.

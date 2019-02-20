@@ -18,6 +18,7 @@ use Drupal\ds\Ds;
 use Drupal\ds\Plugin\DsField\DsFieldInterface;
 use Drupal\field\FieldConfigInterface;
 use Drupal\field_ui\FieldUI;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Adds the Display Suite fields and layouts to the form.
@@ -716,6 +717,9 @@ function _ds_field_ui_table_layouts($entity_type, $bundle, $view_mode, array &$f
   foreach ($ds_layouts as $key => $layout_definition) {
     // Create new layout option group.
     $optgroup = $layout_definition->getCategory() ?: t('Other');
+    if ($optgroup instanceof TranslatableMarkup) {
+      $optgroup = (string) $optgroup;
+    }
     if (!isset($layout_options[$optgroup])) {
       $layout_options[$optgroup] = [];
     }

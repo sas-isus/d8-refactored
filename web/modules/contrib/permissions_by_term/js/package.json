@@ -5,6 +5,7 @@
   "main": "node-form.js",
   "dependencies": {
     "babel-cli": "^6.26.0",
+    "babel-loader": "^7.1.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "lodash": "^4.17.10",
     "qunit": "^2.6.1",
@@ -15,27 +16,12 @@
   "scripts": {
     "test": "npx qunit webpack-dist/bundle-test.js",
     "babel-build-for-test": "babel src/**/*.js test/*.js -d babel-compiled-test",
-    "babel-build": "babel src/**/*.js -d babel-compiled --ignore node_modules,webpack-dist,drupal-behavior-function",
     "cleanup-babel-test": "rm -rf babel-compiled-test/",
-    "cleanup-babel": "rm -rf babel-compiled/",
     "build-and-test": "mv src/drupal-behavior-function /tmp && npm run-script webpack-test && mv /tmp/drupal-behavior-function src/ && npm run-script test",
-    "build": "npm run-script cleanup-babel && npm run-script babel-build && npm run-script webpack",
+    "build": "webpack --config webpack.production.js --mode production",
     "webpack-test": "npx webpack --entry ./src/**/*.js ./test/*.js --output ./webpack-dist/bundle-test.js --mode development",
-    "webpack": "npx webpack --entry ./src/**/*.js --output ./webpack-dist/bundle.js --mode development",
     "bat": "npm run-script build-and-test"
   },
   "author": "",
-  "license": "ISC",
-  "babel": {
-    "ignore": [
-      "node_modules",
-      "package.json",
-      "package-json.lock",
-      "drupal-behavior-function",
-      "webpack-dist"
-    ],
-    "plugins": [
-      "transform-es2015-modules-commonjs"
-    ]
-  }
+  "license": "ISC"
 }

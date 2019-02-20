@@ -87,6 +87,11 @@ class Imce {
     // Convert MB to bytes
     $conf['maxsize'] *= 1048576;
     $conf['quota'] *= 1048576;
+    // Check php max upload size.
+    $phpmaxsize = file_upload_max_size();
+    if ($phpmaxsize && (!$conf['maxsize'] || $phpmaxsize < $conf['maxsize'])) {
+      $conf['maxsize'] = $phpmaxsize;
+    }
     // Set root uri and url
     $conf['root_uri'] = $conf['scheme'] . '://';
     // file_create_url requires a filepath for some schemes like private://

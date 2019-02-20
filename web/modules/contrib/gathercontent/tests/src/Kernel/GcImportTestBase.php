@@ -7,7 +7,7 @@ use Drupal\gathercontent\Import\Importer;
 use Drupal\gathercontent\MetatagQuery;
 use Drupal\gathercontent_test\MockData;
 use Drupal\gathercontent_test\MockDrupalGatherContentClient;
-use Drupal\Tests\token\Kernel\KernelTestBase;
+use Drupal\KernelTests\KernelTestBase;
 
 /**
  * Base class for import kernel tests.
@@ -65,7 +65,8 @@ class GcImportTestBase extends KernelTestBase {
     if ($processor === NULL) {
       $processor = new ContentProcessor(
         static::getClient(),
-        static::getMetatag()
+        static::getMetatag(),
+        \Drupal::service('datetime.time')
       );
     }
     return $processor;

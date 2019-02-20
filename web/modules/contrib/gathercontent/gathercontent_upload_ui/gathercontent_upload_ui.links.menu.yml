@@ -1,5 +1,0 @@
-gathercontent_upload_ui.upload_select_form:
-  title: 'Upload changes to GatherContent'
-  route_name: gathercontent_upload_ui.upload_select_form
-  parent: system.admin_content
-  weight: 100

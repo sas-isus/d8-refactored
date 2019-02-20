@@ -134,8 +134,8 @@ function export_locales($data)
 function generate_base_data(array $englishData, array $codeMappings, array $currencyData) {
     $ignoredCountries = [
         'AN', // Netherlands Antilles, no longer exists.
-        'BV', 'HM', 'CP', // Uninhabited islands.
         'EU', 'QO', // European Union, Outlying Oceania. Not countries.
+        'XA', 'XB',
         'ZZ', // Unknown region
     ];
 

@@ -1,7 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-id: hu
-label: Hungarian
-direction: ltr
-locked: false

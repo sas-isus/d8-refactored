@@ -69,6 +69,17 @@ class ContentUpdateConfirmForm extends ContentConfirmForm {
       ],
     ];
 
+    $form['node_create_new_revision'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Create new revision'),
+      '#default_value' => $import_config->get('node_create_new_revision'),
+      '#states' => [
+        'visible' => [
+          ':input[name="node_update_method"]' => ['value' => NodeUpdateMethod::ALWAYS_UPDATE],
+        ],
+      ],
+    ];
+
     return $form;
   }
 
@@ -87,6 +98,7 @@ class ContentUpdateConfirmForm extends ContentConfirmForm {
       foreach ($nodes as $node) {
         $update_options = new ImportOptions();
         $update_options->setNodeUpdateMethod($form_state->getValue('node_update_method'));
+        $update_options->setCreateNewRevision($form_state->getValue('node_create_new_revision'));
         $update_options->setOperationUuid($operation->uuid());
 
         $operations[] = [

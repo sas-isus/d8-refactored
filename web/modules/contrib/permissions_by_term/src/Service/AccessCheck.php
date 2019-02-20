@@ -68,7 +68,7 @@ class AccessCheck {
     foreach ($terms as $term) {
       $termInfo = Term::load($term->tid);
 
-      if ($termInfo->get('langcode')->getLangcode() == $langcode) {
+      if ($termInfo instanceof Term && $termInfo->get('langcode')->getLangcode() == $langcode) {
         $access_allowed = $this->isAccessAllowedByDatabase($term->tid, $uid, $termInfo->get('langcode')->getLangcode());
         if (!$access_allowed) {
           if ($singleTermRestriction) {

@@ -27,7 +27,7 @@ function template_preprocess_views_bootstrap_accordion(array &$vars) {
     foreach ($vars['rows'] as $id => $row) {
       $vars['rows'][$id] = [];
       $vars['rows'][$id]['content'] = $row;
-      $vars['rows'][$id]['title'] = $view->style_plugin->getFieldValue($id, $panel_title_field);
+      $vars['rows'][$id]['title'] = $view->style_plugin->getField($id, $panel_title_field);
     }
   }
   else {

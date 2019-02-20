@@ -197,7 +197,8 @@ class ContentProcessorTest extends GcImportTestBase {
     $currentEntity = $node;
     for ($i = 0; $i < count($ids) - 1; $i++) {
       $currentFieldName = explode('.', $ids[$i])[2];
-      $targetField = reset($currentEntity->get($currentFieldName)->getValue());
+      $value = $currentEntity->get($currentFieldName)->getValue();
+      $targetField = reset($value);
       $currentEntity = Paragraph::load($targetField['target_id']);
     }
 

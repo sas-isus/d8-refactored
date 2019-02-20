@@ -9,7 +9,7 @@ use Drupal\Core\Cache\Cache;
  *
  * @group ds
  */
-class FieldTemplateTest extends FastTestBase {
+class FieldTemplateTest extends TestBase {
 
   /**
    * {@inheritdoc}
@@ -536,7 +536,7 @@ class FieldTemplateTest extends FastTestBase {
       'field_tags[0][target_id]' => 'Tag 1',
       'field_tags[1][target_id]' => 'Tag 2',
     ];
-    $this->drupalPostForm('node/' . $node->id() . '/edit', $edit, 'Save and keep published');
+    $this->drupalPostForm('node/' . $node->id() . '/edit', $edit, 'Save');
 
     // Count the found tags.
     $this->drupalGet('node/' . $node->id());

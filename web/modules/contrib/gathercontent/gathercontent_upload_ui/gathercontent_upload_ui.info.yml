@@ -1,9 +1,0 @@
-name: GatherContent Upload UI
-description: 'GatherContent Upload User Interface module'
-package: GatherContent
-core: 8.x
-type: module
-dependencies:
-  - gathercontent
-  - gathercontent_upload
-  - views

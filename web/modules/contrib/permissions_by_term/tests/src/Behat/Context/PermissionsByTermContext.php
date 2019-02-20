@@ -14,6 +14,8 @@ use Drupal\taxonomy\Entity\Vocabulary;
  */
 class PermissionsByTermContext extends RawDrupalContext {
 
+  private const MAX_DURATION_SECONDS = 1200;
+
   public function __construct() {
     $driver = new DrupalDriver(DRUPAL_ROOT, '');
     $driver->setCoreFromVersion();
@@ -210,6 +212,37 @@ class PermissionsByTermContext extends RawDrupalContext {
     $page          = $this->getSession()->getPage();
     $selectElement = $page->find('xpath', '//select[@id = "' . $id . '"]');
     $selectElement->selectOption($label);
+  }
+
+  /**
+   * @Then /^I should see text matching "([^"]*)" after a while$/
+   */
+  public function iShouldSeeTextAfterAWhile($text)
+  {
+    try {
+      $startTime = time();
+      do {
+        $content = $this->getSession()->getPage()->getText();
+        if (substr_count($content, $text) > 0) {
+          return true;
+        }
+      } while (time() - $startTime < self::MAX_DURATION_SECONDS);
+      throw new ResponseTextException(
+        sprintf('Could not find text %s after %s seconds', $text, self::MAX_DURATION_SECONDS),
+        $this->getSession()
+      );
+    } catch (StaleElementReference $e) {
+      return true;
+    }
+  }
+
+  /**
+   * @Then /^I click by selector "([^"]*)" via JavaScript$/
+   * @param string $selector
+   */
+  public function clickBySelector(string $selector)
+  {
+    $this->getSession()->executeScript("document.querySelector('" . $selector . "').click()");
   }
 
 }

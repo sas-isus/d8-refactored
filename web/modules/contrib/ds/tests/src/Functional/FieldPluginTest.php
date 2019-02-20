@@ -7,7 +7,7 @@ namespace Drupal\Tests\ds\Functional;
  *
  * @group ds
  */
-class FieldPluginTest extends FastTestBase {
+class FieldPluginTest extends TestBase {
 
   /**
    * Test basic Display Suite fields plugins.

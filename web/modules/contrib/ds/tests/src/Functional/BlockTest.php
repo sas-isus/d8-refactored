@@ -10,7 +10,7 @@ use Drupal\user\Entity\User;
  *
  * @group ds
  */
-class BlockTest extends FastTestBase {
+class BlockTest extends TestBase {
 
   use DsTestTrait;
 

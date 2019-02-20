@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * Contains install/update hooks for moderation_state.

@@ -92,7 +92,7 @@
           File = selection[i];
           // Image
           if (is_img && File.isImageSource()) {
-            lines.push('<img src="' + File.getUrl() + '"' + (File.width ? ' width="' + File.width + '"' : '') + (File.height ? ' height="' + File.height + '"' : '') + ' alt="' + File.formatName() + '" />');
+            lines.push('<img src="' + File.getUrl() + '"' + (File.width ? ' width="' + File.width + '"' : '') + (File.height ? ' height="' + File.height + '"' : '') + ' alt="" />');
           }
           // Link
           else {

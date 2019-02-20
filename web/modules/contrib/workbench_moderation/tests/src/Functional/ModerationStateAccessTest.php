@@ -8,7 +8,7 @@ namespace Drupal\Tests\workbench_moderation\Functional;
 
 use Drupal\node\Entity\Node;
 use Drupal\Tests\BrowserTestBase;
-use Drupal\Tests\workbench_moderation\WorkbenchModerationTestTrait;
+use Drupal\Tests\workbench_moderation\Traits\WorkbenchModerationTestTrait;
 
 /**
  * Tests the view access control handler for moderation state entities.

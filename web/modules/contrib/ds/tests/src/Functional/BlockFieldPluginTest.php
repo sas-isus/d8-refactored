@@ -12,7 +12,7 @@ use Drupal\ds_test\Plugin\Block\DsTestBlock;
  *
  * @group ds
  */
-class BlockFieldPluginTest extends FastTestBase {
+class BlockFieldPluginTest extends TestBase {
 
   /**
    * Modules to install.
@@ -91,7 +91,8 @@ class BlockFieldPluginTest extends FastTestBase {
       'use_block_title' => '1',
     ];
     $this->drupalPostForm('admin/structure/ds/fields/manage_block/test_block_title_field', $edit, t('Save'));
-    $this->assertSession()->responseContains(t('The field %name has been saved', ['%name' => 'Test block title field']));
+    $text = t('The field %name has been saved', ['%name' => 'Test block title field']);
+    $this->assertSession()->responseContains((string) $text);
 
     // Look at node and verify the block title is overridden.
     $this->drupalGet('node/' . $node->id());
@@ -166,6 +167,46 @@ class BlockFieldPluginTest extends FastTestBase {
     // Check for query parameters.
     $this->drupalGet($node->toUrl(), ['query' => ['cached' => 2]]);
     $this->assertSession()->responseContains('cached=2');
+  }
+
+  /**
+   * Tests the "Add block wrappers and classes" option.
+   */
+  public function testBlockAddWrappers() {
+    $block_wrapper_selector = '.field--name-dynamic-block-fieldnode-test-block-title-field .block';
+    // Add and configure block field.
+    $edit = [
+      'name' => 'Test block title field',
+      'id' => 'test_block_title_field',
+      'entities[node]' => '1',
+      'block' => 'views_block:ds_testing-block_1',
+    ];
+    $this->dsCreateBlockField($edit);
+    $fields = [
+      'fields[dynamic_block_field:node-test_block_title_field][region]' => 'left',
+      'fields[dynamic_block_field:node-test_block_title_field][label]' => 'above',
+      'fields[body][region]' => 'right',
+    ];
+    $this->dsSelectLayout();
+    $this->dsConfigureUi($fields);
+
+    // Create a node.
+    $settings = ['type' => 'article'];
+    $node = $this->drupalCreateNode($settings);
+
+    // Verify block wrappers don't exist.
+    $this->drupalGet('node/' . $node->id());
+    $this->assertSession()->elementNotExists('css', $block_wrapper_selector);
+
+    // Configure block to render wrappers.
+    $edit = [
+      'add_block_wrappers' => '1',
+    ];
+    $this->drupalPostForm('admin/structure/ds/fields/manage_block/test_block_title_field', $edit, t('Save'));
+
+    // Verify block wrappers do exist.
+    $this->drupalGet('node/' . $node->id());
+    $this->assertSession()->elementExists('css', $block_wrapper_selector);
   }
 
 }

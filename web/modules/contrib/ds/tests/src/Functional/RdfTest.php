@@ -7,7 +7,7 @@ namespace Drupal\Tests\ds\Functional;
  *
  * @group ds
  */
-class RdfTest extends FastTestBase {
+class RdfTest extends TestBase {
 
   /**
    * Modules to install.

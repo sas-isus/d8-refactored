@@ -411,6 +411,11 @@ function ds_entity_view_alter(&$build, EntityInterface $entity, EntityDisplayInt
  */
 function template_preprocess_ds_entity_view(&$variables) {
   $build = $variables['content'];
+
+  if (empty($build['#ds_configuration'])) {
+    return;
+  }
+
   $configuration = $build['#ds_configuration'];
 
   // Process the render array so we can reuse it.

@@ -79,6 +79,11 @@ function gathercontent_drush_command() {
         'required' => FALSE,
         'hidden' => FALSE,
       ],
+      'create-new-revision' => [
+        'description' => dt('Use --create-new-revision or --no-create-new-revision.'),
+        'required' => FALSE,
+        'hidden' => FALSE,
+      ],
     ],
     'engines' => [
       'outputformat' => [
@@ -166,6 +171,11 @@ function drush_gathercontent_import_validate($mapping_id = NULL) {
     drush_set_error('gathercontent_invalid_option', dt("The --publish option doesn't accept value."));
   }
 
+  $createNewRevision = drush_get_option('create-new-revision');
+  if ($createNewRevision !== NULL && !is_bool($createNewRevision)) {
+    drush_set_error('gathercontent_invalid_option', dt("The --create-new-revision option doesn't accept value."));
+  }
+
   if ($mapping_id !== NULL) {
     $mapping = Mapping::load($mapping_id);
     if (!$mapping) {
@@ -205,6 +215,9 @@ function drush_gathercontent_import($mapping_id = NULL, $node_update_method = No
   $publish = drush_get_option('publish', \Drupal::config('gathercontent.import')->get('node_default_status'));
   $publish = $publish ? '1' : '0';
 
+  $createNewRevision = drush_get_option('create-new-revision', \Drupal::config('gathercontent.import')->get('node_create_new_revision'));
+  $createNewRevision = $createNewRevision ? '1' : '0';
+
   $sql = drush_sql_get_class();
   if (!in_array('batch', $sql->listTables())) {
     $bs = \Drupal::service('batch.storage');
@@ -233,6 +246,7 @@ function drush_gathercontent_import($mapping_id = NULL, $node_update_method = No
     $import_options = new ImportOptions(
       $node_update_method,
       $publish,
+      $createNewRevision,
       $status_id,
       $parent_menu_item,
       $operation->uuid()

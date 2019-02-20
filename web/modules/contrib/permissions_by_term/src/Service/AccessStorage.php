@@ -5,6 +5,7 @@ namespace Drupal\permissions_by_term\Service;
 use Drupal\Component\Utility\Tags;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Form\FormState;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\user\Entity\User;
 use Drupal\user\Entity\Role;
@@ -78,7 +79,7 @@ class AccessStorage {
    * @return array
    *   An array with chosen roles.
    */
-  public function getSubmittedRolesGrantedAccess(FormState $form_state) {
+  public function getSubmittedRolesGrantedAccess(FormStateInterface $form_state) {
     $aRoles       = $form_state->getValue('access')['role'];
     $aChosenRoles = [];
     foreach ($aRoles as $sRole) {
@@ -112,9 +113,10 @@ class AccessStorage {
    *
    * @return array
    */
-  public function getUserTermPermissionsByTid($term_id) {
+  public function getUserTermPermissionsByTid($term_id, $langcode) {
     return $this->database->select('permissions_by_term_user', 'pu')
       ->condition('tid', $term_id)
+      ->condition('langcode', $langcode)
       ->fields('pu', ['uid'])
       ->execute()
       ->fetchCol();
@@ -147,15 +149,15 @@ class AccessStorage {
   }
 
   /**
-   * @param array $tids
-   *
+   * @param array  $tids
+   * @param string $langcode
    * @return array
    */
-  public function getUserTermPermissionsByTids($tids) {
+  public function getUserTermPermissionsByTids($tids, $langcode) {
     $uids = [];
 
     foreach ($tids as $tid) {
-      if (!empty($tmpUids = $this->getUserTermPermissionsByTid($tid))) {
+      if (!empty($tmpUids = $this->getUserTermPermissionsByTid($tid, $langcode))) {
         foreach ($tmpUids as $tmpUid) {
           $uids[] = $tmpUid;
         }
@@ -167,27 +169,29 @@ class AccessStorage {
 
   /**
    * @param int $term_id
+   * @param string $langcode
    *
    * @return array
    */
-  public function getRoleTermPermissionsByTid($term_id) {
+  public function getRoleTermPermissionsByTid($term_id, $langcode) {
     return $this->database->select('permissions_by_term_role', 'pr')
       ->condition('tid', $term_id)
+      ->condition('langcode', $langcode)
       ->fields('pr', ['rid'])
       ->execute()
       ->fetchCol();
   }
 
   /**
-   * @param array $tids
-   *
+   * @param array  $tids
+   * @param string $langcode
    * @return array
    */
-  public function getRoleTermPermissionsByTids($tids) {
+  public function getRoleTermPermissionsByTids($tids, $langcode) {
     $rids = [];
 
     foreach ($tids as $tid) {
-      $tmpRids = $this->getRoleTermPermissionsByTid($tid);
+      $tmpRids = $this->getRoleTermPermissionsByTid($tid, $langcode);
       if (!empty($tmpRids)) {
         foreach ($tmpRids as $tmpRid) {
           $rids[] = $tmpRid;
@@ -230,10 +234,11 @@ class AccessStorage {
    *
    * @return array
    */
-  public function getAllowedUserIds($term_id) {
+  public function getAllowedUserIds($term_id, $langcode) {
     $query = $this->database->select('permissions_by_term_user', 'p')
       ->fields('p', ['uid'])
-      ->condition('p.tid', $term_id);
+      ->condition('p.tid', $term_id)
+      ->condition('p.langcode', $langcode);
 
     // fetchCol() returns all results, fetchAssoc() only "one" result.
     return $query->execute()
@@ -244,11 +249,12 @@ class AccessStorage {
    * @param array $aUserIdsAccessRemove
    * @param int   $term_id
    */
-  public function deleteTermPermissionsByUserIds($aUserIdsAccessRemove, $term_id) {
+  public function deleteTermPermissionsByUserIds($aUserIdsAccessRemove, $term_id, $langcode) {
     foreach ($aUserIdsAccessRemove as $iUserId) {
       $this->database->delete('permissions_by_term_user')
         ->condition('uid', $iUserId, '=')
         ->condition('tid', $term_id, '=')
+        ->condition('langcode', $langcode, '=')
         ->execute();
     }
   }
@@ -257,11 +263,12 @@ class AccessStorage {
    * @param array $aRoleIdsAccessRemove
    * @param int   $term_id
    */
-  public function deleteTermPermissionsByRoleIds($aRoleIdsAccessRemove, $term_id) {
+  public function deleteTermPermissionsByRoleIds($aRoleIdsAccessRemove, $term_id, $langcode) {
     foreach ($aRoleIdsAccessRemove as $sRoleId) {
       $this->database->delete('permissions_by_term_role')
         ->condition('rid', $sRoleId, '=')
         ->condition('tid', $term_id, '=')
+        ->condition('langcode', $langcode, '=')
         ->execute();
     }
   }
@@ -302,9 +309,17 @@ class AccessStorage {
 		$langcode = ($langcode === '') ? \Drupal::languageManager()->getCurrentLanguage()->getId() : $langcode;
 
     foreach ($aUserIdsGrantedAccess as $iUserIdGrantedAccess) {
-      $this->database->insert('permissions_by_term_user')
-        ->fields(['tid', 'uid', 'langcode'], [$term_id, $iUserIdGrantedAccess, $langcode])
-        ->execute();
+      $queryResult = $this->database->query("SELECT uid FROM {permissions_by_term_user} WHERE tid = :tid AND uid = :uid AND langcode = :langcode",
+        [':tid' => $term_id, ':uid' => $iUserIdGrantedAccess, ':langcode' => $langcode])->fetchField();
+      if (empty($queryResult)) {
+        $this->database->insert('permissions_by_term_user')
+          ->fields(['tid', 'uid', 'langcode'], [
+            $term_id,
+            $iUserIdGrantedAccess,
+            $langcode
+          ])
+          ->execute();
+      }
     }
   }
 
@@ -328,9 +343,13 @@ class AccessStorage {
     $aRoleIdsGrantedAccess = array_unique($aRoleIdsGrantedAccess);
 
     foreach ($aRoleIdsGrantedAccess as $sRoleIdGrantedAccess) {
-      $this->database->insert('permissions_by_term_role')
-        ->fields(['tid', 'rid', 'langcode'], [$term_id, $sRoleIdGrantedAccess, $langcode])
-        ->execute();
+      $queryResult = $this->database->query("SELECT rid FROM {permissions_by_term_role} WHERE tid = :tid AND rid = :rid AND langcode = :langcode",
+        [':tid' => $term_id, ':rid' => $sRoleIdGrantedAccess, ':langcode' => $langcode])->fetchField();
+      if (empty($queryResult)) {
+        $this->database->insert('permissions_by_term_role')
+          ->fields(['tid', 'rid', 'langcode'], [$term_id, $sRoleIdGrantedAccess, $langcode])
+          ->execute();
+      }
     }
   }
 
@@ -342,7 +361,7 @@ class AccessStorage {
    * @return array
    *   The user ids which have been submitted.
    */
-  public function getSubmittedUserIds() {
+  public function getSubmittedUserIds($formState) {
     /* There's a $this->oFormState->getValues() method, but
      * it is loosing multiple form values. Don't know why.
      * So there're some custom lines on the $_REQUEST array. */
@@ -367,32 +386,35 @@ class AccessStorage {
   }
 
 	/**
-	 * @param FormState $form_state
-	 * @param int $term_id
+	 * @param FormState $formState
+   * @param int $term_id
+	 *
 	 * @return array
 	 * @throws \Exception
 	 */
-  public function saveTermPermissions(FormState $form_state, $term_id) {
-    $aExistingUserPermissions       = $this->getUserTermPermissionsByTid($term_id);
-    $aSubmittedUserIdsGrantedAccess = $this->getSubmittedUserIds();
+  public function saveTermPermissions(FormStateInterface $formState, $term_id) {
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    if (!empty($formState->getValue('langcode'))) {
+      $langcode = $formState->getValue('langcode')['0']['value'];
+    }
 
-    $aExistingRoleIdsGrantedAccess = $this->getRoleTermPermissionsByTid($term_id);
-    $aSubmittedRolesGrantedAccess  = $this->getSubmittedRolesGrantedAccess($form_state);
+    $aExistingUserPermissions       = $this->getUserTermPermissionsByTid($term_id, $langcode);
+    $aSubmittedUserIdsGrantedAccess = $this->getSubmittedUserIds($formState);
+
+    $aExistingRoleIdsGrantedAccess = $this->getRoleTermPermissionsByTid($term_id, $langcode);
+    $aSubmittedRolesGrantedAccess  = $this->getSubmittedRolesGrantedAccess($formState);
 
     $aRet = $this->getPreparedDataForDatabaseQueries($aExistingUserPermissions,
       $aSubmittedUserIdsGrantedAccess, $aExistingRoleIdsGrantedAccess,
       $aSubmittedRolesGrantedAccess);
 
-    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    if (!empty($form_state->getValue('langcode'))) {
-      $langcode = $form_state->getValue('langcode')['0']['value'];
-    }
-
-    $this->deleteTermPermissionsByUserIds($aRet['UserIdPermissionsToRemove'], $term_id);
+    $this->deleteTermPermissionsByUserIds($aRet['UserIdPermissionsToRemove'], $term_id, $langcode);
     $this->addTermPermissionsByUserIds($aRet['UserIdPermissionsToAdd'], $term_id, $langcode);
 
-    $this->deleteTermPermissionsByRoleIds($aRet['UserRolePermissionsToRemove'], $term_id);
-    $this->addTermPermissionsByRoleIds($aRet['aRoleIdPermissionsToAdd'], $term_id, $langcode);
+    $this->deleteTermPermissionsByRoleIds($aRet['UserRolePermissionsToRemove'], $term_id, $langcode);
+    if (!empty($aRet['aRoleIdPermissionsToAdd'])) {
+      $this->addTermPermissionsByRoleIds($aRet['aRoleIdPermissionsToAdd'], $term_id, $langcode);
+    }
 
     return $aRet;
   }

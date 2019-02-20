@@ -124,6 +124,7 @@ class EntityModerationForm extends FormBase {
     ];
 
     $form['#theme'] = ['entity_moderation_form'];
+    $form['#attached']['library'][] = 'workbench_moderation/entity-moderation-form';
 
     return $form;
   }

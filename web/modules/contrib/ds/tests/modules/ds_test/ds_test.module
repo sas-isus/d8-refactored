@@ -119,3 +119,10 @@ function ds_test_ds_pre_render_alter(&$layout_render_array, array $context, arra
     $vars['attributes']['class'][] = 'entity-label-class-' . $entity->label();
   }
 }
+
+/**
+ * Implements hook_install().
+ */
+function ds_test_install() {
+  module_set_weight('ds_test', 10);
+}

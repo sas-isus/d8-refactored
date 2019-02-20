@@ -126,3 +126,12 @@ function gathercontent_update_8401() {
   }
 
 }
+
+/**
+ * Uninstall gathercontent upload modules.
+ */
+function gathercontent_update_8402() {
+  if (\Drupal::moduleHandler()->moduleExists('gathercontent_upload')) {
+    \Drupal::service('module_installer')->uninstall(['gathercontent_upload']);
+  }
+}

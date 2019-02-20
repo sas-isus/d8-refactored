@@ -85,7 +85,7 @@ function _google_tag_noscript_snippet() {
   // style="display:none;visibility:hidden"
   $noscript = <<<EOS
 <noscript aria-hidden="true"><iframe src="https://www.googletagmanager.com/ns.html?id=$container_id$query"
- height="0" width="0" title="Google Tag Manager">Google Tag Manager</iframe></noscript>
+ height="0" width="0" title="Google Tag Manager"></iframe></noscript>
 EOS;
   if ($compact) {
     $noscript = str_replace("\n", '', $noscript);

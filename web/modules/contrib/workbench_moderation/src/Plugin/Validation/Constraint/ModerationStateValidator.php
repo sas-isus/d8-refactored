@@ -5,6 +5,8 @@ namespace Drupal\workbench_moderation\Plugin\Validation\Constraint;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\workbench_moderation\Entity\ModerationState;
 use Drupal\workbench_moderation\ModerationInformationInterface;
 use Drupal\workbench_moderation\StateTransitionValidation;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -33,6 +35,13 @@ class ModerationStateValidator extends ConstraintValidator implements ContainerI
   protected $moderationInformation;
 
   /**
+   * The current account.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $currentUser;
+
+  /**
    * Creates a new ModerationStateValidator instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -41,18 +50,22 @@ class ModerationStateValidator extends ConstraintValidator implements ContainerI
    *   The state transition validation.
    * @param \Drupal\workbench_moderation\ModerationInformationInterface $moderation_information
    *   The moderation information.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The moderation information.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, StateTransitionValidation $validation, ModerationInformationInterface $moderation_information) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, StateTransitionValidation $validation, ModerationInformationInterface $moderation_information, AccountInterface $account) {
     $this->validation = $validation;
     $this->entityTypeManager = $entity_type_manager;
     $this->moderationInformation = $moderation_information;
+    $this->currentUser = $account;
   }
 
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('workbench_moderation.state_transition_validation'),
-      $container->get('workbench_moderation.moderation_information')
+      $container->get('workbench_moderation.moderation_information'),
+      $container->get('current_user')
     );
   }
 
@@ -68,26 +81,23 @@ class ModerationStateValidator extends ConstraintValidator implements ContainerI
       return;
     }
 
-    // Ignore entities that are being created for the first time.
-    if ($entity->isNew()) {
-      return;
-    }
-
-    // Ignore entities that are being moderated for the first time, such as
-    // when they existed before moderation was enabled for this entity type.
-    if ($this->isFirstTimeModeration($entity)) {
-      return;
-    }
-
     $original_entity = $this->moderationInformation->getLatestRevision($entity->getEntityTypeId(), $entity->id());
     if (!$entity->isDefaultTranslation() && $original_entity->hasTranslation($entity->language()->getId())) {
       $original_entity = $original_entity->getTranslation($entity->language()->getId());
     }
-    $next_moderation_state_id = $entity->moderation_state->target_id;
-    $original_moderation_state_id = $original_entity->moderation_state->target_id;
 
-    if (!$this->validation->isTransitionAllowed($original_moderation_state_id, $next_moderation_state_id)) {
-      $this->context->addViolation($constraint->message, ['%from' => $original_entity->moderation_state->entity->label(), '%to' => $entity->moderation_state->entity->label()]);
+    /** @var \Drupal\Core\Config\Entity\ConfigEntityInterface $bundle */
+    $bundle = $this->entityTypeManager->getStorage($entity->getEntityType()->getBundleEntityType())->load($entity->bundle());
+
+    $default_state = $bundle->getThirdPartySetting('workbench_moderation', 'default_moderation_state');
+    $next_moderation_state = ModerationState::load(!$entity->moderation_state->isEmpty() ? $entity->moderation_state->target_id : $default_state);
+    $original_moderation_state = ModerationState::load($original_entity && !$original_entity->moderation_state->isEmpty() ? $original_entity->moderation_state->target_id : $default_state);
+
+    if (!$this->validation->isTransitionAllowed($original_moderation_state->id(), $next_moderation_state->id())) {
+      $this->context->addViolation($constraint->message, ['%from' => $original_moderation_state->label(), '%to' => $next_moderation_state->label()]);
+    }
+    elseif (!$this->validation->userMayTransition($original_moderation_state->id(), $next_moderation_state->id(), $this->currentUser)) {
+      $this->context->addViolation($constraint->accessDeniedMessage, ['%from' => $original_moderation_state->label(), '%to' => $next_moderation_state->label()]);
     }
   }
 

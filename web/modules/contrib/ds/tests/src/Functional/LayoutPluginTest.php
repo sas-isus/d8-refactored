@@ -7,7 +7,7 @@ namespace Drupal\Tests\ds\Functional;
  *
  * @group ds
  */
-class LayoutPluginTest extends FastTestBase {
+class LayoutPluginTest extends TestBase {
 
   /**
    * Test basic Display Suite layout plugins.

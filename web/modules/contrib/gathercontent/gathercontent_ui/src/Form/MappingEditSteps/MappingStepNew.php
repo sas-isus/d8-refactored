@@ -17,6 +17,13 @@ class MappingStepNew extends MappingSteps {
   public function getForm(FormStateInterface $formState) {
     $form = parent::getForm($formState);
 
+    $filterFormats = filter_formats();
+    $filterFormatOptions = [];
+
+    foreach ($filterFormats as $key => $filterFormat) {
+      $filterFormatOptions[$key] = $filterFormat->label();
+    }
+
     $content_types = node_type_get_names();
 
     $form['gathercontent']['content_type'] = [
@@ -128,7 +135,29 @@ class MappingStepNew extends MappingSteps {
                 ],
               ],
             ];
+
+            if (
+              !$gc_field->plainText &&
+              in_array($gc_field->type, ['text', 'section'])
+            ) {
+              $form['mapping'][$fieldset->id]['element_text_formats'][$gc_field->id] = [
+                '#type' => 'select',
+                '#options' => $filterFormatOptions,
+                '#title' => (!empty($gc_field->label) ? $gc_field->label : $gc_field->title),
+                '#default_value' => isset($mappingData[$fieldset->id]['element_text_formats'][$gc_field->id]) ? $mappingData[$fieldset->id]['element_text_formats'][$gc_field->id] : NULL,
+                '#empty_option' => t("Choose text format"),
+                '#attributes' => [
+                  'class' => [
+                    'gathercontent-ct-element',
+                  ],
+                ],
+              ];
+            }
           }
+
+          $form['mapping'][$fieldset->id]['element_text_formats']['#type'] = 'details';
+          $form['mapping'][$fieldset->id]['element_text_formats']['#title'] = t('Text format settings');
+          $form['mapping'][$fieldset->id]['element_text_formats']['#open'] = FALSE;
         }
       }
       $form['mapping']['er_mapping_type'] = [

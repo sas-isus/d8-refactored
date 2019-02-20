@@ -7,7 +7,7 @@ namespace Drupal\Tests\ds\Functional;
  *
  * @group ds
  */
-class DynamicFieldPluginTest extends FastTestBase {
+class DynamicFieldPluginTest extends TestBase {
 
   /**
    * Test Display fields.

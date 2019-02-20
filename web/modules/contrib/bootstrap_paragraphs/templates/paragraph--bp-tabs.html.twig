@@ -150,7 +150,6 @@ view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
 {# Prints Tabs template. #}
 <div{{ attributes.addClass(classes).setAttribute('id', paragraph_id) }} role="tablist" aria-multiselectable="true">
   <div class="paragraph__column">
-    {{ title_suffix }}
     <ul class="nav nav-tabs" role="tablist">
       {# Loops through the tab sections to print the tab section titles. #}
       {% for key, item in content.bp_tab_section if key|first != '#' %}
@@ -164,8 +163,16 @@ view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
           {% for body_key, body_item in item['#paragraph'].bp_tab_section_body %}
             {# Use the same render array as item and set the '#paragraph'. #}
             {% set section_body = item %}
-            {# Load the entity for the current translation #}
-            {% set section_body = section_body|merge({'#paragraph': section_body['#paragraph'].bp_tab_section_body[body_key].entity.getTranslation(section_body['#paragraph'].langcode[0].value)}) %}
+            {% set lang = section_body['#paragraph'].langcode[0].value %}
+            {# Check if a translation exists #}
+            {% if section_body['#paragraph'].bp_tab_section_body[body_key].entity.hasTranslation(lang) %}
+              {# Load the entity for the current translation #}
+              {% set section_translation= section_body['#paragraph'].bp_tab_section_body[body_key].entity.getTranslation(lang) %}
+            {% else %}
+              {# Load the source entity #}
+              {% set section_translation= section_body['#paragraph'].bp_tab_section_body[body_key].entity %}
+            {% endif %}
+            {% set section_body = section_body|merge({'#paragraph': section_translation}) %}
             {# Remove the cache keys so it doesn't repeat the first value. #}
             {% set section_body = section_body|merge({'#cache': {}}) %}
             {# Print the compiled section body. #}

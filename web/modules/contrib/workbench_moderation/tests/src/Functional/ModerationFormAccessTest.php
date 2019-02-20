@@ -4,7 +4,7 @@ namespace Drupal\Tests\workbench_moderation\Functional;
 
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Tests\BrowserTestBase;
-use Drupal\Tests\workbench_moderation\WorkbenchModerationTestTrait;
+use Drupal\Tests\workbench_moderation\Traits\WorkbenchModerationTestTrait;
 
 /**
  * Tests access to the moderation form.

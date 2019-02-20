@@ -610,9 +610,16 @@ class ImceFM {
       if ($folder = $this->activeFolder) {
         $conf['active_path'] = $folder->getPath();
       }
-      elseif ($this->user->isAuthenticated() && $this->request && $path = $this->request->getSession()->get('imce_active_path')) {
-        if ($this->checkFolder($path)) {
-          $conf['active_path'] = $path; 
+      elseif ($this->request) {
+        // Check $_GET['init_path']
+        if (($path = $this->request->query->get('init_path')) && $this->checkFolder($path)) {
+          $conf['active_path'] = $path;
+        }
+        // Check session
+        elseif ($this->user->isAuthenticated() && $path = $this->request->getSession()->get('imce_active_path')) {
+          if ($this->checkFolder($path)) {
+            $conf['active_path'] = $path; 
+          }
         }
       }
     }

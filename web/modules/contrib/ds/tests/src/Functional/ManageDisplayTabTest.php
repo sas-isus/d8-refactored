@@ -7,7 +7,7 @@ namespace Drupal\Tests\ds\Functional;
  *
  * @group ds
  */
-class ManageDisplayTabTest extends FastTestBase {
+class ManageDisplayTabTest extends TestBase {
 
   /**
    * Test tabs.

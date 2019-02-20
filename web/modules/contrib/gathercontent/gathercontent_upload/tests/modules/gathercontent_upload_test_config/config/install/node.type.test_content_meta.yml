@@ -1,9 +1,0 @@
-langcode: en
-status: true
-name: 'Test content meta'
-type: test_content_meta
-description: ''
-help: ''
-new_revision: true
-preview_mode: 1
-display_submitted: true

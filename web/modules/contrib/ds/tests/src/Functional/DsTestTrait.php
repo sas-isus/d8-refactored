@@ -117,7 +117,8 @@ trait DsTestTrait {
     ];
 
     $this->drupalPostForm($url, $edit, t('Save'));
-    $this->assertSession()->responseContains(t('The field %name has been saved', ['%name' => $edit['name']]));
+    $text = t('The field %name has been saved', ['%name' => $edit['name']]);
+    $this->assertSession()->responseContains((string) $text);
   }
 
   /**
@@ -137,7 +138,8 @@ trait DsTestTrait {
     ];
 
     $this->drupalPostForm($url, $edit, t('Save'));
-    $this->assertSession()->responseContains(t('The field %name has been saved', ['%name' => $edit['name']]));
+    $text = t('The field %name has been saved', ['%name' => $edit['name']]);
+    $this->assertSession()->responseContains((string) $text);
   }
 
   /**

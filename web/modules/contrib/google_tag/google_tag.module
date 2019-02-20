@@ -260,7 +260,7 @@ function _google_tag_path_check() {
       $path_matcher = \Drupal::service('path.matcher');
       // @todo Are not some paths case sensitive???
       // Compare the lowercase path alias (if any) and internal path.
-      $path = rtrim($current_path->getPath($request), '/');
+      $path = $current_path->getPath($request);
       $path_alias = Unicode::strtolower($alias_manager->getAliasByPath($path));
       $satisfied = $path_matcher->matchPath($path_alias, $paths) || (($path != $path_alias) && $path_matcher->matchPath($path, $paths));
       $satisfied = ($toggle == GOOGLE_TAG_EXCLUDE_LISTED) ? !$satisfied : $satisfied;
@@ -298,4 +298,94 @@ function _google_tag_role_check() {
     $debug ? drupal_set_message(t('role check @satisfied', ['@satisfied' => $satisfied])) : '';
   }
   return $satisfied;
+}
+
+/**
+ * Checks that the directory exists and is writable.
+ *
+ * @todo Remove this function if core is updated to check the executable bit.
+ *
+ * @see file_prepare_directory()
+ */
+function __file_prepare_directory(&$directory, $options = FILE_MODIFY_PERMISSIONS) {
+  if (!file_stream_wrapper_valid_scheme(\Drupal::service('file_system')->uriScheme($directory))) {
+    // Only trim if we're not dealing with a stream.
+    $directory = rtrim($directory, '/\\');
+  }
+
+  // Check if directory exists.
+  if (!is_dir($directory)) {
+    // Let mkdir() recursively create directories and use the default directory
+    // permissions.
+    if ($options & FILE_CREATE_DIRECTORY) {
+      return @drupal_mkdir($directory, NULL, TRUE);
+    }
+    return FALSE;
+  }
+  // The directory exists, so check to see if it is writable.
+  $writable = _google_tag_is_writable($directory) && _google_tag_is_executable($directory);
+  if (!$writable && ($options & FILE_MODIFY_PERMISSIONS)) {
+    return drupal_chmod($directory);
+  }
+
+  return $writable;
+}
+
+/**
+ * Determines whether a directory is writable.
+ *
+ * Remove this if PHP is_writable() is changed to respect ACLS on a 'local'
+ * stream wrapper other than the local file wrapper provided by PHP.
+ *
+ * @param string $uri
+ *   A directory path or stream wrapper URI.
+ *
+ * @return bool
+ *   Whether the directory is writable.
+ */
+function _google_tag_is_writable($uri) {
+  // Use the local path, if applicable, since PHP only checks ACLs on its local
+  // file wrapper.
+  $realpath = \Drupal::service('file_system')->realpath($uri);
+  return is_writable($realpath ? $realpath : $uri);
+}
+
+/**
+ * Determines whether a directory is searchable.
+ *
+ * Remove this if PHP is_executable() is changed to not return FALSE simply
+ * because the URI points to a directory (not a file) in a stream wrapper other
+ * than the local file wrapper provided by PHP.
+ *
+ * @param string $uri
+ *   A directory path or stream wrapper URI.
+ *
+ * @return bool
+ *   Whether the directory is searchable.
+ */
+function _google_tag_is_executable($uri) {
+  if ($realpath = \Drupal::service('file_system')->realpath($uri)) {
+    // The URI is a local stream wrapper or a local path.
+    // Use the local path since PHP only checks ACLs on its local file wrapper.
+    return is_executable($realpath);
+  }
+  if ($wrapper = \Drupal::service('stream_wrapper_manager')->getViaUri($uri)) {
+    // The URI is a remote stream wrapper.
+    if (!($stat = $wrapper->url_stat($uri, 0))) {
+      return FALSE;
+    }
+
+    // Determine the appropriate permissions bit mask as an octal.
+    // The stat array is likely to have uid=gid=0 so that the mask is octal 01.
+    // This is true for Amazon S3 and Google Cloud Storage.
+    $mask = 1;
+    if ($stat['uid'] == posix_getuid()) {
+      $mask = $mask << 6;
+    }
+    elseif ($stat['gid'] == posix_getgid()) {
+      $mask = $mask << 3;
+    }
+    return ($stat['mode'] & $mask) != 0;
+  }
+  return FALSE;
 }

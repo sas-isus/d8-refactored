@@ -7,7 +7,7 @@ namespace Drupal\Tests\ds\Functional;
  *
  * @group ds
  */
-class FieldPermissionsTest extends FastTestBase {
+class FieldPermissionsTest extends TestBase {
 
   /**
    * Modules to install.

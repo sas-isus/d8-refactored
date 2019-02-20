@@ -27,13 +27,15 @@ function google_tag_requirements($phase) {
   if ($phase == 'runtime' || $phase == 'update' || $phase == 'install') {
     // Adapted from system_requirements().
     $directory = 'public://google_tag';
-    if (!is_dir($directory) || !is_writable($directory)) {
-      file_prepare_directory($directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+    $phase == 'install' ? module_load_include('module', 'google_tag') : '';
+    if (!is_dir($directory) || !_google_tag_is_writable($directory) || !_google_tag_is_executable($directory)) {
+      __file_prepare_directory($directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
     }
-    $is_writable = is_writable($directory);
+    $is_executable = _google_tag_is_executable($directory);
+    $is_writable = _google_tag_is_writable($directory);
     $is_directory = is_dir($directory);
-    if (!$is_writable || !$is_directory) {
-      // The snippet directory does not exist or is not writable.
+    if (!$is_executable || !$is_writable || !$is_directory) {
+      // The snippet directory does not exist or is not writable or searchable.
 
       // If applicable, get the directory path of stream wrapper.
       $wrapper = \Drupal::service('stream_wrapper_manager')->getViaUri($directory);
@@ -52,10 +54,15 @@ function google_tag_requirements($phase) {
         $description = t('An automated attempt to create the directory failed, possibly due to a permissions problem. Create the directory and make it writable.');
         $value = t('Does not exist');
       }
-      else {
+      elseif (!$is_writable) {
         $error = t('The directory %directory is not writable.', array('%directory' => $path));
         $description = t('An automated attempt to make the directory writable failed, possibly due to a permissions problem. Make the directory writable.');
         $value = t('Not writable');
+      }
+      else {
+        $error = t('The directory %directory is not searchable.', array('%directory' => $path));
+        $description = t('An automated attempt to make the directory searchable failed, possibly due to a permissions problem. Make the directory searchable.');
+        $value = t('Not searchable');
       }
       $extra = '';
       if ($phase == 'install') {
@@ -86,6 +93,8 @@ function google_tag_requirements($phase) {
  * Implements hook_install().
  */
 function google_tag_install() {
+  global $google_tag_display_message;
+  $google_tag_display_message = TRUE;
   _google_tag_assets_create();
 }
 

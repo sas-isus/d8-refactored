@@ -17,6 +17,13 @@ class ImportOptions {
   public $nodeUpdateMethod = NodeUpdateMethod::ALWAYS_UPDATE;
 
   /**
+   * Decides to create a new revision or not.
+   *
+   * @var bool
+   */
+  public $createNewRevision = FALSE;
+
+  /**
    * Decides whether to publish the imported node.
    *
    * @var bool
@@ -52,11 +59,13 @@ class ImportOptions {
   public function __construct(
     $node_update_method = NodeUpdateMethod::ALWAYS_UPDATE,
     $publish = FALSE,
+    $create_new_revision = FALSE,
     $new_status = NULL,
     $parent_menu_item = NULL,
     $operation_uuid = NULL
   ) {
     $this->nodeUpdateMethod = $node_update_method;
+    $this->createNewRevision = $create_new_revision;
     $this->publish = $publish;
     $this->newStatus = filter_var($new_status, FILTER_VALIDATE_INT);
     $this->parentMenuItem = $parent_menu_item;
@@ -75,6 +84,21 @@ class ImportOptions {
    */
   public function setNodeUpdateMethod($nodeUpdateMethod) {
     $this->nodeUpdateMethod = $nodeUpdateMethod;
+    return $this;
+  }
+
+  /**
+   * Getter $createNewRevision.
+   */
+  public function getCreateNewRevision() {
+    return $this->createNewRevision;
+  }
+
+  /**
+   * Setter $createNewRevision.
+   */
+  public function setCreateNewRevision($createNewRevision) {
+    $this->createNewRevision = $createNewRevision;
     return $this;
   }
 

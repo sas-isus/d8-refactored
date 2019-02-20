@@ -7,7 +7,7 @@ namespace Drupal\Tests\ds\Functional;
  *
  * @group ds
  */
-class CloneTest extends FastTestBase {
+class CloneTest extends TestBase {
 
   use DsTestTrait;
 

@@ -17,6 +17,13 @@ class MappingStepEdit extends MappingSteps {
   public function getForm(FormStateInterface $formState) {
     $form = parent::getForm($formState);
 
+    $filterFormats = filter_formats();
+    $filterFormatOptions = [];
+
+    foreach ($filterFormats as $key => $filterFormat) {
+      $filterFormatOptions[$key] = $filterFormat->label();
+    }
+
     $mappingData = unserialize($this->mapping->getData());
     $contentType = $this->mapping->getContentType();
 
@@ -41,7 +48,7 @@ class MappingStepEdit extends MappingSteps {
         $form['mapping'][$fieldset->id] = [
           '#type' => 'details',
           '#title' => $fieldset->label,
-          '#open' => ($i === 0 ? TRUE : FALSE),
+          '#open' => (array_search($i, array_keys($this->template->config)) === 0 ? TRUE : FALSE),
           '#tree' => TRUE,
         ];
 
@@ -117,7 +124,29 @@ class MappingStepEdit extends MappingSteps {
               ],
             ],
           ];
+
+          if (
+            !$gc_field->plainText &&
+            in_array($gc_field->type, ['text', 'section'])
+          ) {
+            $form['mapping'][$fieldset->id]['element_text_formats'][$gc_field->id] = [
+              '#type' => 'select',
+              '#options' => $filterFormatOptions,
+              '#title' => (!empty($gc_field->label) ? $gc_field->label : $gc_field->title),
+              '#default_value' => isset($mappingData[$fieldset->id]['element_text_formats'][$gc_field->id]) ? $mappingData[$fieldset->id]['element_text_formats'][$gc_field->id] : NULL,
+              '#empty_option' => t("Choose text format"),
+              '#attributes' => [
+                'class' => [
+                  'gathercontent-ct-element',
+                ],
+              ],
+            ];
+          }
         }
+
+        $form['mapping'][$fieldset->id]['element_text_formats']['#type'] = 'details';
+        $form['mapping'][$fieldset->id]['element_text_formats']['#title'] = t('Text format settings');
+        $form['mapping'][$fieldset->id]['element_text_formats']['#open'] = FALSE;
       }
     }
     $form['mapping']['er_mapping_type'] = [

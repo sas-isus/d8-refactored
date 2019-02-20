@@ -7,7 +7,7 @@ namespace Drupal\Tests\ds\Functional;
  *
  * @group ds
  */
-class CacheTagsTest extends FastTestBase {
+class CacheTagsTest extends TestBase {
 
   /**
    * Tests setting the correct cache tags.

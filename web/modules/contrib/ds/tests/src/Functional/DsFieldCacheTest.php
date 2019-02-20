@@ -10,7 +10,7 @@ use Drupal\simpletest\NodeCreationTrait;
  *
  * @group ds
  */
-class DsFieldCacheTest extends FastTestBase {
+class DsFieldCacheTest extends TestBase {
 
   use NodeCreationTrait;
   use DsTestTrait;

@@ -5,10 +5,10 @@
  * Can be quickly compiled to CSS at http://lesscss.org/less-preview/.
  */
 /* Adds Accordion container.*/
-.paragraph--bp-accordion--container {
+.paragraph--bp-accordion-container {
   padding-top: 15px;
 }
-.paragraph--bp-accordion--container .bp-accordion--button {
+.paragraph--bp-accordion-container .bp-accordion-button {
   float: right;
 }
 /* Adds margin and padding to paragraphs in accordion section bodies. */
@@ -19,10 +19,10 @@
 .paragraph.paragraph--type--bp-accordion .panel-heading a:after {
   float: right;
 }
-.paragraph.paragraph--type--bp-accordion .panel-heading a[aria-expanded="false"]:after {
+.paragraph.paragraph--type--bp-accordion .panel-heading a[aria-expanded="false"].display:after {
   content: "+";
 }
-.paragraph.paragraph--type--bp-accordion .panel-heading a[aria-expanded="true"]:after {
+.paragraph.paragraph--type--bp-accordion .panel-heading a[aria-expanded="true"].display:after {
   content: "-";
 }
 .paragraph.paragraph--type--bp-accordion .panel-collapse > .paragraph {

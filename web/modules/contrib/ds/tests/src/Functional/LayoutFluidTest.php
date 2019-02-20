@@ -7,7 +7,7 @@ namespace Drupal\Tests\ds\Functional;
  *
  * @group ds
  */
-class LayoutFluidTest extends FastTestBase {
+class LayoutFluidTest extends TestBase {
 
   /**
    * Test fluid Display Suite layouts.

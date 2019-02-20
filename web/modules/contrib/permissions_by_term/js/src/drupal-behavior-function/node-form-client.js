@@ -72,7 +72,7 @@ import TermCollector from "../client/term-collector.prototype";
 
       }
 
-    }
+    };
 
     if (Drupal.autocomplete) {
       /**

@@ -4,6 +4,7 @@ namespace Drupal\gathercontent\Import\ContentProcess;
 
 use Cheppers\GatherContent\DataTypes\Item;
 use Cheppers\GatherContent\GatherContentClientInterface;
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -39,17 +40,38 @@ class ContentProcessor implements ContainerInjectionInterface {
    */
   protected $importedReferences = [];
 
+  /**
+   * Meta tag query object.
+   *
+   * @var \Drupal\gathercontent\MetatagQuery
+   */
   protected $metatag;
+
+  /**
+   * The time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $time;
+
+  /**
+   * The time service.
+   *
+   * @var array
+   */
+  protected $concatFieldValues = [];
 
   /**
    * {@inheritdoc}
    */
   public function __construct(
     GatherContentClientInterface $client,
-    MetatagQuery $metatag
+    MetatagQuery $metatag,
+    TimeInterface $time
   ) {
     $this->client = $client;
     $this->metatag = $metatag;
+    $this->time = $time;
     $this->init();
   }
 
@@ -59,7 +81,8 @@ class ContentProcessor implements ContainerInjectionInterface {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('gathercontent.client'),
-      $container->get('gathercontent.metatag')
+      $container->get('gathercontent.metatag'),
+      $container->get('datetime.time')
     );
   }
 
@@ -74,6 +97,8 @@ class ContentProcessor implements ContainerInjectionInterface {
    * Create a Drupal node filled with the properties of the GC item.
    */
   public function createNode(Item $gc_item, ImportOptions $options, array $files) {
+    $this->concatFieldValues = [];
+
     $mapping = MappingLoader::load($gc_item);
     $content_type = $mapping->getContentType();
     $is_translatable = Importer::isContentTypeTranslatable($content_type);
@@ -89,16 +114,28 @@ class ContentProcessor implements ContainerInjectionInterface {
     // Create a Drupal entity corresponding to GC item.
     $entity = NodeUpdateMethod::getDestinationNode($gc_item->id, $options->getNodeUpdateMethod(), $content_type, $langcode);
 
+    if ($entity === FALSE) {
+      throw new \Exception("System error, please contact you administrator.");
+    }
+
+    // Create new revision according to the import options.
+    if (
+      $entity->getEntityType()->isRevisionable() &&
+      !$entity->isNew() &&
+      $options->getCreateNewRevision()
+    ) {
+      $entity->setNewRevision(TRUE);
+      $entity->setRevisionLogMessage('Created revision for node ID: ' . $entity->id());
+      $entity->setRevisionCreationTime($this->time->getRequestTime());
+      $entity->setRevisionUserId(\Drupal::currentUser()->id());
+    }
+
     $entity->set('gc_id', $gc_item->id);
     $entity->set('gc_mapping_id', $mapping->id());
     $entity->setOwnerId(\Drupal::currentUser()->id());
 
     if ($entity->isNew()) {
       $entity->setPublished($options->getPublish());
-    }
-
-    if ($entity === FALSE) {
-      throw new \Exception("System error, please contact you administrator.");
     }
 
     foreach ($gc_item->config as $pane) {
@@ -121,8 +158,17 @@ class ContentProcessor implements ContainerInjectionInterface {
       foreach ($pane->elements as $field) {
         if (isset($mapping_data[$pane->id]['elements'][$field->id]) && !empty($mapping_data[$pane->id]['elements'][$field->id])) {
           $local_field_id = $mapping_data[$pane->id]['elements'][$field->id];
+          $local_field_text_format = '';
+
+          if (
+            isset($mapping_data[$pane->id]['element_text_formats']) &&
+            !empty($mapping_data[$pane->id]['element_text_formats'][$field->id])
+          ) {
+            $local_field_text_format = $mapping_data[$pane->id]['element_text_formats'][$field->id];
+          }
+
           if (isset($mapping_data[$pane->id]['type']) && ($mapping_data[$pane->id]['type'] === 'content') || !isset($mapping_data[$pane->id]['type'])) {
-            $this->processContentPane($entity, $local_field_id, $field, $is_pane_translatable, $language, $files);
+            $this->processContentPane($entity, $local_field_id, $field, $is_pane_translatable, $language, $files, $local_field_text_format);
           }
           elseif (isset($mapping_data[$pane->id]['type']) && ($mapping_data[$pane->id]['type'] === 'metatag')) {
             $this->processMetatagPane($entity, $local_field_id, $field, $mapping->getContentType(), $is_pane_translatable, $language);
@@ -153,8 +199,17 @@ class ContentProcessor implements ContainerInjectionInterface {
    *   Language of translation if applicable.
    * @param array $files
    *   Array of files fetched from GatherContent.
+   * @param string $local_field_text_format
+   *   Text format setting for the local drupal field.
+   * @param string $parent_field_type
+   *   Parent field type string to pass through field type
+   *   in case of reference fields.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Exception
    */
-  public function processContentPane(EntityInterface &$entity, $local_field_id, $field, $is_translatable, $language, array $files) {
+  public function processContentPane(EntityInterface &$entity, $local_field_id, $field, $is_translatable, $language, array $files, $local_field_text_format, $parent_field_type = '') {
     $local_id_array = explode('||', $local_field_id);
 
     if (count($local_id_array) > 1) {
@@ -188,6 +243,7 @@ class ContentProcessor implements ContainerInjectionInterface {
 
       array_shift($local_id_array);
       $to_import = TRUE;
+
       if (!empty($target_field_value)) {
         foreach ($target_field_value as $target) {
           $childEntity = $entityStorage->loadByProperties([
@@ -217,7 +273,7 @@ class ContentProcessor implements ContainerInjectionInterface {
             if (count($local_id_array) > 1 || empty($check_field_value)) {
               $this->processContentPane($childEntity[$target['target_id']],
                 implode('||', $local_id_array), $field, $is_translatable,
-                $language, $files);
+                $language, $files, $local_field_text_format, $field_info->getType());
 
               $childEntity[$target['target_id']]->save();
               $to_import = FALSE;
@@ -231,7 +287,8 @@ class ContentProcessor implements ContainerInjectionInterface {
           'type' => $field_target_info->getTargetBundle(),
         ]);
 
-        $this->processContentPane($childEntity, implode('||', $local_id_array), $field, $is_translatable, $language, $files);
+        $this->processContentPane($childEntity, implode('||', $local_id_array),
+          $field, $is_translatable, $language, $files, $local_field_text_format, $field_info->getType());
 
         $childEntity->save();
 
@@ -247,9 +304,11 @@ class ContentProcessor implements ContainerInjectionInterface {
     }
     else {
       $field_info = FieldConfig::load($local_field_id);
+
       if (!is_null($field_info)) {
         $is_translatable = $is_translatable && $field_info->isTranslatable();
       }
+
       if ($local_field_id === 'title') {
         $target = &$entity;
         if ($is_translatable) {
@@ -282,12 +341,12 @@ class ContentProcessor implements ContainerInjectionInterface {
 
         case 'section':
           $this->processSectionField($entity, $field_info, $is_translatable,
-            $language, $field);
+            $language, $field, $local_field_text_format, $parent_field_type);
           break;
 
         default:
           $this->processDefaultField($entity, $field_info, $is_translatable,
-            $language, $field);
+            $language, $field, $local_field_text_format, $parent_field_type);
           break;
       }
     }
@@ -348,11 +407,17 @@ class ContentProcessor implements ContainerInjectionInterface {
    *   Language of translation if applicable.
    * @param object $field
    *   Object with field attributes.
+   * @param string $text_format
+   *   Text format string.
+   * @param string $parent_field_type
+   *   Parent field type string to pass through field type
+   *   in case of reference fields.
    */
-  protected function processDefaultField(EntityInterface &$entity, FieldConfig $field_info, $is_translatable, $language, $field) {
+  protected function processDefaultField(EntityInterface &$entity, FieldConfig $field_info, $is_translatable, $language, $field, $text_format, $parent_field_type = '') {
     $local_field_name = $field_info->getName();
     $value = $field->value;
     $target = &$entity;
+
     if ($is_translatable) {
       $target = $entity->getTranslation($language);
     }
@@ -380,15 +445,25 @@ class ContentProcessor implements ContainerInjectionInterface {
         break;
 
       default:
+        $id = $language . $field_info->id();
+
+        if (
+          !isset($this->concatFieldValues[$id]) ||
+          $parent_field_type === 'entity_reference_revisions'
+        ) {
+          $this->concatFieldValues[$id] = '';
+        }
+
+        $this->concatFieldValues[$id] .= $value;
+
         // Probably some kind of text field.
         $target->{$local_field_name} = [
-          'value' => $value,
-          'format' => ($field->plainText ? 'plain_text' : 'basic_html'),
+          'value' => $this->concatFieldValues[$id],
+          'format' => ($field->plainText ? 'plain_text' : (!empty($text_format) ? $text_format : 'basic_html')),
         ];
         break;
     }
   }
-
 
   /**
    * Processing function for section type of field.
@@ -403,21 +478,35 @@ class ContentProcessor implements ContainerInjectionInterface {
    *   Language of translation if applicable.
    * @param object $field
    *   Object with field attributes.
+   * @param string $text_format
+   *   Text format string.
+   * @param string $parent_field_type
+   *   Parent field type string to pass through field type
+   *   in case of reference fields.
    */
-  protected function processSectionField(EntityInterface &$entity, FieldConfig $field_info, $is_translatable, $language, $field) {
+  protected function processSectionField(EntityInterface &$entity, FieldConfig $field_info, $is_translatable, $language, $field, $text_format, $parent_field_type = '') {
     $local_field_name = $field_info->getName();
+    $target = &$entity;
+
     if ($is_translatable) {
-      $entity->getTranslation($language)->{$local_field_name} = [
-        'value' => '<h3>' . $field->title . '</h3>' . $field->subtitle,
-        'format' => 'basic_html',
-      ];
+      $target = $entity->getTranslation($language);
     }
-    else {
-      $entity->{$local_field_name} = [
-        'value' => '<h3>' . $field->title . '</h3>' . $field->subtitle,
-        'format' => 'basic_html',
-      ];
+
+    $id = $language . $field_info->id();
+
+    if (
+      !isset($this->concatFieldValues[$id]) ||
+      $parent_field_type === 'entity_reference_revisions'
+    ) {
+      $this->concatFieldValues[$id] = '';
     }
+
+    $this->concatFieldValues[$id] .= '<h3>' . $field->title . '</h3>' . $field->subtitle;
+
+    $target->{$local_field_name} = [
+      'value' => $this->concatFieldValues[$id],
+      'format' => (!empty($text_format) ? $text_format : 'basic_html'),
+    ];
   }
 
   /**

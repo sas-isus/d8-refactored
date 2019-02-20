@@ -49,7 +49,7 @@ class NodeEntityBundleController extends ControllerBase {
   public function getFormInfoByContentType($nodeType) {
     $fields = $this->entityFieldManager->getFieldDefinitions('node', $nodeType);
 
-    $fieldNames = null;
+    $fieldNames = [];
     foreach ($fields as $field) {
       $fieldDefinitionSettings = $field->getSettings();
       if (!empty($fieldDefinitionSettings['target_type']) && $fieldDefinitionSettings['target_type'] == 'taxonomy_term') {
@@ -74,7 +74,7 @@ class NodeEntityBundleController extends ControllerBase {
 
     $fields = $this->entityFieldManager->getFieldDefinitions('node', $contentType);
 
-    $fieldNames = null;
+    $fieldNames = [];
     foreach ($fields as $field) {
       $fieldDefinitionSettings = $field->getSettings();
       if (!empty($fieldDefinitionSettings['target_type']) && $fieldDefinitionSettings['target_type'] == 'taxonomy_term') {

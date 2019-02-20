@@ -7,6 +7,7 @@ use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
+use Drupal\Tests\user\Traits\UserCreationTrait;
 
 /**
  * @coversDefaultClass \Drupal\workbench_moderation\Plugin\Validation\Constraint\ModerationStateValidator
@@ -14,10 +15,19 @@ use Drupal\node\NodeInterface;
  */
 class EntityStateChangeValidationTest extends KernelTestBase {
 
+  use UserCreationTrait;
+
   /**
    * {@inheritdoc}
    */
   public static $modules = ['node', 'workbench_moderation', 'user', 'system', 'language', 'content_translation'];
+
+  /**
+   * An admin user account.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $adminUser;
 
   /**
    * {@inheritdoc}
@@ -26,9 +36,12 @@ class EntityStateChangeValidationTest extends KernelTestBase {
     parent::setUp();
 
     $this->installSchema('node', 'node_access');
+    $this->installSchema('system', ['sequences']);
     $this->installEntitySchema('node');
     $this->installEntitySchema('user');
     $this->installConfig('workbench_moderation');
+
+    $this->adminUser = $this->createUser(array_keys($this->container->get('user.permissions')->getPermissions()));
   }
 
   /**
@@ -37,6 +50,8 @@ class EntityStateChangeValidationTest extends KernelTestBase {
    * @covers ::validate
    */
   public function testValidTransition() {
+    $this->setCurrentUser($this->adminUser);
+
     $node_type = NodeType::create([
       'type' => 'example',
     ]);
@@ -58,6 +73,8 @@ class EntityStateChangeValidationTest extends KernelTestBase {
    * @covers ::validate
    */
   public function testInvalidTransition() {
+    $this->setCurrentUser($this->adminUser);
+
     $node_type = NodeType::create([
       'type' => 'example',
     ]);
@@ -79,8 +96,12 @@ class EntityStateChangeValidationTest extends KernelTestBase {
 
   /**
    * Verifies that content without prior moderation information can be moderated.
+   *
+   * @legacy
    */
-  public function testLegacyContent() {
+  public function testContent() {
+    $this->setCurrentUser($this->adminUser);
+
     $node_type = NodeType::create([
       'type' => 'example',
     ]);
@@ -116,8 +137,10 @@ class EntityStateChangeValidationTest extends KernelTestBase {
 
   /**
    * Verifies that content without prior moderation information can be translated.
+   *
+   * @legacy
    */
-  public function testLegacyMultilingualContent() {
+  public function testMultilingualContent() {
     // Enable French
     ConfigurableLanguage::createFromLangcode('fr')->save();
 
@@ -159,4 +182,126 @@ class EntityStateChangeValidationTest extends KernelTestBase {
     $node_fr->setTitle('Nouveau');
     $node_fr->save();
   }
+
+  /**
+   * @dataProvider transitionAccessValidationTestCases
+   */
+  public function testTransitionAccessValidationNewEntity($permissions, $default_state, $target_state, $messages) {
+    $this->setCurrentUser($this->createUser($permissions));
+    $this->createExampleModeratedContentType($default_state, ['draft', 'needs_review', 'published', 'archived']);
+
+    $node = Node::create([
+      'type' => 'example',
+      'title' => 'Test content',
+      'moderation_state' => $target_state,
+    ]);
+    $this->assertTrue($node->isNew());
+
+    $violations = $node->validate();
+    $this->assertCount(count($messages), $violations);
+    foreach ($messages as $i => $message) {
+      $this->assertEquals($message, $violations->get($i)->getMessage());
+    }
+  }
+
+  /**
+   * @dataProvider transitionAccessValidationTestCases
+   */
+  public function testTransitionAccessValidationSavedEntity($permissions, $default_state, $target_state, $messages) {
+    $this->setCurrentUser($this->createUser($permissions));
+    $this->createExampleModeratedContentType($default_state, ['draft', 'needs_review', 'published', 'archived']);
+
+    $node = Node::create([
+      'type' => 'example',
+      'title' => 'Test content',
+      'moderation_state' => $default_state,
+    ]);
+    $node->save();
+
+    $node->moderation_state = $target_state;
+
+    $violations = $node->validate();
+    $this->assertCount(count($messages), $violations);
+    foreach ($messages as $i => $message) {
+      $this->assertEquals($message, $violations->get($i)->getMessage());
+    }
+  }
+
+  /**
+   * Test cases for access validation.
+   */
+  public function transitionAccessValidationTestCases() {
+    return [
+      'Invalid transition, no permissions validated' => [
+        [],
+        'draft',
+        'archived',
+        ['Invalid state transition from <em class="placeholder">Draft</em> to <em class="placeholder">Archived</em>'],
+      ],
+      'Valid transition, missing permission' => [
+        [],
+        'draft',
+        'published',
+        ['You do not have access to transition from <em class="placeholder">Draft</em> to <em class="placeholder">Published</em>'],
+      ],
+      'Valid transition, granted published permission' => [
+        ['use draft_published transition'],
+        'draft',
+        'published',
+        [],
+      ],
+      'Valid transition, granted draft permission' => [
+        ['use draft_draft transition'],
+        'draft',
+        'draft',
+        [],
+      ],
+      'Valid transition, incorrect permission granted' => [
+        ['use draft_draft transition'],
+        'draft',
+        'published',
+        ['You do not have access to transition from <em class="placeholder">Draft</em> to <em class="placeholder">Published</em>'],
+      ],
+      'Non-draft default state, incorrect permission granted' => [
+        ['use draft_draft transition'],
+        'archived',
+        'published',
+        ['You do not have access to transition from <em class="placeholder">Archived</em> to <em class="placeholder">Published</em>'],
+      ],
+      'Non-draft default state, correct permission granted' => [
+        ['use archived_published transition'],
+        'archived',
+        'published',
+        [],
+      ],
+      'Non-draft default state, invalid transition' => [
+        ['use published_archived transition'],
+        'archived',
+        'draft',
+        ['Invalid state transition from <em class="placeholder">Archived</em> to <em class="placeholder">Draft</em>'],
+      ],
+    ];
+  }
+
+  /**
+   * Create an example content type.
+   *
+   * @param string $default_state
+   *   The default state.
+   * @param array $allowed_states
+   *   The allowed states.
+   */
+  protected function createExampleModeratedContentType($default_state, $allowed_states) {
+    $node_type = NodeType::create([
+      'type' => 'example',
+    ]);
+    $node_type->save();
+
+    $node_type = NodeType::load('example');
+    $node_type->setThirdPartySetting('workbench_moderation', 'enabled', TRUE);
+    $node_type->setThirdPartySetting('workbench_moderation', 'allowed_moderation_states', $allowed_states);
+    $node_type->setThirdPartySetting('workbench_moderation', 'default_moderation_state', $default_state);
+    $node_type->save();
+  }
+
 }
