@@ -2549,8 +2549,6 @@ return array(
     'Drupal\\Core\\Language\\LanguageManager' => $baseDir . '/web/core/lib/Drupal/Core/Language/LanguageManager.php',
     'Drupal\\Core\\Language\\LanguageManagerInterface' => $baseDir . '/web/core/lib/Drupal/Core/Language/LanguageManagerInterface.php',
     'Drupal\\Core\\Layout\\Annotation\\Layout' => $baseDir . '/web/core/lib/Drupal/Core/Layout/Annotation/Layout.php',
-    'Drupal\\Core\\Layout\\Icon\\IconBuilderInterface' => $baseDir . '/web/core/lib/Drupal/Core/Layout/Icon/IconBuilderInterface.php',
-    'Drupal\\Core\\Layout\\Icon\\SvgIconBuilder' => $baseDir . '/web/core/lib/Drupal/Core/Layout/Icon/SvgIconBuilder.php',
     'Drupal\\Core\\Layout\\LayoutDefault' => $baseDir . '/web/core/lib/Drupal/Core/Layout/LayoutDefault.php',
     'Drupal\\Core\\Layout\\LayoutDefinition' => $baseDir . '/web/core/lib/Drupal/Core/Layout/LayoutDefinition.php',
     'Drupal\\Core\\Layout\\LayoutInterface' => $baseDir . '/web/core/lib/Drupal/Core/Layout/LayoutInterface.php',

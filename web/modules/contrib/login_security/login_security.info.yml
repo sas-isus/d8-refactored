@@ -1,0 +1,14 @@
+name: Login Security
+description: 'Enable security options in the login flow of the site.'
+type: module
+# core: 8.x
+configure: login_security.settings
+
+dependencies:
+  - ban
+
+# Information added by Drupal.org packaging script on 2018-06-11
+version: '8.x-1.5'
+core: '8.x'
+project: 'login_security'
+datestamp: 1528723525
