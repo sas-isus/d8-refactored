@@ -19,6 +19,12 @@
     <env name="BROWSERTEST_OUTPUT_DIRECTORY" value="/tmp"/>
   </php>
 
+  <filter>
+    <whitelist>
+      <directory>./../src/KeyValueCache</directory>
+    </whitelist>
+  </filter>
+
   <testsuites>
     <testsuite name="unit">
       <directory>./src/Unit</directory>

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import includes from 'lodash/includes';
 
 /**
  * @param PermissionOutput permissionOutput
@@ -18,10 +18,10 @@ PermissionsOutputCollector.prototype._collectRoles = function(permissions, tidsB
 
     for (let tidToRole in permissions.tidsToRoles) {
 
-      if (_.includes(tids, tidToRole)) {
+      if (includes(tids, tidToRole)) {
 
         for (let role of permissions.tidsToRoles[tidToRole]) {
-          if (!_.includes(this.permissionOutput.getRoles(), role)) {
+          if (!includes(this.permissionOutput.getRoles(), role)) {
             this.permissionOutput.addRole(role);
           }
         }
@@ -39,9 +39,9 @@ PermissionsOutputCollector.prototype._collectUsers = function(permissions, tidsB
   for (let tids of tidsByInputs) {
 
     for (let tidToUsername in permissions.tidToUsernames) {
-      if (_.includes(tids, tidToUsername)) {
+      if (includes(tids, tidToUsername)) {
         for (let username of permissions.tidToUsernames[tidToUsername]) {
-          if (!_.includes(this.permissionOutput.getUsernames(), username)) {
+          if (!includes(this.permissionOutput.getUsernames(), username)) {
             this.permissionOutput.addUsername(username);
           }
         }

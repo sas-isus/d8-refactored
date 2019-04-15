@@ -4,6 +4,7 @@ import DomClient from '../client/dom-client.prototype';
 import PermissionOutput from '../model/permission-output.prototype';
 import PermissionOutputCollector from '../client/permission-output-collector.prototype';
 import TermCollector from "../client/term-collector.prototype";
+import DocumentAdapter from "../adapter/document-adapter.prototype";
 
 (($) => {
 
@@ -35,7 +36,8 @@ import TermCollector from "../client/term-collector.prototype";
 
             const permissionOutput = new PermissionOutput,
                 termCollector = new TermCollector,
-                domClient = new DomClient(document, permissionOutput, Drupal);
+                documentAdapter = new DocumentAdapter(document),
+                domClient = new DomClient(documentAdapter, permissionOutput, Drupal);
 
             const permissionOutputCollector = new PermissionOutputCollector(permissionOutput);
 

@@ -1,4 +1,6 @@
-const _ = require('lodash');
+const isEmpty = require('lodash/isEmpty');
+const flatten = require('lodash/flatten');
+const isArray = require('lodash/isArray');
 
 let TermCollector = function(){
   this.selectedTids = [];
@@ -27,10 +29,10 @@ TermCollector.prototype.addSelectedTid = function(tid) {
 }
 
 TermCollector.prototype.addSelectedTids = function(tids) {
-  if (!_.isEmpty(tids)) {
-    _.flatten(tids).forEach((tid) => {
+  if (!isEmpty(tids)) {
+    flatten(tids).forEach((tid) => {
 
-      if (_.isArray(tid)) {
+      if (isArray(tid)) {
         throw 'Wanted to add array. Must be string.';
       }
 

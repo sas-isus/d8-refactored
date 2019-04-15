@@ -5,6 +5,7 @@
  * Allows access to terms in a vocabulary to be limited by user or role.
  */
 
+use Drupal\Core\Access\AccessResultForbidden;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormState;
@@ -12,6 +13,10 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
+use Drupal\permissions_by_term\KeyValueCache\CacheNegotiator;
+use Drupal\permissions_by_term\Model\NidToTidsModel;
+use Drupal\permissions_by_term\Service\AccessCheck;
+use Drupal\permissions_by_term\Service\AccessStorage;
 use Drupal\taxonomy\Entity\Term;
 
 /**
@@ -99,8 +104,17 @@ function permissions_by_term_submit($form, FormState $formState) {
     }
   }
 
+  if (\Drupal::configFactory()->getEditable('permissions_by_term.settings')->get('disable_node_access_records')) {
+    $rebuild_cache_and_node_access = false;
+  }
+
   // Do we need to flush the cache and the node access records?
   if($rebuild_cache_and_node_access === true) {
+    /**
+     * @var CacheNegotiator $cacheNegotiator
+     */
+    $cacheNegotiator = \Drupal::service('permissions_by_term.cache_negotiator');
+    $cacheNegotiator->clear(NidToTidsModel::class);
     node_access_rebuild(TRUE);
     Cache::invalidateTags(['search_index:node_search']);
   }
@@ -117,7 +131,7 @@ function permissions_by_term_form_taxonomy_term_form_alter(&$form, FormStateInte
     $access_storage = \Drupal::service('permissions_by_term.access_storage');
 
     $description = <<<EOT
-To limit access to this term by user(s) or role(s), select users or roles above.
+To limit access to this term by user(s) or role(s), select users or roles below.
 If left empty, all users will have access to content, related to this taxonomy term
 and this taxonomy term itself.
 EOT;
@@ -160,6 +174,7 @@ EOT;
       '#description'             => t($description),
       '#value'                   => $sUserFormValue,
       '#size'                    => 60,
+      '#maxlength'               => FALSE,
       '#autocomplete_route_name' => 'permissions_by_term.autocomplete_multiple',
       '#weight'                  => -10,
     ];
@@ -229,6 +244,14 @@ function permissions_by_term_form_alter(&$form, FormStateInterface $formState, $
     $nid = null;
     if (!empty($node = \Drupal::routeMatch()->getParameter('node'))) {
       $nid = $node->id();
+      /**
+       * @var AccessCheck $accessCheck
+       */
+      $accessCheck = \Drupal::service('permissions_by_term.access_check');
+      $accessResult = $accessCheck->handleNode($nid, $langcode);
+      if ($accessResult instanceof AccessResultForbidden) {
+        return $accessResult;
+      }
     }
 
     $viewFilePath = drupal_get_path('module', 'permissions_by_term') . '/src/View/node-details.html.twig';
@@ -256,6 +279,23 @@ function isNodeEditForm() {
 }
 
 /**
+ * Implements hook_node_grants().
+ */
+function permissions_by_term_node_grants(\Drupal\Core\Session\AccountInterface $account, $op) {
+  $grants = [];
+
+  if ($op == 'view' && !\Drupal::configFactory()->getEditable('permissions_by_term.settings')->get('disable_node_access_records')) {
+    /**
+     * @var \Drupal\permissions_by_term\Service\AccessStorage $accessStorage
+     */
+    $accessStorage = \Drupal::service('permissions_by_term.access_storage');
+    $grants = $accessStorage->getGids($account);
+  }
+
+  return $grants;
+}
+
+/**
  * Implements hook_node_access().
  *
  * Forwards user by drupal_access_denied(); to an access denied page, if a
@@ -269,23 +309,7 @@ function permissions_by_term_node_access(NodeInterface $node, $op, AccountInterf
   /* @var \Drupal\permissions_by_term\Service\AccessCheck $accessCheck */
   $accessCheck = \Drupal::service('permissions_by_term.access_check');
 
-  return $accessCheck->handleNode($node->id(), $node->language()->getId());
-}
-
-/**
- * Implements hook_node_grants().
- */
-function permissions_by_term_node_grants(\Drupal\Core\Session\AccountInterface $account, $op)
-{
-    if ($op == 'view') {
-      /**
-       * @var \Drupal\permissions_by_term\Service\AccessStorage $accessStorage
-       */
-      $accessStorage = \Drupal::service('permissions_by_term.access_storage');
-      $grants = $accessStorage->getGids(\Drupal::currentUser());
-
-      return $grants;
-    }
+  $accessCheck->dispatchDeniedEventOnRestricedAccess($node->id(), $node->language()->getId());
 }
 
 /**
@@ -295,12 +319,15 @@ function permissions_by_term_node_grants(\Drupal\Core\Session\AccountInterface $
  */
 function permissions_by_term_node_access_records(\Drupal\node\NodeInterface $node) {
   // Do not return any grants for nodes that this module doesn't manage.
-  if (!$node->isPublished()) {
+  if (!$node->isPublished() || \Drupal::configFactory()->getEditable('permissions_by_term.settings')->get('disable_node_access_records')) {
     return;
   }
   $has_term_access_restrictions = FALSE;
   /* @var \Drupal\permissions_by_term\Service\AccessStorage $access_storage */
   $access_storage = \Drupal::service('permissions_by_term.access_storage');
+
+  taxonomy_node_update($node);
+
   foreach ($access_storage->getTidsByNid($node->id()) as $tid) {
     /* @var \Drupal\permissions_by_term\Service\AccessCheck $access_check_service */
     $access_check_service = \Drupal::service('permissions_by_term.access_check');
@@ -316,7 +343,8 @@ function permissions_by_term_node_access_records(\Drupal\node\NodeInterface $nod
       break;
     }
   }
-  if (!$has_term_access_restrictions) {
+
+  if (!$has_term_access_restrictions && !\Drupal::configFactory()->getEditable('permissions_by_term.settings')->get('permission_mode')) {
     return;
   }
 
@@ -343,6 +371,11 @@ function permissions_by_term_node_access_records(\Drupal\node\NodeInterface $nod
  */
 function permissions_by_term_user_insert($user) {
   Cache::invalidateTags(['search_index:node_search']);
+  /**
+   * @var CacheNegotiator $cacheNegotiator
+   */
+  $cacheNegotiator = \Drupal::service('permissions_by_term.cache_negotiator');
+  $cacheNegotiator->clear(NidToTidsModel::class);
 }
 
 /**
@@ -359,6 +392,11 @@ function permissions_by_term_user_update($user) {
  */
 function permissions_by_term_node_insert($node) {
   Cache::invalidateTags(['search_index:node_search']);
+  /**
+   * @var CacheNegotiator $cacheNegotiator
+   */
+  $cacheNegotiator = \Drupal::service('permissions_by_term.cache_negotiator');
+  $cacheNegotiator->clear(NidToTidsModel::class);
 }
 
 /**
@@ -370,7 +408,7 @@ function permissions_by_term_options_list_alter(array &$options, array $context)
     foreach ($options as $id => $names) {
       if ($id !== '_none') {
         /**
-         * @var \Drupal\permissions_by_term\Service\AccessCheck $accessCheck
+         * @var AccessCheck $accessCheck
          */
         $accessCheck = \Drupal::service('permissions_by_term.access_check');
 
@@ -398,10 +436,14 @@ function permissions_by_term_options_list_alter(array &$options, array $context)
  */
 function permissions_by_term_user_cancel($edit, $account, $method) {
   $deleted_user_id = $account->id();
-
-  /* @var \Drupal\permissions_by_term\Service\AccessStorage $access_storage */
+  /* @var AccessStorage $access_storage */
   $access_storage = \Drupal::service('permissions_by_term.access_storage');
   $access_storage->deleteAllTermPermissionsByUserId($deleted_user_id);
+  /**
+   * @var CacheNegotiator $cacheNegotiator
+   */
+  $cacheNegotiator = \Drupal::service('permissions_by_term.cache_negotiator');
+  $cacheNegotiator->clear(NidToTidsModel::class);
 }
 
 /**
@@ -410,7 +452,12 @@ function permissions_by_term_user_cancel($edit, $account, $method) {
  * Deletes all term permissions from storage when a term is deleted.
  */
 function permissions_by_term_taxonomy_term_delete(EntityInterface $entity) {
-  /* @var \Drupal\permissions_by_term\Service\AccessStorage $access_storage */
+  /* @var AccessStorage $access_storage */
   $access_storage = \Drupal::service('permissions_by_term.access_storage');
   $access_storage->deleteAllTermPermissionsByTid($entity->id());
+  /**
+   * @var CacheNegotiator $cacheNegotiator
+   */
+  $cacheNegotiator = \Drupal::service('permissions_by_term.cache_negotiator');
+  $cacheNegotiator->clear(NidToTidsModel::class);
 }

@@ -2,9 +2,9 @@
 
 namespace Drupal\permissions_by_term\Service;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Database\Connection;
 use Drupal\taxonomy\Entity\Term;
-use Drupal\Component\Utility\Html;
 
 /**
  * Class Term
@@ -48,6 +48,22 @@ class TermHandler {
 
     return $query->execute()
       ->fetchCol();
+  }
+
+  public function getTidsBoundToAllNids(): array {
+    $query = $this->database->select('taxonomy_index', 'ti')
+      ->fields('ti', ['tid', 'nid']);
+
+    $nidToTids = [];
+
+    $ret = $query->execute()
+      ->fetchAll();
+
+    foreach ($ret as $returnObject) {
+      $nidToTids[$returnObject->nid][] = $returnObject->tid;
+    }
+
+    return $nidToTids;
   }
 
   /**

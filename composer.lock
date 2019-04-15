@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "393fc92bc85149cc1a6c795cd1201be9",
+    "content-hash": "35877010c77ac8ec45ef977db5b956c3",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -3857,17 +3857,17 @@
         },
         {
             "name": "drupal/permissions_by_term",
-            "version": "1.61.0",
+            "version": "2.10.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/permissions_by_term.git",
-                "reference": "8.x-1.61"
+                "reference": "8.x-2.10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/permissions_by_term-8.x-1.61.zip",
-                "reference": "8.x-1.61",
-                "shasum": "c984a00f1efaf8856b5804f5837672bf9fb527bb"
+                "url": "https://ftp.drupal.org/files/projects/permissions_by_term-8.x-2.10.zip",
+                "reference": "8.x-2.10",
+                "shasum": "e23b500de3645b42416652830b1300f37a68c5df"
             },
             "require": {
                 "drupal/core": "^8.0"
@@ -3875,11 +3875,11 @@
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
-                    "dev-1.x": "1.x-dev"
+                    "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.61",
-                    "datestamp": "1534865884",
+                    "version": "8.x-2.10",
+                    "datestamp": "1552509784",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3904,7 +3904,7 @@
             "description": "Restricts access to nodes by taxonomy terms in relation to users and their roles.",
             "homepage": "https://www.drupal.org/project/permissions_by_term",
             "support": {
-                "source": "http://cgit.drupalcode.org/permissions_by_term"
+                "source": "https://git.drupalcode.org/project/permissions_by_term"
             }
         },
         {

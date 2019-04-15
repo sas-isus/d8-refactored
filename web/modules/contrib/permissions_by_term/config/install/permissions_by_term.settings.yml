@@ -1,0 +1,3 @@
+permission_mode: FALSE
+require_all_terms_granted: FALSE
+disable_node_access_records: FALSE

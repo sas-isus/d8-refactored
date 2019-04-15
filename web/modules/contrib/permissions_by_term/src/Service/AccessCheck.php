@@ -6,8 +6,8 @@ use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Database\Connection;
 use Drupal\permissions_by_term\Event\PermissionsByTermDeniedEvent;
-use Drupal\user\Entity\User;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\user\Entity\User;
 
 /**
  * AccessCheckService class.
@@ -37,21 +37,22 @@ class AccessCheck {
     $this->eventDispatcher = $eventDispatcher;
   }
 
-  /**
-   * @param int $nid
-   * @param bool $uid
-   * @param string $langcode
-   *
-   * @return array|bool
-   */
-  public function canUserAccessByNodeId($nid, $uid = FALSE, $langcode = '') {
+  public function canUserAccessByNodeId($nid, $uid = FALSE, $langcode = ''): bool {
 		$langcode = ($langcode === '') ? \Drupal::languageManager()->getCurrentLanguage()->getId() : $langcode;
 
-    if (\Drupal::currentUser()->hasPermission('bypass node access')) {
+    if (empty($uid)) {
+      $uid = \Drupal::currentUser()->id();
+    }
+
+    $user = User::load($uid);
+    if ($user instanceof User && $user->hasPermission('bypass node access')) {
       return TRUE;
     }
 
-    if (!$singleTermRestriction = \Drupal::config('permissions_by_term.settings.single_term_restriction')->get('value')) {
+    $configPermissionMode = \Drupal::config('permissions_by_term.settings')->get('permission_mode');
+    $requireAllTermsGranted = \Drupal::config('permissions_by_term.settings')->get('require_all_terms_granted');
+
+    if (!$configPermissionMode && (!$requireAllTermsGranted)) {
       $access_allowed = TRUE;
     } else {
       $access_allowed = FALSE;
@@ -61,7 +62,7 @@ class AccessCheck {
       ->query("SELECT tid FROM {taxonomy_index} WHERE nid = :nid",
       [':nid' => $nid])->fetchAll();
 
-    if (empty($terms)) {
+    if (empty($terms) && !$configPermissionMode) {
       return TRUE;
     }
 
@@ -69,14 +70,15 @@ class AccessCheck {
       $termInfo = Term::load($term->tid);
 
       if ($termInfo instanceof Term && $termInfo->get('langcode')->getLangcode() == $langcode) {
+        if (!$this->isAnyPermissionSetForTerm($term->tid, $termInfo->get('langcode')->getLangcode())) {
+          continue;
+        }
         $access_allowed = $this->isAccessAllowedByDatabase($term->tid, $uid, $termInfo->get('langcode')->getLangcode());
-        if (!$access_allowed) {
-          if ($singleTermRestriction) {
-            return $access_allowed;
-          }
+        if (!$access_allowed && $requireAllTermsGranted) {
+          return $access_allowed;
         }
 
-        if ($access_allowed && !$singleTermRestriction) {
+        if ($access_allowed && !$requireAllTermsGranted) {
           return $access_allowed;
         }
       }
@@ -95,24 +97,22 @@ class AccessCheck {
   public function isAccessAllowedByDatabase($tid, $uid = FALSE, $langcode = '') {
 		$langcode = ($langcode === '') ? \Drupal::languageManager()->getCurrentLanguage()->getId() : $langcode;
 
-    if ($uid === FALSE || (int) $uid === 0) {
-      $user = \Drupal::currentUser();
-    } elseif (is_numeric($uid)) {
+    if (is_numeric($uid) && $uid > 0) {
       $user = User::load($uid);
+    } else {
+      $user = \Drupal::currentUser();
     }
 
     $tid = (int) $tid;
 
-    if (!$this->isAnyPermissionSetForTerm($tid, $langcode)) {
+    if (!$this->isAnyPermissionSetForTerm($tid, $langcode) && !\Drupal::config('permissions_by_term.settings')->get('permission_mode')) {
       return TRUE;
     }
 
     /* At this point permissions are enabled, check to see if this user or one
      * of their roles is allowed.
      */
-    $aUserRoles = $user->getRoles();
-
-    foreach ($aUserRoles as $sUserRole) {
+    foreach ($user->getRoles() as $sUserRole) {
 
       if ($this->isTermAllowedByUserRole($tid, $sUserRole, $langcode)) {
         return TRUE;
@@ -120,14 +120,11 @@ class AccessCheck {
 
     }
 
-    $iUid = intval($user->id());
-
-    if ($this->isTermAllowedByUserId($tid, $iUid, $langcode)) {
+    if ($this->isTermAllowedByUserId($tid, $user->id(), $langcode)) {
       return TRUE;
     }
 
     return FALSE;
-
   }
 
   /**
@@ -178,11 +175,11 @@ class AccessCheck {
   public function isAnyPermissionSetForTerm($tid, $langcode = '') {
 		$langcode = ($langcode === '') ? \Drupal::languageManager()->getCurrentLanguage()->getId() : $langcode;
 
-    $iUserTableResults = intval($this->database->query("SELECT COUNT(1) FROM {permissions_by_term_user} WHERE tid = :tid AND langcode = :langcode",
-      [':tid' => $tid, ':langcode' => $langcode])->fetchField());
+    $iUserTableResults = (int)$this->database->query("SELECT COUNT(1) FROM {permissions_by_term_user} WHERE tid = :tid AND langcode = :langcode",
+      [':tid' => $tid, ':langcode' => $langcode])->fetchField();
 
-    $iRoleTableResults = intval($this->database->query("SELECT COUNT(1) FROM {permissions_by_term_role} WHERE tid = :tid AND langcode = :langcode",
-      [':tid' => $tid, ':langcode' => $langcode])->fetchField());
+    $iRoleTableResults = (int)$this->database->query("SELECT COUNT(1) FROM {permissions_by_term_role} WHERE tid = :tid AND langcode = :langcode",
+      [':tid' => $tid, ':langcode' => $langcode])->fetchField();
 
     if ($iUserTableResults > 0 ||
       $iRoleTableResults > 0) {
@@ -191,22 +188,28 @@ class AccessCheck {
 
   }
 
-  /**
-   * @param string $nodeId
-   * @param string $langcode
-   *
-   * @return AccessResult
-   */
-  public function handleNode($nodeId, $langcode) {
-    if ($this->canUserAccessByNodeId($nodeId, false, $langcode) === TRUE) {
-      return AccessResult::neutral();
-    }
-    else {
-      $accessDeniedEvent = new PermissionsByTermDeniedEvent($nodeId);
-      $this->eventDispatcher->dispatch(PermissionsByTermDeniedEvent::NAME, $accessDeniedEvent);
+  public function handleNode($nodeId, string $langcode): AccessResult {
+    $result = AccessResult::neutral();
 
-      return AccessResult::forbidden();
+    if (!$this->canUserAccessByNodeId($nodeId, false, $langcode)) {
+      $this->dispatchDeniedEvent($nodeId);
+
+      $result = AccessResult::forbidden();
     }
+
+    return $result;
+  }
+
+  public function dispatchDeniedEventOnRestricedAccess($nodeId, string $langcode): void {
+    if (!$this->canUserAccessByNodeId($nodeId, false, $langcode)) {
+      $this->dispatchDeniedEvent($nodeId);
+    }
+  }
+
+  private function dispatchDeniedEvent($nodeId): void
+  {
+    $accessDeniedEvent = new PermissionsByTermDeniedEvent($nodeId);
+    $this->eventDispatcher->dispatch(PermissionsByTermDeniedEvent::NAME, $accessDeniedEvent);
   }
 
 }

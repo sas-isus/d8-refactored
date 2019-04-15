@@ -5,7 +5,9 @@ namespace Drupal\Tests\permissions_by_term\Behat\Context;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\Driver\DrupalDriver;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\user\Entity\Role;
 
 /**
  * Class PermissionsByTermContext
@@ -15,6 +17,8 @@ use Drupal\taxonomy\Entity\Vocabulary;
 class PermissionsByTermContext extends RawDrupalContext {
 
   private const MAX_DURATION_SECONDS = 1200;
+
+  private const MAX_SHORT_DURATION_SECONDS = 20;
 
   public function __construct() {
     $driver = new DrupalDriver(DRUPAL_ROOT, '');
@@ -102,11 +106,30 @@ class PermissionsByTermContext extends RawDrupalContext {
   }
 
   /**
-   * @Given Node access records are rebuild.
+   * @Given Node access records are rebuild
    */
-  public function nodeAccessRecordsAreRebuild()
-  {
+  public function nodeAccessRecordsAreRebuild(): void {
     node_access_rebuild();
+  }
+
+  /**
+   * @Given node access records are disabled
+   */
+  public function nodeAccessRecordsAreDisabled(): void {
+    \Drupal::configFactory()
+      ->getEditable('permissions_by_term.settings')
+      ->set('disable_node_access_records', TRUE)
+      ->save();
+  }
+
+  /**
+   * @Given node access records are enabled
+   */
+  public function nodeAccessRecordsAreEnabled(): void {
+    \Drupal::configFactory()
+      ->getEditable('permissions_by_term.settings')
+      ->set('disable_node_access_records', FALSE)
+      ->save();
   }
 
   /**
@@ -237,12 +260,134 @@ class PermissionsByTermContext extends RawDrupalContext {
   }
 
   /**
+   * @Then /^I should not see text matching "([^"]*)" after a while$/
+   */
+  public function iShouldNotSeeTextAfterAWhile($text)
+  {
+    $startTime = time();
+    do {
+      $content = $this->getSession()->getPage()->getText();
+      if (substr_count($content, $text) === 0) {
+        return true;
+      }
+    } while (time() - $startTime < self::MAX_SHORT_DURATION_SECONDS);
+    throw new ResponseTextException(
+      sprintf('Could find text %s after %s seconds', $text, self::MAX_SHORT_DURATION_SECONDS),
+      $this->getSession()
+    );
+  }
+
+  /**
    * @Then /^I click by selector "([^"]*)" via JavaScript$/
    * @param string $selector
    */
   public function clickBySelector(string $selector)
   {
     $this->getSession()->executeScript("document.querySelector('" . $selector . "').click()");
+  }
+
+  /**
+   * @Given /^editor role exists$/
+   */
+  public function createEditorRole() {
+    if (!Role::load('editor')) {
+      $role = Role::create(['id' => 'editor']);
+      $role->grantPermission('edit any article content')
+        ->save();
+    }
+  }
+
+  /**
+   * @Given /^permission mode is set$/
+   */
+  public function permissionModeIsSet(): void {
+    \Drupal::configFactory()
+      ->getEditable('permissions_by_term.settings')
+      ->set('permission_mode', TRUE)
+      ->save();
+  }
+
+  /**
+   * @Then /^I submit the form$/
+   */
+  public function iSubmitTheForm()
+  {
+    $session = $this->getSession(); // get the mink session
+    $element = $session->getPage()->find(
+      'xpath',
+      $session->getSelectorsHandler()->selectorToXpath('xpath', '//*[@type="submit"]')
+    ); // runs the actual query and returns the element
+
+    // errors must not pass silently
+    if (null === $element) {
+      throw new \InvalidArgumentException(sprintf('Could not evaluate XPath: "%s"', '//*[@type="submit"]'));
+    }
+
+    // ok, let's click on it
+    $element->click();
+  }
+
+  /**
+   * Dumps the current page HTML.
+   *
+   * @When I dump the HTML
+   */
+  public function dumpHTML() {
+    print_r($this->getSession()->getPage()->getContent());
+  }
+
+  /**
+   * @Then /^I create main menu item for node with title "([^"]*)"$/
+   */
+  public function createMainMenuItemForNode(string $nodeTitle): void {
+    $query = \Drupal::service('database')->select('node_field_data', 'nfd')
+      ->fields('nfd', ['nid'])
+      ->condition('nfd.title', $nodeTitle);
+
+    $menuLink = MenuLinkContent::create([
+      'title'     => $nodeTitle,
+      'link'      => [
+        'uri' => 'internal:/node/' . $query->execute()
+            ->fetchField(),
+      ],
+      'menu_name' => 'main',
+      'expanded'  => TRUE,
+    ]);
+    $menuLink->save();
+  }
+
+  /**
+   * @Then /^I should see menu item text matching "([^"]*)"$/
+   */
+  public function seeMenuItemMatchingText(string $text): void {
+    $xpath = '//*/ul/li/a[text() = "' . $text . '"]';
+
+    $session = $this->getSession(); // get the mink session
+    $element = $session->getPage()->find(
+      'xpath',
+      $session->getSelectorsHandler()->selectorToXpath('xpath', $xpath)
+    );
+
+    if ($element === NULL) {
+      throw new \InvalidArgumentException(sprintf('Could not evaluate XPath: "%s"', $xpath));
+    }
+  }
+
+  /**
+   * @Then /^I should not see menu item text matching "([^"]*)"$/
+   */
+  public function seeNotMenuItemMatchingText(string $text): void {
+    $xpath = '//*/ul/li/a[text() = "' . $text . '"]';
+
+    $session = $this->getSession(); // get the mink session
+    $element = $session->getPage()->find(
+      'xpath',
+      $session->getSelectorsHandler()->selectorToXpath('xpath', $xpath)
+    );
+
+    if ($element !== NULL) {
+      throw new \InvalidArgumentException(sprintf('Could not evaluate XPath: "%s"', $xpath));
+    }
   }
 
 }

@@ -116,29 +116,6 @@ class NodeAccess {
     $this->uniqueGid = $uniqueGid;
   }
 
-  /**
-   * @param $uid
-   * @param $nodeType
-   * @param $nid
-   *
-   * @return bool
-   */
-  public function canUserUpdateNode($uid, $nodeType, $nid) {
-    $user = $this->getUserInstance($uid);
-
-    $this->setLoadedUid($uid);
-
-    if ($user->hasPermission('edit any ' . $nodeType . ' content')) {
-      return TRUE;
-    }
-
-    if ($this->isNodeOwner($nid, $uid) && $this->canUpdateOwnNode($uid, $nodeType)) {
-      return TRUE;
-    }
-
-    return FALSE;
-  }
-
   public function canUserBypassNodeAccess($uid) {
     $user = $this->getUserInstance($uid);
     if ($user->hasPermission('bypass node access')) {
@@ -168,30 +145,6 @@ class NodeAccess {
     return FALSE;
   }
 
-  private function getGrantDelete($uid, $nodeType, $nid) {
-    if ($this->canUserBypassNodeAccess($uid)) {
-      return 1;
-    }
-
-    if ($this->canUserDeleteNode($uid, $nodeType, $nid)) {
-      return 1;
-    }
-
-    return 0;
-  }
-
-  private function getGrantUpdate($uid, $nodeType, $nid) {
-    if ($this->canUserBypassNodeAccess($uid)) {
-      return 1;
-    }
-
-    if ($this->canUserUpdateNode($uid, $nodeType, $nid)) {
-      return 1;
-    }
-
-    return 0;
-  }
-
   /**
    * @param $nid
    * @param $uid
@@ -200,7 +153,7 @@ class NodeAccess {
    */
   public function isNodeOwner($nid, $uid) {
     $node = $this->node->load($nid);
-    if (intval($node->getOwnerId()) == intval($uid)) {
+    if ((int)$node->getOwnerId() == (int)$uid) {
       return TRUE;
     }
 

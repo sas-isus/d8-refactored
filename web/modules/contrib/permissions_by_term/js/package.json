@@ -1,27 +1,34 @@
 {
-  "name": "pbt",
-  "version": "1.0.0",
-  "description": "JavaScript code has been tested with [Jasmine](https://jasmine.github.io/). Install the dependencies by [Yarn](https://yarnpkg.com/lang/en/). Just run `yarn`. To run the tests, switch to the `js` folder and run `yarn test`.",
+  "name": "permissions_by_term",
+  "description": "JavaScript package definition",
   "main": "node-form.js",
   "dependencies": {
+    "axios": "^0.18.0",
     "babel-cli": "^6.26.0",
-    "babel-loader": "^7.1.4",
+    "babel-plugin-transform-es2015-arrow-functions": "^6.22.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "es6-promise": "^4.2.5",
     "lodash": "^4.17.10",
     "qunit": "^2.6.1",
     "sinon": "^5.0.10",
-    "webpack": "^4.12.0",
-    "webpack-cli": "^3.0"
+    "webpack-cli": "^3.0",
+    "babel-polyfill": "^6.26.0",
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-transform-arrow-functions": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "webpack": "^4.20.2"
   },
   "scripts": {
     "test": "npx qunit webpack-dist/bundle-test.js",
     "babel-build-for-test": "babel src/**/*.js test/*.js -d babel-compiled-test",
     "cleanup-babel-test": "rm -rf babel-compiled-test/",
     "build-and-test": "mv src/drupal-behavior-function /tmp && npm run-script webpack-test && mv /tmp/drupal-behavior-function src/ && npm run-script test",
-    "build": "webpack --config webpack.production.js --mode production",
+    "build": "webpack --config webpack.js --mode production",
+    "build-dev": "webpack --config webpack.js --mode development",
     "webpack-test": "npx webpack --entry ./src/**/*.js ./test/*.js --output ./webpack-dist/bundle-test.js --mode development",
     "bat": "npm run-script build-and-test"
-  },
-  "author": "",
-  "license": "ISC"
+  }
 }

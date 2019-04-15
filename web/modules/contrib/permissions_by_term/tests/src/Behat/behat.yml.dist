@@ -19,7 +19,7 @@ default:
         wd_host: "http://localhost:4444/wd/hub"
         browser: "chrome"
         capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "*", "chrome": { switches: ["--no-sandbox"] } }
-      base_url: http://localhost:8000
+      base_url: http://localhost:80
     Drupal\DrupalExtension:
       blackbox: ~
       api_driver: 'drupal'

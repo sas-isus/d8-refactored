@@ -1,23 +1,47 @@
 services:
+
     permissions_by_term.kernel_event_listener:
-        class: Drupal\permissions_by_term\Listener\KernelEventListener
-        arguments: []
-        tags:
-            - { name: event_subscriber }
+      class: Drupal\permissions_by_term\Listener\KernelEventListener
+      arguments: []
+      tags:
+          - { name: event_subscriber }
+
     permissions_by_term.access_check:
-        class: Drupal\permissions_by_term\Service\AccessCheck
-        arguments: ['@database', '@event_dispatcher']
+      class: Drupal\permissions_by_term\Service\AccessCheck
+      arguments: ['@database', '@event_dispatcher']
+
     permissions_by_term.access_storage:
-        class: Drupal\permissions_by_term\Service\AccessStorage
-        arguments: ['@database',  '@permissions_by_term.term_handler', '@permissions_by_term.access_check']
+      class: Drupal\permissions_by_term\Service\AccessStorage
+      arguments: ['@database',  '@permissions_by_term.term_handler', '@permissions_by_term.access_check', '@permissions_by_term.cache_negotiator', '@logger.channel.client_config_care']
+
     permissions_by_term.node_access_record_factory:
-        class: \Drupal\permissions_by_term\Factory\NodeAccessRecordFactory
+      class: \Drupal\permissions_by_term\Factory\NodeAccessRecordFactory
+
     permissions_by_term.node_access:
-        class: \Drupal\permissions_by_term\Service\NodeAccess
-        arguments: ['@permissions_by_term.access_storage', '@permissions_by_term.node_access_record_factory', '@entity_type.manager', '@permissions_by_term.access_check', '@database']
+      class: \Drupal\permissions_by_term\Service\NodeAccess
+      arguments: ['@permissions_by_term.access_storage', '@permissions_by_term.node_access_record_factory', '@entity_type.manager', '@permissions_by_term.access_check', '@database']
+
     permissions_by_term.term_handler:
-        class: \Drupal\permissions_by_term\Service\TermHandler
-        arguments: ['@database']
+      class: \Drupal\permissions_by_term\Service\TermHandler
+      arguments: ['@database']
+
     permissions_by_term.node_entity_bundle_info:
-        class: \Drupal\permissions_by_term\Service\NodeEntityBundleInfo
-        arguments: ['@permissions_by_term.access_storage', '@permissions_by_term.term_handler', '@twig', '@database']
+      class: \Drupal\permissions_by_term\Service\NodeEntityBundleInfo
+      arguments: ['@permissions_by_term.access_storage', '@permissions_by_term.term_handler', '@twig', '@database']
+
+    permissions_by_term.cache_negotiator:
+      class: Drupal\permissions_by_term\KeyValueCache\CacheNegotiator
+      autowire: true
+
+    permissions_by_term.shared_temp_store:
+      class: Drupal\permissions_by_term\KeyValueCache\SharedTempStore
+      arguments: ['@user.shared_tempstore', '@logger.channel.client_config_care']
+
+    permissions_by_term.static_storage:
+      class: Drupal\permissions_by_term\KeyValueCache\StaticStorage
+      autowire: true
+
+    logger.channel.client_config_care:
+      class: Drupal\Core\Logger\LoggerChannel
+      factory: logger.factory:get
+      arguments: ['permissions_by_term']

@@ -6,9 +6,15 @@ use Drupal\Component\Utility\Tags;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\user\Entity\User;
+use Drupal\Driver\Exception\Exception;
+use Drupal\node\Entity\Node;
+use Drupal\permissions_by_term\KeyValueCache\CacheNegotiator;
+use Drupal\permissions_by_term\Model\NidToTidsModel;
 use Drupal\user\Entity\Role;
+use Drupal\user\Entity\User;
+use function GuzzleHttp\Promise\is_settled;
 
 /**
  * Class AccessStorage.
@@ -61,16 +67,19 @@ class AccessStorage {
   protected $accessCheck;
 
   /**
-   * AccessStorageService constructor.
-   *
-   * @param Connection  $database
-   * @param TermHandler        $term
-   * @param AccessCheck $accessCheck
+   * @var \Drupal\permissions_by_term\KeyValueCache\CacheNegotiator
    */
-  public function __construct(Connection $database, TermHandler $term, AccessCheck $accessCheck) {
+  private $cacheNegotiator;
+
+
+  private $logger;
+
+  public function __construct(Connection $database, TermHandler $term, AccessCheck $accessCheck, CacheNegotiator $cacheNegotiator, LoggerChannelInterface $logger) {
     $this->database  = $database;
     $this->term = $term;
     $this->accessCheck = $accessCheck;
+    $this->cacheNegotiator = $cacheNegotiator;
+    $this->logger = $logger;
   }
 
   /**
@@ -298,14 +307,7 @@ class AccessStorage {
       ->execute();
   }
 
-  /**
-   * @param array  $aUserIdsGrantedAccess
-   * @param int    $term_id
-   * @param string $langcode
-   *
-   * @throws \Exception
-   */
-  public function addTermPermissionsByUserIds($aUserIdsGrantedAccess, $term_id, $langcode = '') {
+  public function addTermPermissionsByUserIds(array $aUserIdsGrantedAccess, int $term_id, string $langcode = ''): void {
 		$langcode = ($langcode === '') ? \Drupal::languageManager()->getCurrentLanguage()->getId() : $langcode;
 
     foreach ($aUserIdsGrantedAccess as $iUserIdGrantedAccess) {
@@ -529,7 +531,7 @@ class AccessStorage {
     if (!empty($aAllowedUsers)) {
 
       foreach ($aAllowedUsers as $oUser) {
-        $iUid = intval($oUser->id());
+        $iUid = (int)$oUser->id();
         if ($iUid !== 0) {
           $sUsername = $oUser->getDisplayName();
         }
@@ -548,29 +550,37 @@ class AccessStorage {
   }
 
   /**
+   * Returns an array of term ids attached to the passed node id.
+   *
    * @param $nid
+   *   Node id.
    *
    * @return array
+   *   Array of term ids
    */
-  public function getTidsByNid($nid)
-  {
-    $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
-    $tids = [];
+  public function getTidsByNid($nid): array {
+    $nidsToTidsPairs = [];
 
-    foreach ($node->getFields() as $field) {
-      if ($field->getFieldDefinition()->getType() == 'entity_reference' && $field->getFieldDefinition()->getSetting('target_type') == 'taxonomy_term') {
-        $aReferencedTaxonomyTerms = $field->getValue();
-        if (!empty($aReferencedTaxonomyTerms)) {
-          foreach ($aReferencedTaxonomyTerms as $aReferencedTerm) {
-            if (isset($aReferencedTerm['target_id'])) {
-              $tids[] = $aReferencedTerm['target_id'];
-            }
-          }
-        }
+    if ($this->cacheNegotiator->has(NidToTidsModel::class)) {
+      $nidsToTidsPairs = $this->cacheNegotiator->get(NidToTidsModel::class);
+      if (!empty($nidsToTidsPairs[$nid])) {
+        return $nidsToTidsPairs[$nid];
       }
     }
 
-    return $tids;
+    $tidsForNid = $this->database->select('taxonomy_index')
+      ->fields('taxonomy_index', ['tid'])
+      ->condition('nid', $nid)
+      ->execute()
+      ->fetchCol();
+
+    if (!empty($tidsForNid)) {
+      $nidsToTidsPairs[$nid] = $tidsForNid;
+      $this->cacheNegotiator->set(NidToTidsModel::class, $nidsToTidsPairs);
+      return $tidsForNid;
+    }
+
+    return [];
   }
 
   /**
@@ -644,7 +654,7 @@ class AccessStorage {
     $nidsWithNoTidRestriction = $this->getUnrestrictedNids();
     $nidsByTids = $this->term->getNidsByTids($this->getPermittedTids($user->id(), $user->getRoles()));
 
-    if (\Drupal::config('permissions_by_term.settings.single_term_restriction')->get('value')) {
+    if (\Drupal::config('permissions_by_term.settings')->get('require_all_terms_granted')) {
       $permittedNids = [];
       foreach ($nidsByTids as $nid) {
         if($this->accessCheck->canUserAccessByNodeId($nid, $user->id(), $this->getLangCode($nid))) {
