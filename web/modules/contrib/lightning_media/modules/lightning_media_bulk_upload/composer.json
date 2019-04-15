@@ -1,0 +1,5 @@
+{
+  "name": "drupal/lightning_media_bulk_upload",
+  "type": "drupal-module",
+  "description": "Provides a form to upload many media items at once."
+}

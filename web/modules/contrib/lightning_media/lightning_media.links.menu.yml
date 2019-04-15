@@ -1,0 +1,5 @@
+lightning_media.settings:
+  title: 'Media'
+  description: 'Configure Lightning Media settings.'
+  parent: lightning_core.settings
+  route_name: lightning_media.settings

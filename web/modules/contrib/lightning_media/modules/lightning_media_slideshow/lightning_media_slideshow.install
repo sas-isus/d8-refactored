@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Contains install and update functions for Lightning Media Slideshow.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function lightning_media_slideshow_install() {
+  if (Drupal::isConfigSyncing()) {
+    return;
+  }
+
+  // Allow every available media type to be used in slideshows.
+  $media_types = Drupal::entityTypeManager()
+    ->getStorage('media_type')
+    ->getQuery()
+    ->execute();
+
+  _lightning_media_slideshow_enable_media_types($media_types);
+}

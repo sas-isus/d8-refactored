@@ -1,0 +1,16 @@
+imports:
+  - 'docroot/modules/contrib/lightning_core/tests/drupal.behat.yml'
+  - 'docroot/modules/contrib/lightning_core/tests/mink.behat.yml'
+
+default:
+  suites:
+    lightning_media:
+      paths:
+        - 'modules/lightning_media_bulk_upload/tests/features'
+        - 'modules/lightning_media_slideshow/tests/features'
+        - 'tests/features'
+      contexts:
+        - '\Drupal\DrupalExtension\Context\DrupalContext'
+        - '\Drupal\DrupalExtension\Context\MinkContext'
+        - '\Drupal\DrupalExtension\Context\MessageContext'
+        - '\Drupal\Tests\lightning_media\FixtureContext'

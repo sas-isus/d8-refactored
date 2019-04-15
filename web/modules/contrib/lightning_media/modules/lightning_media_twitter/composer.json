@@ -1,0 +1,5 @@
+{
+  "name": "drupal/lightning_media_twitter",
+  "type": "drupal-module",
+  "description": "Twitter support for Lightning Media."
+}

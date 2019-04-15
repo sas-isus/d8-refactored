@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * @file
+ * Contains hooks and other functions for Lightning Media Slideshow.
+ */
+
+use Drupal\field\Entity\FieldConfig;
+use Drupal\media\MediaTypeInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function lightning_media_slideshow_media_type_insert(MediaTypeInterface $media_type) {
+  if (Drupal::isConfigSyncing()) {
+    return;
+  }
+  _lightning_media_slideshow_enable_media_types([
+    $media_type->id(),
+  ]);
+}
+
+/**
+ * Allows a set of media types to be used in slideshow blocks.
+ *
+ * @param string[] $media_types
+ *   Media type IDs to enable for slideshow blocks.
+ */
+function _lightning_media_slideshow_enable_media_types(array $media_types) {
+  $media_types = array_values($media_types);
+
+  // Allow the new media type to be referenced by the slideshow block. If the
+  // media type is deleted, it will be removed automatically without any
+  // intervention from us.
+  $field = FieldConfig::loadByName('block_content', 'media_slideshow', 'field_slideshow_items');
+
+  if ($field) {
+    $media_types = array_combine($media_types, $media_types);
+
+    $handler_settings = $field->getSetting('handler_settings');
+    $handler_settings['target_bundles'] = array_unique(array_merge($media_types, $handler_settings['target_bundles']));
+    $field->setSetting('handler_settings', $handler_settings)->save();
+  }
+}

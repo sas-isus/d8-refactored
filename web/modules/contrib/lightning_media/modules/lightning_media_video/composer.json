@@ -1,0 +1,5 @@
+{
+  "name": "drupal/lightning_media_video",
+  "type": "drupal-module",
+  "description": "Video support for Lightning Media."
+}

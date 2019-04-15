@@ -1,0 +1,5 @@
+{
+  "name": "drupal/lightning_media_instagram",
+  "type": "drupal-module",
+  "description": "Instagram support for Lightning Media."
+}

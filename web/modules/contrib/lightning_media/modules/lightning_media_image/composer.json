@@ -1,0 +1,5 @@
+{
+  "name": "drupal/lightning_media_image",
+  "type": "drupal-module",
+  "description": "Image support for Lightning Media."
+}

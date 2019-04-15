@@ -1,0 +1,5 @@
+{
+  "name": "drupal/lightning_media_audio",
+  "type": "drupal-module",
+  "description": "Audio support for Lightning Media."
+}
