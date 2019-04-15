@@ -23,7 +23,7 @@
     "drupal/config_direct_save": "^1.0",
     "drupal/config_installer": "^1.0",
     "drupal/console": "^1",
-    "drupal/core": "8.6.10",
+    "drupal/core": "8.6.13",
     "drupal/ds": "^3.1",
     "drupal/easy_social": "^3.0",
     "drupal/editor_advanced_link": "^1.4",
