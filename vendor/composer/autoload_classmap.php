@@ -5541,6 +5541,7 @@ return array(
     'Twig\\Node\\EmbedNode' => $vendorDir . '/twig/twig/src/Node/EmbedNode.php',
     'Twig\\Node\\Expression\\AbstractExpression' => $vendorDir . '/twig/twig/src/Node/Expression/AbstractExpression.php',
     'Twig\\Node\\Expression\\ArrayExpression' => $vendorDir . '/twig/twig/src/Node/Expression/ArrayExpression.php',
+    'Twig\\Node\\Expression\\ArrowFunctionExpression' => $vendorDir . '/twig/twig/src/Node/Expression/ArrowFunctionExpression.php',
     'Twig\\Node\\Expression\\AssignNameExpression' => $vendorDir . '/twig/twig/src/Node/Expression/AssignNameExpression.php',
     'Twig\\Node\\Expression\\Binary\\AbstractBinary' => $vendorDir . '/twig/twig/src/Node/Expression/Binary/AbstractBinary.php',
     'Twig\\Node\\Expression\\Binary\\AddBinary' => $vendorDir . '/twig/twig/src/Node/Expression/Binary/AddBinary.php',
