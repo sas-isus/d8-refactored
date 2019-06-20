@@ -94,7 +94,7 @@ class EntityRow extends ViewsEntityRow {
     ];
     $form['alternating_fieldset']['allpages'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Use this configuration on every page. Otherwise the default view mode is used as soon you browse away from the first page of this view.'),
+      '#title' => $this->t('Use this configuration on every page. Otherwise the default view mode is used as soon as you browse away from the first page of this view.'),
       '#default_value' => (isset($this->options['alternating_fieldset']['allpages'])) ? $this->options['alternating_fieldset']['allpages'] : FALSE,
     ];
 

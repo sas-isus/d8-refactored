@@ -85,7 +85,7 @@ class BlockTest extends TestBase {
 
     // Change to a DS layout.
     $url = 'admin/structure/block/block-content/manage/basic/display';
-    $edit = ['layout' => 'ds_2col'];
+    $edit = ['ds_layout' => 'ds_2col'];
     $this->drupalPostForm($url, $edit, t('Save'), []);
 
     $fields = [

@@ -129,7 +129,7 @@ class FieldController extends ControllerBase implements ContainerInjectionInterf
       }
     }
 
-    drupal_set_message($this->t('Field not found'));
+    $this->messenger()->addMessage($this->t('Field not found'));
     $url = new Url('ds.fields_list');
     return new RedirectResponse($url->toString());
   }

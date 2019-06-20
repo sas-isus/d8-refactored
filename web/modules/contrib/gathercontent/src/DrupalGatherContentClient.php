@@ -153,7 +153,8 @@ class DrupalGatherContentClient extends GatherContentClient {
               $importedFile
                 ->set('gc_id', $files[$index]->id)
                 ->set('langcode', $language)
-                ->set('filesize', $files[$index]->size);
+                ->set('filesize', $files[$index]->size)
+                ->save();
 
               $importedFiles[$index] = $importedFile->id();
             }

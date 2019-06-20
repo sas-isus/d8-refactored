@@ -28,7 +28,7 @@ class FieldGroupTest extends TestBase {
 
     // Configure layout.
     $layout = [
-      'layout' => 'ds_2col',
+      'ds_layout' => 'ds_2col',
     ];
     $layout_assert = [
       'regions' => [

@@ -88,12 +88,6 @@ function ds_theme_registry_alter(&$theme_registry) {
   // layout is using the Display Suite layout class.
   foreach ($theme_registry as $theme_hook => $info) {
     if (array_key_exists($theme_hook, $layout_theme_hooks) || (!empty($info['base hook']) && array_key_exists($info['base hook'], $layout_theme_hooks))) {
-
-      // @todo Remove once https://www.drupal.org/node/2861840 is resolved.
-      if (!in_array('template_preprocess_layout', $theme_registry[$theme_hook]['preprocess functions'])) {
-        $theme_registry[$theme_hook]['preprocess functions'][] = 'template_preprocess_layout';
-      }
-
       $theme_registry[$theme_hook]['preprocess functions'][] = 'ds_preprocess_ds_layout';
     }
   }
@@ -482,6 +476,7 @@ function template_preprocess_ds_entity_view(&$variables) {
  */
 function ds_preprocess_ds_layout(&$variables) {
   $layout_settings = $variables['settings'];
+  $layout_settings += ['wrappers' => []];
 
   // Fetch the entity type.
   $bundle = FALSE;
@@ -1102,12 +1097,14 @@ function ds_ds_field_operations_alter(&$operations, $field) {
  * Implements hook_entity_type_alter().
  */
 function ds_entity_type_alter(array &$entity_types) {
-  /* @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
-  foreach ($entity_types as $entity_type) {
-    $base_table = $entity_type->getBaseTable();
-    if ($entity_type->get('field_ui_base_route') && !empty($base_table)) {
-      if ($entity_type->hasLinkTemplate('canonical')) {
-        $entity_type->setLinkTemplate('display', $entity_type->getLinkTemplate('canonical') . '/manage-display');
+  if (\Drupal::moduleHandler()->moduleExists('field_ui')) {
+    /* @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
+    foreach ($entity_types as $entity_type) {
+      $base_table = $entity_type->getBaseTable();
+      if ($entity_type->get('field_ui_base_route') && !empty($base_table)) {
+        if ($entity_type->hasLinkTemplate('canonical')) {
+          $entity_type->setLinkTemplate('display', $entity_type->getLinkTemplate('canonical') . '/manage-display');
+        }
       }
     }
   }

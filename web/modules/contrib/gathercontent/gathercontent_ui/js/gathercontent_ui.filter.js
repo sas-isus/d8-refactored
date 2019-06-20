@@ -176,7 +176,7 @@
       selectNone: Drupal.t('Deselect all rows in this table')
     };
     var updateSelectAll = function (state) {
-      $(table).prev('table.sticky-header').andSelf().find('th.select-all input:checkbox').each(function () {
+      $(table).prev('table.sticky-header').addBack().find('th.select-all input:checkbox').each(function () {
         $(this).attr('title', state ? strings.selectNone : strings.selectAll);
         this.checked = state;
       });
@@ -194,6 +194,7 @@
           }
         });
         updateSelectAll(event.target.checked);
+        checkboxes.trigger('update');
       }
     });
 

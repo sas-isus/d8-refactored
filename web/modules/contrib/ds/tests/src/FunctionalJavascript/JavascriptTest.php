@@ -65,7 +65,7 @@ class JavascriptTest extends JavascriptTestBase {
 
     // Change the layout to 2 column layout and wait for it to be changed, see
     // if the new template is displayed.
-    $page->selectFieldOption('layout', 'ds_2col');
+    $page->selectFieldOption('ds_layout', 'ds_2col');
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->pageTextContains('ds-2col--node.html.twig');
     $page->pressButton('Save');
@@ -80,7 +80,7 @@ class JavascriptTest extends JavascriptTestBase {
     $this->assertSame($settings['id'], 'ds_2col');
 
     // Switch back to not using a layout.
-    $page->selectFieldOption('layout', '');
+    $page->selectFieldOption('ds_layout', '');
     $this->assertSession()->assertWaitOnAjaxRequest();
     $page->pressButton('Save');
 

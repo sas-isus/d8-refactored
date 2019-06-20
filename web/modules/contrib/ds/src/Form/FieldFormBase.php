@@ -245,7 +245,7 @@ class FieldFormBase extends ConfigFormBase implements ContainerInjectionInterfac
     // Redirect.
     $url = new Url('ds.fields_list');
     $form_state->setRedirectUrl($url);
-    drupal_set_message(t('The field %field has been saved.', ['%field' => $field['label']]));
+    $this->messenger()->addMessage($this->t('The field %field has been saved.', ['%field' => $field['label']]));
   }
 
 }

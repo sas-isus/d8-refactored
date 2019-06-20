@@ -12,7 +12,7 @@ trait DsTestTrait {
    */
   public function dsSelectLayout($edit = [], $assert = [], $url = 'admin/structure/types/manage/article/display', $options = []) {
     $edit += [
-      'layout' => 'ds_2col_stacked',
+      'ds_layout' => 'ds_2col_stacked',
     ];
 
     $this->drupalPostForm($url, $edit, t('Save'), $options);

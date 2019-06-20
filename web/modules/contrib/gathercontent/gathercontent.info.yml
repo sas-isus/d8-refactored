@@ -4,9 +4,9 @@ package: GatherContent
 core: 8.x
 type: module
 dependencies:
-  - node
-  - taxonomy
-  - menu_link_content
-  - image
-  - file
-  - field
+  - drupal:node
+  - drupal:taxonomy
+  - drupal:menu_link_content
+  - drupal:image
+  - drupal:file
+  - drupal:field

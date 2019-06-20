@@ -52,7 +52,7 @@ abstract class RendererBase extends EntityTranslationRendererBase {
         // Change the view mode per row.
         if ($this->view->rowPlugin->options['alternating_fieldset']['alternating']) {
           // Check for paging to determine the view mode.
-          $page = \Drupal::request()->get('page');
+          $page = $this->view->getPager()->getCurrentPage();
           if (!empty($page) && isset($this->view->rowPlugin->options['alternating_fieldset']['allpages']) && !$this->view->rowPlugin->options['alternating_fieldset']['allpages']) {
             $view_mode = $this->view->rowPlugin->options['view_mode'];
           }

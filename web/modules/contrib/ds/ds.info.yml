@@ -6,12 +6,12 @@ package: 'Display Suite'
 configure: ds.structure
 dependencies:
   - drupal:layout_discovery
-  - drupal:system (>= 8.3.x)
+  - drupal:system (>= 8.6.x)
 test_dependencies:
   - field_group:field_group
 
-# Information added by Drupal.org packaging script on 2018-12-11
-version: '8.x-3.2'
+# Information added by Drupal.org packaging script on 2019-02-28
+version: '8.x-3.3'
 core: '8.x'
 project: 'ds'
-datestamp: 1544537299
+datestamp: 1551355376

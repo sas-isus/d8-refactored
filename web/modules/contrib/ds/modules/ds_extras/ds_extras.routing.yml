@@ -1,5 +1,5 @@
 ds_extras.switch_view_mode:
-  path: 'ds-switch-view-mode/{entityType}/{entityId}/{viewMode}'
+  path: '/ds-switch-view-mode/{entityType}/{entityId}/{viewMode}'
   defaults:
     _controller: '\Drupal\ds_extras\Controller\DsExtrasController::switchViewMode'
   requirements:

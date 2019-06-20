@@ -241,7 +241,7 @@ class ChangeLayoutForm extends FormBase {
     $this->entityFieldManager->clearCachedFieldDefinitions();
 
     // Show message.
-    drupal_set_message(t('The layout change has been saved.'));
+    $this->messenger()->addMessage($this->t('The layout change has been saved.'));
   }
 
 }

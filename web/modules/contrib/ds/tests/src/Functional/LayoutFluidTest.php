@@ -18,7 +18,7 @@ class LayoutFluidTest extends TestBase {
     $this->assertSession()->responseContains('Test Fluid two column');
 
     $layout = [
-      'layout' => 'dstest_2col_fluid',
+      'ds_layout' => 'dstest_2col_fluid',
     ];
 
     $assert = [

@@ -54,7 +54,7 @@ class ExportablesTest extends TestBase {
 
     // Override default layout.
     $layout = [
-      'layout' => 'ds_2col_stacked',
+      'ds_layout' => 'ds_2col_stacked',
     ];
 
     $assert = [

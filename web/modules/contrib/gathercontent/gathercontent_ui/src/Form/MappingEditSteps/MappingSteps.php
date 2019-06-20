@@ -378,12 +378,15 @@ abstract class MappingSteps {
         // and checkboxes (GC).
         switch ($gc_field->type) {
           case 'text':
-            if (!$gc_field->plainText && in_array($instance->getType(), [
-              'string',
-              'string_long',
-              'email',
-              'telephone',
-            ])) {
+            if (
+              (!isset($gc_field->plainText) || !$gc_field->plainText) &&
+              in_array($instance->getType(), [
+                'string',
+                'string_long',
+                'email',
+                'telephone',
+              ])
+            ) {
               continue 2;
             }
             break;
@@ -413,6 +416,16 @@ abstract class MappingSteps {
 
           if (!empty($settings['target_bundles'])) {
             $bundles = $settings['target_bundles'];
+            if (!empty($settings['negate']) && !empty($settings['target_bundles_drag_drop'])) {
+              $negated_bundles = array_filter(
+                $settings['target_bundles_drag_drop'],
+                function ($v) {
+                  return !$v['enabled'];
+                }
+              );
+
+              $bundles = array_combine(array_keys($negated_bundles), array_keys($negated_bundles));
+            }
             $target_type = $instance->getFieldStorageDefinition()
               ->getSetting('target_type');
             $bundle_entity_type = $entityTypeManager
@@ -492,7 +505,11 @@ abstract class MappingSteps {
    *   Array of supported metatag fields.
    */
   protected function filterMetatags($gathercontent_field) {
-    if ($gathercontent_field->type === 'text' && $gathercontent_field->plainText) {
+    if (
+      $gathercontent_field->type === 'text' &&
+      isset($gathercontent_field->plainText) &&
+      $gathercontent_field->plainText
+    ) {
       return [
         'title' => t('Title'),
         'description' => t('Description'),

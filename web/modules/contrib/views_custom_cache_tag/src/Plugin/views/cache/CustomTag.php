@@ -94,11 +94,23 @@ class CustomTag extends Tag {
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    $id = $this->view->storage->getCacheTags();
+    $tags = parent::getCacheTags();
+
+    // Remove the the list cache tags for the entity types listed in this view.
+    // @see CachePluginBase::getCacheTags().
+    $entity_information = $this->view->getQuery()->getEntityTableInfo();
+    if (!empty($entity_information)) {
+      // Add the list cache tags for each entity type used by this view.
+      foreach ($entity_information as $table => $metadata) {
+        $remove = \Drupal::entityManager()->getDefinition($metadata['entity_type'])->getListCacheTags();
+        $tags = array_diff($tags, $remove);
+      }
+    }
+
     $custom_tags = preg_split('/\r\n|[\r\n]/', $this->options['custom_tag']);
     $custom_tags = array_map('trim', $custom_tags);
     $custom_tags =  array_map(function ($tag){ return $this->view->getStyle()->tokenizeValue($tag, 0);}, $custom_tags);
-    return Cache::mergeTags($custom_tags, $id);
+    return Cache::mergeTags($custom_tags, $tags);
   }
 
   /**

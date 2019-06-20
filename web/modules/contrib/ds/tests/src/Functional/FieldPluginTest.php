@@ -28,7 +28,7 @@ class FieldPluginTest extends TestBase {
     $this->assertSession()->pageTextContains('Field altered');
 
     $empty = [];
-    $edit = ['layout' => 'ds_2col_stacked'];
+    $edit = ['ds_layout' => 'ds_2col_stacked'];
     $this->dsSelectLayout($edit, $empty, 'admin/config/people/accounts/display');
 
     // Fields can not be found on user.

@@ -11,9 +11,8 @@ use Drupal\Core\Entity\Entity;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\simpletest\WebTestBase;
-use Drupal\system\Tests\Cache\AssertPageCacheContextsAndTagsTrait;
+use Drupal\Tests\system\Functional\Cache\AssertPageCacheContextsAndTagsTrait;
 use Drupal\views\Entity\View;
-use Drupal\views\Tests\AssertViewsCacheTagsTrait;
 
 /**
  * Tests the custom cache tags in views.
@@ -22,7 +21,10 @@ use Drupal\views\Tests\AssertViewsCacheTagsTrait;
  */
 class CustomCacheTagsTest extends WebTestBase {
 
-  use AssertPageCacheContextsAndTagsTrait;
+  use AssertPageCacheContextsAndTagsTrait {
+    assertPageCacheContextsAndTags as protected assertPageCacheContextsAndTagsOriginal;
+  }
+
 
   /**
    * Modules to enable.
@@ -37,6 +39,47 @@ class CustomCacheTagsTest extends WebTestBase {
     'views_custom_cache_tag_demo'
   );
 
+ /**
+   * Asserts page cache miss, then hit for the given URL; checks cache headers.
+   *
+   * @param \Drupal\Core\Url $url
+   *   The URL to test.
+   * @param string[] $expected_contexts
+   *   The expected cache contexts for the given URL.
+   * @param string[] $expected_tags
+   *   The expected cache tags for the given URL.
+   */
+  protected function assertPageCacheContextsAndTags(Url $url, array $expected_contexts, array $expected_tags) {
+    $query = $url->getOption('query');
+    if (empty($query['_format'])) {
+      $this->assertPageCacheContextsAndTagsOriginal($url, $expected_contexts, $expected_tags);
+    }
+    else {
+      $absolute_url = $url->setAbsolute()->toString();
+      sort($expected_contexts);
+      sort($expected_tags);
+
+      // Assert cache miss + expected cache contexts + tags.
+      $this->drupalGet($absolute_url);
+      $this->assertEqual($this->drupalGetHeader('X-Drupal-Cache'), 'MISS');
+      $this->assertCacheTags($expected_tags);
+      $this->assertCacheContexts($expected_contexts);
+
+      // Assert cache hit + expected cache contexts + tags.
+      $this->drupalGet($absolute_url);
+      $this->assertCacheTags($expected_tags);
+      $this->assertCacheContexts($expected_contexts);
+
+      // Assert page cache item + expected cache tags.
+      $cid_parts = [$url->setAbsolute()->toString(), $query['_format']];
+      $cid = implode(':', $cid_parts);
+      $cache_entry = \Drupal::cache('page')->get($cid);
+      sort($cache_entry->tags);
+      $this->assertEqual($cache_entry->tags, $expected_tags);
+      $this->debugCacheTags($cache_entry->tags, $expected_tags);
+    }
+  }
+
   /**
    * Tests the cache tag invalidation.
    */
@@ -44,6 +87,7 @@ class CustomCacheTagsTest extends WebTestBase {
 
     $this->enablePageCaching();
     $cache_contexts = array('theme', 'timezone', 'languages:language_content', 'languages:language_interface', 'url', 'user.node_grants:view', 'user.permissions');
+    $cache_contexts_rest = array('theme', 'request_format', 'languages:language_content', 'languages:language_interface', 'url', 'user.node_grants:view', 'user.permissions');
     // Create a new node of type A.
     $node_a = Node::create([
       'body' => [
@@ -81,6 +125,7 @@ class CustomCacheTagsTest extends WebTestBase {
       'config:filter.format.plain_text',
       'config:views.view.view_node_type_ab',
       'config:user.role.anonymous',
+      'http_response',
       'node:2',
       'node:type:node_type_a',
       'node_view',
@@ -92,12 +137,29 @@ class CustomCacheTagsTest extends WebTestBase {
       'config:filter.format.plain_text',
       'config:views.view.view_node_type_ab',
       'config:user.role.anonymous',
+      'http_response',
       'node:3',
       'node:type:node_type_b',
       'node_view',
       'rendered',
       'user:0',
       'user_view',
+    ));
+
+    // Check the cache tags in the views.
+    $this->assertPageCacheContextsAndTags(Url::fromRoute('view.view_node_type_ab_rest.rest_export_1', array('arg_0' => 'node_type_a'), array('query' => array('_format' => 'json'))), $cache_contexts_rest, array(
+      'config:views.view.view_node_type_ab_rest',
+      'config:user.role.anonymous',
+      'http_response',
+      'node:2',
+      'node:type:node_type_a',
+    ));
+    $this->assertPageCacheContextsAndTags(Url::fromRoute('view.view_node_type_ab_rest.rest_export_1', array('arg_0' => 'node_type_b'), array('query' => array('_format' => 'json'))), $cache_contexts_rest, array(
+      'config:views.view.view_node_type_ab_rest',
+      'config:user.role.anonymous',
+      'http_response',
+      'node:3',
+      'node:type:node_type_b',
     ));
 
     // Create a new node of type B ensure that the page
@@ -118,11 +180,13 @@ class CustomCacheTagsTest extends WebTestBase {
     $node_b->save();
     // Make sure the node type A tags are not invalidated.
     $this->verifyPageCache(Url::fromRoute('view.view_node_type_ab.page_1', array('arg_0' => 'node_type_a')), 'HIT');
+    $this->verifyPageCache(Url::fromRoute('view.view_node_type_ab_rest.rest_export_1', array('arg_0' => 'node_type_a'), array('query' => array('_format' => 'json'))), 'HIT');
     // Ensure cache tags invalidation in node type B view.
     $this->assertPageCacheContextsAndTags(Url::fromRoute('view.view_node_type_ab.page_1', array('arg_0' => 'node_type_b')), $cache_contexts, array(
       'config:filter.format.plain_text',
       'config:views.view.view_node_type_ab',
       'config:user.role.anonymous',
+      'http_response',
       'node:3',
       'node:4',
       'node:type:node_type_b',
@@ -132,8 +196,22 @@ class CustomCacheTagsTest extends WebTestBase {
       'user_view'
     ));
 
+    $this->assertPageCacheContextsAndTags(Url::fromRoute('view.view_node_type_ab_rest.rest_export_1', array('arg_0' => 'node_type_b'), array('query' => array('_format' => 'json'))), $cache_contexts_rest, array(
+      'config:views.view.view_node_type_ab_rest',
+      'config:user.role.anonymous',
+      'http_response',
+      'node:3',
+      'node:4',
+      'node:type:node_type_b',
+    ));
+
+
     $this->drupalGet(Url::fromRoute('view.view_node_type_ab.page_1', array('arg_0' => 'node_type_b')));
     $this->assertText($title);
+
+    $this->drupalGet(Url::fromRoute('view.view_node_type_ab_rest.rest_export_1', array('arg_0' => 'node_type_b'), array('query' => array('_format' => 'json'))));
+    $this->assertText($title);
+
     // Save the view again, check the cache tag invalidation.
     $view_b = View::load('view_node_type_ab');
     $view_b->save();
@@ -141,6 +219,14 @@ class CustomCacheTagsTest extends WebTestBase {
     // Ensure cache tags invalidation in node type A & B views.
     $this->verifyPageCache(Url::fromRoute('view.view_node_type_ab.page_1', array('arg_0' => 'node_type_b')), 'MISS');
     $this->verifyPageCache(Url::fromRoute('view.view_node_type_ab.page_1', array('arg_0' => 'node_type_a')), 'MISS');
+
+    // Save the view again, check the cache tag invalidation.
+    $view_b = View::load('view_node_type_ab_rest');
+    $view_b->save();
+
+    // Ensure cache tags invalidation in node type A & B views.
+    $this->verifyPageCache(Url::fromRoute('view.view_node_type_ab_rest.rest_export_1', array('arg_0' => 'node_type_b'), array('query' => array('_format' => 'json'))), 'MISS');
+    $this->verifyPageCache(Url::fromRoute('view.view_node_type_ab_rest.rest_export_1', array('arg_0' => 'node_type_a'), array('query' => array('_format' => 'json'))), 'MISS');
   }
 
   /**

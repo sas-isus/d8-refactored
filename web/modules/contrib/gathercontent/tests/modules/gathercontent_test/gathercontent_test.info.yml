@@ -4,6 +4,6 @@ package: 'Testing'
 type: module
 core: 8.x
 dependencies:
-  - gathercontent
-  - paragraph
-  - metatag
+  - gathercontent:gathercontent
+  - paragraph:paragraph
+  - metatag:metatag

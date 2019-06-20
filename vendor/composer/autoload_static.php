@@ -101,6 +101,7 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
+            'Prophecy\\' => 9,
             'PhpParser\\' => 10,
             'PantheonSystems\\CDNBehatHelpers\\' => 32,
         ),
@@ -126,6 +127,7 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         ),
         'D' => 
         array (
+            'Drush\\' => 6,
             'Drupal\\Driver\\' => 14,
             'Drupal\\Core\\' => 12,
             'Drupal\\Console\\Core\\' => 20,
@@ -134,6 +136,7 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
             'Drupal\\Component\\' => 17,
             'DrupalComposer\\DrupalScaffold\\' => 30,
             'Doctrine\\Instantiator\\' => 22,
+            'Doctrine\\Common\\Lexer\\' => 22,
             'Doctrine\\Common\\Inflector\\' => 26,
             'Doctrine\\Common\\Cache\\' => 22,
             'Doctrine\\Common\\Annotations\\' => 28,
@@ -344,6 +347,10 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
+        'Prophecy\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy',
+        ),
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
@@ -384,6 +391,10 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         array (
             0 => __DIR__ . '/..' . '/fabpot/goutte/Goutte',
         ),
+        'Drush\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/drush/drush/src',
+        ),
         'Drupal\\Driver\\' => 
         array (
             0 => __DIR__ . '/../..' . '/web/drivers/lib/Drupal/Driver',
@@ -415,6 +426,10 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'Doctrine\\Instantiator\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
+        ),
+        'Doctrine\\Common\\Lexer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/lexer/lib/Doctrine/Common/Lexer',
         ),
         'Doctrine\\Common\\Inflector\\' => 
         array (
@@ -488,7 +503,7 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         array (
             'org\\bovigo\\vfs\\' => 
             array (
-                0 => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php',
+                0 => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php',
             ),
         ),
         'W' => 
@@ -510,13 +525,6 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
             'Stack' => 
             array (
                 0 => __DIR__ . '/..' . '/stack/builder/src',
-            ),
-        ),
-        'P' => 
-        array (
-            'Prophecy\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/phpspec/prophecy/src',
             ),
         ),
         'E' => 
@@ -555,10 +563,6 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
             'Drupal\\Driver' => 
             array (
                 0 => __DIR__ . '/..' . '/drupal/drupal-driver/src',
-            ),
-            'Doctrine\\Common\\Lexer\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/doctrine/lexer/lib',
             ),
             'Doctrine\\Common\\Collections\\' => 
             array (
@@ -1895,6 +1899,7 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'Drupal\\Console\\Command\\Config\\EditCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Config/EditCommand.php',
         'Drupal\\Console\\Command\\Config\\ExportCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Config/ExportCommand.php',
         'Drupal\\Console\\Command\\Config\\ExportContentTypeCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Config/ExportContentTypeCommand.php',
+        'Drupal\\Console\\Command\\Config\\ExportEntityCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Config/ExportEntityCommand.php',
         'Drupal\\Console\\Command\\Config\\ExportSingleCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Config/ExportSingleCommand.php',
         'Drupal\\Console\\Command\\Config\\ExportViewCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Config/ExportViewCommand.php',
         'Drupal\\Console\\Command\\Config\\ImportCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Config/ImportCommand.php',
@@ -1933,6 +1938,7 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'Drupal\\Console\\Command\\Debug\\EntityCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Debug/EntityCommand.php',
         'Drupal\\Console\\Command\\Debug\\EventCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Debug/EventCommand.php',
         'Drupal\\Console\\Command\\Debug\\FeaturesCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Debug/FeaturesCommand.php',
+        'Drupal\\Console\\Command\\Debug\\HookCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Debug/HookCommand.php',
         'Drupal\\Console\\Command\\Debug\\ImageStylesCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Debug/ImageStylesCommand.php',
         'Drupal\\Console\\Command\\Debug\\LibrariesCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Debug/LibrariesCommand.php',
         'Drupal\\Console\\Command\\Debug\\MigrateCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Debug/MigrateCommand.php',
@@ -1963,6 +1969,7 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'Drupal\\Console\\Command\\Generate\\BreakPointCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/BreakPointCommand.php',
         'Drupal\\Console\\Command\\Generate\\CacheContextCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/CacheContextCommand.php',
         'Drupal\\Console\\Command\\Generate\\CommandCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/CommandCommand.php',
+        'Drupal\\Console\\Command\\Generate\\ComposerCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/ComposerCommand.php',
         'Drupal\\Console\\Command\\Generate\\ConfigFormBaseCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/ConfigFormBaseCommand.php',
         'Drupal\\Console\\Command\\Generate\\ControllerCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/ControllerCommand.php',
         'Drupal\\Console\\Command\\Generate\\EntityBundleCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/EntityBundleCommand.php',
@@ -1988,13 +1995,18 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'Drupal\\Console\\Command\\Generate\\PluginImageEffectCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/PluginImageEffectCommand.php',
         'Drupal\\Console\\Command\\Generate\\PluginImageFormatterCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/PluginImageFormatterCommand.php',
         'Drupal\\Console\\Command\\Generate\\PluginMailCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/PluginMailCommand.php',
+        'Drupal\\Console\\Command\\Generate\\PluginMigrateDataParserCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/PluginMigrateDataParserCommand.php',
         'Drupal\\Console\\Command\\Generate\\PluginMigrateProcessCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/PluginMigrateProcessCommand.php',
         'Drupal\\Console\\Command\\Generate\\PluginMigrateSourceCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/PluginMigrateSourceCommand.php',
+        'Drupal\\Console\\Command\\Generate\\PluginQueueWorkerCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/PluginQueueWorkerCommand.php',
         'Drupal\\Console\\Command\\Generate\\PluginRestResourceCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/PluginRestResourceCommand.php',
         'Drupal\\Console\\Command\\Generate\\PluginRulesActionCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/PluginRulesActionCommand.php',
+        'Drupal\\Console\\Command\\Generate\\PluginRulesConditionCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/PluginRulesConditionCommand.php',
+        'Drupal\\Console\\Command\\Generate\\PluginRulesDataprocessorCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/PluginRulesDataprocessorCommand.php',
         'Drupal\\Console\\Command\\Generate\\PluginSkeletonCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/PluginSkeletonCommand.php',
         'Drupal\\Console\\Command\\Generate\\PluginTypeAnnotationCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/PluginTypeAnnotationCommand.php',
         'Drupal\\Console\\Command\\Generate\\PluginTypeYamlCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/PluginTypeYamlCommand.php',
+        'Drupal\\Console\\Command\\Generate\\PluginValidationConstraintCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/PluginValidationConstraintCommand.php',
         'Drupal\\Console\\Command\\Generate\\PluginViewsFieldCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/PluginViewsFieldCommand.php',
         'Drupal\\Console\\Command\\Generate\\PostUpdateCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/PostUpdateCommand.php',
         'Drupal\\Console\\Command\\Generate\\ProfileCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Generate/ProfileCommand.php',
@@ -2047,6 +2059,7 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'Drupal\\Console\\Command\\Shared\\ThemeBreakpointTrait' => __DIR__ . '/..' . '/drupal/console/src/Command/Shared/ThemeBreakpointTrait.php',
         'Drupal\\Console\\Command\\Shared\\ThemeRegionTrait' => __DIR__ . '/..' . '/drupal/console/src/Command/Shared/ThemeRegionTrait.php',
         'Drupal\\Console\\Command\\Shared\\TranslationTrait' => __DIR__ . '/..' . '/drupal/console/src/Command/Shared/TranslationTrait.php',
+        'Drupal\\Console\\Command\\Shared\\UpdateTrait' => __DIR__ . '/..' . '/drupal/console/src/Command/Shared/UpdateTrait.php',
         'Drupal\\Console\\Command\\ShellCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/ShellCommand.php',
         'Drupal\\Console\\Command\\Site\\ImportLocalCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Site/ImportLocalCommand.php',
         'Drupal\\Console\\Command\\Site\\InstallCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Site/InstallCommand.php',
@@ -2073,6 +2086,7 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'Drupal\\Console\\Command\\User\\PasswordHashCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/User/PasswordHashCommand.php',
         'Drupal\\Console\\Command\\User\\PasswordResetCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/User/PasswordResetCommand.php',
         'Drupal\\Console\\Command\\User\\RoleCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/User/RoleCommand.php',
+        'Drupal\\Console\\Command\\User\\UnblockCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/User/UnblockCommand.php',
         'Drupal\\Console\\Command\\User\\UserBase' => __DIR__ . '/..' . '/drupal/console/src/Command/User/UserBase.php',
         'Drupal\\Console\\Command\\Views\\DisableCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Views/DisableCommand.php',
         'Drupal\\Console\\Command\\Views\\EnableCommand' => __DIR__ . '/..' . '/drupal/console/src/Command/Views/EnableCommand.php',
@@ -2108,7 +2122,10 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'Drupal\\Console\\Core\\Descriptor\\TextDescriptor' => __DIR__ . '/..' . '/drupal/console-core/src/Descriptor/TextDescriptor.php',
         'Drupal\\Console\\Core\\EventSubscriber\\CallCommandListener' => __DIR__ . '/..' . '/drupal/console-core/src/EventSubscriber/CallCommandListener.php',
         'Drupal\\Console\\Core\\EventSubscriber\\DefaultValueEventListener' => __DIR__ . '/..' . '/drupal/console-core/src/EventSubscriber/DefaultValueEventListener.php',
+        'Drupal\\Console\\Core\\EventSubscriber\\MaintenanceModeListener' => __DIR__ . '/..' . '/drupal/console-core/src/EventSubscriber/MaintenanceModeListener.php',
         'Drupal\\Console\\Core\\EventSubscriber\\RemoveMessagesListener' => __DIR__ . '/..' . '/drupal/console-core/src/EventSubscriber/RemoveMessagesListener.php',
+        'Drupal\\Console\\Core\\EventSubscriber\\SaveStatisticsListener' => __DIR__ . '/..' . '/drupal/console-core/src/EventSubscriber/SaveStatisticsListener.php',
+        'Drupal\\Console\\Core\\EventSubscriber\\SendStatisticsListener' => __DIR__ . '/..' . '/drupal/console-core/src/EventSubscriber/SendStatisticsListener.php',
         'Drupal\\Console\\Core\\EventSubscriber\\ShowGenerateChainListener' => __DIR__ . '/..' . '/drupal/console-core/src/EventSubscriber/ShowGenerateChainListener.php',
         'Drupal\\Console\\Core\\EventSubscriber\\ShowGenerateCountCodeLinesListener' => __DIR__ . '/..' . '/drupal/console-core/src/EventSubscriber/ShowGenerateCountCodeLinesListener.php',
         'Drupal\\Console\\Core\\EventSubscriber\\ShowGenerateInlineListener' => __DIR__ . '/..' . '/drupal/console-core/src/EventSubscriber/ShowGenerateInlineListener.php',
@@ -2148,6 +2165,7 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'Drupal\\Console\\Generator\\BreakPointGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/BreakPointGenerator.php',
         'Drupal\\Console\\Generator\\CacheContextGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/CacheContextGenerator.php',
         'Drupal\\Console\\Generator\\CommandGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/CommandGenerator.php',
+        'Drupal\\Console\\Generator\\ComposerGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/ComposerGenerator.php',
         'Drupal\\Console\\Generator\\ControllerGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/ControllerGenerator.php',
         'Drupal\\Console\\Generator\\DatabaseSettingsGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/DatabaseSettingsGenerator.php',
         'Drupal\\Console\\Generator\\DockerInitGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/DockerInitGenerator.php',
@@ -2172,13 +2190,18 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'Drupal\\Console\\Generator\\PluginImageEffectGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/PluginImageEffectGenerator.php',
         'Drupal\\Console\\Generator\\PluginImageFormatterGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/PluginImageFormatterGenerator.php',
         'Drupal\\Console\\Generator\\PluginMailGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/PluginMailGenerator.php',
+        'Drupal\\Console\\Generator\\PluginMigrateDataParserGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/PluginMigrateDataParserGenerator.php',
         'Drupal\\Console\\Generator\\PluginMigrateProcessGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/PluginMigrateProcessGenerator.php',
         'Drupal\\Console\\Generator\\PluginMigrateSourceGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/PluginMigrateSourceGenerator.php',
+        'Drupal\\Console\\Generator\\PluginQueueWorkerGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/PluginQueueWorkerGenerator.php',
         'Drupal\\Console\\Generator\\PluginRestResourceGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/PluginRestResourceGenerator.php',
         'Drupal\\Console\\Generator\\PluginRulesActionGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/PluginRulesActionGenerator.php',
+        'Drupal\\Console\\Generator\\PluginRulesConditionGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/PluginRulesConditionGenerator.php',
+        'Drupal\\Console\\Generator\\PluginRulesDataprocessorGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/PluginRulesDataprocessorGenerator.php',
         'Drupal\\Console\\Generator\\PluginSkeletonGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/PluginSkeletonGenerator.php',
         'Drupal\\Console\\Generator\\PluginTypeAnnotationGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/PluginTypeAnnotationGenerator.php',
         'Drupal\\Console\\Generator\\PluginTypeYamlGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/PluginTypeYamlGenerator.php',
+        'Drupal\\Console\\Generator\\PluginValidationConstraintGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/PluginValidationConstraintGenerator.php',
         'Drupal\\Console\\Generator\\PluginViewsFieldGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/PluginViewsFieldGenerator.php',
         'Drupal\\Console\\Generator\\PostUpdateGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/PostUpdateGenerator.php',
         'Drupal\\Console\\Generator\\ProfileGenerator' => __DIR__ . '/..' . '/drupal/console/src/Generator/ProfileGenerator.php',
@@ -3801,11 +3824,14 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'Drush\\Commands\\DrushCommands' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Commands/DrushCommands.php',
         'Drush\\Commands\\core\\SanitizeCommands' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Commands/core/SanitizeCommands.php',
         'Drush\\Commands\\core\\StatusCommands' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Commands/core/StatusCommands.php',
+        'Drush\\ConfigAdapter' => __DIR__ . '/..' . '/drush/drush/lib/Drush/ConfigAdapter.php',
         'Drush\\Drupal\\DrupalKernel' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Drupal/DrupalKernel.php',
         'Drush\\Drupal\\DrushServiceModifier' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Drupal/DrushServiceModifier.php',
         'Drush\\Drupal\\ExtensionDiscovery' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Drupal/ExtensionDiscovery.php',
         'Drush\\Drupal\\FindCommandsCompilerPass' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Drupal/FindCommandsCompilerPass.php',
+        'Drush\\Drush' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Drush.php',
         'Drush\\DrushConfig' => __DIR__ . '/..' . '/drush/drush/lib/Drush/DrushConfig.php',
+        'Drush\\Exceptions\\UserAbortException' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Exceptions/UserAbortException.php',
         'Drush\\Log\\DrushLog' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Log/DrushLog.php',
         'Drush\\Log\\LogLevel' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Log/LogLevel.php',
         'Drush\\Log\\Logger' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Log/Logger.php',
@@ -3827,6 +3853,10 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'Drush\\Role\\Role8' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Role/Role8.php',
         'Drush\\Role\\RoleBase' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Role/RoleBase.php',
         'Drush\\Role\\RoleException' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Role/RoleException.php',
+        'Drush\\SiteAlias\\AliasManagerAdapter' => __DIR__ . '/..' . '/drush/drush/lib/Drush/SiteAlias/AliasManagerAdapter.php',
+        'Drush\\SiteAlias\\AliasManagerAdapterInjector' => __DIR__ . '/..' . '/drush/drush/lib/Drush/SiteAlias/AliasManagerAdapterInjector.php',
+        'Drush\\SiteAlias\\ProcessManager' => __DIR__ . '/..' . '/drush/drush/lib/Drush/SiteAlias/ProcessManager.php',
+        'Drush\\SiteAlias\\ProcessManagerInjector' => __DIR__ . '/..' . '/drush/drush/lib/Drush/SiteAlias/ProcessManagerInjector.php',
         'Drush\\Sql\\Sql6' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Sql/Sql6.php',
         'Drush\\Sql\\Sql7' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Sql/Sql7.php',
         'Drush\\Sql\\Sql8' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Sql/Sql8.php',
@@ -3839,6 +3869,9 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'Drush\\Sql\\Sqlpgsql' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Sql/Sqlpgsql.php',
         'Drush\\Sql\\Sqlsqlite' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Sql/Sqlsqlite.php',
         'Drush\\Sql\\Sqlsqlsrv' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Sql/Sqlsqlsrv.php',
+        'Drush\\TestTraits\\CliTestTrait' => __DIR__ . '/..' . '/drush/drush/src/TestTraits/CliTestTrait.php',
+        'Drush\\TestTraits\\DrushTestTrait' => __DIR__ . '/..' . '/drush/drush/src/TestTraits/DrushTestTrait.php',
+        'Drush\\TestTraits\\OutputUtilsTrait' => __DIR__ . '/..' . '/drush/drush/src/TestTraits/OutputUtilsTrait.php',
         'Drush\\UpdateService\\Project' => __DIR__ . '/..' . '/drush/drush/lib/Drush/UpdateService/Project.php',
         'Drush\\UpdateService\\ReleaseInfo' => __DIR__ . '/..' . '/drush/drush/lib/Drush/UpdateService/ReleaseInfo.php',
         'Drush\\UpdateService\\StatusInfoDrupal6' => __DIR__ . '/..' . '/drush/drush/lib/Drush/UpdateService/StatusInfoDrupal6.php',
@@ -4452,6 +4485,9 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'PhpParser\\JsonDecoder' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/JsonDecoder.php',
         'PhpParser\\Lexer' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer.php',
         'PhpParser\\Lexer\\Emulative' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/Emulative.php',
+        'PhpParser\\Lexer\\TokenEmulator\\CoaleseEqualTokenEmulator' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/CoaleseEqualTokenEmulator.php',
+        'PhpParser\\Lexer\\TokenEmulator\\FnTokenEmulator' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/FnTokenEmulator.php',
+        'PhpParser\\Lexer\\TokenEmulator\\TokenEmulatorInterface' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/TokenEmulatorInterface.php',
         'PhpParser\\NameContext' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/NameContext.php',
         'PhpParser\\Node' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node.php',
         'PhpParser\\NodeAbstract' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/NodeAbstract.php',
@@ -4471,6 +4507,7 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'PhpParser\\Node\\Expr\\ArrayDimFetch' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node/Expr/ArrayDimFetch.php',
         'PhpParser\\Node\\Expr\\ArrayItem' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node/Expr/ArrayItem.php',
         'PhpParser\\Node\\Expr\\Array_' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node/Expr/Array_.php',
+        'PhpParser\\Node\\Expr\\ArrowFunction' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node/Expr/ArrowFunction.php',
         'PhpParser\\Node\\Expr\\Assign' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node/Expr/Assign.php',
         'PhpParser\\Node\\Expr\\AssignOp' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node/Expr/AssignOp.php',
         'PhpParser\\Node\\Expr\\AssignOp\\BitwiseAnd' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node/Expr/AssignOp/BitwiseAnd.php',
@@ -6781,26 +6818,26 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'cweagans\\Composer\\PatchEvent' => __DIR__ . '/..' . '/cweagans/composer-patches/src/PatchEvent.php',
         'cweagans\\Composer\\PatchEvents' => __DIR__ . '/..' . '/cweagans/composer-patches/src/PatchEvents.php',
         'cweagans\\Composer\\Patches' => __DIR__ . '/..' . '/cweagans/composer-patches/src/Patches.php',
-        'org\\bovigo\\vfs\\DotDirectory' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/DotDirectory.php',
-        'org\\bovigo\\vfs\\Quota' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/Quota.php',
-        'org\\bovigo\\vfs\\content\\FileContent' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/content/FileContent.php',
-        'org\\bovigo\\vfs\\content\\LargeFileContent' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/content/LargeFileContent.php',
-        'org\\bovigo\\vfs\\content\\SeekableFileContent' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/content/SeekableFileContent.php',
-        'org\\bovigo\\vfs\\content\\StringBasedFileContent' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/content/StringBasedFileContent.php',
-        'org\\bovigo\\vfs\\vfsStream' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/vfsStream.php',
-        'org\\bovigo\\vfs\\vfsStreamAbstractContent' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/vfsStreamAbstractContent.php',
-        'org\\bovigo\\vfs\\vfsStreamBlock' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/vfsStreamBlock.php',
-        'org\\bovigo\\vfs\\vfsStreamContainer' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/vfsStreamContainer.php',
-        'org\\bovigo\\vfs\\vfsStreamContainerIterator' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/vfsStreamContainerIterator.php',
-        'org\\bovigo\\vfs\\vfsStreamContent' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/vfsStreamContent.php',
-        'org\\bovigo\\vfs\\vfsStreamDirectory' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/vfsStreamDirectory.php',
-        'org\\bovigo\\vfs\\vfsStreamException' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/vfsStreamException.php',
-        'org\\bovigo\\vfs\\vfsStreamFile' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/vfsStreamFile.php',
-        'org\\bovigo\\vfs\\vfsStreamWrapper' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/vfsStreamWrapper.php',
-        'org\\bovigo\\vfs\\visitor\\vfsStreamAbstractVisitor' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/visitor/vfsStreamAbstractVisitor.php',
-        'org\\bovigo\\vfs\\visitor\\vfsStreamPrintVisitor' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/visitor/vfsStreamPrintVisitor.php',
-        'org\\bovigo\\vfs\\visitor\\vfsStreamStructureVisitor' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/visitor/vfsStreamStructureVisitor.php',
-        'org\\bovigo\\vfs\\visitor\\vfsStreamVisitor' => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php/org/bovigo/vfs/visitor/vfsStreamVisitor.php',
+        'org\\bovigo\\vfs\\DotDirectory' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/DotDirectory.php',
+        'org\\bovigo\\vfs\\Quota' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/Quota.php',
+        'org\\bovigo\\vfs\\content\\FileContent' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/content/FileContent.php',
+        'org\\bovigo\\vfs\\content\\LargeFileContent' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/content/LargeFileContent.php',
+        'org\\bovigo\\vfs\\content\\SeekableFileContent' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/content/SeekableFileContent.php',
+        'org\\bovigo\\vfs\\content\\StringBasedFileContent' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/content/StringBasedFileContent.php',
+        'org\\bovigo\\vfs\\vfsStream' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/vfsStream.php',
+        'org\\bovigo\\vfs\\vfsStreamAbstractContent' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/vfsStreamAbstractContent.php',
+        'org\\bovigo\\vfs\\vfsStreamBlock' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/vfsStreamBlock.php',
+        'org\\bovigo\\vfs\\vfsStreamContainer' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/vfsStreamContainer.php',
+        'org\\bovigo\\vfs\\vfsStreamContainerIterator' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/vfsStreamContainerIterator.php',
+        'org\\bovigo\\vfs\\vfsStreamContent' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/vfsStreamContent.php',
+        'org\\bovigo\\vfs\\vfsStreamDirectory' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/vfsStreamDirectory.php',
+        'org\\bovigo\\vfs\\vfsStreamException' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/vfsStreamException.php',
+        'org\\bovigo\\vfs\\vfsStreamFile' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/vfsStreamFile.php',
+        'org\\bovigo\\vfs\\vfsStreamWrapper' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/vfsStreamWrapper.php',
+        'org\\bovigo\\vfs\\visitor\\vfsStreamAbstractVisitor' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/visitor/vfsStreamAbstractVisitor.php',
+        'org\\bovigo\\vfs\\visitor\\vfsStreamPrintVisitor' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/visitor/vfsStreamPrintVisitor.php',
+        'org\\bovigo\\vfs\\visitor\\vfsStreamStructureVisitor' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/visitor/vfsStreamStructureVisitor.php',
+        'org\\bovigo\\vfs\\visitor\\vfsStreamVisitor' => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php/org/bovigo/vfs/visitor/vfsStreamVisitor.php',
         'phpDocumentor\\Reflection\\DocBlock' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlock.php',
         'phpDocumentor\\Reflection\\DocBlockFactory' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlockFactory.php',
         'phpDocumentor\\Reflection\\DocBlockFactoryInterface' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlockFactoryInterface.php',

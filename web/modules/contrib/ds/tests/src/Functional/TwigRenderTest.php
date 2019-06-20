@@ -20,7 +20,7 @@ class TwigRenderTest extends TestBase {
 
     // Configure layout.
     $layout = [
-      'layout' => 'dstest_1col_title',
+      'ds_layout' => 'dstest_1col_title',
     ];
     $layout_assert = [
       'regions' => [
