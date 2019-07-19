@@ -6,6 +6,7 @@ use Cheppers\GatherContent\DataTypes\Item;
 use Cheppers\GatherContent\GatherContentClientInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\gathercontent\Event\GatherContentEvents;
+use Drupal\gathercontent\Event\NodeToUpdateEvent;
 use Drupal\gathercontent\Event\PostNodeSaveEvent;
 use Drupal\gathercontent\Event\PreNodeSaveEvent;
 use Drupal\gathercontent\Import\ContentProcess\ContentProcessor;
@@ -90,7 +91,21 @@ class Importer implements ContainerInjectionInterface {
   public function import(Item $gc_item, ImportOptions $importOptions) {
     $this->updateStatus($gc_item, $importOptions->getNewStatus());
     $files = $this->client->itemFilesGet($gc_item->id);
-    $entity = $this->contentProcessor->createNode($gc_item, $importOptions, $files);
+
+    // Let other modules determine the Node to update.
+    /** @var \Drupal\gathercontent\Event\NodeToUpdateEvent $node_to_update_event */
+    $node_to_update_event = $this->eventDispatcher->dispatch(
+      GatherContentEvents::NODE_TO_UPDATE,
+      new NodeToUpdateEvent($gc_item, $files)
+    );
+    $entity = $node_to_update_event->getNode();
+
+    // If no Node to update is set by other modules, determine the Node to
+    // update or create a new Node.
+    if (!$entity) {
+      $entity = $this->contentProcessor->createNode($gc_item, $importOptions,
+        $files);
+    }
 
     $this->eventDispatcher->dispatch(
       GatherContentEvents::PRE_NODE_SAVE,

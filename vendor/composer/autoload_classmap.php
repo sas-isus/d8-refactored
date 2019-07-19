@@ -1347,6 +1347,7 @@ return array(
     'Drupal\\Console\\Command\\Debug\\ThemeCommand' => $vendorDir . '/drupal/console/src/Command/Debug/ThemeCommand.php',
     'Drupal\\Console\\Command\\Debug\\ThemeKeysCommand' => $vendorDir . '/drupal/console/src/Command/Debug/ThemeKeysCommand.php',
     'Drupal\\Console\\Command\\Debug\\UpdateCommand' => $vendorDir . '/drupal/console/src/Command/Debug/UpdateCommand.php',
+    'Drupal\\Console\\Command\\Debug\\UpdateComposerCommand' => $vendorDir . '/drupal/console/src/Command/Debug/UpdateComposerCommand.php',
     'Drupal\\Console\\Command\\Debug\\UserCommand' => $vendorDir . '/drupal/console/src/Command/Debug/UserCommand.php',
     'Drupal\\Console\\Command\\Debug\\ViewsCommand' => $vendorDir . '/drupal/console/src/Command/Debug/ViewsCommand.php',
     'Drupal\\Console\\Command\\Debug\\ViewsPluginsCommand' => $vendorDir . '/drupal/console/src/Command/Debug/ViewsPluginsCommand.php',

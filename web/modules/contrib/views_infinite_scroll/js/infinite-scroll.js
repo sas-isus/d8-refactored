@@ -41,7 +41,7 @@
     $existingPager.removeOnce('infinite-scroll');
 
     var $newRows = $newView.find(contentWrapperSelector).children();
-    var $newPager = $newView.find('.js-pager__items');
+    var $newPager = $newView.find(pagerSelector);
 
     // Add the new rows to existing view.
     view.$view.find(contentWrapperSelector).append($newRows);

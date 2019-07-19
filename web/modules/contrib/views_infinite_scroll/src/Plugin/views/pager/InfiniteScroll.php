@@ -23,6 +23,16 @@ class InfiniteScroll extends SqlBase {
    * {@inheritdoc}
    */
   public function render($input) {
+    // Replace tokens in the button text.
+    $text = $this->options['views_infinite_scroll']['button_text'];
+    if (!empty($text) && strpos($text, '@') !== FALSE) {
+      $replacements = [
+        '@next_page_count' => $this->getNumberItemsLeft(),
+        '@total' => (int) $this->getTotalItems(),
+      ];
+      $this->options['views_infinite_scroll']['button_text'] = strtr($text, $replacements);
+    }
+
     return [
       '#theme' => $this->themeFunctions(),
       '#options' => $this->options['views_infinite_scroll'],
@@ -80,6 +90,14 @@ class InfiniteScroll extends SqlBase {
         '#type' => 'textfield',
         '#title' => $this->t('Button Text'),
         '#default_value' => $options['button_text'],
+        '#description' => [
+          '#theme' => 'item_list',
+          '#items' => [
+            '@next_page_count -- the next page record count',
+            '@total -- the total amount of results returned from the view',
+          ],
+          '#prefix' => $this->t('The following tokens are supported:'),
+        ],
       ],
       'automatically_load_content' => [
         '#type' => 'checkbox',
@@ -88,6 +106,27 @@ class InfiniteScroll extends SqlBase {
         '#default_value' => $options['automatically_load_content'],
       ],
     ];
+  }
+
+  /**
+   * Returns the number of items in the next page.
+   *
+   * @return int
+   *   The number of items in the next page.
+   */
+  protected function getNumberItemsLeft() {
+    $items_per_page = (int) $this->view->getItemsPerPage();
+    $total = (int) $this->getTotalItems();
+    $current_page = (int) $this->getCurrentPage() + 1;
+
+    // Default to the pager amount.
+    $next_page_count = $items_per_page;
+    // Calculate the remaining items if we are at the 2nd to last page.
+    if ($current_page >= ceil($total / $items_per_page) - 1) {
+      $next_page_count = $total - ($current_page * $items_per_page);
+      return $next_page_count;
+    }
+    return $next_page_count;
   }
 
 }

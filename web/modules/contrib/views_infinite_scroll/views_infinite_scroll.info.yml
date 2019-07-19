@@ -5,10 +5,10 @@ package: Views
 # core: 8.x
 
 dependencies:
- - views
+ - drupal:views
 
-# Information added by Drupal.org packaging script on 2017-08-19
-version: '8.x-1.5'
+# Information added by Drupal.org packaging script on 2019-07-01
+version: '8.x-1.6'
 core: '8.x'
 project: 'views_infinite_scroll'
-datestamp: 1503109450
+datestamp: 1561996387

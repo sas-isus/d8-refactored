@@ -5,11 +5,29 @@ namespace Drupal\gathercontent\Event;
 /**
  * Defines events for the GatherContent module.
  *
+ * @see \Drupal\gathercontent\Event\NodeToUpdateEvent
  * @see \Drupal\gathercontent\Event\PreNodeSaveEvent
  * @see \Drupal\gathercontent\Event\PostNodeSaveEvent
  * @see \Drupal\gathercontent\Event\PostImportEvent
  */
 final class GatherContentEvents {
+
+  /**
+   * Name of the event fired before we determine the node to update.
+   *
+   * This event allows modules to provide an alternative node to update based
+   * on custom criteria rather than the default GatherContent node to update
+   * rules. The event is triggered just before the importer attempts to create
+   * a node or find an existing node to update. The event listener method
+   * receives a \Drupal\gathercontent\Event\NodeToUpdateEvent instance.
+   *
+   * @Event
+   *
+   * @see \Drupal\gathercontent\Event\NodeToUpdateEvent
+   *
+   * @var string
+   */
+  const NODE_TO_UPDATE = 'gathercontent.node_to_update';
 
   /**
    * Name of the event fired before we save node from GatherContent.

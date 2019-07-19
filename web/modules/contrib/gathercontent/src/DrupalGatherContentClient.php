@@ -126,15 +126,22 @@ class DrupalGatherContentClient extends GatherContentClient {
   public function downloadFiles(array $files, $directory, $language) {
     /** @var \GuzzleHttp\Client $httpClient */
     $httpClient = $this->client;
+    $options = [
+      'auth' => $this->getRequestAuth(),
+      'headers' => [],
+    ];
+
+    $options['headers'] += $this->getRequestHeaders();
+
     $files = array_values($files);
     $importedFiles = [];
 
-    $requests = function () use ($httpClient, $files) {
+    $requests = function () use ($httpClient, $files, $options) {
       foreach ($files as $file) {
-        $url = $file->url;
+        $url = $this->getUri("files/{$file->id}/download");
 
-        yield function () use ($httpClient, $url) {
-          return $httpClient->getAsync($url);
+        yield function () use ($httpClient, $url, $options) {
+          return $httpClient->getAsync($url, $options);
         };
       }
     };

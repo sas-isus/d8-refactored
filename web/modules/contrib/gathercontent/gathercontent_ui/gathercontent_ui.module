@@ -21,7 +21,7 @@ function gathercontent_ui_entity_type_alter(array &$entity_types) {
       'html' => 'Drupal\gathercontent_ui\MappingHtmlRouteProvider',
     ]);
 
-    $entity_types['gathercontent_mapping']->set('admin_permission', 'administer site configuration');
+    $entity_types['gathercontent_mapping']->set('admin_permission', 'administer gathercontent');
 
     $entity_types['gathercontent_mapping']->setLinkTemplate('canonical', '/admin/config/gathercontent/mapping/{gathercontent_mapping}');
     $entity_types['gathercontent_mapping']->setLinkTemplate('add-form', '/admin/config/gathercontent/mapping/create');
