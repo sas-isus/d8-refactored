@@ -411,11 +411,9 @@ abstract class AbstractTest extends AbstractValidatorTest
         $this->assertCount(0, $violations);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
-     */
     public function testExpectTraversableIfTraversalEnabledOnClass()
     {
+        $this->expectException('Symfony\Component\Validator\Exception\ConstraintDefinitionException');
         $entity = new Entity();
 
         $this->metadata->addConstraint(new Traverse(true));
@@ -511,7 +509,7 @@ abstract class AbstractTest extends AbstractValidatorTest
                 ->setParameter('%param%', 'value')
                 ->setInvalidValue('Invalid value')
                 ->setPlural(2)
-                ->setCode(42)
+                ->setCode('42')
                 ->addViolation();
         };
 
@@ -528,7 +526,7 @@ abstract class AbstractTest extends AbstractValidatorTest
         $this->assertSame($entity, $violations[0]->getRoot());
         $this->assertSame('Invalid value', $violations[0]->getInvalidValue());
         $this->assertSame(2, $violations[0]->getPlural());
-        $this->assertSame(42, $violations[0]->getCode());
+        $this->assertSame('42', $violations[0]->getCode());
     }
 
     public function testNoDuplicateValidationIfClassConstraintInMultipleGroups()
@@ -569,11 +567,9 @@ abstract class AbstractTest extends AbstractValidatorTest
         $this->assertCount(1, $violations);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\RuntimeException
-     */
     public function testValidateFailsIfNoConstraintsAndNoObjectOrArray()
     {
+        $this->expectException('Symfony\Component\Validator\Exception\RuntimeException');
         $this->validate('Foobar');
     }
 
