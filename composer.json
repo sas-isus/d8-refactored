@@ -23,7 +23,7 @@
     "drupal/config_direct_save": "^1.0",
     "drupal/config_installer": "^1.0",
     "drupal/console": "^1",
-    "drupal/core": "8.6.17",
+    "drupal/core": "8.7.7",
     "drupal/ds": "^3.1",
     "drupal/easy_social": "^3.0",
     "drupal/editor_advanced_link": "^1.4",
@@ -53,7 +53,6 @@
     "drupal/viewsreference": "^1.2",
     "drupal/workbench_moderation": "^1.2",
     "drush/drush": "~8",
-    "egulias/email-validator": "1.2.15",
     "guzzlehttp/guzzle": "^6.2@dev",
     "rvtraveller/qs-composer-installer": "^1.1",
     "webflo/drupal-core-strict": "^8"
