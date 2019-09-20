@@ -252,16 +252,6 @@ function ds_module_implements_alter(&$implementations, $hook) {
   if ($hook == 'entity_view_display_alter') {
     unset($implementations['node']);
   }
-
-  // Because it's possible to turn on/off field templates,
-  // we'll unset hooks here so ds_preprocess_field() doesn't run.
-  $ft_hooks = [
-    'form_ds_classes_form_alter',
-    'form_field_ui_field_edit_form_alter',
-  ];
-  if (!\Drupal::config('ds.settings')->get('field_template') && in_array($hook, $ft_hooks)) {
-    unset($implementations['ds']);
-  }
 }
 
 /**
@@ -299,6 +289,12 @@ function ds_entity_view_alter(&$build, EntityInterface $entity, EntityDisplayInt
 
   // Get configuration.
   $configuration = $display->getThirdPartySettings('ds');
+
+  // Don't fatal on missing layout plugins.
+  $layout_id = isset($configuration['layout']['id']) ? $configuration['layout']['id'] : '';
+  if (!Ds::layoutExists($layout_id)) {
+    return;
+  }
 
   // Put #entity_type, #bundle and #layout on the build so we can access it in
   // ds_entity_variables().

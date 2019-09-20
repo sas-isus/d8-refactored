@@ -29,6 +29,11 @@ class LayoutClassesTest extends TestBase {
 
   /**
    * Test selecting layouts, classes, region to block and fields.
+   *
+   * @throws \Behat\Mink\Exception\ExpectationException
+   * @throws \Behat\Mink\Exception\ResponseTextException
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function testDsTestLayouts() {
     // Check that the ds_3col_equal_width layout is not available (through the

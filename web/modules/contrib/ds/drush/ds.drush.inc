@@ -6,7 +6,6 @@
  */
 
 use Drupal\Component\Utility\Html;
-use Drupal\Component\Utility\Unicode;
 
 /**
  * Implements hook_drush_command().
@@ -144,7 +143,7 @@ function drush_ds_build($name = NULL) {
  * Prepare a string for use as a valid machine name.
  */
 function ds_prepare_machine_name($string) {
-  $machine_name = str_replace(' ', '_', Unicode::strtolower($string));
+  $machine_name = str_replace(' ', '_', mb_strtolower($string));
   // Remove characters not valid in function names.
   $machine_name = preg_replace('/[^a-z0-9_]/', '', $machine_name);
 

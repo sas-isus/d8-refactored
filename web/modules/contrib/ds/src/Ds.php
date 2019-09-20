@@ -109,6 +109,20 @@ class Ds {
   }
 
   /**
+   * Check if a layout exists or not.
+   *
+   * @param $id
+   *   The layout plugin id.
+   *
+   * @return bool
+   *   Whether the layout exists or not.
+   */
+  public static function layoutExists($id) {
+    $layouts = self::getLayouts();
+    return isset($layouts[$id]) ? TRUE : FALSE;
+  }
+
+  /**
    * Gets a display for a given entity.
    *
    * @param string $entity_type

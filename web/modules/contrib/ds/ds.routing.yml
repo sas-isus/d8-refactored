@@ -66,11 +66,25 @@ ds.manage_token_field:
     _title: 'Edit a token field'
   requirements:
     _permission: 'admin fields'
+ds.manage_twig_field:
+  path: '/admin/structure/ds/fields/manage_twig/{field_key}'
+  defaults:
+    _form: '\Drupal\ds\Form\TwigFieldForm'
+    _title: 'Edit a twig field'
+  requirements:
+    _permission: 'admin fields'
 ds.add_token_field:
   path: '/admin/structure/ds/fields/manage_token'
   defaults:
     _form: '\Drupal\ds\Form\TokenFieldForm'
     _title: 'Add a token field'
+  requirements:
+    _permission: 'admin fields'
+ds.add_twig_field:
+  path: '/admin/structure/ds/fields/manage_twig'
+  defaults:
+    _form: '\Drupal\ds\Form\TwigFieldForm'
+    _title: 'Add a twig field'
   requirements:
     _permission: 'admin fields'
 ds.manage_block_field:

@@ -109,11 +109,17 @@ class BlockFieldForm extends FieldFormBase implements ContainerInjectionInterfac
 
     // Create an instance of the block to find out if it has a config form.
     // Redirect to the block config form if there is one.
-    /* @var $block BlockPluginInterface */
+    /* @var $block \Drupal\Core\Block\BlockPluginInterface */
     $manager = \Drupal::service('plugin.manager.block');
     $block_id = $this->field['properties']['block'];
     $block = $manager->createInstance($block_id);
-    $block_config_form = $block->blockForm([], new FormState());
+
+    // Inject default theme in form state (Site branding needs it for instance).
+    $form_state = new FormState();
+    $default_theme = $this->config('system.theme')->get('default');
+    $form_state->set('block_theme', $default_theme);
+
+    $block_config_form = $block->blockForm([], $form_state);
     if ($block_config_form) {
       $url = new Url('ds.manage_block_field_config', ['field_key' => $this->field['id']]);
       $form_state->setRedirectUrl($url);

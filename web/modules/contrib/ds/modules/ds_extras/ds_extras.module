@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
+use Drupal\Core\Link;
 
 /**
  * Implements hook_layout_alter().
@@ -63,7 +64,6 @@ function ds_extras_form_entity_view_display_edit_form_alter(&$form, FormStateInt
     $entity_type = $form['#entity_type'];
     $bundle = $form['#bundle'];
     $view_mode = $mode;
-
     $region_blocks_options = [];
     $region_blocks = \Drupal::config('ds_extras.settings')->get('region_blocks');
 
@@ -79,10 +79,10 @@ function ds_extras_form_entity_view_display_edit_form_alter(&$form, FormStateInt
       '#type' => 'details',
       '#group' => 'additional_settings',
       '#title' => t('Block regions (deprecated)'),
-      '#description' => t('Create additional regions in this layout which will be exposed as blocks.'),
+      '#description' => t('Create additional regions in this layout which will be exposed as blocks. Will be removed in Drupal 9 version.'),
     ];
     $url = Url::fromUri('https://www.drupal.org/node/2754967');
-    $link = Drupal::l(t('handbook page'), $url);
+    $link = Link::fromTextAndUrl(t('handbook page'), $url)->toString();
     $form['region_to_block']['deprecated'] = [
       '#markup' => '<b>' . t('This functionality is not compatible with some caching modules. Read the @handbook for a better alternative.', ['@handbook' => $link]) . '</b>',
     ];
@@ -237,7 +237,7 @@ function ds_extras_form_ds_admin_form_alter(&$form, FormStateInterface $form_sta
 
   if (\Drupal::moduleHandler()->moduleExists('block')) {
     $url = Url::fromUri('https://www.drupal.org/node/2754967');
-    $link = Drupal::l(t('handbook page'), $url);
+    $link = Link::fromTextAndUrl(t('handbook page'), $url)->toString();
     $form['fs3']['region_to_block'] = [
       '#type' => 'checkbox',
       '#title' => t('Region to block (deprecated)'),

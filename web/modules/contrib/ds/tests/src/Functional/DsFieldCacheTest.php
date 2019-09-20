@@ -3,7 +3,7 @@
 namespace Drupal\Tests\ds\Functional;
 
 use Drupal\Core\Cache\Cache;
-use Drupal\simpletest\NodeCreationTrait;
+use Drupal\Tests\node\Traits\NodeCreationTrait;
 
 /**
  * Cache field test.
@@ -27,6 +27,9 @@ class DsFieldCacheTest extends TestBase {
 
   /**
    * Test a DS field that returns cache data.
+   *
+   * @throws \Drupal\Core\Entity\EntityMalformedException
+   * @throws \Behat\Mink\Exception\ResponseTextException
    */
   public function testCachedDsField() {
     $fields = [

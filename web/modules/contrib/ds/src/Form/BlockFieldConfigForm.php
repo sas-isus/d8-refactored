@@ -55,11 +55,15 @@ class BlockFieldConfigForm extends FieldFormBase implements ContainerInjectionIn
     // Fetch field.
     $field = $this->config('ds.field.' . $field_key)->get();
 
+    // Inject default theme in form state (Site branding needs it for instance).
+    $default_theme = $this->config('system.theme')->get('default');
+    $form_state->set('block_theme', $default_theme);
+
     // Save the field for future reuse.
     $this->field = $field;
 
     // Create an instance of the block.
-    /* @var $block BlockPluginInterface */
+    /* @var $block \Drupal\Core\Block\BlockPluginInterface */
     $manager = \Drupal::service('plugin.manager.block');
     $block_id = $field['properties']['block'];
     $block = $manager->createInstance($block_id);
