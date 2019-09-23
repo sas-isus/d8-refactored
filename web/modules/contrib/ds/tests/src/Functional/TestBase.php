@@ -3,11 +3,11 @@
 namespace Drupal\Tests\ds\Functional;
 
 use Drupal\Core\Language\LanguageInterface;
-use Drupal\field\Tests\EntityReference\EntityReferenceTestTrait;
-use Drupal\field_ui\Tests\FieldUiTestTrait;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
+use Drupal\Tests\field_ui\Traits\FieldUiTestTrait;
 use Drupal\Tests\taxonomy\Functional\TaxonomyTestTrait;
 
 /**

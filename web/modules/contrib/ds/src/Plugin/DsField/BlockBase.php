@@ -112,7 +112,7 @@ abstract class BlockBase extends DsFieldBase implements ContainerFactoryPluginIn
       // Merge cache contexts, tags and max-age.
       if ($contexts = $block->getCacheContexts()) {
         $render_element['#cache']['contexts'] = [];
-        if (isset($block_build['#cache']) && is_array($block_build['#cache']['contexts'])) {
+        if (isset($block_build['#cache']) && isset($block_build['contexts']) && is_array($block_build['#cache']['contexts'])) {
           $render_element['#cache']['contexts'] = $block_build['#cache']['contexts'];
         }
 
@@ -121,7 +121,7 @@ abstract class BlockBase extends DsFieldBase implements ContainerFactoryPluginIn
 
       if ($tags = $block->getCacheTags()) {
         $render_element['#cache']['tags'] = [];
-        if (isset($block_build['#cache']) && is_array($block_build['#cache']['tags'])) {
+        if (isset($block_build['#cache']) && isset($block_build['tags']) && is_array($block_build['#cache']['tags'])) {
           $render_element['#cache']['tags'] = $block_build['#cache']['tags'];
         }
 
@@ -131,7 +131,8 @@ abstract class BlockBase extends DsFieldBase implements ContainerFactoryPluginIn
       // Add the block base config cache tag.
       $render_element['#cache']['tags'][] = 'config:ds.block_base';
 
-      if ($max_age = $block->getCacheMaxAge()) {
+      $max_age = $block->getCacheMaxAge();
+      if (is_numeric($max_age) && !isset($render_element['#cache']['max-age'])) {
         $render_element['#cache']['max-age'] = $max_age;
       }
 

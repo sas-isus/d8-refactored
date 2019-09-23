@@ -46,17 +46,25 @@ CONFIGURATION
 -------------
 
 Users in roles with the 'Administer Google Tag Manager' permission will be able
-to manage the settings for this module. Configure permissions as usual at:
+to manage the module settings and containers for the site. Configure permissions
+as usual at:
 
  * Administration » People » Permissions
  * admin/people/permissions
 
-From the module settings page, configure the conditions on which the tags are
-inserted on a page response. Conditions exist for: page paths, user roles, and
-response statuses. See:
+From the module settings page, configure the snippet URI and the default
+conditions on which the tags are inserted on a page response. Conditions exist
+for: page paths, user roles, and response statuses. See:
 
  * Administration » Configuration » System » Google Tag Manager
  * admin/config/system/google_tag
+
+From the container management page, manage the containers to be inserted on a
+page response. Add one or more containers with separate container IDs and the
+snippet insertion conditions. See:
+
+ * Administration » Structure » Google Tag Manager
+ * admin/structure/google_tag
 
 For development purposes, create a GTM environment for your website and enter
 the 'environment ID' on the 'Advanced' tab of the settings form.
@@ -70,13 +78,20 @@ TROUBLESHOOTING
 If the JavaScript snippets are not present in the HTML output, try the following
 steps to debug the situation:
 
- * Confirm the snippet files exist at public://google_tag/ (on most sites this
-   equates to sites/default/files/google_tag/).
+ * Confirm the snippet files exist at the snippet base URI shown on the module
+   settings page. By default this is public://google_tag/ which on most sites
+   equates to sites/default/files/google_tag/.
 
-   If missing, then visit the module settings page and submit the form to
-   recreate the snippet files. The need to do this may arise if the project is
-   deployed from one environment to another (e.g. development to production) but
-   the snippet files are not deployed.
+   If missing or stale, then invoke a cache rebuild (see note below) or visit
+   the container management page, edit each container, and submit the form to
+   recreate the snippet files for the container.
+
+   The need to do this may arise if the project is deployed from one environment
+   to another (e.g. development to production) but the snippet files are not
+   deployed.
+
+   NOTE: Snippet files will only be recreated on cache rebuild if the 'Recreate
+   snippets on cache rebuild' setting is enabled (this is the default).
 
  * Enable debug output on the 'Advanced' tab of the settings page to display the
    result of each snippet insertion condition in the message area. Modify the

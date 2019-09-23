@@ -9,7 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\ds\Plugin\DsField\DsFieldBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
+use Drupal\Core\Link;
 /**
  * Plugin that generates a link to switch view mode with via ajax.
  *
@@ -92,7 +92,8 @@ class SwitchField extends DsFieldBase {
         // If the label is empty, do not create a link.
         if (!empty($value)) {
           $route_parameters['viewMode'] = $key == 'default' ? 'full' : $key;
-          $items[] = \Drupal::l($value, Url::fromRoute('ds_extras.switch_view_mode', $route_parameters, $route_options));
+          $url= Url::fromRoute('ds_extras.switch_view_mode', $route_parameters, $route_options);
+          $items[] =  Link::fromTextAndUrl($value, $url)->toString();
         }
       }
     }

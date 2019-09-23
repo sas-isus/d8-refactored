@@ -4,7 +4,6 @@ namespace Drupal\Tests\ds\Functional;
 
 use Drupal\views\Tests\ViewTestData;
 use Drupal\views\ViewExecutable;
-use Drupal\Component\Utility\Unicode;
 use Drupal\ds_test\Plugin\Block\DsTestBlock;
 
 /**
@@ -103,7 +102,7 @@ class BlockFieldPluginTest extends TestBase {
    * Ensure block is not rendered if block disallows access.
    */
   public function testBlockAccess() {
-    $block_field_id = Unicode::strtolower($this->randomMachineName());
+    $block_field_id = mb_strtolower($this->randomMachineName());
     $entity_type = 'node';
 
     $edit = [
@@ -142,7 +141,7 @@ class BlockFieldPluginTest extends TestBase {
    * field build array.
    */
   public function testBlockCache() {
-    $block_field_id = Unicode::strtolower($this->randomMachineName());
+    $block_field_id = mb_strtolower($this->randomMachineName());
     $entity_type = 'node';
 
     $edit = [

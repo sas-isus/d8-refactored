@@ -3,14 +3,14 @@
 namespace Drupal\Tests\ds\FunctionalJavascript;
 
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
-use Drupal\FunctionalJavascriptTests\JavascriptTestBase;
+use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 
 /**
  * Tests javascript behavior for the admin UI.
  *
  * @group ds
  */
-class JavascriptTest extends JavascriptTestBase {
+class JavascriptTest extends WebDriverTestBase {
 
   /**
    * {@inheritdoc}
@@ -57,6 +57,10 @@ class JavascriptTest extends JavascriptTestBase {
 
   /**
    * Test DS settings.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   * @throws \Behat\Mink\Exception\ExpectationException
+   * @throws \Behat\Mink\Exception\ResponseTextException
    */
   public function testSettings() {
     // Go to the article manage display page.
