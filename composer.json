@@ -51,6 +51,7 @@
     "drupal/views_field_formatter": "^1.9",
     "drupal/views_infinite_scroll": "^1.5",
     "drupal/viewsreference": "^1.2",
+    "drupal/webform": "^5.4",
     "drupal/workbench_moderation": "^1.2",
     "drush/drush": "~8",
     "guzzlehttp/guzzle": "^6.2@dev",
