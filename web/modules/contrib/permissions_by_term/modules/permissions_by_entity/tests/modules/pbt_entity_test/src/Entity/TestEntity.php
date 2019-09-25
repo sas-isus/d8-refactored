@@ -2,6 +2,8 @@
 
 namespace Drupal\pbt_entity_test\Entity;
 
+use Drupal\Core\Entity\EntityPublishedInterface;
+use Drupal\Core\Entity\EntityPublishedTrait;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -24,10 +26,13 @@ use Drupal\Core\Entity\EntityTypeInterface;
  *   entity_keys = {
  *     "id" = "id",
  *     "langcode" = "langcode",
+ *     "published" = "published"
  *   }
  * )
  */
-class TestEntity extends ContentEntityBase {
+class TestEntity extends ContentEntityBase implements EntityPublishedInterface {
+
+  use EntityPublishedTrait;
 
   /**
    * {@inheritdoc}
@@ -39,6 +44,8 @@ class TestEntity extends ContentEntityBase {
       ->setSetting('target_type', 'taxonomy_term')
       ->setSetting('handler', 'default')
       ->setLabel(t('terms'));
+
+    $fields += static::publishedBaseFieldDefinitions($entity_type);
 
     return $fields;
   }

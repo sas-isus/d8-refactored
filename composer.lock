@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "fed05dcb200add9f158d72da4837d6da",
@@ -164,12 +164,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Cheppers/gathercontent-client.git",
-                "reference": "b730d4ebf35106c2986fb2116d8608ba16a5d06c"
+                "reference": "748b872f9ec1708b2faf8df0ac5a97f42261cb36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Cheppers/gathercontent-client/zipball/b730d4ebf35106c2986fb2116d8608ba16a5d06c",
-                "reference": "b730d4ebf35106c2986fb2116d8608ba16a5d06c",
+                "url": "https://api.github.com/repos/Cheppers/gathercontent-client/zipball/748b872f9ec1708b2faf8df0ac5a97f42261cb36",
+                "reference": "748b872f9ec1708b2faf8df0ac5a97f42261cb36",
                 "shasum": ""
             },
             "require": {
@@ -195,7 +195,7 @@
                 "GPL-2.0+"
             ],
             "description": "GatherContent client",
-            "time": "2017-08-24T13:34:50+00:00"
+            "time": "2019-09-16T15:42:32+00:00"
         },
         {
             "name": "commerceguys/addressing",
@@ -3934,17 +3934,17 @@
         },
         {
             "name": "drupal/permissions_by_term",
-            "version": "2.10.0",
+            "version": "2.11.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/permissions_by_term.git",
-                "reference": "8.x-2.10"
+                "reference": "8.x-2.11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/permissions_by_term-8.x-2.10.zip",
-                "reference": "8.x-2.10",
-                "shasum": "e23b500de3645b42416652830b1300f37a68c5df"
+                "url": "https://ftp.drupal.org/files/projects/permissions_by_term-8.x-2.11.zip",
+                "reference": "8.x-2.11",
+                "shasum": "16a1e261d762dd56875e7d434f45bddf6a25a67b"
             },
             "require": {
                 "drupal/core": "^8.0"
@@ -3955,8 +3955,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.10",
-                    "datestamp": "1552509784",
+                    "version": "8.x-2.11",
+                    "datestamp": "1569396485",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3976,6 +3976,10 @@
                 {
                     "name": "SaschaHannes",
                     "homepage": "https://www.drupal.org/user/3536189"
+                },
+                {
+                    "name": "marcoliver",
+                    "homepage": "https://www.drupal.org/user/1529744"
                 }
             ],
             "description": "Restricts access to nodes by taxonomy terms in relation to users and their roles.",
@@ -7798,6 +7802,12 @@
                 "url": "https://github.com/webflo/drupal-core-strict.git",
                 "reference": "1eb044b722ebe44bc6af86a03888415d7f31c057"
             },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webflo/drupal-core-strict/zipball/1eb044b722ebe44bc6af86a03888415d7f31c057",
+                "reference": "1eb044b722ebe44bc6af86a03888415d7f31c057",
+                "shasum": ""
+            },
             "type": "metapackage",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -8936,16 +8946,16 @@
         },
         {
             "name": "instaclick/php-webdriver",
-            "version": "1.4.5",
+            "version": "1.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/instaclick/php-webdriver.git",
-                "reference": "6fa959452e774dcaed543faad3a9d1a37d803327"
+                "reference": "bd9405077ca04129a73059a06873bedb5e138402"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/instaclick/php-webdriver/zipball/6fa959452e774dcaed543faad3a9d1a37d803327",
-                "reference": "6fa959452e774dcaed543faad3a9d1a37d803327",
+                "url": "https://api.github.com/repos/instaclick/php-webdriver/zipball/bd9405077ca04129a73059a06873bedb5e138402",
+                "reference": "bd9405077ca04129a73059a06873bedb5e138402",
                 "shasum": ""
             },
             "require": {
@@ -8991,7 +9001,7 @@
                 "webdriver",
                 "webtest"
             ],
-            "time": "2017-06-30T04:02:48+00:00"
+            "time": "2019-09-23T15:50:44+00:00"
         },
         {
             "name": "jcalderonzumba/gastonjs",

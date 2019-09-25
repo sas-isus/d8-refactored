@@ -19,9 +19,21 @@ interface AccessCheckerInterface {
    * @param bool|int $uid
    *   (Optional) Defaults to the uid of the current user.
    *
-   * @return bool TRUE if access is allowed, otherwise FALSE.
-   * TRUE if access is allowed, otherwise FALSE.
+   * @return bool
+   *   TRUE if access is allowed, otherwise FALSE.
    */
   public function isAccessAllowed(FieldableEntityInterface $entity, $uid = FALSE);
+
+  /**
+   * Checks if the given entity uses terms with access restrictions.
+   *
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
+   *   A fieldable entity.
+   *
+   * @return bool
+   *   TRUE if entity is access controlled.
+   *   FALSE if entity has no access restrictions.
+   */
+  public function isAccessControlled(FieldableEntityInterface $entity);
 
 }

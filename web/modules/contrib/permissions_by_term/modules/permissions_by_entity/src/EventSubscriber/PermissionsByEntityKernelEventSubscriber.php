@@ -108,7 +108,7 @@ class PermissionsByEntityKernelEventSubscriber implements EventSubscriberInterfa
 
     // Check if the current user is allowed to access this entity.
     if (
-      $entity && $entity instanceof FieldableEntityInterface &&
+      $entity && $entity instanceof FieldableEntityInterface && $this->accessChecker->isAccessControlled($entity) &&
       !$this->accessChecker->isAccessAllowed($entity)
     ) {
 

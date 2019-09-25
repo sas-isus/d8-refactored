@@ -473,6 +473,16 @@ class GatherContentClient implements GatherContentClientInterface
         return $this->getBaseUri() . "/$path";
     }
 
+    public function foldersGet($projectId)
+    {
+        $this->sendGet('folders', ['query' => ['project_id' => $projectId]]);
+
+        $this->validateResponse();
+        $body = $this->parseResponse();
+
+        return $this->parseResponseDataItems($body['data'], DataTypes\Folder::class);
+    }
+
     protected function getRequestAuth()
     {
         return [

@@ -23,7 +23,7 @@ pipelines:
           - mv permissions_by_term/ build/
           - cd build
           - composer create-project drupal-composer/drupal-project:8.x-dev drupal --stability dev --no-interaction
-          - (cd drupal && composer require twig/twig:~1.37.0 behat/behat:^3.0 behat/mink-extension:^2.2 drupal/drupal-extension:^3.2 --dev)
+          - (cd drupal && composer require twig/twig:~1.38.0 behat/behat:^3.0 behat/mink-extension:^2.2 drupal/drupal-extension:^3.2 --dev)
           - mv permissions_by_term drupal/web/modules/
           - (cd drupal/web/modules/permissions_by_term/tests/ && ../../../../vendor/bin/phpunit --testdox)
           - (cd drupal/web/modules/permissions_by_term/js/ && npm install && npm run bat)
@@ -38,7 +38,7 @@ pipelines:
         name: Deploy
         script:
           - apt-get update && apt-get install -y unzip git
-          - git remote add d.o jepSter@git.drupal.org:project/permissions_by_term.git
+          - git remote add d.o git@git.drupal.org:project/permissions_by_term.git
           - git config --global push.default simple
           - git config --global user.name "Peter Majmesku"
           - git push -u d.o

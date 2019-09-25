@@ -650,12 +650,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/Cheppers/gathercontent-client.git",
-            "reference": "b730d4ebf35106c2986fb2116d8608ba16a5d06c"
+            "reference": "748b872f9ec1708b2faf8df0ac5a97f42261cb36"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Cheppers/gathercontent-client/zipball/b730d4ebf35106c2986fb2116d8608ba16a5d06c",
-            "reference": "b730d4ebf35106c2986fb2116d8608ba16a5d06c",
+            "url": "https://api.github.com/repos/Cheppers/gathercontent-client/zipball/748b872f9ec1708b2faf8df0ac5a97f42261cb36",
+            "reference": "748b872f9ec1708b2faf8df0ac5a97f42261cb36",
             "shasum": ""
         },
         "require": {
@@ -670,7 +670,7 @@
             "phpunit/phpunit": "^6.2",
             "webmozart/path-util": "^2.3"
         },
-        "time": "2017-08-24T13:34:50+00:00",
+        "time": "2019-09-16T15:42:32+00:00",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -4751,18 +4751,18 @@
     },
     {
         "name": "drupal/permissions_by_term",
-        "version": "2.10.0",
-        "version_normalized": "2.10.0.0",
+        "version": "2.11.0",
+        "version_normalized": "2.11.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/permissions_by_term.git",
-            "reference": "8.x-2.10"
+            "reference": "8.x-2.11"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/permissions_by_term-8.x-2.10.zip",
-            "reference": "8.x-2.10",
-            "shasum": "e23b500de3645b42416652830b1300f37a68c5df"
+            "url": "https://ftp.drupal.org/files/projects/permissions_by_term-8.x-2.11.zip",
+            "reference": "8.x-2.11",
+            "shasum": "16a1e261d762dd56875e7d434f45bddf6a25a67b"
         },
         "require": {
             "drupal/core": "^8.0"
@@ -4773,8 +4773,8 @@
                 "dev-2.x": "2.x-dev"
             },
             "drupal": {
-                "version": "8.x-2.10",
-                "datestamp": "1552509784",
+                "version": "8.x-2.11",
+                "datestamp": "1569396485",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -4795,6 +4795,10 @@
             {
                 "name": "SaschaHannes",
                 "homepage": "https://www.drupal.org/user/3536189"
+            },
+            {
+                "name": "marcoliver",
+                "homepage": "https://www.drupal.org/user/1529744"
             }
         ],
         "description": "Restricts access to nodes by taxonomy terms in relation to users and their roles.",
@@ -5387,6 +5391,122 @@
         "support": {
             "source": "http://cgit.drupalcode.org/viewsreference",
             "issues": "http://drupal.org/project/issues/viewsreference"
+        }
+    },
+    {
+        "name": "drupal/webform",
+        "version": "5.4.0",
+        "version_normalized": "5.4.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/webform.git",
+            "reference": "8.x-5.4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/webform-8.x-5.4.zip",
+            "reference": "8.x-5.4",
+            "shasum": "367de6af2485d3838ec80f41c536f6ecc52a405f"
+        },
+        "require": {
+            "drupal/core": "*"
+        },
+        "require-dev": {
+            "drupal/address": "~1.4",
+            "drupal/bootstrap": "~3.0",
+            "drupal/captcha": "~1.0",
+            "drupal/chosen": "~2.6",
+            "drupal/devel": "*",
+            "drupal/entity_print": "^2.1",
+            "drupal/jsonapi": "~2.0 || ~8.7",
+            "drupal/mailsystem": "~4.0",
+            "drupal/select2": "~1.1",
+            "drupal/smtp": "~1.0",
+            "drupal/telephone_validation": "^2.2",
+            "drupal/token": "~1.3",
+            "drupal/webform_access": "*",
+            "drupal/webform_attachment": "*",
+            "drupal/webform_entity_print": "*",
+            "drupal/webform_node": "*",
+            "drupal/webform_scheduled_email": "*",
+            "drupal/webform_ui": "*"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "branch-alias": {
+                "dev-5.x": "5.x-dev"
+            },
+            "drupal": {
+                "version": "8.x-5.4",
+                "datestamp": "1566209286",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            },
+            "drush": {
+                "services": {
+                    "drush.services.yml": "^9"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "Jacob Rockowitz (jrockowitz)",
+                "homepage": "https://www.drupal.org/u/jrockowitz",
+                "role": "Maintainer"
+            },
+            {
+                "name": "Alexander Trotsenko (bucefal91)",
+                "homepage": "https://www.drupal.org/u/bucefal91",
+                "role": "Co-maintainer"
+            },
+            {
+                "name": "bucefal91",
+                "homepage": "https://www.drupal.org/user/504128"
+            },
+            {
+                "name": "fenstrat",
+                "homepage": "https://www.drupal.org/user/362649"
+            },
+            {
+                "name": "jrockowitz",
+                "homepage": "https://www.drupal.org/user/371407"
+            },
+            {
+                "name": "podarok",
+                "homepage": "https://www.drupal.org/user/116002"
+            },
+            {
+                "name": "quicksketch",
+                "homepage": "https://www.drupal.org/user/35821"
+            },
+            {
+                "name": "sanchiz",
+                "homepage": "https://www.drupal.org/user/1671246"
+            },
+            {
+                "name": "tedbow",
+                "homepage": "https://www.drupal.org/user/240860"
+            },
+            {
+                "name": "torotil",
+                "homepage": "https://www.drupal.org/user/865256"
+            }
+        ],
+        "description": "Enables the creation of webforms and questionnaires.",
+        "homepage": "https://drupal.org/project/webform",
+        "support": {
+            "source": "http://cgit.drupalcode.org/webform",
+            "error": "Invalid dependency: \"telephone_validation/telephone_validation\" is an unknown drupal 8 package name",
+            "issues": "https://www.drupal.org/project/issues/webform?version=8.x",
+            "docs": "https://www.drupal.org/docs/8/modules/webform",
+            "forum": "https://drupal.stackexchange.com/questions/tagged/webform"
         }
     },
     {
@@ -6020,17 +6140,17 @@
     },
     {
         "name": "instaclick/php-webdriver",
-        "version": "1.4.5",
-        "version_normalized": "1.4.5.0",
+        "version": "1.4.6",
+        "version_normalized": "1.4.6.0",
         "source": {
             "type": "git",
             "url": "https://github.com/instaclick/php-webdriver.git",
-            "reference": "6fa959452e774dcaed543faad3a9d1a37d803327"
+            "reference": "bd9405077ca04129a73059a06873bedb5e138402"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/instaclick/php-webdriver/zipball/6fa959452e774dcaed543faad3a9d1a37d803327",
-            "reference": "6fa959452e774dcaed543faad3a9d1a37d803327",
+            "url": "https://api.github.com/repos/instaclick/php-webdriver/zipball/bd9405077ca04129a73059a06873bedb5e138402",
+            "reference": "bd9405077ca04129a73059a06873bedb5e138402",
             "shasum": ""
         },
         "require": {
@@ -6041,7 +6161,7 @@
             "phpunit/phpunit": "^4.8",
             "satooshi/php-coveralls": "^1.0||^2.0"
         },
-        "time": "2017-06-30T04:02:48+00:00",
+        "time": "2019-09-23T15:50:44+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -10032,6 +10152,12 @@
             "url": "https://github.com/webflo/drupal-core-strict.git",
             "reference": "1eb044b722ebe44bc6af86a03888415d7f31c057"
         },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/webflo/drupal-core-strict/zipball/1eb044b722ebe44bc6af86a03888415d7f31c057",
+            "reference": "1eb044b722ebe44bc6af86a03888415d7f31c057",
+            "shasum": ""
+        },
         "time": "2018-01-30T18:48:19+00:00",
         "type": "metapackage",
         "notification-url": "https://packagist.org/downloads/",
@@ -10405,121 +10531,5 @@
             "stdlib",
             "zf"
         ]
-    },
-    {
-        "name": "drupal/webform",
-        "version": "5.4.0",
-        "version_normalized": "5.4.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://git.drupalcode.org/project/webform.git",
-            "reference": "8.x-5.4"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/webform-8.x-5.4.zip",
-            "reference": "8.x-5.4",
-            "shasum": "367de6af2485d3838ec80f41c536f6ecc52a405f"
-        },
-        "require": {
-            "drupal/core": "*"
-        },
-        "require-dev": {
-            "drupal/address": "~1.4",
-            "drupal/bootstrap": "~3.0",
-            "drupal/captcha": "~1.0",
-            "drupal/chosen": "~2.6",
-            "drupal/devel": "*",
-            "drupal/entity_print": "^2.1",
-            "drupal/jsonapi": "~2.0 || ~8.7",
-            "drupal/mailsystem": "~4.0",
-            "drupal/select2": "~1.1",
-            "drupal/smtp": "~1.0",
-            "drupal/telephone_validation": "^2.2",
-            "drupal/token": "~1.3",
-            "drupal/webform_access": "*",
-            "drupal/webform_attachment": "*",
-            "drupal/webform_entity_print": "*",
-            "drupal/webform_node": "*",
-            "drupal/webform_scheduled_email": "*",
-            "drupal/webform_ui": "*"
-        },
-        "type": "drupal-module",
-        "extra": {
-            "branch-alias": {
-                "dev-5.x": "5.x-dev"
-            },
-            "drupal": {
-                "version": "8.x-5.4",
-                "datestamp": "1566209286",
-                "security-coverage": {
-                    "status": "covered",
-                    "message": "Covered by Drupal's security advisory policy"
-                }
-            },
-            "drush": {
-                "services": {
-                    "drush.services.yml": "^9"
-                }
-            }
-        },
-        "installation-source": "dist",
-        "notification-url": "https://packages.drupal.org/8/downloads",
-        "license": [
-            "GPL-2.0+"
-        ],
-        "authors": [
-            {
-                "name": "Jacob Rockowitz (jrockowitz)",
-                "homepage": "https://www.drupal.org/u/jrockowitz",
-                "role": "Maintainer"
-            },
-            {
-                "name": "Alexander Trotsenko (bucefal91)",
-                "homepage": "https://www.drupal.org/u/bucefal91",
-                "role": "Co-maintainer"
-            },
-            {
-                "name": "bucefal91",
-                "homepage": "https://www.drupal.org/user/504128"
-            },
-            {
-                "name": "fenstrat",
-                "homepage": "https://www.drupal.org/user/362649"
-            },
-            {
-                "name": "jrockowitz",
-                "homepage": "https://www.drupal.org/user/371407"
-            },
-            {
-                "name": "podarok",
-                "homepage": "https://www.drupal.org/user/116002"
-            },
-            {
-                "name": "quicksketch",
-                "homepage": "https://www.drupal.org/user/35821"
-            },
-            {
-                "name": "sanchiz",
-                "homepage": "https://www.drupal.org/user/1671246"
-            },
-            {
-                "name": "tedbow",
-                "homepage": "https://www.drupal.org/user/240860"
-            },
-            {
-                "name": "torotil",
-                "homepage": "https://www.drupal.org/user/865256"
-            }
-        ],
-        "description": "Enables the creation of webforms and questionnaires.",
-        "homepage": "https://drupal.org/project/webform",
-        "support": {
-            "source": "http://cgit.drupalcode.org/webform",
-            "error": "Invalid dependency: \"telephone_validation/telephone_validation\" is an unknown drupal 8 package name",
-            "issues": "https://www.drupal.org/project/issues/webform?version=8.x",
-            "docs": "https://www.drupal.org/docs/8/modules/webform",
-            "forum": "https://drupal.stackexchange.com/questions/tagged/webform"
-        }
     }
 ]

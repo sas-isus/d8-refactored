@@ -1309,6 +1309,7 @@ class ComposerStaticInit46953076477c25a4313d45fdb3671e15
         'Cheppers\\GatherContent\\DataTypes\\ElementSection' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/ElementSection.php',
         'Cheppers\\GatherContent\\DataTypes\\ElementText' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/ElementText.php',
         'Cheppers\\GatherContent\\DataTypes\\File' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/File.php',
+        'Cheppers\\GatherContent\\DataTypes\\Folder' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/Folder.php',
         'Cheppers\\GatherContent\\DataTypes\\Item' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/Item.php',
         'Cheppers\\GatherContent\\DataTypes\\Project' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/Project.php',
         'Cheppers\\GatherContent\\DataTypes\\Status' => __DIR__ . '/..' . '/cheppers/gathercontent-client/src/DataTypes/Status.php',

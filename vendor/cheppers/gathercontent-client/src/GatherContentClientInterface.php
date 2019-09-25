@@ -153,4 +153,11 @@ interface GatherContentClientInterface
      * @see https://docs.gathercontent.com/reference#get-template-by-id
      */
     public function templateGet($templateId);
+
+    /**
+     * @see https://docs.gathercontent.com/reference#get-folders
+     *
+     * @return \Cheppers\GatherContent\DataTypes\Folder[]
+     */
+    public function foldersGet($projectId);
 }

@@ -676,6 +676,7 @@ return array(
     'Cheppers\\GatherContent\\DataTypes\\ElementSection' => $vendorDir . '/cheppers/gathercontent-client/src/DataTypes/ElementSection.php',
     'Cheppers\\GatherContent\\DataTypes\\ElementText' => $vendorDir . '/cheppers/gathercontent-client/src/DataTypes/ElementText.php',
     'Cheppers\\GatherContent\\DataTypes\\File' => $vendorDir . '/cheppers/gathercontent-client/src/DataTypes/File.php',
+    'Cheppers\\GatherContent\\DataTypes\\Folder' => $vendorDir . '/cheppers/gathercontent-client/src/DataTypes/Folder.php',
     'Cheppers\\GatherContent\\DataTypes\\Item' => $vendorDir . '/cheppers/gathercontent-client/src/DataTypes/Item.php',
     'Cheppers\\GatherContent\\DataTypes\\Project' => $vendorDir . '/cheppers/gathercontent-client/src/DataTypes/Project.php',
     'Cheppers\\GatherContent\\DataTypes\\Status' => $vendorDir . '/cheppers/gathercontent-client/src/DataTypes/Status.php',

@@ -1,0 +1,28 @@
+
+os: 'linux'
+dist: 'trusty'
+sudo: false
+language: 'php'
+php:
+    - '7.1'
+
+cache:
+    directories:
+        - '$HOME/.composer/cache'
+
+before_install:
+    - 'export COMPOSER_NO_INTERACTION=1'
+    - 'export COMPOSER_DISABLE_XDEBUG_WARN=1'
+
+install:
+    - 'composer install --no-progress'
+
+script:
+    - 'bin/robo lint'
+    - 'bin/phpunit'
+
+after_success:
+    - 'bash <(curl -s https://codecov.io/bash)'
+
+notifications:
+    email: false

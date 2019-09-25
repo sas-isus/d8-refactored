@@ -68,7 +68,7 @@ class AccessChecker extends AccessCheck implements AccessCheckerInterface {
   /**
    * {@inheritdoc}
    */
-  public function isAccessAllowed(FieldableEntityInterface $entity, $uid = FALSE) {
+  public function isAccessAllowed(FieldableEntityInterface $entity, $uid = FALSE): bool {
     // Iterate over the fields the entity contains.
     foreach ($entity->getFields() as $field) {
 
@@ -165,4 +165,85 @@ class AccessChecker extends AccessCheck implements AccessCheckerInterface {
     return TRUE;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function isAccessControlled(FieldableEntityInterface $entity): bool {
+    $this->checkedEntityCache->clear();
+
+    // Iterate over the fields the entity contains.
+    foreach ($entity->getFields() as $field) {
+      // We only need to check for entity reference fields
+      // which references to a taxonomy term.
+      if (
+        $field->getFieldDefinition()->getType() == 'entity_reference' &&
+        $field->getFieldDefinition()->getSetting('target_type') == 'taxonomy_term'
+      ) {
+        // Iterate over each referenced taxonomy term.
+        /** @var \Drupal\Core\Field\FieldItemInterface $item */
+        foreach ($field->getValue() as $item) {
+          if(!empty($item['target_id']) && $this->isAnyPermissionSetForTerm($item['target_id'], $entity->language()->getId())) {
+            return TRUE;
+          }
+        }
+      }
+
+      // Check if the field contains another fieldable entity,
+      // that we need to check.
+      if ($field->entity && $field->entity instanceof FieldableEntityInterface) {
+
+        // We need to iterate over the entities.
+        $num_values = $field->count();
+        if ($num_values > 0) {
+
+          // Iterate over the field values.
+          for ($i = 0; $i < $num_values; $i++) {
+
+            // Get the value of the current field index.
+            $field_value = $field->get($i);
+
+            // If the value is null or empty we continue with the next index of
+            // the loop.
+            if (!$field_value) {
+              continue;
+            }
+
+            // Get the field entity.
+            $field_entity = $field_value->entity;
+
+            // If the field entity is null we also continue with the next index
+            // of the loop.
+            if (!$field_entity) {
+              continue;
+            }
+
+            // It is possible, that the referenced field entity creates a
+            // circular dependency to the current entity. This will cause
+            // memory limit exhausted errors because there is no way out for
+            // the script. To avoid this, we need to be able to imagine if we
+            // already checked this field entity before. If so, we ignore this
+            // field entity, if not we can securely do a recursive call.
+            //
+            // Using own method to avoid "max nesting level error" trying to
+            // check if the field entity is stored in the entitiesChecked array.
+            if ($this->checkedEntityCache->isChecked($field_entity)) {
+              continue;
+            }
+            else {
+              // Add the current entity to the list of checked entities.
+              $this->checkedEntityCache->add($field_entity);
+            }
+
+            // Do a recursive call to check if the user is allowed to access
+            // this entity.
+            if ($this->isAccessControlled($field_entity)) {
+              return TRUE;
+            }
+          }
+        }
+      }
+    }
+
+    return FALSE;
+  }
 }
