@@ -3029,6 +3029,7 @@ return array(
     'Drupal\\Core\\Test\\HttpClientMiddleware\\TestHttpClientMiddleware' => $baseDir . '/web/core/lib/Drupal/Core/Test/HttpClientMiddleware/TestHttpClientMiddleware.php',
     'Drupal\\Core\\Test\\ObjectSerialization' => $baseDir . '/web/core/lib/Drupal/Core/Test/ObjectSerialization.php',
     'Drupal\\Core\\Test\\RefreshVariablesTrait' => $baseDir . '/web/core/lib/Drupal/Core/Test/RefreshVariablesTrait.php',
+    'Drupal\\Core\\Test\\RunTests\\TestFileParser' => $baseDir . '/web/core/lib/Drupal/Core/Test/RunTests/TestFileParser.php',
     'Drupal\\Core\\Test\\TestDatabase' => $baseDir . '/web/core/lib/Drupal/Core/Test/TestDatabase.php',
     'Drupal\\Core\\Test\\TestKernel' => $baseDir . '/web/core/lib/Drupal/Core/Test/TestKernel.php',
     'Drupal\\Core\\Test\\TestRunnerKernel' => $baseDir . '/web/core/lib/Drupal/Core/Test/TestRunnerKernel.php',
