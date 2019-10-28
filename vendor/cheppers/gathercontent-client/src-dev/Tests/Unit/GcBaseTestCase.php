@@ -331,6 +331,7 @@ class GcBaseTestCase extends TestCase
             'id' => static::getUniqueInt(),
             'project_id' => static::getUniqueInt(),
             'parent_id' => static::getUniqueInt(),
+            'folder_uuid' => static::getUniqueString('folder_uuid'),
             'template_id' => static::getUniqueInt(),
             'custom_state_id' => static::getUniqueInt(),
             'position' => static::getUniqueString('position'),

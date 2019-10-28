@@ -168,8 +168,10 @@ class AccessChecker extends AccessCheck implements AccessCheckerInterface {
   /**
    * {@inheritdoc}
    */
-  public function isAccessControlled(FieldableEntityInterface $entity): bool {
-    $this->checkedEntityCache->clear();
+  public function isAccessControlled(FieldableEntityInterface $entity, bool $clearCache = TRUE): bool {
+    if ($clearCache) {
+      $this->checkedEntityCache->clear();
+    }
 
     // Iterate over the fields the entity contains.
     foreach ($entity->getFields() as $field) {
@@ -236,7 +238,7 @@ class AccessChecker extends AccessCheck implements AccessCheckerInterface {
 
             // Do a recursive call to check if the user is allowed to access
             // this entity.
-            if ($this->isAccessControlled($field_entity)) {
+            if ($this->isAccessControlled($field_entity, FALSE)) {
               return TRUE;
             }
           }

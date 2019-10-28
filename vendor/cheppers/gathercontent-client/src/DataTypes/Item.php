@@ -15,6 +15,11 @@ class Item extends Base
     public $parentId = 0;
 
     /**
+     * @var string
+     */
+    public $folderUuid = '';
+
+    /**
      * @var int
      */
     public $templateId = 0;
@@ -87,6 +92,7 @@ class Item extends Base
             [
                 'project_id' => 'projectId',
                 'parent_id' => 'parentId',
+                'folder_uuid' => 'folderUuid',
                 'template_id' => 'templateId',
                 'custom_state_id' => 'customStateId',
                 'position' => 'position',
