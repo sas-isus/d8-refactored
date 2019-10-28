@@ -8,7 +8,7 @@
     "babel-plugin-transform-es2015-arrow-functions": "^6.22.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "es6-promise": "^4.2.5",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.13",
     "qunit": "^2.6.1",
     "sinon": "^5.0.10",
     "webpack-cli": "^3.0",
