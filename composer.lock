@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ecb54c8fcffecbbcb45f5e6cd8c903dc",
+    "content-hash": "355b1d8619c11bc3179479540453d901",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -3855,6 +3855,39 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/pantheon_advanced_page_cache"
             }
+        },
+        {
+            "name": "drupal/pantheon_domain_masking",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:sas-isus/pantheon_domain_masking.git",
+                "reference": "08a37b750a0c4b00a616c70f2d58f51ece3daa72"
+            },
+            "require-dev": {
+                "drupal/coder": "^8.3",
+                "squizlabs/php_codesniffer": "^3.4"
+            },
+            "type": "drupal-module",
+            "scripts": {
+                "codesniff": [
+                    "phpcs --report=full --extensions=php,module,inc,theme,info,install --standard=vendor/drupal/coder/coder_sniffer/Drupal src",
+                    "phpcs --report=full --extensions=php,module,inc,theme,info,install --standard=vendor/drupal/coder/coder_sniffer/DrupalPractice src"
+                ]
+            },
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "Domain masking middleware for Drupal 8",
+            "homepage": "https://www.drupal.org/project/pantheon_domain_masking",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "issues": "https://www.drupal.org/project/issues/pantheon_domain_masking",
+                "source": "http://cgit.drupalcode.org/pantheon_domain_masking"
+            },
+            "time": "2019-11-11T19:31:21+00:00"
         },
         {
             "name": "drupal/paragraphs",
