@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "2fb1ddd4b80a964751eb452e807bd4d5",
@@ -1765,6 +1765,10 @@
             ],
             "authors": [
                 {
+                    "name": "joelpittet",
+                    "homepage": "https://www.drupal.org/user/160302"
+                },
+                {
                     "name": "mlncn",
                     "homepage": "https://www.drupal.org/user/64383"
                 },
@@ -1835,7 +1839,7 @@
             "description": "This module is going to generate layouts with Bootstrap grid system.",
             "homepage": "https://www.drupal.org/project/bootstrap_layouts",
             "support": {
-                "source": "http://cgit.drupalcode.org/bootstrap_layouts"
+                "source": "https://git.drupalcode.org/project/bootstrap_layouts"
             }
         },
         {
@@ -1893,7 +1897,7 @@
             "description": "A suite of Paragraph bundles made with the Boostrap framework.",
             "homepage": "https://www.drupal.org/project/bootstrap_paragraphs",
             "support": {
-                "source": "http://cgit.drupalcode.org/bootstrap_paragraphs"
+                "source": "https://git.drupalcode.org/project/bootstrap_paragraphs"
             }
         },
         {
@@ -1993,7 +1997,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -2004,7 +2008,7 @@
             "description": "This module allow you to export configuration after changes",
             "homepage": "https://www.drupal.org/project/config_direct_save",
             "support": {
-                "source": "http://cgit.drupalcode.org/config_direct_save"
+                "source": "https://git.drupalcode.org/project/config_direct_save"
             }
         },
         {
@@ -2050,7 +2054,7 @@
             ],
             "homepage": "https://www.drupal.org/project/config_installer",
             "support": {
-                "source": "http://cgit.drupalcode.org/config_installer"
+                "source": "https://git.drupalcode.org/project/config_installer"
             }
         },
         {
@@ -2752,7 +2756,7 @@
                 },
                 "drupal": {
                     "version": "8.x-3.4",
-                    "datestamp": "1567165687",
+                    "datestamp": "1574750285",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2857,7 +2861,7 @@
             "description": "Easily add social sharing widgets to your site.",
             "homepage": "https://www.drupal.org/project/easy_social",
             "support": {
-                "source": "http://cgit.drupalcode.org/easy_social"
+                "source": "https://git.drupalcode.org/project/easy_social"
             }
         },
         {
@@ -2904,7 +2908,7 @@
             "description": "Add title, target etc. attributes to Text Editor's link dialog if the text format allows them.",
             "homepage": "https://www.drupal.org/project/editor_advanced_link",
             "support": {
-                "source": "http://cgit.drupalcode.org/editor_advanced_link"
+                "source": "https://git.drupalcode.org/project/editor_advanced_link"
             }
         },
         {
@@ -3106,12 +3110,12 @@
                     "homepage": "https://www.drupal.org/user/3190515"
                 },
                 {
-                    "name": "axel.rutz",
-                    "homepage": "https://www.drupal.org/user/229048"
-                },
-                {
                     "name": "eaton",
                     "homepage": "https://www.drupal.org/user/16496"
+                },
+                {
+                    "name": "geek.merlin aka axel.rutz",
+                    "homepage": "https://www.drupal.org/user/229048"
                 },
                 {
                     "name": "mkadin",
@@ -3121,7 +3125,7 @@
             "description": "Attach a view to an entity",
             "homepage": "https://www.drupal.org/project/eva",
             "support": {
-                "source": "http://cgit.drupalcode.org/eva"
+                "source": "https://git.drupalcode.org/project/eva"
             }
         },
         {
@@ -3232,7 +3236,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.2",
-                    "datestamp": "1567174084",
+                    "datestamp": "1573067711",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3292,6 +3296,10 @@
             ],
             "authors": [
                 {
+                    "name": "thalles",
+                    "homepage": "https://www.drupal.org/user/3589086"
+                },
+                {
                     "name": "ufku",
                     "homepage": "https://www.drupal.org/user/9910"
                 }
@@ -3299,7 +3307,7 @@
             "description": "Provides a file manager supporting personal folders.",
             "homepage": "https://drupal.org/project/imce",
             "support": {
-                "source": "http://cgit.drupalcode.org/imce"
+                "source": "https://git.drupalcode.org/project/imce"
             }
         },
         {
@@ -3341,6 +3349,10 @@
                 {
                     "name": "Pol",
                     "homepage": "https://www.drupal.org/user/47194"
+                },
+                {
+                    "name": "joseph.olstad",
+                    "homepage": "https://www.drupal.org/user/1321830"
                 },
                 {
                     "name": "rjacobs",
@@ -3477,7 +3489,7 @@
             "description": "Enable security options in the login flow of the site.",
             "homepage": "https://www.drupal.org/project/login_security",
             "support": {
-                "source": "http://cgit.drupalcode.org/login_security"
+                "source": "https://git.drupalcode.org/project/login_security"
             }
         },
         {
@@ -3528,7 +3540,7 @@
             "description": "Allows to give roles per menu admin permissions without giving them full administer menu permission.",
             "homepage": "https://www.drupal.org/project/menu_admin_per_menu",
             "support": {
-                "source": "http://cgit.drupalcode.org/menu_admin_per_menu"
+                "source": "https://git.drupalcode.org/project/menu_admin_per_menu"
             }
         },
         {
@@ -3575,7 +3587,7 @@
             "description": "This module exports and imports menus and menu links.",
             "homepage": "https://www.drupal.org/project/menu_export",
             "support": {
-                "source": "http://cgit.drupalcode.org/menu_export"
+                "source": "https://git.drupalcode.org/project/menu_export"
             }
         },
         {
@@ -3630,7 +3642,7 @@
             "description": "Expand menus and set active-trail according to the current path.",
             "homepage": "https://www.drupal.org/project/menu_trail_by_path",
             "support": {
-                "source": "http://cgit.drupalcode.org/menu_trail_by_path"
+                "source": "https://git.drupalcode.org/project/menu_trail_by_path"
             }
         },
         {
@@ -3696,6 +3708,10 @@
                 {
                     "name": "See other contributors",
                     "homepage": "https://www.drupal.org/node/1072922/committers"
+                },
+                {
+                    "name": "phenaproxima",
+                    "homepage": "https://www.drupal.org/user/205645"
                 },
                 {
                     "name": "tim.plunkett",
@@ -3945,7 +3961,7 @@
             "description": "Advanced page cache capabilities for Pantheon.",
             "homepage": "https://www.drupal.org/project/pantheon_advanced_page_cache",
             "support": {
-                "source": "http://cgit.drupalcode.org/pantheon_advanced_page_cache"
+                "source": "https://git.drupalcode.org/project/pantheon_advanced_page_cache"
             }
         },
         {
@@ -4022,7 +4038,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.9",
-                    "datestamp": "1565881389",
+                    "datestamp": "1572617586",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4049,6 +4065,10 @@
                 {
                     "name": "jeroen.b",
                     "homepage": "https://www.drupal.org/user/1853532"
+                },
+                {
+                    "name": "jstoller",
+                    "homepage": "https://www.drupal.org/user/99012"
                 },
                 {
                     "name": "miro_dietiker",
@@ -4333,14 +4353,26 @@
             ],
             "authors": [
                 {
+                    "name": "Frans",
+                    "homepage": "https://www.drupal.org/user/514222"
+                },
+                {
+                    "name": "Wietzehiha",
+                    "homepage": "https://www.drupal.org/user/3183901"
+                },
+                {
                     "name": "jeroen.b",
                     "homepage": "https://www.drupal.org/user/1853532"
+                },
+                {
+                    "name": "matglas86",
+                    "homepage": "https://www.drupal.org/user/573464"
                 }
             ],
             "description": "Creates permisisons per node content type to control access to unpublished nodes per content type.",
             "homepage": "https://www.drupal.org/project/unpublished_node_permissions",
             "support": {
-                "source": "http://cgit.drupalcode.org/unpublished_node_permissions"
+                "source": "https://git.drupalcode.org/project/unpublished_node_permissions"
             }
         },
         {
@@ -4463,7 +4495,7 @@
                 "Drupal"
             ],
             "support": {
-                "source": "http://cgit.drupalcode.org/views_bootstrap"
+                "source": "https://git.drupalcode.org/project/views_bootstrap"
             }
         },
         {
@@ -4518,7 +4550,7 @@
             "description": "Allows conditional views output.",
             "homepage": "https://www.drupal.org/project/views_conditional",
             "support": {
-                "source": "http://cgit.drupalcode.org/views_conditional"
+                "source": "https://git.drupalcode.org/project/views_conditional"
             }
         },
         {
@@ -4726,6 +4758,10 @@
                     "homepage": "https://www.drupal.org/user/93571"
                 },
                 {
+                    "name": "jasonawant",
+                    "homepage": "https://www.drupal.org/user/589890"
+                },
+                {
                     "name": "joekers",
                     "homepage": "https://www.drupal.org/user/2229066"
                 },
@@ -4788,7 +4824,7 @@
                 },
                 "drupal": {
                     "version": "8.x-5.4",
-                    "datestamp": "1566209286",
+                    "datestamp": "1572377284",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5730,18 +5766,18 @@
             "authors": [
                 {
                     "name": "Greg Beaver",
-                    "role": "Helper",
-                    "email": "cellog@php.net"
+                    "email": "cellog@php.net",
+                    "role": "Helper"
                 },
                 {
                     "name": "Andrei Zmievski",
-                    "role": "Lead",
-                    "email": "andrei@php.net"
+                    "email": "andrei@php.net",
+                    "role": "Lead"
                 },
                 {
                     "name": "Stig Bakken",
-                    "role": "Developer",
-                    "email": "stig@php.net"
+                    "email": "stig@php.net",
+                    "role": "Developer"
                 }
             ],
             "description": "More info available on: http://pear.php.net/package/Console_Getopt",
@@ -6945,16 +6981,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v3.4.32",
+            "version": "v3.4.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "233f40cbebd595ffd91ddf291355f8a930a13777"
+                "reference": "d2d0cfe8e319d9df44c4cca570710fcf221d4593"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/233f40cbebd595ffd91ddf291355f8a930a13777",
-                "reference": "233f40cbebd595ffd91ddf291355f8a930a13777",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/d2d0cfe8e319d9df44c4cca570710fcf221d4593",
+                "reference": "d2d0cfe8e319d9df44c4cca570710fcf221d4593",
                 "shasum": ""
             },
             "require": {
@@ -6995,7 +7031,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "time": "2019-10-02T16:15:21+00:00"
+            "time": "2019-11-28T12:52:59+00:00"
         },
         {
             "name": "symfony/http-kernel",
@@ -7205,16 +7241,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.12.0",
+            "version": "v1.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "b42a2f66e8f1b15ccf25652c3424265923eb4f17"
+                "reference": "7b4aab9743c30be783b73de055d24a39cf4b954f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/b42a2f66e8f1b15ccf25652c3424265923eb4f17",
-                "reference": "b42a2f66e8f1b15ccf25652c3424265923eb4f17",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/7b4aab9743c30be783b73de055d24a39cf4b954f",
+                "reference": "7b4aab9743c30be783b73de055d24a39cf4b954f",
                 "shasum": ""
             },
             "require": {
@@ -7226,7 +7262,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12-dev"
+                    "dev-master": "1.13-dev"
                 }
             },
             "autoload": {
@@ -7260,20 +7296,20 @@
                 "portable",
                 "shim"
             ],
-            "time": "2019-08-06T08:03:45+00:00"
+            "time": "2019-11-27T14:18:11+00:00"
         },
         {
             "name": "symfony/polyfill-php70",
-            "version": "v1.12.0",
+            "version": "v1.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php70.git",
-                "reference": "54b4c428a0054e254223797d2713c31e08610831"
+                "reference": "af23c7bb26a73b850840823662dda371484926c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/54b4c428a0054e254223797d2713c31e08610831",
-                "reference": "54b4c428a0054e254223797d2713c31e08610831",
+                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/af23c7bb26a73b850840823662dda371484926c4",
+                "reference": "af23c7bb26a73b850840823662dda371484926c4",
                 "shasum": ""
             },
             "require": {
@@ -7283,7 +7319,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12-dev"
+                    "dev-master": "1.13-dev"
                 }
             },
             "autoload": {
@@ -7319,7 +7355,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2019-08-06T08:03:45+00:00"
+            "time": "2019-11-27T13:56:44+00:00"
         },
         {
             "name": "symfony/process",
@@ -7918,19 +7954,19 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "role": "Lead Developer",
                     "email": "fabien@symfony.com",
-                    "homepage": "http://fabien.potencier.org"
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Twig Team",
-                    "role": "Contributors",
-                    "homepage": "https://twig.symfony.com/contributors"
+                    "homepage": "https://twig.symfony.com/contributors",
+                    "role": "Contributors"
                 },
                 {
                     "name": "Armin Ronacher",
-                    "role": "Project Founder",
-                    "email": "armin.ronacher@active-4.com"
+                    "email": "armin.ronacher@active-4.com",
+                    "role": "Project Founder"
                 }
             ],
             "description": "Twig, the flexible, fast, and secure template language for PHP",
@@ -8861,6 +8897,7 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "homepage": "https://github.com/container-interop/container-interop",
+            "abandoned": "psr/container",
             "time": "2017-02-14T19:40:03+00:00"
         },
         {
@@ -9348,8 +9385,8 @@
             "authors": [
                 {
                     "name": "Frank Kleine",
-                    "role": "Developer",
-                    "homepage": "http://frankkleine.de/"
+                    "homepage": "http://frankkleine.de/",
+                    "role": "Developer"
                 }
             ],
             "description": "Virtual file system to mock the real file system in unit tests.",
