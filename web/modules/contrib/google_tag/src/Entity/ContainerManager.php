@@ -7,6 +7,9 @@ use Drupal\google_tag\Entity\ContainerManagerInterface;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -31,11 +34,35 @@ class ContainerManager implements ContainerManagerInterface {
   protected $moduleHandler;
 
   /**
+   * The file system.
+  *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
+   * The messenger.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
+   * The logger.
+  *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, FileSystemInterface $file_system, MessengerInterface $messenger, LoggerChannelFactoryInterface $logger_factory) {
     $this->entityTypeManager = $entity_type_manager;
     $this->moduleHandler = $module_handler;
+    $this->fileSystem = $file_system;
+    $this->messenger = $messenger;
+    $this->logger = $logger_factory->get('google_tag');
   }
 
   /**
@@ -45,7 +72,7 @@ class ContainerManager implements ContainerManagerInterface {
     $result = TRUE;
     $directory = $container->snippetDirectory();
     if (!is_dir($directory) || !_google_tag_is_writable($directory) || !_google_tag_is_executable($directory)) {
-      $result = __file_prepare_directory($directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+      $result = _file_prepare_directory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
     }
     if ($result) {
       $result = $this->saveSnippets($container);
@@ -53,8 +80,8 @@ class ContainerManager implements ContainerManagerInterface {
     else {
       $args = ['%directory' => $directory];
       $message = 'The directory %directory could not be prepared for use, possibly due to file system permissions. The directory either does not exist, or is not writable or searchable.';
-      $this->displayMessage($message, $args, 'error');
-      \Drupal::logger('google_tag')->error($message, $args);
+      $this->displayMessage($message, $args, MessengerInterface::TYPE_ERROR);
+      $this->logger->error($message, $args);
     }
     return $result;
   }
@@ -68,27 +95,19 @@ class ContainerManager implements ContainerManagerInterface {
     $snippets = $container->snippets();
     foreach ($snippets as $type => $snippet) {
       $uri = $container->snippetURI($type);
-      $path = file_unmanaged_save_data($snippet, $uri, FILE_EXISTS_REPLACE);
+      $path = $this->fileSystem->saveData($snippet, $uri, FileSystemInterface::EXISTS_REPLACE);
       $result = !$path ? FALSE : $result;
     }
-    $args = ['@count' => count($snippets)];
+    $args = ['@count' => count($snippets), '%container' => $container->get('label')];
     if (!$result) {
-      $message = 'An error occurred saving @count snippet files. Contact the site administrator if this persists.';
-      $this->displayMessage($message, $args, 'error');
-      \Drupal::logger('google_tag')->error($message, $args);
+      $message = 'An error occurred saving @count snippet files for %container container. Contact the site administrator if this persists.';
+      $this->displayMessage($message, $args, MessengerInterface::TYPE_ERROR);
+      $this->logger->error($message, $args);
     }
     else {
-      $message = 'Created @count snippet files based on configuration.';
+      $message = 'Created @count snippet files for %container container based on configuration.';
       $this->displayMessage($message, $args);
-      // @todo It may be sufficient to only call
-      // $this->state->delete('system.js_cache_files');
-      // which is first thing done by deleteAll(). This clears the list of JS
-      // files to include on page in event our JS files are deleted (which would
-      // be done manually as the module is not). This may have been noticed on
-      // 7.x branch after uninstall. It may be that only the second statement
-      // below is needed here to change the query argument on the JS url.
-      // Drupal/Core/Asset/JsCollectionOptimizer->deleteAll();
-      \Drupal::service('asset.js.collection_optimizer')->deleteAll();
+      // Reset the URL query argument so browsers reload snippet files.
       _drupal_flush_css_js();
     }
     return $result;
@@ -97,8 +116,6 @@ class ContainerManager implements ContainerManagerInterface {
   /**
    * Displays a message to admin users.
    *
-   * See arguments to t() and drupal_set_message().
-   *
    * @param string $message
    *   The message to display.
    * @param array $args
@@ -106,18 +123,18 @@ class ContainerManager implements ContainerManagerInterface {
    * @param string $type
    *   (optional) The message type. Defaults to 'status'.
    */
-  public function displayMessage($message, array $args = [], $type = 'status') {
+  public function displayMessage($message, array $args = [], $type = MessengerInterface::TYPE_STATUS) {
     global $_google_tag_display_message;
     if ($_google_tag_display_message) {
-      drupal_set_message($this->t($message, $args), $type);
+      $this->messenger->addMessage($this->t($message, $args), $type, TRUE);
     }
   }
 
   /**
-   * Adds page attachments.
+   * Returns container entity IDs.
    *
-   * @param array $attachments
-   *   The attachments array.
+   * @return array
+   *   The entity ID array.
    */
   public function loadContainerIDs() {
     return \Drupal::entityQuery('google_tag_container')
@@ -188,8 +205,13 @@ class ContainerManager implements ContainerManagerInterface {
     if (!$ids) {
       return;
     }
-    // Remove any stale files (e.g. module update or machine name change).
-    @file_unmanaged_delete_recursive(\Drupal::config('google_tag.settings')->get('uri') . '/');
+    if (\Drupal::config('google_tag.settings')->get('flush_snippets')) {
+      $directory = \Drupal::config('google_tag.settings')->get('uri');
+      if (!empty($directory)) {
+        // Remove any stale files (e.g. module update or machine name change).
+        $this->fileSystem->deleteRecursive($directory . '/google_tag');
+      }
+    }
     // Create snippet files for enabled containers.
     $containers = $this->entityTypeManager->getStorage('google_tag_container')->loadMultiple($ids);
     $result = TRUE;

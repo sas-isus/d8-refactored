@@ -59,7 +59,7 @@ class ContainerController extends EntityController {
    */
   public function enable(Container $google_tag_container) {
     $google_tag_container->enable()->save();
-    return new RedirectResponse($google_tag_container->url('collection', ['absolute' => TRUE]));
+    return new RedirectResponse($google_tag_container->toUrl('collection', ['absolute' => TRUE])->toString());
   }
 
   /**
@@ -73,7 +73,7 @@ class ContainerController extends EntityController {
    */
   public function disable(Container $google_tag_container) {
     $google_tag_container->disable()->save();
-    return new RedirectResponse($google_tag_container->url('collection', ['absolute' => TRUE]));
+    return new RedirectResponse($google_tag_container->toUrl('collection', ['absolute' => TRUE])->toString());
   }
 
 }

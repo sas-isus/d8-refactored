@@ -3,10 +3,12 @@
 namespace Drupal\google_tag\Entity;
 
 use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Component\Utility\Unicode;
+use Drupal\Core\Condition\ConditionPluginCollection;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Defines the container configuration entity.
@@ -23,6 +25,7 @@ use Drupal\Core\Entity\EntityStorageInterface;
  *     },
  *     "access" = "Drupal\google_tag\ContainerAccessControlHandler"
  *   },
+ *   admin_permission = "administer google tag manager",
  *   config_prefix = "container",
  *   entity_keys = {
  *     "id" = "id",
@@ -34,12 +37,6 @@ use Drupal\Core\Entity\EntityStorageInterface;
  *     "label",
  *     "weight",
  *     "container_id",
- *     "path_toggle",
- *     "path_list",
- *     "role_toggle",
- *     "role_list",
- *     "status_toggle",
- *     "status_list",
  *     "data_layer",
  *     "include_classes",
  *     "whitelist_classes",
@@ -47,14 +44,21 @@ use Drupal\Core\Entity\EntityStorageInterface;
  *     "include_environment",
  *     "environment_id",
  *     "environment_token",
+ *     "path_toggle",
+ *     "path_list",
+ *     "role_toggle",
+ *     "role_list",
+ *     "status_toggle",
+ *     "status_list",
+ *     "conditions",
  *   },
  *   links = {
- *     "add-form" = "/admin/structure/google_tag/add",
- *     "edit-form" = "/admin/structure/google_tag/manage/{google_tag_container}",
- *     "delete-form" = "/admin/structure/google_tag/manage/{google_tag_container}/delete",
- *     "enable" = "/admin/structure/google_tag/manage/{google_tag_container}/enable",
- *     "disable" = "/admin/structure/google_tag/manage/{google_tag_container}/disable",
- *     "collection" = "/admin/structure/google_tag",
+ *     "add-form" = "/admin/config/system/google-tag/add",
+ *     "edit-form" = "/admin/config/system/google-tag/manage/{google_tag_container}",
+ *     "delete-form" = "/admin/config/system/google-tag/manage/{google_tag_container}/delete",
+ *     "enable" = "/admin/config/system/google-tag/manage/{google_tag_container}/enable",
+ *     "disable" = "/admin/config/system/google-tag/manage/{google_tag_container}/disable",
+ *     "collection" = "/admin/config/system/google-tag",
  *   }
  * )
  *
@@ -62,7 +66,9 @@ use Drupal\Core\Entity\EntityStorageInterface;
  * this may not be an option in above annotation
  *     "clone-form" = "/admin/structure/google_tag/manage/{google_tag_container}/clone",
  */
-class Container extends ConfigEntityBase implements ConfigEntityInterface {
+class Container extends ConfigEntityBase implements ConfigEntityInterface, EntityWithPluginCollectionInterface {
+
+  use StringTranslationTrait;
 
   /**
    * The machine name for the configuration entity.
@@ -91,48 +97,6 @@ class Container extends ConfigEntityBase implements ConfigEntityInterface {
    * @var string
    */
   public $container_id;
-
-  /**
-   * Whether to include or exclude the listed paths.
-   *
-   * @var string
-   */
-  public $path_toggle;
-
-  /**
-   * The listed paths.
-   *
-   * @var string
-   */
-  public $path_list;
-
-  /**
-   * Whether to include or exclude the listed roles.
-   *
-   * @var string
-   */
-  public $role_toggle;
-
-  /**
-   * The listed roles.
-   *
-   * @var array
-   */
-  public $role_list;
-
-  /**
-   * Whether to include or exclude the listed statuses.
-   *
-   * @var string
-   */
-  public $status_toggle;
-
-  /**
-   * The listed statuses.
-   *
-   * @var string
-   */
-  public $status_list;
 
   /**
    * The name of the data layer.
@@ -184,6 +148,71 @@ class Container extends ConfigEntityBase implements ConfigEntityInterface {
   public $environment_token;
 
   /**
+   * Whether to include or exclude the listed paths.
+   *
+   * @var string
+   */
+  public $path_toggle;
+
+  /**
+   * The listed paths.
+   *
+   * @var string
+   */
+  public $path_list;
+
+  /**
+   * Whether to include or exclude the listed roles.
+   *
+   * @var string
+   */
+  public $role_toggle;
+
+  /**
+   * The listed roles.
+   *
+   * @var array
+   */
+  public $role_list;
+
+  /**
+   * Whether to include or exclude the listed statuses.
+   *
+   * @var string
+   */
+  public $status_toggle;
+
+  /**
+   * The listed statuses.
+   *
+   * @var string
+   */
+  public $status_list;
+
+  /**
+   * The insertion conditions.
+   *
+   * Each item is the configuration array not the condition object.
+   *
+   * @var array
+   */
+  protected $conditions = [];
+
+  /**
+   * The insertion condition collection.
+   *
+   * @var \Drupal\Core\Condition\ConditionPluginCollection
+   */
+  protected $conditionCollection;
+
+  /**
+   * The condition plugin manager.
+   *
+   * @var \Drupal\Core\Executable\ExecutableManagerInterface
+   */
+  protected $conditionPluginManager;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(array $values, $entity_type) {
@@ -213,7 +242,7 @@ class Container extends ConfigEntityBase implements ConfigEntityInterface {
       'data_layer' => $this->dataLayerSnippet(),
     ];
     // Allow other modules to alter the snippets.
-    \Drupal::moduleHandler()->alter('google_tag_snippets', $snippets);
+    \Drupal::moduleHandler()->alter('google_tag_snippets', $snippets, $this);
     return $snippets;
   }
 
@@ -360,28 +389,28 @@ EOS;
    *   TRUE if the conditions are met; FALSE otherwise.
    */
   public function insertSnippet() {
-    static $satisfied;
+    static $satisfied = [];
 
-    if (!isset($satisfied)) {
-      $debug = \Drupal::config('google_tag.settings')->get('debug_output');
+    if (!isset($satisfied[$this->id])) {
       $id = $this->get('container_id');
 
       if (empty($id)) {
         // No container ID.
-        return FALSE;
+        return $satisfied[$this->id] = FALSE;
       }
 
-      $satisfied = TRUE;
-      if (!$this->statusCheck() || !$this->pathCheck() || !$this->roleCheck()) {
+      $this->displayMessage('google_tag container ' . $this->id);
+      $satisfied[$this->id] = TRUE;
+      if (!$this->statusCheck() || !$this->pathCheck() || !$this->roleCheck() || !$this->access('view')) {
         // Omit snippet if any condition is not met.
-        $satisfied = FALSE;
+        $satisfied[$this->id] = FALSE;
       }
 
       // Allow other modules to alter the insertion criteria.
-      \Drupal::moduleHandler()->alter('google_tag_insert', $satisfied);
-      $debug ? drupal_set_message(t('after alter @satisfied', ['@satisfied' => $satisfied])) : '';
+      \Drupal::moduleHandler()->alter('google_tag_insert', $satisfied[$this->id], $this);
+      $this->displayMessage('after alter @satisfied', ['@satisfied' => $satisfied[$this->id]]);
     }
-    return $satisfied;
+    return $satisfied[$this->id];
   }
 
   /**
@@ -391,29 +420,23 @@ EOS;
    *   TRUE if the status conditions are met; FALSE otherwise.
    */
   protected function statusCheck() {
-    static $satisfied;
+    $toggle = $this->get('status_toggle');
+    $statuses = $this->get('status_list');
 
-    if (!isset($satisfied)) {
-      $debug = \Drupal::config('google_tag.settings')->get('debug_output');
-      $toggle = $this->get('status_toggle');
-      $statuses = $this->get('status_list');
-
-      if (empty($statuses)) {
-        $satisfied = ($toggle == GOOGLE_TAG_EXCLUDE_LISTED);
-      }
-      else {
-        // Get the HTTP response status.
-        $request = \Drupal::request();
-        $status = '200';
-        if ($exception = $request->attributes->get('exception')) {
-          $status = $exception->getStatusCode();
-        }
-        $satisfied = strpos($statuses, (string) $status) !== FALSE;
-        $satisfied = ($toggle == GOOGLE_TAG_EXCLUDE_LISTED) ? !$satisfied : $satisfied;
-      }
-      $debug ? drupal_set_message(t('google_tag')) : '';
-      $debug ? drupal_set_message(t('status check @satisfied', ['@satisfied' => $satisfied])) : '';
+    if (empty($statuses)) {
+      $satisfied = ($toggle == GOOGLE_TAG_EXCLUDE_LISTED);
     }
+    else {
+      // Get the HTTP response status.
+      $request = \Drupal::request();
+      $status = '200';
+      if ($exception = $request->attributes->get('exception')) {
+        $status = $exception->getStatusCode();
+      }
+      $satisfied = strpos($statuses, (string) $status) !== FALSE;
+      $satisfied = ($toggle == GOOGLE_TAG_EXCLUDE_LISTED) ? !$satisfied : $satisfied;
+    }
+    $this->displayMessage('status check @satisfied', ['@satisfied' => $satisfied]);
     return $satisfied;
   }
 
@@ -424,30 +447,25 @@ EOS;
    *   TRUE if the path conditions are met; FALSE otherwise.
    */
   protected function pathCheck() {
-    static $satisfied;
+    $toggle = $this->get('path_toggle');
+    $paths = mb_strtolower($this->get('path_list'));
 
-    if (!isset($satisfied)) {
-      $debug = \Drupal::config('google_tag.settings')->get('debug_output');
-      $toggle = $this->get('path_toggle');
-      $paths = Unicode::strtolower($this->get('path_list'));
-
-      if (empty($paths)) {
-        $satisfied = ($toggle == GOOGLE_TAG_EXCLUDE_LISTED);
-      }
-      else {
-        $request = \Drupal::request();
-        $current_path = \Drupal::service('path.current');
-        $alias_manager = \Drupal::service('path.alias_manager');
-        $path_matcher = \Drupal::service('path.matcher');
-        // @todo Are not some paths case sensitive???
-        // Compare the lowercase path alias (if any) and internal path.
-        $path = $current_path->getPath($request);
-        $path_alias = Unicode::strtolower($alias_manager->getAliasByPath($path));
-        $satisfied = $path_matcher->matchPath($path_alias, $paths) || (($path != $path_alias) && $path_matcher->matchPath($path, $paths));
-        $satisfied = ($toggle == GOOGLE_TAG_EXCLUDE_LISTED) ? !$satisfied : $satisfied;
-      }
-      $debug ? drupal_set_message(t('path check @satisfied', ['@satisfied' => $satisfied])) : '';
+    if (empty($paths)) {
+      $satisfied = ($toggle == GOOGLE_TAG_EXCLUDE_LISTED);
     }
+    else {
+      $request = \Drupal::request();
+      $current_path = \Drupal::service('path.current');
+      $alias_manager = \Drupal::service('path.alias_manager');
+      $path_matcher = \Drupal::service('path.matcher');
+      // @todo Are not some paths case sensitive???
+      // Compare the lowercase path alias (if any) and internal path.
+      $path = $current_path->getPath($request);
+      $path_alias = mb_strtolower($alias_manager->getAliasByPath($path));
+      $satisfied = $path_matcher->matchPath($path_alias, $paths) || (($path != $path_alias) && $path_matcher->matchPath($path, $paths));
+      $satisfied = ($toggle == GOOGLE_TAG_EXCLUDE_LISTED) ? !$satisfied : $satisfied;
+    }
+    $this->displayMessage('path check @satisfied', ['@satisfied' => $satisfied]);
     return $satisfied;
   }
 
@@ -458,25 +476,34 @@ EOS;
    *   TRUE if the role conditions are met; FALSE otherwise.
    */
   protected function roleCheck() {
-    static $satisfied;
+    $toggle = $this->get('role_toggle');
+    $roles = array_filter($this->get('role_list'));
 
-    if (!isset($satisfied)) {
-      $debug = \Drupal::config('google_tag.settings')->get('debug_output');
-      $toggle = $this->get('role_toggle');
-      $roles = array_filter($this->get('role_list'));
-
-      if (empty($roles)) {
-        $satisfied = ($toggle == GOOGLE_TAG_EXCLUDE_LISTED);
-      }
-      else {
-        $satisfied = FALSE;
-        // Check user roles against listed roles.
-        $satisfied = (bool) array_intersect($roles, \Drupal::currentUser()->getRoles());
-        $satisfied = ($toggle == GOOGLE_TAG_EXCLUDE_LISTED) ? !$satisfied : $satisfied;
-      }
-      $debug ? drupal_set_message(t('role check @satisfied', ['@satisfied' => $satisfied])) : '';
+    if (empty($roles)) {
+      $satisfied = ($toggle == GOOGLE_TAG_EXCLUDE_LISTED);
     }
+    else {
+      $satisfied = FALSE;
+      // Check user roles against listed roles.
+      $satisfied = (bool) array_intersect($roles, \Drupal::currentUser()->getRoles());
+      $satisfied = ($toggle == GOOGLE_TAG_EXCLUDE_LISTED) ? !$satisfied : $satisfied;
+    }
+    $this->displayMessage('role check @satisfied', ['@satisfied' => $satisfied]);
     return $satisfied;
+  }
+
+  /**
+   * Displays a message.
+   *
+   * @param string $message
+   *   The message to display.
+   * @param array $args
+   *   (optional) An associative array of replacements.
+   */
+  public function displayMessage($message, array $args = []) {
+    if (\Drupal::config('google_tag.settings')->get('debug_output')) {
+      \Drupal::service('messenger')->addStatus($this->t($message, $args), TRUE);
+    }
   }
 
   /**
@@ -486,7 +513,7 @@ EOS;
    *   The snippet directory path.
    */
   public function snippetDirectory() {
-    return \Drupal::config('google_tag.settings')->get('uri') . "/{$this->id()}";
+    return \Drupal::config('google_tag.settings')->get('uri') . "/google_tag/{$this->id()}";
   }
 
   /**
@@ -521,7 +548,7 @@ EOS;
       [
         '#type' => 'html_tag',
         '#tag' => 'script',
-        '#attributes' => ['src' => $url . '?' . $query_string, 'defer' => 'true'],
+        '#attributes' => ['src' => $url . '?' . $query_string, 'defer' => TRUE],
         '#weight' => $weight,
       ],
       "google_tag_{$type}_tag__{$this->id()}",
@@ -590,6 +617,88 @@ EOS;
       ],
     ] : [];
     return $attachment;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPluginCollections() {
+    return [
+      'conditions' => $this->getInsertionConditions(),
+    ];
+  }
+
+  /**
+   * Returns an array of configuration arrays keyed by insertion condition.
+   *
+   * @return array
+   *   An array of condition configuration keyed by the condition ID.
+   */
+  public function getInsertionConfiguration() {
+    return $this->getInsertionConditions()->getConfiguration();
+  }
+
+  /**
+   * Returns an insertion condition for this container.
+   *
+   * @param string $instance_id
+   *   The condition plugin instance ID.
+   *
+   * @return \Drupal\Core\Condition\ConditionInterface
+   *   A condition plugin.
+   */
+  public function getInsertionCondition($instance_id) {
+    return $this->getInsertionConditions()->get($instance_id);
+  }
+
+  /**
+   * Sets the configuration for an insertion condition.
+   *
+   * @param string $instance_id
+   *   The condition instance ID.
+   * @param array $configuration
+   *   The condition configuration.
+   *
+   * @return $this
+   *
+   * @todo Does this need to set a persistent property?
+   */
+  public function setInsertionCondition($instance_id, array $configuration) {
+    $conditions = $this->getInsertionConditions();
+    if (!$conditions->has($instance_id)) {
+      $configuration['id'] = $instance_id;
+      $conditions->addInstanceId($instance_id, $configuration);
+    }
+    else {
+      $conditions->setInstanceConfiguration($instance_id, $configuration);
+    }
+    return $this;
+  }
+
+  /**
+   * Returns the set of insertion conditions for this container.
+   *
+   * @return \Drupal\Core\Condition\ConditionPluginCollection
+   *   A collection of configured condition plugins.
+   */
+  public function getInsertionConditions() {
+    if (!isset($this->conditionCollection)) {
+      $this->conditionCollection = new ConditionPluginCollection($this->conditionPluginManager(), $this->get('conditions'));
+    }
+    return $this->conditionCollection;
+  }
+
+  /**
+   * Gets the condition plugin manager.
+   *
+   * @return \Drupal\Core\Executable\ExecutableManagerInterface
+   *   The condition plugin manager.
+   */
+  protected function conditionPluginManager() {
+    if (!isset($this->conditionPluginManager)) {
+      $this->conditionPluginManager = \Drupal::service('plugin.manager.condition');
+    }
+    return $this->conditionPluginManager;
   }
 
 }

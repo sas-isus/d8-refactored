@@ -19,6 +19,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   label = @Translation("Text format"),
  *   description = @Translation("Provides a text format form element."),
  *   category = @Translation("Advanced elements"),
+ *   states_wrapper = TRUE,
  *   composite = TRUE,
  *   multiline = TRUE,
  * )
@@ -266,8 +267,8 @@ class TextFormat extends WebformElementBase {
   protected function getElementSelectorInputsOptions(array $element) {
     $title = $this->getAdminLabel($element);
     return [
-      'value' => $title . ' [' . t('Textarea') . ']',
-      'format' => $title . ' [' . t('Select') . ']',
+      'value' => $title . ' [' . $this->t('Textarea') . ']',
+      'format' => $title . ' [' . $this->t('Select') . ']',
     ];
   }
 

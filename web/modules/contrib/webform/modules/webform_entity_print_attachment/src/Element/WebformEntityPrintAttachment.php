@@ -3,7 +3,6 @@
 namespace Drupal\webform_entity_print_attachment\Element;
 
 use Drupal\webform\WebformSubmissionInterface;
-use Drupal\webform\WebformSubmissionViewBuilderInterface;
 use Drupal\webform_attachment\Element\WebformAttachmentBase;
 
 /**
@@ -59,7 +58,7 @@ class WebformEntityPrintAttachment extends WebformAttachmentBase {
     $temporary_file_path = $print_builder->savePrintable([$webform_submission], $print_engine, $scheme, $file_name);
     if ($temporary_file_path) {
       $contents = file_get_contents($temporary_file_path);
-      file_unmanaged_delete($temporary_file_path);
+      \Drupal::service('file_system')->delete($temporary_file_path);
     }
     else {
       // Log error.

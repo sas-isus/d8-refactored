@@ -1,13 +1,13 @@
 name: 'Webform Submission Export/Import [EXPERIMENTAL]'
 type: module
 description: 'Provides the ability to export and import submissions.'
-package: Webform
-# core: 8.x
+experimental: true
+package: 'Webform [EXPERIMENTAL]'
+core: 8.x
 dependencies:
   - 'webform:webform'
 
-# Information added by Drupal.org packaging script on 2019-08-19
-version: '8.x-5.4'
-core: '8.x'
+# Information added by Drupal.org packaging script on 2020-01-21
+version: '8.x-5.8'
 project: 'webform'
-datestamp: 1566209294
+datestamp: 1579637592

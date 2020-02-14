@@ -9,6 +9,7 @@ use Drupal\permissions_by_entity\Service\CheckedEntityCache;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -80,6 +81,11 @@ class PermissionsByEntityKernelEventSubscriber implements EventSubscriberInterfa
    *   The event instance.
    */
   public function onKernelRequest(GetResponseEvent $event) {
+     // Only act on the master request.
+    if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
+      return;
+    }
+
     // Get the current request from the event.
     $request = $event->getRequest();
 

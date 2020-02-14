@@ -1,12 +1,9 @@
-uuid: 28d4e7be-efdb-4a88-bc0d-16ed5e8a1767
 langcode: en
 status: open
 dependencies:
   enforced:
     module:
       - webform_test
-_core:
-  default_config_hash: n-o0dubYyFAYHV9OGOrntyVrFt0L6owQM3jhd_cjuIc
 open: null
 close: null
 weight: 0
@@ -1332,48 +1329,6 @@ elements: |
       '#help_display': element_after
     webform_select_other_hr:
       '#type': webform_horizontal_rule
-    webform_toggles_help:
-      '#markup': 'Toggles (webform_toggles)'
-      '#prefix': '<h3>'
-      '#suffix': '</h3>'
-    webform_toggles_title_before:
-      '#type': webform_toggles
-      '#title': 'Toggles (title_before)'
-      '#options':
-        one: One
-        two: Two
-        three: Three
-      '#help': 'This is help.'
-      '#help_display': title_before
-    webform_toggles_title_after:
-      '#type': webform_toggles
-      '#title': 'Toggles (title_after)'
-      '#options':
-        one: One
-        two: Two
-        three: Three
-      '#help': 'This is help.'
-      '#help_display': title_after
-    webform_toggles_element_before:
-      '#type': webform_toggles
-      '#title': 'Toggles (element_before)'
-      '#options':
-        one: One
-        two: Two
-        three: Three
-      '#help': 'This is help.'
-      '#help_display': element_before
-    webform_toggles_element_after:
-      '#type': webform_toggles
-      '#title': 'Toggles (element_after)'
-      '#options':
-        one: One
-        two: Two
-        three: Three
-      '#help': 'This is help.'
-      '#help_display': element_after
-    webform_toggles_hr:
-      '#type': webform_horizontal_rule
   date_time_elements:
     '#type': details
     '#title': 'Date/time elements'
@@ -2020,6 +1975,7 @@ settings:
   wizard_progress_pages: false
   wizard_progress_percentage: false
   wizard_progress_link: false
+  wizard_progress_states: false
   wizard_start_label: ''
   wizard_preview_link: false
   wizard_confirmation: true
@@ -2067,6 +2023,7 @@ settings:
   purge_days: null
   results_disabled: false
   results_disabled_ignore: false
+  token_view: false
   token_update: false
 access:
   create:
@@ -2116,3 +2073,6 @@ access:
     users: {  }
     permissions: {  }
 handlers: {  }
+uuid: 28d4e7be-efdb-4a88-bc0d-16ed5e8a1767
+_core:
+  default_config_hash: n-o0dubYyFAYHV9OGOrntyVrFt0L6owQM3jhd_cjuIc

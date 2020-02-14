@@ -30,8 +30,7 @@ class Checkboxes extends OptionsBase {
       // Options settings.
       'options_display' => 'one_column',
       'options_description_display' => 'description',
-      // iCheck settings.
-      'icheck' => '',
+      'options__properties' => [],
       // Wrapper.
       'wrapper_type' => 'fieldset',
     ] + parent::getDefaultProperties();

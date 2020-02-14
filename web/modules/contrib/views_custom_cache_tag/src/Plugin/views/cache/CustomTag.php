@@ -9,6 +9,7 @@ namespace Drupal\views_custom_cache_tag\Plugin\views\cache;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\views\Plugin\views\cache\Tag;
 
 /**
@@ -23,6 +24,8 @@ use Drupal\views\Plugin\views\cache\Tag;
  * )
  */
 class CustomTag extends Tag {
+
+  use MessengerTrait;
 
   /**
    * Overrides Drupal\views\Plugin\Plugin::$usesOptions.
@@ -102,7 +105,7 @@ class CustomTag extends Tag {
     if (!empty($entity_information)) {
       // Add the list cache tags for each entity type used by this view.
       foreach ($entity_information as $table => $metadata) {
-        $remove = \Drupal::entityManager()->getDefinition($metadata['entity_type'])->getListCacheTags();
+        $remove = \Drupal::entityTypeManager()->getDefinition($metadata['entity_type'])->getListCacheTags();
         $tags = array_diff($tags, $remove);
       }
     }
@@ -128,7 +131,7 @@ class CustomTag extends Tag {
 
     // This can be used to debug/test the views cache result.
     if ($type == 'results' && !$result && \Drupal::state()->get('views_custom_cache_tag.execute_debug', FALSE)) {
-      drupal_set_message('Executing view ' . $this->view->storage->id() . ':' . $this->view->current_display . ':' . implode(',', $this->view->args) . ' (' . implode(',', $this->view->getCacheTags()) . ')');
+      $this->messenger()->addMessage('Executing view ' . $this->view->storage->id() . ':' . $this->view->current_display . ':' . implode(',', $this->view->args) . ' (' . implode(',', $this->view->getCacheTags()) . ')');
     }
     return $result;
   }

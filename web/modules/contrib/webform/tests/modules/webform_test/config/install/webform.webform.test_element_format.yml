@@ -32,6 +32,18 @@ elements: |
         '#title': 'Checkbox (Raw value)'
         '#default_value': true
         '#format': raw
+    radios:
+      '#type': details
+      '#title': Radios
+      radios_description:
+        '#type': radios
+        '#title': 'Radios (Description)'
+        '#default_value': one
+        '#format': description
+        '#options':
+          one: 'One -- This is the <strong>first</strong> description'
+          two: 'Two -- This is the <strong>second</strong> description'
+          three: 'Three -- This is <strong>third</strong> description'
     password:
       '#type': details
       '#title': Password
@@ -330,19 +342,6 @@ elements: |
         '#required': true
         '#terms_type': slideout
         '#terms_content': '<em>These are the terms of service.</em>'
-        '#default_value': true
-        '#format': raw
-    webform_toggle:
-      '#type': details
-      '#title': Toggle
-      webform_toggle_value:
-        '#type': webform_toggle
-        '#title': 'Toggle (Value)'
-        '#default_value': true
-        '#format': value
-      webform_toggle_raw:
-        '#type': webform_toggle
-        '#title': 'Toggle (Raw value)'
         '#default_value': true
         '#format': raw
     url:
@@ -1258,6 +1257,11 @@ elements: |
         '#title': 'File (File name)'
         '#file_extensions': txt
         '#format': name
+      managed_file_basename:
+        '#type': managed_file
+        '#title': 'File (File base name (no extension))'
+        '#file_extensions': txt
+        '#format': basename
       managed_file_id:
         '#type': managed_file
         '#title': 'File (File ID)'
@@ -1366,6 +1370,7 @@ settings:
   wizard_progress_pages: false
   wizard_progress_percentage: false
   wizard_progress_link: false
+  wizard_progress_states: false
   wizard_start_label: ''
   wizard_preview_link: false
   wizard_confirmation: true
@@ -1413,6 +1418,7 @@ settings:
   purge_days: null
   results_disabled: false
   results_disabled_ignore: false
+  token_view: false
   token_update: false
 access:
   create:
@@ -1487,10 +1493,12 @@ handlers:
       ignore_access: false
       exclude_empty: true
       exclude_empty_checkbox: false
+      exclude_attachments: false
       html: false
       attachments: false
       twig: false
       theme_name: ''
+      parameters: {  }
       debug: true
       reply_to: ''
       return_path: ''
@@ -1521,10 +1529,12 @@ handlers:
       ignore_access: false
       exclude_empty: true
       exclude_empty_checkbox: false
+      exclude_attachments: false
       html: true
       attachments: false
       twig: false
       theme_name: ''
+      parameters: {  }
       debug: true
       reply_to: ''
       return_path: ''

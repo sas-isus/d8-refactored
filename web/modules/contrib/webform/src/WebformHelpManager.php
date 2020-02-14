@@ -5,6 +5,7 @@ namespace Drupal\webform;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\State\StateInterface;
@@ -493,8 +494,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     switch ($video_display) {
       case 'dialog':
         $route_name = 'webform.help.video';
-        $route_parameters  = ['id' => str_replace('_', '-', $video_info['id'])];
-        $route_options  = ($options['more']) ? ['query' => ['more' => 1]] : [];
+        $route_parameters = ['id' => str_replace('_', '-', $video_info['id'])];
+        $route_options = ($options['more']) ? ['query' => ['more' => 1]] : [];
         return [
           '#url' => Url::fromRoute($route_name, $route_parameters, $route_options),
           '#attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_WIDE, $options['class']),
@@ -553,7 +554,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         $build['content'][$category_name]['projects'][$project_name] = [
           'title' => [
             '#type' => 'link',
-            '#title' => $project['title'],
+            '#title' => Markup::create($project['title']
+              . (!empty($project['experimental']) ? ' [' . $this->t('EXPERIMENTAL') . ']' : '')),
             '#url' => $project['url'],
             '#prefix' => '<dt>',
             '#suffix' => ((isset($project['recommended'])) ? ' ★' : '') . '</dt>',
@@ -975,6 +977,23 @@ class WebformHelpManager implements WebformHelpManagerInterface {
           ],
         ],
       ],
+      'variants' => [
+        'title' => $this->t('Webform variants'),
+        'content' => $this->t("This screencast provides an overview of how to use webform variants to create A/B tests, audience segmentation, and personalization."),
+        'youtube_id' => '53aB_mTkrI4',
+        'presentation_id' => '1Pd_F8t82iXnNn87fWCj5r2zLh9je-SrCmrpOQjG-xCc',
+        'links' => [
+
+          [
+            'title' => $this->t('Webform module now supports variants, which can be used for A/B tests, segmentation, and personalization'),
+            'url' => 'https://www.drupal.org/node/3104280',
+          ],
+          [
+            'title' => $this->t('Personalized Webforms'),
+            'url' => 'https://www.jrockowitz.com/blog/personalized-webforms',
+          ],
+        ],
+      ],
       'settings' => [
         'title' => $this->t('Configuring webform settings'),
         'content' => $this->t("This screencast shows how to configure a form's general settings, submission handling, confirmation message/page, custom CSS/JS and access controls."),
@@ -1176,6 +1195,30 @@ class WebformHelpManager implements WebformHelpManagerInterface {
           [
             'title' => $this->t('Webform Attachment sub-module | Drupal.org'),
             'url' => 'https://www.drupal.org/node/3021481',
+          ],
+        ],
+      ],
+      'limits' => [
+        'title' => $this->t('Submission limits and options limits'),
+        'content' => $this->t("This screencast shows how to set submission limits and options limits."),
+        'youtube_id' => 'fdkv10v3AX4',
+        'presentation_id' => '1owgZ4ueFagynwnzvBsH6krpvLqMXunMJXD32BqMCC-E',
+        'links' => [
+          [
+            'title' => $this->t('Webform now supports option limits as well as submission limits'),
+            'url' => 'https://www.drupal.org/node/3080869',
+          ],
+        ],
+      ],
+      'custom_options' => [
+        'title' => $this->t('Webform custom options elements'),
+        'content' => $this->t("The screencast walks through creating custom webform options elements."),
+        'youtube_id' => '08Ze1eACM48',
+        'presentation_id' => '1MZQ0we3qG9G3eFLtnHXiQ5c_uDfn1jjiBHciAeW311g',
+        'links' => [
+          [
+            'title' => $this->t('Webform module supports creating custom elements using HTML and SVG markup'),
+            'url' => 'https://www.drupal.org/node/3089024',
           ],
         ],
       ],
@@ -1638,6 +1681,19 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       ],
     ];
 
+    // Configuration: Variants.
+    $help['config_variants'] = [
+      'group' => 'configuration',
+      'title' => $this->t('Configuration: Variants'),
+      'content' => $this->t('The <strong>Variants configuration</strong> page allows administrators to enable/disable variants.') . ' ' .
+        $this->t('<strong>Variants</strong> are used for A/B testing, segmentation, and personalization.'),
+      'video_id' => 'configuration',
+      'routes' => [
+        // @see /admin/structure/webform/config/variants
+        'webform.config.variants',
+      ],
+    ];
+
     // Configuration: Exporters.
     $help['config_exporters'] = [
       'group' => 'configuration',
@@ -1759,6 +1815,18 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       ],
     ];
 
+    // Plugins: Variants.
+    $help['plugins_variants'] = [
+      'group' => 'plugins',
+      'title' => $this->t('Plugins: Variants'),
+      'content' => $this->t('The <strong>Variant plugins</strong> overview page lists all available webform variant plugins.') . ' ' .
+        $this->t('<strong>Variants</strong> are used for A/B testing, segmentation, and personalization.'),
+      'video_id' => 'plugins',
+      'routes' => [
+        // @see /admin/reports/webform-plugins/variants
+        'webform.reports_plugins.variants',
+      ],
+    ];
     // Plugins: Exporters.
     $help['plugins_exporters'] = [
       'group' => 'plugins',
@@ -1859,6 +1927,22 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/handlers
         'entity.webform.handlers',
+      ],
+    ];
+
+    /**************************************************************************/
+    // Variants.
+    /**************************************************************************/
+
+    // Variants.
+    $help['variants'] = [
+      'group' => 'variants',
+      'title' => $this->t('Variants'),
+      'content' => $this->t('The <strong>Variants</strong> page allows variations of a webform to be created and managed for A/B testing, segmentation, and personalization.'),
+      'video_id' => 'variants',
+      'routes' => [
+        // @see /admin/structure/webform/manage/{webform}/variants
+        'entity.webform.variants',
       ],
     ];
 

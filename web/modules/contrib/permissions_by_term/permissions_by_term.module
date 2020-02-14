@@ -130,16 +130,10 @@ function permissions_by_term_form_taxonomy_term_form_alter(&$form, FormStateInte
     /* @var \Drupal\permissions_by_term\Service\AccessStorage $access_storage */
     $access_storage = \Drupal::service('permissions_by_term.access_storage');
 
-    $description = <<<EOT
-To limit access to this term by user(s) or role(s), select users or roles below.
-If left empty, all users will have access to content, related to this taxonomy term
-and this taxonomy term itself.
-EOT;
-
     $form['access'] = [
       '#type'        => 'details',
       '#title'       => t('Permissions'),
-      '#description' => t($description),
+      '#description' => t('To limit access to this term by user(s) or role(s), select users or roles below. If left empty, all users will have access to content, related to this taxonomy term and this taxonomy term itself.'),
       '#attributes'  => ['id' => 'fieldset_term_access'],
       '#weight'      => -5,
       '#tree'        => TRUE,
@@ -159,11 +153,6 @@ EOT;
       $sUserFormValue = NULL;
     }
 
-    $description = <<<EOT
-Enter a comma-separated list of user names who will be able to access content,
-related to this taxonomy term.
-EOT;
-
     // Note that the autocomplete widget will only enable for users with the
     // 'access profiles' permission. Other users will have to specify the name
     // manually.
@@ -171,7 +160,7 @@ EOT;
       '#type'                    => 'entity_autocomplete',
       '#target_type'             => 'user',
       '#title'                   => t('Allowed users'),
-      '#description'             => t($description),
+      '#description'             => t('Enter a comma-separated list of user names who will be able to access content, related to this taxonomy term.'),
       '#value'                   => $sUserFormValue,
       '#size'                    => 60,
       '#maxlength'               => FALSE,
@@ -203,15 +192,11 @@ EOT;
       }
     }
 
-    $description = <<<EOT
-Select user roles who will be able to access content, related to this taxonomy term.
-EOT;
-
     // Now, lets do the Roles table.
     $form['access']['role'] = [
       '#type'          => 'checkboxes',
       '#title'         => t('Allowed roles'),
-      '#description'   => t($description),
+      '#description'   => t('Select user roles who will be able to access content, related to this taxonomy term.'),
       '#default_value' => $aSetRoles,
       '#options'       => $aTranslatedUserRoles,
       '#multiple'      => FALSE,

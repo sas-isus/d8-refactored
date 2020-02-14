@@ -8,6 +8,7 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\TypedData\TypedDataManagerInterface;
 use Drupal\ctools\Form\ManageContext;
+use Drupal\ctools\TypedDataResolver;
 use Drupal\user\SharedTempStoreFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -35,6 +36,7 @@ class PanelizerWizardContextForm extends ManageContext {
     return new static(
       $container->get('typed_data_manager'),
       $container->get('form_builder'),
+      $container->get('ctools.typed_data.resolver'),
       $container->get('user.shared_tempstore')
     );
   }
@@ -46,11 +48,13 @@ class PanelizerWizardContextForm extends ManageContext {
    *   The typed data manager.
    * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
    *   The form builder.
+   * @param \Drupal\ctools\TypedDataResolver $typed_data_resolver
+   *   The CTools typed data resolver.
    * @param \Drupal\user\SharedTempStoreFactory $tempstore_factory
    *   Shared user tempstore factory.
    */
-  public function __construct(TypedDataManagerInterface $typed_data_manager, FormBuilderInterface $form_builder, SharedTempStoreFactory $tempstore_factory) {
-    parent::__construct($typed_data_manager, $form_builder);
+  public function __construct(TypedDataManagerInterface $typed_data_manager, FormBuilderInterface $form_builder, TypedDataResolver $typed_data_resolver, SharedTempStoreFactory $tempstore_factory) {
+    parent::__construct($typed_data_manager, $form_builder, $typed_data_resolver);
     $this->tempstoreFactory = $tempstore_factory;
   }
 

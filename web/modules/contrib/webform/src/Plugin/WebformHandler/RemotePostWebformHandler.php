@@ -339,7 +339,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
             '504' => $this->t('504 Gateway Timeout'),
           ],
           '#other__type' => 'number',
-          '#other__description' => t('<a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">List of HTTP status codes</a>.'),
+          '#other__description' => $this->t('<a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">List of HTTP status codes</a>.'),
         ],
         'message' => [
           '#type' => 'webform_html_editor',
@@ -408,9 +408,6 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     if ($this->configuration['method'] === 'GET') {
       $this->configuration['type'] = '';
     }
-
-    // Cast debug.
-    $this->configuration['debug'] = (bool) $this->configuration['debug'];
   }
 
   /**
@@ -704,7 +701,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
    * @param string $request_type
    *   The type of remote post.
    * @param string $request_options
-   *   The requests options including the submission data..
+   *   The requests options including the submission data.
    * @param \Psr\Http\Message\ResponseInterface|null $response
    *   The response returned by the remote server.
    * @param string $type
@@ -819,7 +816,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     }
     else {
       $build['response_code'] = [
-        '#markup' => t('No response. Please see the recent log messages.'),
+        '#markup' => $this->t('No response. Please see the recent log messages.'),
         '#prefix' => '<p>',
         '#suffix' => '</p>',
       ];
@@ -854,7 +851,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
    * @param string $request_type
    *   The type of remote post.
    * @param string $request_options
-   *   The requests options including the submission data..
+   *   The requests options including the submission data.
    * @param \Psr\Http\Message\ResponseInterface|null $response
    *   The response returned by the remote server.
    */

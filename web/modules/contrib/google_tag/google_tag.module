@@ -10,7 +10,7 @@
  * @author Jim Berry ("solotandem", http://drupal.org/user/240748)
  */
 
-use Drupal\google_tag\Form\GoogleTagSettingsForm;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
@@ -69,14 +69,44 @@ function google_tag_page_top(array &$page) {
 }
 
 /**
+ * Implements hook_plugin_filter_TYPE_alter().
+ *
+ * @see ContainerForm::conditionsForm()
+ */
+function google_tag_plugin_filter_condition_alter(array &$definitions, array $extra, $consumer) {
+  if ($consumer == 'google_tag') {
+    // Remove condition plugins defined by core and domain.
+    $definitions = array_diff_key($definitions, array_flip([
+      'current_theme', 'language', 'node_type', 'request_path', 'user_role',
+      'domain',
+    ]));
+
+    $language_manager = \Drupal::service('language_manager');
+    if (!$language_manager->isMultilingual()) {
+      // Omit the language condition until multiple languages.
+      unset($definitions['gtag_language']);
+    }
+  }
+  else {
+    foreach ($definitions as $id => $definition) {
+      if (substr($id, 0, 5) == 'gtag_') {
+        // Prevent use of custom plugins by other consumers.
+        unset($definitions[$id]);
+      }
+    }
+  }
+}
+
+/**
  * Checks that the directory exists and is writable.
  *
  * @todo Remove this function if core is updated to check the executable bit.
  *
  * @see file_prepare_directory()
  */
-function __file_prepare_directory(&$directory, $options = FILE_MODIFY_PERMISSIONS) {
-  if (!file_stream_wrapper_valid_scheme(\Drupal::service('file_system')->uriScheme($directory))) {
+function _file_prepare_directory(&$directory, $options = FileSystemInterface::MODIFY_PERMISSIONS) {
+  $file_system = \Drupal::service('file_system');
+  if (!$file_system->validScheme($file_system->uriScheme($directory))) {
     // Only trim if we're not dealing with a stream.
     $directory = rtrim($directory, '/\\');
   }
@@ -85,15 +115,15 @@ function __file_prepare_directory(&$directory, $options = FILE_MODIFY_PERMISSION
   if (!is_dir($directory)) {
     // Let mkdir() recursively create directories and use the default directory
     // permissions.
-    if ($options & FILE_CREATE_DIRECTORY) {
-      return @drupal_mkdir($directory, NULL, TRUE);
+    if ($options & FileSystemInterface::CREATE_DIRECTORY) {
+      return @$file_system->mkdir($directory, NULL, TRUE);
     }
     return FALSE;
   }
   // The directory exists, so check to see if it is writable.
   $writable = _google_tag_is_writable($directory) && _google_tag_is_executable($directory);
-  if (!$writable && ($options & FILE_MODIFY_PERMISSIONS)) {
-    return drupal_chmod($directory);
+  if (!$writable && ($options & FileSystemInterface::MODIFY_PERMISSIONS)) {
+    return $file_system->chmod($directory);
   }
 
   return $writable;

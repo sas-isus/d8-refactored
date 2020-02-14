@@ -4,7 +4,7 @@
          beStrictAboutChangesToGlobalState="true"
          printerClass="\Drupal\Tests\Listeners\HtmlOutputPrinter">
 
-  <env name="PHP_IDE_CONFIG" value="PHPSTORM"/>
+<!--  <env name="PHP_IDE_CONFIG" value="PHPSTORM"/>-->
 
   <php>
     <!-- Set error reporting to E_ALL. -->

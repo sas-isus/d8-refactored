@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.6.1] - 2019-02-06
+### Fixed
+  * [#1278](https://github.com/Behat/Behat/pull/1278): Fix fatal when unexpected symfony/event-dispatcher version is installed
+
+## [3.6.0] - 2019-02-04
+### Added
+  * [#1244](https://github.com/Behat/Behat/pull/1244): Hide internal steps from stack traces in very verbose mode
+### Fixed
+  * [#1238](https://github.com/Behat/Behat/pull/1238): Don't run Junit output if ext-dom is not present (and suggest in composer)
+### Changed
+  * [#1256](https://github.com/Behat/Behat/pull/1256): Update dependencies to support Symfony 5.x
+  * [#1171](https://github.com/Behat/Behat/pull/1171): Remove symfony/class-loader dependency
+  * [#1170](https://github.com/Behat/Behat/pull/1170): Switch to PSR-4 autoloading
+  * [#1230](https://github.com/Behat/Behat/pull/1230): PHP 7.3 support
+  * [#1230](https://github.com/Behat/Behat/pull/1230): Suggest ext-dom for JUnit support
+
 ## [3.5.0] - 2018-08-10
 ### Added
   * [#1144](https://github.com/Behat/Behat/pull/1144): Allow to use arrays as context parameters 
@@ -885,6 +901,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[Unreleased]: https://github.com/Behat/Behat/compare/v3.5.0...master
 [3.5.0]: https://github.com/Behat/Behat/compare/v3.4.3...v3.5.0
 [3.4.3]: https://github.com/Behat/Behat/compare/v3.4.2...v3.4.3
 [3.4.2]: https://github.com/Behat/Behat/compare/v3.4.1...v3.4.2

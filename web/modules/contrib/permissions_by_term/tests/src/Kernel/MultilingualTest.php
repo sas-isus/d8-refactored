@@ -7,7 +7,7 @@ use Drupal\node\Entity\Node;
 use Drupal\permissions_by_term\Service\NodeEntityBundleInfo;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
-use Drupal\Tests\taxonomy\Functional\TaxonomyTestTrait;
+use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 use Drupal\user\Entity\User;
 
 /**

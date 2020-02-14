@@ -4,9 +4,9 @@ namespace Drupal\panelizer\Plugin\PanelsPattern;
 
 use Drupal\Core\Plugin\Context\Context;
 use Drupal\Core\Plugin\Context\ContextDefinition;
+use Drupal\Core\TempStore\SharedTempStoreFactory;
 use Drupal\ctools\Context\AutomaticContext;
 use Drupal\panels\Plugin\PanelsPattern\DefaultPattern;
-use Drupal\user\SharedTempStoreFactory;
 
 /**
  * @PanelsPattern("panelizer")

@@ -125,6 +125,10 @@ class WebformSame extends Checkbox {
    * {@inheritdoc}
    */
   public function alterForm(array &$element, array &$form, FormStateInterface $form_state) {
+    if (!isset($element['#source']) || !isset($element['#destination'])) {
+      return;
+    }
+
     // Get source element.
     $source = $element['#source'];
     $source_element = WebformElementHelper::getElement($form, $source);
@@ -142,9 +146,7 @@ class WebformSame extends Checkbox {
     // Add #states to destination element.
     $selector = ':input[name="' . $element['#webform_key'] . '"]';
     $state = (!empty($element['#destination_state'])) ? $element['#destination_state'] : 'visible';
-    $destination_element['#states'][$state] = [
-      $selector => ['checked' => FALSE],
-    ];
+    $destination_element['#states'][$state][$selector] = ['checked' => FALSE];
     $destination_element['#states_clear'] = FALSE;
 
     // Track webform same elements and add validation callback used

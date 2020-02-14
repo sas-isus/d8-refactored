@@ -14,6 +14,7 @@ use Drupal\webform\Entity\Webform;
 use Drupal\webform\Utility\WebformYaml;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\Utility\WebformElementHelper;
+use Drupal\field\Entity\FieldConfig;
 
 /**
  * Implements hook_form_FORM_ID_alter() for language_content_settings_form().
@@ -65,7 +66,23 @@ function webform_form_config_translation_add_form_alter(&$form, FormStateInterfa
       _webform_form_config_translate_add_form_alter_yaml_element($config_element['test']['types']);
       _webform_form_config_translate_add_form_alter_yaml_element($config_element['test']['names']);
     }
-    elseif (strpos($config_name, 'webform.webform_options.') === 0) {
+    elseif ($config_name == 'block.block.webform') {
+      _webform_form_config_translate_add_form_alter_yaml_element($config_element['settings']['default_data']);;
+    }
+    elseif (strpos($config_name, 'field.field.') === 0
+      && preg_match('/^field\.field\.([_a-z0-9]+)\.([_a-z0-9]+)\.([_a-z0-9]+)$/', $config_name, $match)
+      && isset($config_element['default_value'])) {
+      $field = FieldConfig::loadByName($match[1], $match[2], $match[3]);
+      if ($field->getType() === 'webform') {
+        foreach (Element::children($config_element['default_value']) as $key) {
+          if (isset($config_element['default_value'][$key]['default_data'])) {
+            _webform_form_config_translate_add_form_alter_yaml_element($config_element['default_value'][$key]['default_data']);
+          }
+        }
+      }
+    }
+    elseif (strpos($config_name, 'webform.webform_options.') === 0
+      || strpos($config_name, 'webform_options_custom.webform_options_custom.') === 0) {
       _webform_form_config_translate_add_form_alter_yaml_element($config_element['options']);
     }
     elseif (strpos($config_name, 'webform.webform.') === 0) {
@@ -86,8 +103,11 @@ function webform_form_config_translation_add_form_alter(&$form, FormStateInterfa
       $form_state->set('webform_config_name', $config_name);
       $form_state->set('webform_source_elements', $source_elements);
 
-      $form['#validate'][] = '_webform_form_config_translate_add_form_validate';
+      // Tweak default 128 max length for certain settings.
+      $config_element['title']['translation']['#maxlength'] = 255;
+      $config_element['settings']['submission_label']['translation']['#maxlength'] = NULL;
 
+      $form['#validate'][] = '_webform_form_config_translate_add_form_validate';
     }
   }
 }
@@ -163,11 +183,15 @@ function webform_form_config_translation_edit_form_alter(&$form, FormStateInterf
  */
 function _webform_form_config_translate_add_form_alter_yaml_element(array &$element, $source_value = NULL, $translation_value = NULL) {
   // Source.
+  $source_value = $source_value ?: trim(strip_tags($element['source']['#markup']));
+  if ($source_value === ((string) t('(Empty)'))) {
+    $source_value = '';
+  }
   $element['source']['#wrapper_attributes']['class'][] = 'webform-translation-source';
   $element['source']['value'] = [
     '#type' => 'webform_codemirror',
     '#mode' => 'yaml',
-    '#value' => WebformYaml::tidy($source_value ?: trim(strip_tags($element['source']['#markup']))),
+    '#value' => ($source_value) ? WebformYaml::tidy($source_value) : '',
     '#disabled' => TRUE,
     '#attributes' => ['readonly' => TRUE],
   ];
@@ -221,8 +245,24 @@ function webform_lingotek_config_entity_document_upload(array &$source_data, Con
       break;
 
     case 'webform_options';
+    case 'webform_options_custom';
       // Convert options YAML string to an associative array.
-      $source_data['options'] = Yaml::decode($source_data['options']);
+      $options = Yaml::decode($source_data['options']);;
+
+      // Extract optgroups from the options and append them as '_optgroups_'
+      // to the options so that the optgroups can be translated.
+      $optgroups = [];
+      foreach ($options as $option_value => $option_text) {
+        if (is_array($option_text)) {
+          $optgroups[$option_value] = $option_value;
+        }
+      }
+      if ($optgroups) {
+        $options['_optgroups_'] = $optgroups;
+      }
+
+      // Update source data's options.
+      $source_data['options'] = $options;
       break;
   }
 }
@@ -256,10 +296,32 @@ function webform_lingotek_config_entity_translation_presave(ConfigEntityInterfac
       break;
 
     case 'webform_options';
+    case 'webform_options_custom';
+      $options = $data['options'];
+      // If '_optgroups_' are defined we need to translate the optgroups.
+      if (isset($options['_optgroups_'])) {
+        // Get optgroup from options.
+        $optgroups = $options['_optgroups_'];
+        unset($options['_optgroups_']);
+
+        // Build translated optgroup options.
+        $optgroup_options = [];
+        foreach ($options as $option_value => $option_text) {
+          if (is_array($option_text)) {
+            $optgroups_options[$optgroups[$option_value]] = $option_text;
+          }
+          else {
+            $optgroup_options[$option_value] = $option_text;
+          }
+        }
+        // Replace options with optgroup options.
+        $options = $optgroups_options;
+      }
+
       /** @var \Drupal\webform\WebformOptionsInterface $translation */
       // Convert options associative array back to YAML string.
-      $translation->setOptions($data['options']);
-      $data['options'] = Yaml::encode($data['options']);
+      $translation->setOptions($options);
+      $data['options'] = Yaml::encode($options);
       break;
   }
 }

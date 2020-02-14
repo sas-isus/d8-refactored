@@ -3,7 +3,6 @@ description: 'Restricts access to nodes and taxonomy terms via user to term rela
 dependencies:
   - 'drupal:system'
   - 'drupal:field'
-  - 'drupal:entity_reference'
   - 'drupal:taxonomy'
 type: module
 core: '8.x'
@@ -11,7 +10,7 @@ core: '8.x'
 package: 'Permissions by Term'
 configure: permissions_by_term.settings
 
-# Information added by Drupal.org packaging script on 2019-09-26
-version: '8.x-2.12'
+# Information added by Drupal.org packaging script on 2020-02-13
+version: '8.x-2.15'
 project: 'permissions_by_term'
-datestamp: 1569507512
+datestamp: 1581580830

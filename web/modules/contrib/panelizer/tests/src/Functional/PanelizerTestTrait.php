@@ -170,7 +170,16 @@ trait PanelizerTestTrait {
     $this->drupalPostForm(NULL, [], t('Next'));
     $this->assertResponse(200);
 
-    // Step 4: Select content.
+    // Step 4: If the layout has settings (new since Drupal 8.8), accept the
+    // defaults.
+    $layout_settings_form = $this->getSession()
+      ->getPage()
+      ->find('css', '#panels-layout-settings-form');
+    if ($layout_settings_form) {
+      $layout_settings_form->pressButton('Next');
+    }
+
+    // Step 5: Select content.
     $this->assertUrl("admin/structure/panelizer/add/{$default_id}/content", $options);
     $this->drupalPostForm(NULL, [], t('Finish'));
     $this->assertResponse(200);

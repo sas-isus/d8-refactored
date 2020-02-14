@@ -45,10 +45,14 @@ class WebformMultiple extends FormElement {
       '#add_more' => TRUE,
       '#add_more_items' => 1,
       '#add_more_button_label' => $this->t('Add'),
+      '#add_more_input' => TRUE,
       '#add_more_input_label' => $this->t('more items'),
       '#sorting' => TRUE,
       '#operations' => TRUE,
       '#add' => TRUE,
+      '#ajax_attributes' => [],
+      '#table_attributes' => [],
+      '#table_wrapper_attributes' => [],
       '#remove' => TRUE,
       '#process' => [
         [$class, 'processWebformMultiple'],
@@ -164,8 +168,10 @@ class WebformMultiple extends FormElement {
     }
 
     // Add wrapper to the element.
+    $ajax_attributes = $element['#ajax_attributes'];
+    $ajax_attributes['id'] = $table_id;
     $element += ['#prefix' => '', '#suffix' => ''];
-    $element['#prefix'] = $element['#prefix'] . '<div id="' . $table_id . '">';
+    $element['#prefix'] = $element['#prefix'] . '<div' . new Attribute($ajax_attributes) . '>';
     $element['#suffix'] = '</div>' . $element['#suffix'];
 
     // DEBUG:
@@ -219,12 +225,13 @@ class WebformMultiple extends FormElement {
     }
 
     // Build table.
-    $attributes = ['class' => ['webform-multiple-table']];
+    $table_wrapper_attributes = $element['#table_wrapper_attributes'];
+    $table_wrapper_attributes['class'][] = 'webform-multiple-table';
     if (count($element['#element']) > 1) {
-      $attributes['class'][] = 'webform-multiple-table-responsive';
+      $table_wrapper_attributes['class'][] = 'webform-multiple-table-responsive';
     }
     $element['items'] = [
-      '#prefix' => '<div' . new Attribute($attributes) . '>',
+      '#prefix' => '<div' . new Attribute($table_wrapper_attributes) . '>',
       '#suffix' => '</div>',
     ] + $rows;
 
@@ -233,6 +240,7 @@ class WebformMultiple extends FormElement {
       $element['items'] += [
         '#type' => 'table',
         '#header' => $header,
+        '#attributes' => $element['#table_attributes'],
       ] + $rows;
 
       // Add sorting to table.
@@ -279,6 +287,7 @@ class WebformMultiple extends FormElement {
         '#default_value' => $element['#add_more_items'],
         '#field_suffix' => $element['#add_more_input_label'],
         '#error_no_message' => TRUE,
+        '#access' => $element['#add_more_input'],
       ];
     }
 
@@ -467,26 +476,10 @@ class WebformMultiple extends FormElement {
           }
 
           $child_element = $element['#element'][$child_key];
-          $child_title = (!empty($child_element['#title'])) ? $child_element['#title'] : '';
 
-          $title = [];
-          $title['title'] = [
-            '#markup' => $child_title,
-          ];
-          if (!empty($child_element ['#required']) || !empty($child_element ['#_required'])) {
-            $title['title'] += [
-              '#prefix' => '<span class="form-required">',
-              '#suffix' => '</span>',
-            ];
-          }
-          if (!empty($child_element['#help'])) {
-            $title['help'] = [
-              '#type' => 'webform_help',
-              '#help' => $child_element['#help'],
-              '#help_title' => $child_title,
-            ];
-          }
-          $header[$child_key] = ['data' => $title];
+          // Build element title.
+          $header[$child_key] = ['data' => static::buildElementTitle($child_element)];
+
           // Append label attributes to header.
           if (!empty($child_element['#label_attributes'])) {
             $header[$child_key] += $child_element['#label_attributes'];
@@ -519,6 +512,39 @@ class WebformMultiple extends FormElement {
 
       return $header;
     }
+  }
+
+  /**
+   * Build an element's title with help.
+   *
+   * @param array $element
+   *   An element.
+   *
+   * @return array
+   *   A render array containing an element's title with help.
+   */
+  protected static function buildElementTitle(array $element) {
+    $title = (!empty($element['#title'])) ? $element['#title'] : '';
+
+    $build = [];
+    $build['title'] = [
+      '#markup' => $title,
+    ];
+    if (!empty($element['#required']) || !empty($element['#_required'])) {
+      $build['title'] += [
+        '#prefix' => '<span class="form-required">',
+        '#suffix' => '</span>',
+      ];
+    }
+    if (!empty($element['#help'])) {
+      $build['help'] = [
+        '#type' => 'webform_help',
+        '#help' => $element['#help'],
+        '#help_title' => $title,
+      ];
+    }
+
+    return $build;
   }
 
   /**
