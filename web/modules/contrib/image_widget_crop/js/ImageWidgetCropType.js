@@ -156,6 +156,13 @@
     this.showDefaultCrop = true;
 
     /**
+     * Flag indicating whether to show the default crop.
+     *
+     * @type {Boolean}
+     */
+    this.isRequired = false;
+
+    /**
      * The soft limit of the crop.
      *
      * @type {{height: Number, width: Number, reached: {height: Boolean, width: Boolean}}}
@@ -228,7 +235,7 @@
   Drupal.ImageWidgetCropType.prototype.selectors = {
     image: '[data-drupal-iwc=image]',
     reset: '[data-drupal-iwc=reset]',
-    table: '[data-drupal-iwc=table]', // @todo is this even used anymore?
+    table: '[data-drupal-iwc=table]',
     values: {
       applied: '[data-drupal-iwc-value=applied]',
       height: '[data-drupal-iwc-value=height]',
@@ -274,7 +281,7 @@
    * The "cropmove" event handler for the Cropper plugin.
    */
   Drupal.ImageWidgetCropType.prototype.cropMove = function () {
-    this.updateSoftLimits();
+    this.built();
   };
 
   /**
@@ -375,6 +382,7 @@
 
     // Set the default options.
     this.options = $.extend({}, this.defaultOptions);
+    this.isRequired = this.$wrapper.data('drupalIwcRequired');
 
     // Extend this instance with data from the wrapper.
     var data = this.$wrapper.data();
@@ -410,12 +418,10 @@
       .one('visible.iwc', this.initializeCropper.bind(this))
       .on('hidden.iwc', function () {
         this.visible = false;
-      }.bind(this))
-    ;
+      }.bind(this));
 
     this.$reset
-      .on('click.iwc', this.reset.bind(this))
-    ;
+      .on('click.iwc', this.reset.bind(this));
 
     // Star polling visibility of the image that should be able to be cropped.
     this.pollVisibility(this.$image);
@@ -425,6 +431,13 @@
 
     // Trigger the initial summaryUpdate event.
     this.$wrapper.trigger('summaryUpdated');
+    var isIE = /*@cc_on!@*/false || !!document.documentMode;
+    if (isIE) {
+      var $image = this.$image;
+      $('.image-data__crop-wrapper > summary').on('click', function () {
+        setTimeout(function () {$image.trigger('visible.iwc')}, 100);
+      });
+    }
   };
 
   /**
@@ -455,7 +468,6 @@
       this.options.autoCrop = true;
     }
 
-    this.options.data.rotate = 0;
     this.options.data.scaleX = 1;
     this.options.data.scaleY = 1;
 
@@ -463,8 +475,7 @@
       .on('built.iwc.cropper', this.built.bind(this))
       .on('cropend.iwc.cropper', this.cropEnd.bind(this))
       .on('cropmove.iwc.cropper', this.cropMove.bind(this))
-      .cropper(this.options)
-    ;
+      .cropper(this.options);
 
     this.cropper = this.$image.data('cropper');
     this.options = this.cropper.options;
@@ -484,9 +495,8 @@
    * @param {HTMLElement|jQuery} element
    *   The element to poll.
    *
-   * @todo Perhaps replace once vertical tabs have proper events?
-   *
-   * @see https://www.drupal.org/node/2653570
+   * Replace once vertical tabs have proper events ?
+   * When following issue are fixed @see https://www.drupal.org/node/2653570.
    */
   Drupal.ImageWidgetCropType.prototype.pollVisibility = function (element) {
     var $element = $(element);
@@ -646,7 +656,7 @@
     if (!this.values.hasOwnProperty(name) || !this.values[name][0]) {
       return;
     }
-    value = value ? parseInt(value, 10) : 0;
+    value = value ? parseFloat(value) : 0;
     if (delta && name !== 'applied') {
       value = Math.round(value * delta);
     }
@@ -760,6 +770,34 @@
       summary.push(Drupal.t('Soft limit reached.'));
     }
     return summary.join('<br>');
+  };
+
+    /**
+     * Override Theme function for a vertical tabs.
+     *
+     * @param {object} settings
+     *   An object with the following keys:
+     * @param {string} settings.title
+     *   The name of the tab.
+     *
+     * @return {object}
+     *   This function has to return an object with at least these keys:
+     *   - item: The root tab jQuery element
+     *   - link: The anchor tag that acts as the clickable area of the tab
+     *       (jQuery version)
+     *   - summary: The jQuery element that contains the tab summary
+     */
+  Drupal.theme.verticalTab = function (settings) {
+      var tab = {};
+      this.isRequired = settings.details.data('drupalIwcRequired');
+      tab.item = $('<li class="vertical-tabs__menu-item" tabindex="-1"></li>').append(tab.link = $('<a href="#"></a>').append(tab.title = $('<strong class="vertical-tabs__menu-item-title"></strong>').text(settings.title)).append(tab.summary = $('<span class="vertical-tabs__menu-item-summary"></span>')));
+
+      // If those Crop type is required add attributes.
+      if (this.isRequired) {
+        tab.title.addClass('js-form-required form-required');
+      }
+
+      return tab;
   };
 
 }(jQuery, Drupal));

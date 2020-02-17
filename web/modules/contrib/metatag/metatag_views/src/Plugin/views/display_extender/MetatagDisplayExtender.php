@@ -45,9 +45,9 @@ class MetatagDisplayExtender extends DisplayExtenderPluginBase {
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param Drupal\metatag\MetatagTagPluginManager $metatag_plugin_manager
+   * @param \Drupal\metatag\MetatagTagPluginManager $metatag_plugin_manager
    *   The plugin manager for metatag tags.
-   * @param Drupal\metatag\MetatagManagerInterface $metatag_manager
+   * @param \Drupal\metatag\MetatagManagerInterface $metatag_manager
    *   The metatag manager.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, MetatagTagPluginManager $metatag_plugin_manager, MetatagManagerInterface $metatag_manager) {
@@ -129,15 +129,15 @@ class MetatagDisplayExtender extends DisplayExtenderPluginBase {
    * This output is returned as an array.
    */
   public function optionsSummary(&$categories, &$options) {
-    $categories['metatags'] = array(
+    $categories['metatags'] = [
       'title' => t('Meta tags'),
       'column' => 'second',
-    );
-    $options['metatags'] = array(
+    ];
+    $options['metatags'] = [
       'category' => 'metatags',
       'title' => t('Meta tags'),
       'value' => $this->hasMetatags() ? t('Overridden') : t('Using defaults'),
-    );
+    ];
   }
 
   /**
@@ -165,7 +165,7 @@ class MetatagDisplayExtender extends DisplayExtenderPluginBase {
    *   The meta tag values.
    */
   public function getMetatags() {
-    $metatags = array();
+    $metatags = [];
 
     if (!empty($this->options['metatags'])) {
       $metatags = $this->options['metatags'];
@@ -175,7 +175,7 @@ class MetatagDisplayExtender extends DisplayExtenderPluginBase {
   }
 
   /**
-   * Sets the metatags for the given view.
+   * Sets the meta tags for the given view.
    *
    * @param array $metatags
    *   Metatag arrays as suitable for storage.

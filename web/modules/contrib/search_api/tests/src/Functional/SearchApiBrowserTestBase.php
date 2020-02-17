@@ -2,11 +2,12 @@
 
 namespace Drupal\Tests\search_api\Functional;
 
-use Drupal\Component\Utility\Html;
 use Drupal\node\Entity\NodeType;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
+use Drupal\search_api\Utility\Utility;
 use Drupal\Tests\BrowserTestBase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides the base class for web tests for Search API.
@@ -23,6 +24,13 @@ abstract class SearchApiBrowserTestBase extends BrowserTestBase {
     'search_api',
     'search_api_test',
   ];
+
+  /**
+   * Set this to TRUE to include "item" and "article" bundles for test entities.
+   *
+   * @var bool
+   */
+  protected static $additionalBundles = FALSE;
 
   /**
    * An admin user used for this test.
@@ -116,7 +124,7 @@ abstract class SearchApiBrowserTestBase extends BrowserTestBase {
     // Do not use a batch for tracking the initial items after creating an
     // index when running the tests via the GUI. Otherwise, it seems Drupal's
     // Batch API gets confused and the test fails.
-    if (php_sapi_name() != 'cli') {
+    if (!Utility::isRunningInCli()) {
       \Drupal::state()->set('search_api_use_tracking_batch', FALSE);
     }
   }
@@ -195,26 +203,26 @@ abstract class SearchApiBrowserTestBase extends BrowserTestBase {
   }
 
   /**
-   * Checks for meta refresh tag and, if found, calls drupalGet() recursively.
-   *
-   * This function looks for the "http-equiv" attribute to be set to "Refresh"
-   * and is case-sensitive.
-   *
-   * @todo Remove once #2757023 gets committed (and we can depend on it).
+   * {@inheritdoc}
    */
-  protected function checkForMetaRefresh() {
-    $refresh = $this->cssSelect('meta[http-equiv="Refresh"]');
-    if (!empty($refresh) && (!isset($this->maximumMetaRefreshCount) || $this->metaRefreshCount < $this->maximumMetaRefreshCount)) {
-      // Parse the content attribute of the meta tag for the format:
-      // "[delay]: URL=[page_to_redirect_to]".
-      if (preg_match('/\d+;\s*URL=(?<url>.*)/i', $refresh[0]->getAttribute('content'), $match)) {
-        ++$this->metaRefreshCount;
-        $this->drupalGet($this->getAbsoluteUrl(Html::decodeEntities($match['url'])));
-        $this->checkForMetaRefresh();
-      }
+  protected function initConfig(ContainerInterface $container) {
+    parent::initConfig($container);
+
+    if (!static::$additionalBundles) {
+      return;
     }
-    // Reset refresh count.
-    $this->metaRefreshCount = 0;
+
+    // This will just set the Drupal state to include the necessary bundles for
+    // our test entity type. Otherwise, fields from those bundles won't be found
+    // and thus removed from the test index. (We can't do it in setUp(), before
+    // calling the parent method, since the container isn't set up at that
+    // point.)
+    $bundles = [
+      'entity_test_mulrev_changed' => ['label' => 'Entity Test Bundle'],
+      'item' => ['label' => 'item'],
+      'article' => ['label' => 'article'],
+    ];
+    \Drupal::state()->set('entity_test_mulrev_changed.bundles', $bundles);
   }
 
 }

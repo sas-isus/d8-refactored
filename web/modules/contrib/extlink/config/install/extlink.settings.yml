@@ -14,3 +14,7 @@ extlink_css_exclude: ''
 extlink_css_explicit: ''
 extlink_mailto_class: 'mailto'
 extlink_mailto_label: '(link sends email)'
+extlink_use_font_awesome: false
+extlink_font_awesome_classes: {  }
+extlink_icon_placement: 'append'
+whitelisted_domains: []

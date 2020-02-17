@@ -6,6 +6,17 @@
  */
 
 /**
+ * Allow other modules to alter the Extlink settings.
+ *
+ * @param array $settings
+ *   Array of all ExtLink settings.
+ */
+function hook_extlink_settings_alter(array &$settings) {
+  // Add one CSS selector to ignore links that match that.
+  $settings['extlink_css_exclude'] .= ', .my-module a.button';
+}
+
+/**
  * Allow other modules to alter the excluded CSS selector settings.
  *
  * @param string $cssExclude

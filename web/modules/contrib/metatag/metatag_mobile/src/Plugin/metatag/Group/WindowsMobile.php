@@ -1,10 +1,8 @@
 <?php
-/**
- * @file
- * Contains \Drupal\metatag_mobile\Plugin\metatag\Group\WindowsMobile.
- */
 
 namespace Drupal\metatag_mobile\Plugin\metatag\Group;
+
+use Drupal\metatag\Plugin\metatag\Group\GroupBase;
 
 /**
  * The Windows mobile group.

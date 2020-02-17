@@ -6,29 +6,40 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Url;
 use Drupal\metatag\MetatagManagerInterface;
-use Drupal\metatag_views\Plugin\views\display_extender\MetatagDisplayExtender;
-use Drupal\views\Plugin\views\display\DisplayPluginInterface;
-use Drupal\views\Plugin\views\display_extender\DisplayExtenderPluginBase;
-use Drupal\views\ViewEntityInterface;
-use Drupal\views\ViewExecutable;
 use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class MetatagViewsController
+ * Class MetatagViewsController.
+ *
  * @package Drupal\metatag_views\Controller
  */
 class MetatagViewsController extends ControllerBase {
 
-  /** @var EntityStorageInterface  */
+  /**
+   * The Views storage interface.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
   protected $viewStorage;
 
-  /** @var MetatagManagerInterface  */
+  /**
+   * The Metatag manager interface.
+   *
+   * @var \Drupal\metatag\MetatagManagerInterface
+   */
   protected $metatagManager;
 
-  /** @var array  associative array of labels */
+  /**
+   * Associative array of labels.
+   *
+   * @var array
+   */
   protected $viewLabels;
 
+  /**
+   * {@inheritdoc}
+   */
   public function __construct(EntityStorageInterface $viewStorage, MetatagManagerInterface $metatagManager) {
     $this->viewStorage = $viewStorage;
     $this->metatagManager = $metatagManager;
@@ -38,7 +49,7 @@ class MetatagViewsController extends ControllerBase {
   }
 
   /**
-   * @inheritDoc
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
@@ -48,7 +59,7 @@ class MetatagViewsController extends ControllerBase {
   }
 
   /**
-   * Get metatags for all of the views / displays that have them set.
+   * Get meta tags for all of the views / displays that have them set.
    *
    * @return array
    *   List of tags grouped by view and display.
@@ -67,23 +78,23 @@ class MetatagViewsController extends ControllerBase {
   }
 
   /**
-   * Main controller function. Generates the renderable array for views
-   * metatags UI.
+   * Generates the renderable array for views meta tags UI.
    *
    * @return array
+   *   The list of details.
    */
   public function listViews() {
     $elements = [];
 
     $elements['header'] = [
-      '#markup' => '<p>' . t("To view a list of displays with meta tags set up, click on a view name. To view a summary of meta tags configuration for a particular display, click on the display name. If you need to set metatags for a specific view, choose Add views meta tags. Reverting the meta tags removes the specific configuration and falls back to defaults.") . '</p>',
+      '#markup' => '<p>' . $this->t("To view a list of displays with meta tags set up, click on a view name. To view a summary of meta tags configuration for a particular display, click on the display name. If you need to set meta tags for a specific view, choose Add views meta tags. Reverting the meta tags removes the specific configuration and falls back to defaults.") . '</p>',
     ];
 
     // Iterate over the values and build the whole UI.
     // 1. Top level is a collapsible fieldset with a view name (details)
     // 2. Inside each fieldset we have 2 columns -> Display and Operations.
     //    Display contains point 3.
-    //    Operations contain edit and revert
+    //    Operations contain edit and revert.
     // 3. In each display there is a table that has 2 columns: tag name and tag
     //    value.
     $tagged_views = $this->getTaggedViews();
@@ -99,17 +110,24 @@ class MetatagViewsController extends ControllerBase {
   }
 
   /**
-   * Builds the second "level" of the UI - table with display fieldset and operations.
+   * Builds the second "level" of the UI table with display fieldset and ops.
    *
-   * @param $view_id
-   * @param $displays
+   * @param string $view_id
+   *   The view display to use.
+   * @param array $displays
+   *   The displays to process.
+   *
    * @return array
+   *   Render array.
    */
-  protected function buildViewDetails($view_id, $displays) {
+  protected function buildViewDetails($view_id, array $displays) {
     $element = [
       '#type' => 'table',
       '#collapsible' => TRUE,
-      '#header' => [$this->t('Display'), $this->t('Operations')],
+      '#header' => [
+        $this->t('Display'),
+        $this->t('Operations'),
+      ],
     ];
 
     foreach ($displays as $display_id => $metatags) {
@@ -120,22 +138,25 @@ class MetatagViewsController extends ControllerBase {
         '#title' => $this->viewLabels[$view_id][$display_id],
       ];
 
-      $params = ['view_id' => $view_id, 'display_id' => $display_id];
+      $params = [
+        'view_id' => $view_id,
+        'display_id' => $display_id,
+      ];
 
       // Generate the operations.
       $element[$display_id]['ops'] = [
         '#type' => 'operations',
         '#links' => [
           'edit' => [
-            'title' => t('Edit'),
+            'title' => $this->t('Edit'),
             'url' => Url::fromRoute('metatag_views.metatags.edit', $params),
           ],
           'translate' => [
-            'title' => t('Translate'),
+            'title' => $this->t('Translate'),
             'url' => Url::fromRoute('metatag_views.metatags.translate_overview', $params),
           ],
           'revert' => [
-            'title' => t('Revert'),
+            'title' => $this->t('Revert'),
             'url' => Url::fromRoute('metatag_views.metatags.revert', $params),
           ],
         ],
@@ -149,12 +170,15 @@ class MetatagViewsController extends ControllerBase {
   }
 
   /**
-   * Build the table with metatags values summary.
+   * Build the table with metatag values summary.
    *
-   * @param $tags
+   * @param array $tags
+   *   The tags to process.
+   *
    * @return array
+   *   The tag structure in a display element.
    */
-  protected function buildDisplayDetailsTable($tags) {
+  protected function buildDisplayDetailsTable(array $tags) {
     $element = [
       '#type' => 'table',
     ];
@@ -183,11 +207,13 @@ class MetatagViewsController extends ControllerBase {
   }
 
   /**
-   * Massage the tag value. Returns an imploded string for metatags that
-   * are nested (ex. robots).
+   * Massage the tag value.
    *
-   * @param $value
+   * @param string $value
+   *   The meta tag to output.
+   *
    * @return string
+   *   An imploded string for meta tags that are nested, ex. robots.
    */
   protected function prepareTagValue($value) {
     if (is_array($value)) {
@@ -201,7 +227,7 @@ class MetatagViewsController extends ControllerBase {
    * Gets label values for the views and their displays.
    */
   protected function getViewsAndDisplaysLabels() {
-    /** @var ViewEntityInterface[] $views */
+    /** @var \Drupal\views\ViewEntityInterface[] $views */
     $views = $this->viewStorage->loadByProperties(['status' => 1]);
 
     $labels = [];
@@ -216,4 +242,5 @@ class MetatagViewsController extends ControllerBase {
 
     $this->viewLabels = $labels;
   }
+
 }

@@ -115,7 +115,7 @@ class SearchApiRow extends RowPluginBase {
       if (!$datasource->getViewModes()) {
         $form['view_modes'][$datasource_id] = [
           '#type' => 'item',
-          '#title' => $this->t('Default View mode for datasource %name', ['%name' => $datasource_label]),
+          '#title' => $this->t('View mode for datasource %name', ['%name' => $datasource_label]),
           '#description' => $this->t("This datasource doesn't have any view modes available. It is therefore not possible to display results of this datasource using this row plugin."),
         ];
         continue;
@@ -198,7 +198,14 @@ class SearchApiRow extends RowPluginBase {
     }
 
     try {
-      return $this->index->getDatasource($datasource_id)->viewItem($row->_object, $view_mode);
+      $build = $this->index->getDatasource($datasource_id)
+        ->viewItem($row->_object, $view_mode);
+      // Add the excerpt to the render array to allow adding it to view modes.
+      if (isset($row->search_api_excerpt)) {
+        $build['#search_api_excerpt'] = $row->search_api_excerpt;
+      }
+
+      return $build;
     }
     catch (SearchApiException $e) {
       $this->logException($e);

@@ -268,6 +268,7 @@ class TestBackend extends BackendPluginBase implements PluginFormInterface {
       $item->setScore(1);
       $result_items[$item_id] = $item;
     }
+    $results->setResultItems($result_items);
     $results->setResultCount(count($result_items));
   }
 
@@ -286,7 +287,10 @@ class TestBackend extends BackendPluginBase implements PluginFormInterface {
    */
   public function getDiscouragedProcessors() {
     if ($override = $this->getMethodOverride(__FUNCTION__)) {
-      return (array) call_user_func($override, $this);
+      // Safeguard against "stupid" dummy methods used in tests, such as
+      // \Drupal\search_api_test\MethodOverrides::overrideTestBackendMethod().
+      $ret = call_user_func($override, $this);
+      return is_array($ret) ? $ret : [];
     }
     return $this->getReturnValue(__FUNCTION__, []);
   }

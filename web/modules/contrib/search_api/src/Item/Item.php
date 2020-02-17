@@ -2,14 +2,15 @@
 
 namespace Drupal\search_api\Item;
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\TypedData\ComplexDataInterface;
 use Drupal\search_api\Datasource\DatasourceInterface;
+use Drupal\search_api\IndexInterface;
 use Drupal\search_api\LoggerTrait;
 use Drupal\search_api\Processor\ProcessorInterface;
 use Drupal\search_api\Processor\ProcessorPropertyInterface;
 use Drupal\search_api\SearchApiException;
-use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Utility\Utility;
 
 /**
@@ -102,6 +103,15 @@ class Item implements \IteratorAggregate, ItemInterface {
    * @var array
    */
   protected $extraData = [];
+
+  /**
+   * Cached access results for the item, keyed by user ID.
+   *
+   * @var \Drupal\Core\Access\AccessResultInterface[]
+   *
+   * @see getAccessResult()
+   */
+  protected $accessResults = [];
 
   /**
    * Constructs an Item object.
@@ -218,6 +228,7 @@ class Item implements \IteratorAggregate, ItemInterface {
       foreach ([NULL, $this->getDatasourceId()] as $datasource_id) {
         $fields_by_property_path = [];
         $processors_with_fields = [];
+        $properties = $this->index->getPropertyDefinitions($datasource_id);
         foreach ($this->index->getFieldsByDatasource($datasource_id) as $field_id => $field) {
           // Don't overwrite fields that were previously set.
           if (empty($this->fields[$field_id])) {
@@ -230,7 +241,16 @@ class Item implements \IteratorAggregate, ItemInterface {
               $this->fields[$field_id]->setType($data_type_fallback_mapping[$field_data_type]);
             }
 
-            $property = $field->getDataDefinition();
+            // For determining whether the field is provided via a processor, we
+            // need to check using the first part of its property path (in other
+            // words, the property that's directly on the result item, not
+            // nested), since only direct properties of the item can be added by
+            // the processor.
+            $property = NULL;
+            $property_name = Utility::splitPropertyPath($field->getPropertyPath(), FALSE)[0];
+            if (isset($properties[$property_name])) {
+              $property = $properties[$property_name];
+            }
             if ($property instanceof ProcessorPropertyInterface) {
               $processors_with_fields[$property->getProcessorId()] = TRUE;
             }
@@ -396,13 +416,30 @@ class Item implements \IteratorAggregate, ItemInterface {
    * {@inheritdoc}
    */
   public function checkAccess(AccountInterface $account = NULL) {
-    try {
-      return $this->getDatasource()
-        ->checkItemAccess($this->getOriginalObject(), $account);
+    @trigger_error('\Drupal\search_api\Item\ItemInterface::checkAccess() is deprecated in search_api:8.x-1.14 and is removed from search_api:9.x-1.0. Use getAccessResult() instead. See https://www.drupal.org/node/3051902', E_USER_DEPRECATED);
+    return $this->getAccessResult($account)->isAllowed();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAccessResult(AccountInterface $account = NULL) {
+    if (!$account) {
+      $account = \Drupal::currentUser();
     }
-    catch (SearchApiException $e) {
-      return FALSE;
+    $uid = $account->id();
+
+    if (empty($this->accessResults[$uid])) {
+      try {
+        $this->accessResults[$uid] = $this->getDatasource()
+          ->getItemAccessResult($this->getOriginalObject(), $account);
+      }
+      catch (SearchApiException $e) {
+        $this->accessResults[$uid] = AccessResult::neutral('Item could not be loaded, so cannot check access');
+      }
     }
+
+    return $this->accessResults[$uid];
   }
 
   /**
@@ -446,9 +483,9 @@ class Item implements \IteratorAggregate, ItemInterface {
       $excerpt = str_replace("\n", "\n  ", $this->getExcerpt());
       $out .= "\nExcerpt: $excerpt";
     }
-    if ($this->getFields()) {
+    if ($this->getFields(FALSE)) {
       $out .= "\nFields:";
-      foreach ($this->getFields() as $field) {
+      foreach ($this->getFields(FALSE) as $field) {
         $field = str_replace("\n", "\n  ", "$field");
         $out .= "\n- " . $field;
       }

@@ -6,7 +6,7 @@ extlink.settings:
   mapping:
     extlink_target:
       type: boolean
-      label: 'Open external links in a new window'
+      label: 'Open external links in a new tab'
     extlink_target_no_override:
       type: boolean
       label: 'Do not override target="*" if set'
@@ -52,3 +52,22 @@ extlink.settings:
     extlink_mailto_label:
       type: label
       label: 'Alternative text for mailto icon'
+    extlink_use_font_awesome:
+      type: boolean
+      label: 'Use Font Awesome icons instead of images.'
+    extlink_font_awesome_classes:
+      type: mapping
+      label: 'Font Awesome icon classes'
+      mapping:
+        links:
+          type: string
+          label: 'External link classes'
+        mailto:
+          type: string
+          label: 'Mailto link classes'
+    extlink_icon_placement:
+      type: string
+      label: 'Add icon in front of any processed link.'
+    whitelisted_domains:
+      type: sequence
+      label: 'Whitelisted domains'

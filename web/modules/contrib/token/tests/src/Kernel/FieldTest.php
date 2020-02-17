@@ -16,8 +16,8 @@ use Drupal\node\Entity\NodeType;
 use Drupal\contact\Entity\Message;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
-use Drupal\taxonomy\Tests\TaxonomyTestTrait;
 use Drupal\language\Entity\ConfigurableLanguage;
+use Drupal\Tests\taxonomy\Functional\TaxonomyTestTrait;
 
 /**
  * Tests field tokens.
@@ -191,32 +191,48 @@ class FieldTest extends KernelTestBase {
     $language->save();
 
     // Add a datetime field.
-    $field_datetime_storage = FieldStorageConfig::create(array(
-        'field_name' => 'field_datetime',
-        'type' => 'datetime',
-        'entity_type' => 'node',
-        'settings' => array('datetime_type' => DateTimeItem::DATETIME_TYPE_DATETIME),
-    ));
+    $field_datetime_storage = FieldStorageConfig::create([
+      'field_name' => 'field_datetime',
+      'type' => 'datetime',
+      'entity_type' => 'node',
+      'settings' => ['datetime_type' => DateTimeItem::DATETIME_TYPE_DATETIME],
+      'cardinality' => FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED,
+    ]);
     $field_datetime_storage->save();
     $field_datetime = FieldConfig::create([
-        'field_storage' => $field_datetime_storage,
-        'bundle' => 'article',
+      'field_storage' => $field_datetime_storage,
+      'bundle' => 'article',
     ]);
     $field_datetime->save();
 
     // Add a daterange field.
-    $field_daterange_storage = FieldStorageConfig::create(array(
-        'field_name' => 'field_daterange',
-        'type' => 'daterange',
-        'entity_type' => 'node',
-        'settings' => array('datetime_type' => DateRangeItem::DATETIME_TYPE_DATETIME),
-    ));
+    $field_daterange_storage = FieldStorageConfig::create([
+      'field_name' => 'field_daterange',
+      'type' => 'daterange',
+      'entity_type' => 'node',
+      'settings' => ['datetime_type' => DateRangeItem::DATETIME_TYPE_DATETIME],
+      'cardinality' => FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED,
+    ]);
     $field_daterange_storage->save();
     $field_daterange = FieldConfig::create([
-        'field_storage' => $field_daterange_storage,
-        'bundle' => 'article',
+      'field_storage' => $field_daterange_storage,
+      'bundle' => 'article',
     ]);
     $field_daterange->save();
+
+    // Add a timestamp field.
+    $field_timestamp_storage = FieldStorageConfig::create([
+      'field_name' => 'field_timestamp',
+      'type' => 'timestamp',
+      'entity_type' => 'node',
+      'cardinality' => FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED,
+    ]);
+    $field_timestamp_storage->save();
+    $field_timestamp = FieldConfig::create([
+      'field_storage' => $field_timestamp_storage,
+      'bundle' => 'article',
+    ]);
+    $field_timestamp->save();
   }
 
   /**
@@ -260,12 +276,12 @@ class FieldTest extends KernelTestBase {
     // Test the test_list token metadata.
     $tokenService = \Drupal::service('token');
     $token_info = $tokenService->getTokenInfo('node', 'test_list');
-    $this->assertEqual($token_info['name'], 'test_list');
-    $this->assertEqual($token_info['module'], 'token');
-    $this->assertEqual($token_info['type'], 'list<node-test_list>');
+    $this->assertEquals('test_list', $token_info['name']);
+    $this->assertEquals('token', $token_info['module']);
+    $this->assertEquals('list<node-test_list>', $token_info['type']);
     $typeInfo = $tokenService->getTypeInfo('list<node-test_list>');
-    $this->assertEqual($typeInfo['name'], 'List of test_list values');
-    $this->assertEqual($typeInfo['type'], 'list<node-test_list>');
+    $this->assertEquals('List of test_list values', $typeInfo['name']);
+    $this->assertEquals('list<node-test_list>', $typeInfo['type']);
 
     // Create a node type that does not have test_field field.
     $node_type = NodeType::create([
@@ -304,9 +320,9 @@ class FieldTest extends KernelTestBase {
 
     // Test the token info of the text field of the artcle content type.
     $token_info = $tokenService->getTokenInfo('node', 'test_field');
-    $this->assertEqual($token_info['name'], 'Test field', 'The token info name is correct.');
-    $this->assertEqual($token_info['description'], 'Text (formatted) field.', 'The token info description is correct.');
-    $this->assertEqual($token_info['module'], 'token', 'The token info module is correct.');
+    $this->assertEquals('Test field', $token_info['name'], 'The token info name is correct.');
+    $this->assertEquals('Text (formatted) field.', $token_info['description'], 'The token info description is correct.');
+    $this->assertEquals('token', $token_info['module'], 'The token info module is correct.');
 
     // Now create two more content types that share the field but the last
     // of them sets a different label. This should show an alternative label
@@ -336,17 +352,17 @@ class FieldTest extends KernelTestBase {
     $field->save();
 
     $token_info = $tokenService->getTokenInfo('node', 'test_field');
-    $this->assertEqual($token_info['name'], 'Test field', 'The token info name is correct.');
-    $this->assertEqual((string) $token_info['description'], 'Text (formatted) field. Also known as <em class="placeholder">Different test field</em>.', 'When a field is used in several bundles with different labels, this is noted at the token info description.');
-    $this->assertEqual($token_info['module'], 'token', 'The token info module is correct.');
-    $this->assertEqual($token_info['type'], 'node-test_field', 'The field property token info type is correct.');
+    $this->assertEquals('Test field', $token_info['name'], 'The token info name is correct.');
+    $this->assertEquals('Text (formatted) field. Also known as <em class="placeholder">Different test field</em>.', (string) $token_info['description'], 'When a field is used in several bundles with different labels, this is noted at the token info description.');
+    $this->assertEquals('token', $token_info['module'], 'The token info module is correct.');
+    $this->assertEquals('node-test_field', $token_info['type'], 'The field property token info type is correct.');
 
     // Test field property token info.
     $token_info = $tokenService->getTokenInfo('node-test_field', 'value');
-    $this->assertEqual($token_info['name'], 'Text', 'The field property token info name is correct.');
+    $this->assertEquals('Text', $token_info['name'], 'The field property token info name is correct.');
     // This particular field property description happens to be empty.
-    $this->assertEqual((string) $token_info['description'], '', 'The field property token info description is correct.');
-    $this->assertEqual($token_info['module'], 'token', 'The field property token info module is correct.');
+    $this->assertEquals('', (string) $token_info['description'], 'The field property token info description is correct.');
+    $this->assertEquals('token', $token_info['module'], 'The field property token info module is correct.');
   }
 
   /**
@@ -676,11 +692,17 @@ class FieldTest extends KernelTestBase {
       'type' => 'article',
     ]);
 
-    $node->set('field_datetime', '1925-09-28T00:00:00')->save();
+    $node->set('field_datetime', ['1925-09-28T00:00:00', '1930-10-28T00:00:00'])->save();
     $this->assertTokens('node', ['node' => $node], [
       'field_datetime:date:custom:Y' => '1925',
       'field_datetime:date:html_month' => '1925-09',
-      'field_datetime:date' => $node->field_datetime->date->getTimestamp(),
+      'field_datetime:date' => $node->get('field_datetime')->date->getTimestamp(),
+      'field_datetime:0:date:custom:Y' => '1925',
+      'field_datetime:0:date:html_month' => '1925-09',
+      'field_datetime:0:date' => $node->get('field_datetime')->date->getTimestamp(),
+      'field_datetime:1:date:custom:Y' => '1930',
+      'field_datetime:1:date:html_month' => '1930-10',
+      'field_datetime:1:date' => $node->get('field_datetime')->get(1)->date->getTimestamp(),
     ]);
   }
 
@@ -689,20 +711,58 @@ class FieldTest extends KernelTestBase {
    */
   public function testDatetimeRangeFieldTokens() {
 
+    /** @var \Drupal\node\NodeInterface $node */
     $node = Node::create([
         'title' => 'Node for daterange field',
         'type' => 'article',
     ]);
 
-    $node->field_daterange->value = '2013-12-22T00:00:00';
-    $node->field_daterange->end_value = '2016-08-26T00:00:00';
+    $node->get('field_daterange')->value = '2013-12-22T00:00:00';
+    $node->get('field_daterange')->end_value = '2016-08-26T00:00:00';
+    $node->get('field_daterange')->appendItem([
+      'value' => '2014-08-22T00:00:00',
+      'end_value' => '2017-12-20T00:00:00',
+    ]);
+    $node->get('field_daterange')->value = '2013-12-22T00:00:00';
+    $node->get('field_daterange')->end_value = '2016-08-26T00:00:00';
     $node->save();
     $this->assertTokens('node', ['node' => $node], [
       'field_daterange:start_date:html_month' => '2013-12',
       'field_daterange:start_date:custom:Y' => '2013',
       'field_daterange:end_date:custom:Y' => '2016',
-      'field_daterange:start_date' => $node->field_daterange->start_date->getTimestamp(),
+      'field_daterange:start_date' => $node->get('field_daterange')->start_date->getTimestamp(),
+      'field_daterange:0:start_date:html_month' => '2013-12',
+      'field_daterange:0:start_date:custom:Y' => '2013',
+      'field_daterange:0:end_date:custom:Y' => '2016',
+      'field_daterange:0:start_date' => $node->get('field_daterange')->start_date->getTimestamp(),
+      'field_daterange:1:start_date:html_month' => '2014-08',
+      'field_daterange:1:start_date:custom:Y' => '2014',
+      'field_daterange:1:end_date:custom:Y' => '2017',
+      'field_daterange:1:end_date' => $node->get('field_daterange')->get(1)->end_date->getTimestamp(),
     ]);
   }
 
+  /**
+   * Tests support for a timestamp fields.
+   */
+  public function testTimestampFieldTokens() {
+
+    $node = Node::create([
+      'title' => 'Node for timestamp field',
+      'type' => 'article',
+    ]);
+
+    $node->set('field_timestamp', ['1277540209', '1532593009'])->save();
+    $this->assertTokens('node', ['node' => $node], [
+      'field_timestamp:date:custom:Y' => '2010',
+      'field_timestamp:date:html_month' => '2010-06',
+      'field_timestamp:date' => $node->get('field_timestamp')->value,
+      'field_timestamp:0:date:custom:Y' => '2010',
+      'field_timestamp:0:date:html_month' => '2010-06',
+      'field_timestamp:0:date' => $node->get('field_timestamp')->value,
+      'field_timestamp:1:date:custom:Y' => '2018',
+      'field_timestamp:1:date:html_month' => '2018-07',
+      'field_timestamp:1:date' => $node->get('field_timestamp')->get(1)->value,
+    ]);
+  }
 }

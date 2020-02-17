@@ -3,7 +3,6 @@
 namespace Drupal\search_api_db\DatabaseCompatibility;
 
 use Drupal\Component\Transliteration\TransliterationInterface;
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Database\Connection;
 
 /**
@@ -48,6 +47,15 @@ class GenericDatabase implements DatabaseCompatibilityHandlerInterface {
   /**
    * {@inheritdoc}
    */
+  public function getCloneForDatabase(Connection $database) {
+    $service = clone $this;
+    $service->database = $database;
+    return $service;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function alterNewTable($table, $type = 'text') {}
 
   /**
@@ -57,7 +65,7 @@ class GenericDatabase implements DatabaseCompatibilityHandlerInterface {
     if ($type == 'text') {
       return $value;
     }
-    return Unicode::strtolower($this->transliterator->transliterate($value));
+    return mb_strtolower($this->transliterator->transliterate($value));
   }
 
 }

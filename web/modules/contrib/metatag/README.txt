@@ -43,6 +43,9 @@ The primary features include:
 * The fifteen Dublin Core Basic Element Set 1.1 meta tags may be added by
   enabling the "Metatag: Dublin Core" submodule.
 
+* Forty additional Dublin Core meta tags may be added by enabling the "Metatag:
+  Dublin Core Advanced" submodule.
+
 * The Open Graph Protocol meta tags, as used by Facebook, Pinterest, LinkedIn
   and other sites, may be added by enabling the "Metatag: Open Graph" submodule.
 
@@ -57,6 +60,9 @@ The primary features include:
   are using Facebook widgets or are building custom integration with Facebook's
   APIs, but they are not needed by most sites and have no bearing on the
   Open Graph meta tags.
+
+* The Pinterest meta tags may be added by enabling the "Metatag: Pinterest"
+  submodule.
 
 * Site verification meta tags can be added, e.g. as used by the Google search
   engine to confirm ownership of the site; see the "Metatag: Verification"
@@ -85,6 +91,10 @@ The primary features include:
 * Integration with DrupalConsole [1] to provide a quick method of generating new
   meta tags.
 
+* A report page at /admin/reports/metatag-plugins which shows all of the meta
+  tag plugins provided on the site, and indication as to which module provides
+  them.
+
 
 Standard usage scenario
 --------------------------------------------------------------------------------
@@ -95,7 +105,7 @@ Standard usage scenario
    automatically assign values.
 4. Additional bundle defaults may be added by clicking on "Add metatag
    defaults" and filling out the form.
-5. To adjust metatags for a specific entity, the Metatag field must be added
+5. To adjust meta tags for a specific entity, the Metatag field must be added
    first. Follow these steps:
 
    5.1 Go to the "Manage fields" of the bundle where the Metatag field is to
@@ -107,6 +117,30 @@ Standard usage scenario
    5.5 If the site supports multiple languages, and translations have been
        enabled for this entity, select "Users may translate this field" to use
        Drupal's translation system.
+
+Please note: no meta tags will be output while the site is in maintenance mode.
+
+
+Simplify the content administration experience
+--------------------------------------------------------------------------------
+This module and its submodules gives a site's content team the ability to add
+every meta tag ever. The standard meta tag form added by the Metatag field on
+content entities can be overwhelming to content creators and editors who just
+need to manage a few options.
+
+The easiest way of simplifying this for content teams is to add new fields to
+the content type for the meta data fields that are needed and skip adding the
+Metatag field entirely, then use tokens for those fields in the defaults
+(/admin/config/search/metatag). These fields can be used in the entity's
+display, or just left hidden.
+
+
+Alternative option to simplify the content administration experience
+--------------------------------------------------------------------------------
+On the settings page (/admin/config/search/metatag/settings) are options to
+control which meta tag groups are available for each entity bundle. This allows
+e.g. the Favicon meta tags to be available for global configurations but to hide
+them on entity forms.
 
 
 Programmatically assign meta tags to an entity
@@ -130,17 +164,19 @@ Option 1:
       'keywords' => 'Some,Keywords',
     ]),
   ];
-  $node = \Drupal::entityTypeManager()->getStorage($entity_type)->create($values);
+  $node = \Drupal::entityTypeManager()
+    ->getStorage($entity_type)
+    ->create($values);
   $node->save();
 
 Option 2:
 
-  $node = Node::create(array(
+  $node = Node::create([
     'type' => article,
     'langcode' => 'en',
     'status' => 1,
     'uid' => 1,
-  ));
+  ]);
   $node->set('title', 'Testing metatag creation');
   $node->set('field_meta_tags', serialize([
     'title' => 'Some title',
@@ -152,6 +188,89 @@ Option 2:
 In both examples, the custom meta tag values will still be merged with the
 values defined via the global defaults prior to being output - it is not
 necessary to copy each value to the new record.
+
+
+Obtain meta tags for an entity
+--------------------------------------------------------------------------------
+For developers needing to access the rendered meta tags for a given entity, a
+function is provided to make this easy to do:
+
+  $metatags = metatag_generate_entity_metatags($entity);
+
+This will return an array with the following structure:
+
+  [
+    'title' => [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'title',
+        'content' => 'The What | D8.4',
+      ],
+    ],
+    'canonical_url' => [
+      '#tag' => 'link',
+      '#attributes' => [
+        'rel' => 'canonical',
+        'href' => 'http://example.com/what',
+      ],
+    ],
+    'description' => [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'description',
+        'content' => 'I can't even.',
+      ],
+    ],
+    'generator' => [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'generator',
+        'content' => 'Drupal 8!',
+      ],
+    ],
+  ]
+
+The meta tags are keyed off the meta tag plugin's ID, e.g. "generator". Each
+meta tag is then provided as arguments suitable for use in a render array with
+the type "html_tag". Extracting the value of the meta tag will depend upon the
+type of meta tag, e.g. the generator meta tag uses the "content" attribute while
+the link tag uses the "href" attribute.
+
+
+Migration / Upgrade from Drupal 7
+--------------------------------------------------------------------------------
+An upgrade path from Metatag on Drupal 7 is provided.
+
+Two migration processes are supported:
+
+ 1. A guided migration using either the Migrate Drupal UI from core or the
+    Migrate Upgrade [2] contributed module. This will automatically create a
+    field named "field_metatag" and import any meta tag data that existed in D7.
+
+    This is set up in metatag_migration_plugins_alter() and then leverages code
+    in metatag_migrate_prepare_row() and
+    \Drupal\metatag\Plugin\migrate\process\d7\MetatagEntities to do the actual
+    data migration.
+
+ 2. A custom migration using Migrate Plus [3] and possibly Migrate Tools [4].
+    This will require manually creating the meta tag fields and assigning a
+    custom process plugin as the source for its data. For example, if the name
+    of the field is "field_meta_tags" the lines fron the "process" section of
+    the migration yml file will look line the following:
+
+.......................................
+process:
+  field_metatag:
+    plugin: d7_metatag_entities
+    source: pseudo_d7_metatag_entities
+.......................................
+
+    The important items are the plugin "d7_metatag_entities" and the source
+    value of "pseudo_d7_metatag_entities", if these are not present the
+    migration will not work as expected.
+
+    This is handled by metatag_migrate_prepare_row() and
+    \Drupal\metatag\Plugin\migrate\process\d7\MetatagEntities.
 
 
 DrupalConsole integration
@@ -174,14 +293,38 @@ There is also a command for generating meta tag groups:
 Again, this provides a guided process to create a new group.
 
 
+Known issue with testing infrastructure
+--------------------------------------------------------------------------------
+Thanks to contributions from the community, the Metatag module has an extensive
+collection of tests to ensure proposed changes avoid breaking the module.
+
+Part of this includes a test that confirms the separate Schema.org Metatag
+module suite continues to work. This test is specifically designed with the
+drupal.org testing platform in mind. Projects which have their own testing
+infrastructure might run into errors like the following:
+
+`Fatal error: Class 'Drupal\Tests\schema_web_page\Functional\SchemaWebPageTest'
+not found in SchemaMetatagTest.php on line 17`
+
+To resolve this, add "schema_metatag" as a "require-dev" item in the project's
+custom composer.json. This can be done by running the following in the
+project's root:
+
+  composer require --dev drupal/schema_metatag
+
+This will update composer.json and composer.lock as well as download the
+dependency. When `composer install` is run on a production deployment and the
+`--no-dev` flag is provided it will skip installing the dev requirements.
+
+
 Related modules
 --------------------------------------------------------------------------------
 Some modules are available that extend Metatag with additional or complimentary
 functionality:
 
-* Schema Metatag
+* Schema.org Metatag
   https://www.drupal.org/project/schema_metatag
-  Extensive solution for adding schema.org support to Metatag.
+  Extensive solution for adding schema.org / JSON-LD support to Metatag.
 
 * Context Metadata
   https://www.drupal.org/project/context_metadata
@@ -218,14 +361,14 @@ Known issues
 
 Credits / contact
 --------------------------------------------------------------------------------
-Currently maintained by Damien McKenna [2] and Dave Reid [3]. Drupal 7 module
+Currently maintained by Damien McKenna [5] and Dave Reid [6]. Drupal 7 module
 originally written by Dave Reid. Early work on Drupal 8 port by Damien McKenna
-and Michelle Cox [4], and sponsored by Mediacurrent [5]; key improvements by
-Juampy Novillo Requena [6] with insights from Dave Reid and sponsorship by
-Lullabot [7] and Acquia [8]. Additional contributions to the 8.x-1.0 release
-from cilefen [9], Daniel Wehner [10], Jesus Manuel Olivas [11], Lee Rowlands
-[12], Michael Kandelaars [13], Ivo Van Geertruyen [14], Nikhilesh Gupta B [15],
-Rakesh James [16], and many others.
+and Michelle Cox [7], and sponsored by Mediacurrent [8]; key improvements by
+Juampy Novillo Requena [9] with insights from Dave Reid and sponsorship by
+Lullabot [10] and Acquia [11]. Additional contributions to the 8.x-1.0 release
+from cilefen [12], Daniel Wehner [13], Jesus Manuel Olivas [14], Lee Rowlands
+[15], Michael Kandelaars [16], Ivo Van Geertruyen [17], Nikhilesh Gupta B [18],
+Rakesh James [19], and many others.
 
 Ongoing development is sponsored by Mediacurrent.
 
@@ -237,18 +380,21 @@ request, a feature request or a bug report, in the project issue queue:
 References
 --------------------------------------------------------------------------------
 1: https://www.drupal.org/project/console
-2: https://www.drupal.org/u/damienmckenna
-3: https://www.drupal.org/u/dave-reid
-4: https://www.drupal.org/u/michelle
-5: https://www.mediacurrent.com/
-6: https://www.drupal.org/u/juampynr
-7: https://www.lullabot.com/
-8: https://www.acquia.com/
-9: https://www.drupal.org/u/cilefen
-10: https://www.drupal.org/u/dawehner
-11: https://www.drupal.org/u/jmolivas
-12: https://www.drupal.org/u/larowlan
-13: https://www.drupal.org/u/mikeyk
-14: https://www.drupal.org/u/mr.baileys
-15: https://www.drupal.org/u/nikhilesh-gupta
-16: https://www.drupal.org/u/rakeshgectcr
+2: https://www.drupal.org/project/migrate_upgrade
+3: https://www.drupal.org/project/migrate_plus
+4: https://www.drupal.org/project/migrate_tools
+5: https://www.drupal.org/u/damienmckenna
+6: https://www.drupal.org/u/dave-reid
+7: https://www.drupal.org/u/michelle
+8: https://www.mediacurrent.com/
+9: https://www.drupal.org/u/juampynr
+10: https://www.lullabot.com/
+11: https://www.acquia.com/
+12: https://www.drupal.org/u/cilefen
+13: https://www.drupal.org/u/dawehner
+14: https://www.drupal.org/u/jmolivas
+15: https://www.drupal.org/u/larowlan
+16: https://www.drupal.org/u/mikeyk
+17: https://www.drupal.org/u/mr.baileys
+18: https://www.drupal.org/u/nikhilesh-gupta
+19: https://www.drupal.org/u/rakeshgectcr

@@ -5,68 +5,78 @@
  * Install, update and uninstall functions for the draggableviews module.
  */
 
+use Drupal\views\Views;
+
 /**
  * Implements hook_schema().
  */
 function draggableviews_schema() {
-  $schema['draggableviews_structure'] = array(
-    'description' => 'Table that contains logs of all system events.',
-    'fields' => array(
-      'dvid' => array(
+  $schema['draggableviews_structure'] = [
+    'description' => 'Saves the order settings of a draggableview view.',
+    'fields' => [
+      'dvid' => [
         'type' => 'serial',
         'unsigned' => TRUE,
         'not null' => TRUE,
         'description' => 'The primary identifier.',
-      ),
-      'view_name' => array(
+      ],
+      'view_name' => [
         'type' => 'varchar',
         'length' => 128,
         'not null' => TRUE,
         'default' => '',
         'description' => 'Makes the order unique for each view.',
-      ),
-      'view_display' => array(
+      ],
+      'view_display' => [
         'type' => 'varchar',
         'length' => 64,
         'not null' => TRUE,
         'default' => '',
         'description' => 'Makes the order unique for each view display.',
-      ),
-      'args' => array(
+      ],
+      'args' => [
         'type' => 'varchar',
         'length' => 255,
         'not null' => FALSE,
         'default' => '',
         'description' => 'Makes the order unique for a given set of arguments',
-      ),
-      'entity_id' => array(
+      ],
+      'entity_id' => [
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
         'description' => 'Id of the entity that we are sorting (node, user, etc.).',
-      ),
-      'weight' => array(
+      ],
+      'weight' => [
         'type' => 'int',
         'unsigned' => FALSE,
         'not null' => TRUE,
         'default' => 0,
         'description' => 'The order weight.',
-      ),
-      'parent' => array(
+      ],
+      'parent' => [
         'type' => 'int',
         'unsigned' => FALSE,
         'not null' => TRUE,
         'default' => 0,
         'description' => 'The id of the parent.',
-      ),
-    ),
-    'indexes' => array(
-      'view' => array('view_name', 'view_display', 'args', 'entity_id'),
-      'weight' => array('weight'),
-      'entity_id' => array('entity_id'),
-    ),
-    'primary key' => array('dvid'),
-  );
+      ],
+    ],
+    'indexes' => [
+      'view' => ['view_name', 'view_display', 'args', 'entity_id'],
+      'weight' => ['weight'],
+      'entity_id' => ['entity_id'],
+    ],
+    'primary key' => ['dvid'],
+  ];
 
   return $schema;
+}
+
+/**
+ * Implements hook_update().
+ */
+function draggableviews_update_8104(&$sandbox) {
+  // the update hook here accidentally cropped in into 1.1 but it shouldn't be
+  // there, I belivee that removing it should be harmless.
 }

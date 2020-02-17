@@ -4,14 +4,42 @@ namespace Drupal\search_api\Form;
 
 use Drupal\Core\Entity\EntityConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Utility\Error;
 use Drupal\search_api\SearchApiException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines a confirm form for clearing a server.
  */
 class ServerClearConfirmForm extends EntityConfirmFormBase {
+
+  /**
+   * The messenger.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
+   * Constructs a ServerClearConfirmForm object.
+   *
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
+   */
+  public function __construct(MessengerInterface $messenger) {
+    $this->messenger = $messenger;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    $messenger = $container->get('messenger');
+
+    return new static($messenger);
+  }
 
   /**
    * {@inheritdoc}
@@ -24,7 +52,7 @@ class ServerClearConfirmForm extends EntityConfirmFormBase {
    * {@inheritdoc}
    */
   public function getDescription() {
-    return $this->t('This will permanently remove all data currently indexed on this server for indexes that aren\'t read-only. Items are queued for reindexing. Until reindexing occurs, searches for the affected indexes will not return any results. This action cannot be undone.');
+    return $this->t("This will permanently remove all data currently indexed on this server for indexes that aren't read-only. Items are queued for reindexing. Until reindexing occurs, searches for the affected indexes will not return any results. This action cannot be undone.");
   }
 
   /**
@@ -43,10 +71,10 @@ class ServerClearConfirmForm extends EntityConfirmFormBase {
 
     try {
       $server->deleteAllItems();
-      drupal_set_message($this->t('All indexed data was successfully deleted from the server.'));
+      $this->messenger->addStatus($this->t('All indexed data was successfully deleted from the server.'));
     }
     catch (SearchApiException $e) {
-      drupal_set_message($this->t('Indexed data could not be cleared for some indexes. Check the logs for details.'), 'error');
+      $this->messenger->addError($this->t('Indexed data could not be cleared for some indexes. Check the logs for details.'));
     }
 
     $failed_reindexing = [];
@@ -74,7 +102,7 @@ class ServerClearConfirmForm extends EntityConfirmFormBase {
       $args = [
         '@indexes' => implode(', ', $failed_reindexing),
       ];
-      drupal_set_message($this->t('Failed to mark the following indexes for reindexing: @indexes. Check the logs for details.', $args), 'warning');
+      $this->messenger->addWarning($this->t('Failed to mark the following indexes for reindexing: @indexes. Check the logs for details.', $args));
     }
 
     $form_state->setRedirect('entity.search_api_server.canonical', ['search_api_server' => $server->id()]);

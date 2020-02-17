@@ -30,6 +30,7 @@ pipelines:
           - (cd drupal/web && ../vendor/drush/drush/drush si standard --db-url=mysql://root:testing@127.0.01/testing -y && ../vendor/drush/drush/drush en permissions_by_term -y)
           - (cd drupal && cp web/modules/permissions_by_term/tests/src/Behat/composer-require-namespace.php . && php composer-require-namespace.php && composer dump-autoload)
           - (cd drupal/web && screen -dmS php-server php -S localhost:80 .ht.router.php)
+          - (cd drupal/web && ../vendor/drush/drush/drush pm:uninstall page_cache -y && ../vendor/drush/drush/drush en dynamic_page_cache -y)
           - (cd drupal/web && cp modules/permissions_by_term/tests/src/Behat/behat.yml.dist behat.yml && ../vendor/bin/behat)
         services:
           - testing

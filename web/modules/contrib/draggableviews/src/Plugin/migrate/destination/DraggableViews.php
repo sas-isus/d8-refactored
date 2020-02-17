@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains destination plugin for Draggable Views database table.
- */
-
 namespace Drupal\draggableviews\Plugin\migrate\destination;
 
 use Drupal\Core\Database\Database;
@@ -22,22 +17,6 @@ use Drupal\migrate\Row;
 class DraggableViews extends DestinationBase {
 
   /**
-   * Constructs an entity destination plugin.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param MigrationInterface $migration
-   *   The migration.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $migration);
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function import(Row $row, array $old_destination_id_values = []) {
@@ -50,7 +29,7 @@ class DraggableViews extends DestinationBase {
       'parent' => $row->getDestinationProperty('parent'),
     ];
     $result = Database::getConnection()->insert('draggableviews_structure')->fields($record)->execute();
-    return array($result);
+    return [$result];
   }
 
   /**

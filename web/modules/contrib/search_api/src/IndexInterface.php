@@ -176,6 +176,15 @@ interface IndexInterface extends ConfigEntityInterface {
   public function setDatasources(array $datasources);
 
   /**
+   * Retrieves all entity types contained in this index.
+   *
+   * @return string[]
+   *   An associative array mapping all datasources containing entities to their
+   *   entity type IDs.
+   */
+  public function getEntityTypes();
+
+  /**
    * Determines whether the tracker is valid.
    *
    * @return bool
@@ -280,7 +289,7 @@ interface IndexInterface extends ConfigEntityInterface {
    *   An array of all enabled processors that support the given stage, ordered
    *   by the weight for that stage.
    */
-  public function getProcessorsByStage($stage, $overrides = []);
+  public function getProcessorsByStage($stage, array $overrides = []);
 
   /**
    * Determines whether the given processor ID is valid for this index.
@@ -390,18 +399,15 @@ interface IndexInterface extends ConfigEntityInterface {
   /**
    * Adds a field to this index.
    *
-   * If the field is already present (with the same datasource and property
-   * path) its settings will be updated.
-   *
    * @param \Drupal\search_api\Item\FieldInterface $field
-   *   The field to add, or update.
+   *   The field to add.
    *
    * @return $this
    *
    * @throws \Drupal\search_api\SearchApiException
-   *   Thrown if the field could not be added, either because a different field
-   *   with the same field ID would be overwritten, or because the field
-   *   identifier is one of the pseudo-fields that can be used in search
+   *   Thrown if the field could not be added, either because a field with the
+   *   same field ID already exists, or because the field identifier is one of
+   *   the reserved field IDs of pseudo-fields that can be used in search
    *   queries.
    */
   public function addField(FieldInterface $field);
@@ -685,6 +691,14 @@ interface IndexInterface extends ConfigEntityInterface {
    *   Thrown if the server couldn't be loaded, for example.
    */
   public function clear();
+
+  /**
+   * Starts a rebuild of the index's tracking information.
+   *
+   * @see \Drupal\search_api\Task\IndexTaskManagerInterface::stopTracking()
+   * @see \Drupal\search_api\Task\IndexTaskManagerInterface::startTracking()
+   */
+  public function rebuildTracker();
 
   /**
    * Determines whether reindexing has been triggered in this page request.

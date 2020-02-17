@@ -26,9 +26,16 @@ Feature: Access
       | Joe           | joe@example.com | password |
     Given node access records are enabled
 
+  Scenario: Anonymous users cannot access taxonomy term view page for "Tag two"
+    Given I am on "/taxonomy/term/2"
+    Then I should see text matching "Access denied"
+    Given I am logged in as a user with the "authenticated" role
+    And I am on "/taxonomy/term/2"
+    Then I should not see text matching "Access denied"
+
   Scenario: Anonymous users cannot see restricted node
     Given I open node view by node title "Authenticated user can access"
-    Then I should see text matching "Access denied"
+    Then I should not see text matching "Authenticated user can access"
 
   Scenario: Anonymous users can see allowed node with term with multiple user role relation in view
     Given I am on "/"

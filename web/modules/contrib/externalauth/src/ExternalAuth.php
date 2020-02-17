@@ -2,7 +2,8 @@
 
 namespace Drupal\externalauth;
 
-use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\DependencyInjection\DeprecatedServicePropertyTrait;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Drupal\externalauth\Event\ExternalAuthEvents;
@@ -19,12 +20,19 @@ use Drupal\externalauth\Exception\ExternalAuthRegisterException;
  */
 class ExternalAuth implements ExternalAuthInterface {
 
+  use DeprecatedServicePropertyTrait;
+
   /**
-   * The entity manager.
-   *
-   * @var \Drupal\Core\Entity\EntityManagerInterface
+   * {@inheritdoc}
    */
-  protected $entityManager;
+  protected $deprecatedProperties = ['entityManager' => 'entity.manager'];
+
+  /**
+   * The entity type manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
 
   /**
    * The authmap service.
@@ -50,17 +58,17 @@ class ExternalAuth implements ExternalAuthInterface {
   /**
    * {@inheritdoc}
    *
-   * @param EntityManagerInterface $entity_manager
-   *   The entity manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager service.
    * @param AuthmapInterface $authmap
    *   The authmap service.
-   * @param LoggerInterface $logger
+   * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
-   * @param EventDispatcherInterface $event_dispatcher
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
    *   The event dispatcher.
    */
-  public function __construct(EntityManagerInterface $entity_manager, AuthmapInterface $authmap, LoggerInterface $logger, EventDispatcherInterface $event_dispatcher) {
-    $this->entityManager = $entity_manager;
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, AuthmapInterface $authmap, LoggerInterface $logger, EventDispatcherInterface $event_dispatcher) {
+    $this->entityTypeManager = $entity_type_manager;
     $this->authmap = $authmap;
     $this->logger = $logger;
     $this->eventDispatcher = $event_dispatcher;
@@ -71,7 +79,7 @@ class ExternalAuth implements ExternalAuthInterface {
    */
   public function load($authname, $provider) {
     if ($uid = $this->authmap->getUid($authname, $provider)) {
-      return $this->entityManager->getStorage('user')->load($uid);
+      return $this->entityTypeManager->getStorage('user')->load($uid);
     }
     return FALSE;
   }
@@ -90,12 +98,19 @@ class ExternalAuth implements ExternalAuthInterface {
   /**
    * {@inheritdoc}
    */
-  public function register($authname, $provider, $account_data = array(), $authmap_data = NULL) {
-    $username = $provider . '_' . $authname;
-    $authmap_event = $this->eventDispatcher->dispatch(ExternalAuthEvents::AUTHMAP_ALTER, new ExternalAuthAuthmapAlterEvent($provider, $authname, $username, $authmap_data));
-    $entity_storage = $this->entityManager->getStorage('user');
+  public function register($authname, $provider, array $account_data = [], $authmap_data = NULL) {
+    if (!empty($account_data['name'])) {
+      $username = $account_data['name'];
+      unset($account_data['name']);
+    }
+    else {
+      $username = $provider . '_' . $authname;
+    }
 
-    $account_search = $entity_storage->loadByProperties(array('name' => $authmap_event->getUsername()));
+    $authmap_event = $this->eventDispatcher->dispatch(ExternalAuthEvents::AUTHMAP_ALTER, new ExternalAuthAuthmapAlterEvent($provider, $authname, $username, $authmap_data));
+    $entity_storage = $this->entityTypeManager->getStorage('user');
+
+    $account_search = $entity_storage->loadByProperties(['name' => $authmap_event->getUsername()]);
     if ($account = reset($account_search)) {
       throw new ExternalAuthRegisterException(sprintf('User could not be registered. There is already an account with username "%s"', $authmap_event->getUsername()));
     }
@@ -130,7 +145,7 @@ class ExternalAuth implements ExternalAuthInterface {
   /**
    * {@inheritdoc}
    */
-  public function loginRegister($authname, $provider, $account_data = array(), $authmap_data = NULL) {
+  public function loginRegister($authname, $provider, array $account_data = [], $authmap_data = NULL) {
     $account = $this->login($authname, $provider);
     if (!$account) {
       $account = $this->register($authname, $provider, $account_data, $authmap_data);
@@ -146,7 +161,7 @@ class ExternalAuth implements ExternalAuthInterface {
    */
   public function userLoginFinalize(UserInterface $account, $authname, $provider) {
     user_login_finalize($account);
-    $this->logger->notice('External login of user %name', array('%name' => $account->getAccountName()));
+    $this->logger->notice('External login of user %name', ['%name' => $account->getAccountName()]);
     $this->eventDispatcher->dispatch(ExternalAuthEvents::LOGIN, new ExternalAuthLoginEvent($account, $provider, $authname));
     return $account;
   }

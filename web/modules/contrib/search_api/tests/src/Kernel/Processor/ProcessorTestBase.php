@@ -72,6 +72,7 @@ abstract class ProcessorTestBase extends KernelTestBase {
     $this->installEntitySchema('search_api_task');
     $this->installSchema('comment', ['comment_entity_statistics']);
     $this->installConfig(['field']);
+    $this->installConfig('search_api');
 
     Action::create([
       'id' => 'foo',
@@ -82,15 +83,9 @@ abstract class ProcessorTestBase extends KernelTestBase {
     // Do not use a batch for tracking the initial items after creating an
     // index when running the tests via the GUI. Otherwise, it seems Drupal's
     // Batch API gets confused and the test fails.
-    if (php_sapi_name() != 'cli') {
+    if (!Utility::isRunningInCli()) {
       \Drupal::state()->set('search_api_use_tracking_batch', FALSE);
     }
-
-    // Set tracking page size so tracking will work properly.
-    \Drupal::configFactory()
-      ->getEditable('search_api.settings')
-      ->set('tracking_page_size', 100)
-      ->save();
 
     $this->server = Server::create([
       'id' => 'server',
@@ -158,27 +153,47 @@ abstract class ProcessorTestBase extends KernelTestBase {
    * @return \Drupal\search_api\Item\ItemInterface[]
    *   The generated test items.
    */
-  public function generateItems(array $items) {
+  protected function generateItems(array $items) {
     /** @var \Drupal\search_api\Item\ItemInterface[] $extracted_items */
     $extracted_items = [];
-    foreach ($items as $item) {
-      $id = Utility::createCombinedId($item['datasource'], $item['item_id']);
-      $extracted_items[$id] = \Drupal::getContainer()
-        ->get('search_api.fields_helper')
-        ->createItemFromObject($this->index, $item['item'], $id);
-      foreach ([NULL, $item['datasource']] as $datasource_id) {
-        foreach ($this->index->getFieldsByDatasource($datasource_id) as $key => $field) {
-          /** @var \Drupal\search_api\Item\FieldInterface $field */
-          $field = clone $field;
-          if (isset($item[$field->getPropertyPath()])) {
-            $field->addValue($item[$field->getPropertyPath()]);
-          }
-          $extracted_items[$id]->setField($key, $field);
-        }
-      }
+    foreach ($items as $values) {
+      $item = $this->generateItem($values);
+      $extracted_items[$item->getId()] = $item;
     }
 
     return $extracted_items;
+  }
+
+  /**
+   * Generates a single test item.
+   *
+   * @param array $values
+   *   An associative array with the following keys:
+   *   - datasource: The datasource plugin ID.
+   *   - item: The item object to be indexed.
+   *   - item_id: The datasource-specific raw item ID.
+   *   - *: Any other keys will be treated as property paths, and their values
+   *     as a single value for a field with that property path.
+   *
+   * @return \Drupal\search_api\Item\Item|\Drupal\search_api\Item\ItemInterface
+   *   The generated test item.
+   */
+  protected function generateItem(array $values) {
+    $id = Utility::createCombinedId($values['datasource'], $values['item_id']);
+    $item = \Drupal::getContainer()
+      ->get('search_api.fields_helper')
+      ->createItemFromObject($this->index, $values['item'], $id);
+    foreach ([NULL, $values['datasource']] as $datasource_id) {
+      foreach ($this->index->getFieldsByDatasource($datasource_id) as $key => $field) {
+        /** @var \Drupal\search_api\Item\FieldInterface $field */
+        $field = clone $field;
+        if (isset($values[$field->getPropertyPath()])) {
+          $field->addValue($values[$field->getPropertyPath()]);
+        }
+        $item->setField($key, $field);
+      }
+    }
+    return $item;
   }
 
   /**

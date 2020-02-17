@@ -211,7 +211,7 @@ interface FieldsHelperInterface {
    * @return \Drupal\search_api\Item\FieldInterface
    *   A new field object.
    */
-  public function createField(IndexInterface $index, $fieldIdentifier, $fieldInfo = []);
+  public function createField(IndexInterface $index, $fieldIdentifier, array $fieldInfo = []);
 
   /**
    * Creates a new field on an index based on a property.
@@ -256,5 +256,19 @@ interface FieldsHelperInterface {
    *   A new unique field identifier on the given index.
    */
   public function getNewFieldId(IndexInterface $index, $propertyPath);
+
+  /**
+   * Compares two fields for alphabetic sorting according to their labels.
+   *
+   * @param \Drupal\search_api\Item\FieldInterface $a
+   *   The first field.
+   * @param \Drupal\search_api\Item\FieldInterface $b
+   *   The second field.
+   *
+   * @return int
+   *   -1, 0 or 1 if the first field should, respectively, be considered less
+   *   than, equal to or greater than the second.
+   */
+  public function compareFieldLabels(FieldInterface $a, FieldInterface $b);
 
 }

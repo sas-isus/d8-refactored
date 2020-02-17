@@ -35,13 +35,11 @@ class ExtlinkTestNoFollow extends ExtlinkTestBase {
     // Get the page.
     $this->drupalGet($node->toUrl());
     $page = $this->getSession()->getPage();
-    $this->createScreenshot(\Drupal::root() . '/sites/default/files/simpletest/ExtlinkEnabledNoFollowEnabled.png');
-    $this->assertSession()->statusCodeEquals(200);
     $this->assertTrue($page->hasLink('Google!'));
 
-    // Test that the page has the external link span.
-    $externalLink = $page->find('css', 'span.ext');
-    $this->assertTrue($externalLink->isVisible(), 'External Link does not exist.');
+    // Test that the page has the external link svg.
+    $externalLink = $page->find('xpath', self::EXTLINK_EXT_XPATH);
+    $this->assertTrue(!is_null($externalLink) && $externalLink->isVisible(), 'External Link does not exist.');
 
     // Does the anchor tag have no follow?
     $link = $page->findLink('Google!');
@@ -77,12 +75,10 @@ class ExtlinkTestNoFollow extends ExtlinkTestBase {
     // Get the page.
     $this->drupalGet($node->toUrl());
     $page = $this->getSession()->getPage();
-    $this->createScreenshot(\Drupal::root() . '/sites/default/files/simpletest/ExtlinkDisabledNoFollowEnabled.png');
-    $this->assertSession()->statusCodeEquals(200);
     $this->assertTrue($page->hasLink('Google!'));
 
-    // Test that the page has the external link span.
-    $externalLink = $page->find('css', 'span.ext');
+    // Test that the page has the external link svg.
+    $externalLink = $page->find('xpath', self::EXTLINK_EXT_XPATH);
     $this->assertTrue(is_null($externalLink), 'External Link exists.');
 
     // Does the anchor tag have no follow?
@@ -120,12 +116,10 @@ class ExtlinkTestNoFollow extends ExtlinkTestBase {
     // Get the page.
     $this->drupalGet($node->toUrl());
     $page = $this->getSession()->getPage();
-    $this->createScreenshot(\Drupal::root() . '/sites/default/files/simpletest/ExtlinkDisabledNoFollowDisabled.png');
-    $this->assertSession()->statusCodeEquals(200);
     $this->assertTrue($page->hasLink('Google!'));
 
-    // Test that the page doesn't have the external link span.
-    $externalLink = $page->find('css', 'span.ext');
+    // Test that the page doesn't have the external link svg.
+    $externalLink = $page->find('xpath', self::EXTLINK_EXT_XPATH);
     $this->assertTrue(is_null($externalLink), 'External Link exists.');
 
     // Check for no 'nofollow'.
@@ -160,13 +154,11 @@ class ExtlinkTestNoFollow extends ExtlinkTestBase {
     // Get the page.
     $this->drupalGet($node->toUrl());
     $page = $this->getSession()->getPage();
-    $this->createScreenshot(\Drupal::root() . '/sites/default/files/simpletest/ExtlinkNoFollowNoOverride.png');
-    $this->assertSession()->statusCodeEquals(200);
     $this->assertTrue($page->hasLink('Google!'));
 
-    // Test that the page has the external link span.
-    $externalLink = $page->find('css', 'span.ext');
-    $this->assertTrue($externalLink->isVisible(), 'External Link Exists.');
+    // Test that the page has the external link svg.
+    $externalLink = $page->find('xpath', self::EXTLINK_EXT_XPATH);
+    $this->assertTrue(!is_null($externalLink) && $externalLink->isVisible(), 'External Link does not exist.');
 
     // Does the anchor tag have no follow?
     $link = $page->findLink('Google!');

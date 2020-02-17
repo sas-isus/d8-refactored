@@ -1,7 +1,5 @@
 <?php
 
-// @codingStandardsIgnoreFile
-
 namespace Drupal\search_api;
 
 use Drupal\Core\Entity\EntityInterface;
@@ -16,13 +14,10 @@ use Drupal\search_api\Processor\ProcessorInterface;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ResultSetInterface;
 use Drupal\search_api\Tracker\TrackerInterface;
-use Drupal\user\SharedTempStore;
+use Drupal\Core\TempStore\SharedTempStore;
 
 /**
  * Represents a configuration of an index that was not yet permanently saved.
- *
- * Proxy code created with:
- * php ./core/scripts/generate-proxy-class.php 'Drupal\search_api\IndexInterface' modules/search_api/src/
  */
 class UnsavedIndexConfiguration implements IndexInterface, UnsavedConfigurationInterface {
 
@@ -36,7 +31,7 @@ class UnsavedIndexConfiguration implements IndexInterface, UnsavedConfigurationI
   /**
    * The shared temporary storage to use.
    *
-   * @var \Drupal\user\SharedTempStore
+   * @var \Drupal\Core\TempStore\SharedTempStore
    */
   protected $tempStore;
 
@@ -66,7 +61,7 @@ class UnsavedIndexConfiguration implements IndexInterface, UnsavedConfigurationI
    *
    * @param \Drupal\search_api\IndexInterface $index
    *   The index to proxy.
-   * @param \Drupal\user\SharedTempStore $temp_store
+   * @param \Drupal\Core\TempStore\SharedTempStore $temp_store
    *   The shared temporary storage to use.
    * @param int|string $current_user_id
    *   Either the UID of the currently logged-in user, or the session ID (for
@@ -283,6 +278,13 @@ class UnsavedIndexConfiguration implements IndexInterface, UnsavedConfigurationI
   /**
    * {@inheritdoc}
    */
+  public function getEntityTypes() {
+    return $this->entity->getEntityTypes();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function hasValidTracker() {
     return $this->entity->hasValidTracker();
   }
@@ -355,7 +357,7 @@ class UnsavedIndexConfiguration implements IndexInterface, UnsavedConfigurationI
   /**
    * {@inheritdoc}
    */
-  public function getProcessorsByStage($stage, $overrides = []) {
+  public function getProcessorsByStage($stage, array $overrides = []) {
     return $this->entity->getProcessorsByStage($stage, $overrides);
   }
 
@@ -591,6 +593,13 @@ class UnsavedIndexConfiguration implements IndexInterface, UnsavedConfigurationI
    */
   public function clear() {
     $this->entity->clear();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function rebuildTracker() {
+    $this->entity->rebuildTracker();
   }
 
   /**

@@ -3,7 +3,6 @@
 namespace Drupal\metatag;
 
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\views\ViewEntityInterface;
 
 /**
  * Class MetatagManager.
@@ -16,7 +15,7 @@ interface MetatagManagerInterface {
    * Extracts all tags of a given entity.
    *
    * @param \Drupal\Core\Entity\ContentEntityInterface $entity
-   *   The content entity to extract metatags from.
+   *   The content entity to extract meta tags from.
    *
    * @return array
    *   Array of metatags.
@@ -24,11 +23,12 @@ interface MetatagManagerInterface {
   public function tagsFromEntity(ContentEntityInterface $entity);
 
   /**
-   * Extracts all tags of a given entity, and combines them with sitewide,
-   * per-entity-type, and per-bundle defaults.
+   * Extracts all tags of a given entity.
+   *
+   * And combines them with sitewide, per-entity-type, and per-bundle defaults.
    *
    * @param \Drupal\Core\Entity\ContentEntityInterface $entity
-   *   The content entity to extract metatags from.
+   *   The content entity to extract meta tags from.
    *
    * @return array
    *   Array of metatags.
@@ -36,8 +36,9 @@ interface MetatagManagerInterface {
   public function tagsFromEntityWithDefaults(ContentEntityInterface $entity);
 
   /**
-   * Extracts all appropriate default tags for an entity, from sitewide,
-   * per-entity-type, and per-bundle defaults.
+   * Extracts all appropriate default tags for an entity.
+   *
+   * From sitewide, per-entity-type, and per-bundle defaults.
    *
    * @param \Drupal\Core\Entity\ContentEntityInterface $entity
    *   The content entity for which to calculate defaults.
@@ -81,8 +82,8 @@ interface MetatagManagerInterface {
    * @param array $values
    *   Existing values.
    * @param array $element
-   *   Existing element
-   * @param mixed $token_types
+   *   Existing element.
+   * @param array $token_types
    *   Token types to return in the tree.
    * @param array $included_groups
    *   Available group plugins.

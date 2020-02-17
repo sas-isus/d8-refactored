@@ -35,24 +35,22 @@ class ExtlinkTestTarget extends ExtlinkTestBase {
     // Get the page.
     $this->drupalGet($node->toUrl());
     $page = $this->getSession()->getPage();
-    $this->createScreenshot(\Drupal::root() . '/sites/default/files/simpletest/Extlink.png');
-    $this->assertSession()->statusCodeEquals(200);
     $this->assertTrue($page->hasLink('Google!'));
 
-    // Test that the page has the external link span.
-    $externalLink = $page->find('css', 'span.ext');
-    $this->assertTrue($externalLink->isVisible(), 'External Link Exists.');
+    // Test that the page has the external link svg.
+    $externalLink = $page->find('xpath', self::EXTLINK_EXT_XPATH);
+    $this->assertTrue(!is_null($externalLink) && $externalLink->isVisible(), 'External Link does not exist.');
     $link = $page->findLink('Google!');
 
     // Link should have target attribute.
     $this->assertTrue($link->getAttribute('target') === '_blank', 'ExtLink target attribute is not "_blank".');
 
-    // Link should have rel attribute 'noopener noreferrer'
+    // Link should have rel attribute 'noopener noreferrer'.
     $this->assertTrue($link->getAttribute('rel') === 'noopener noreferrer' || $link->getAttribute('rel') === 'noreferrer noopener', 'ExtLink rel attribute is not "noopener noreferrer".');
   }
 
   /**
-   * Checks to see if extlink changes the target attribute
+   * Checks to see if extlink changes the target attribute.
    */
   public function testExtlinkTargetNoOverride() {
     // Target Enabled.
@@ -78,19 +76,17 @@ class ExtlinkTestTarget extends ExtlinkTestBase {
     // Get the page.
     $this->drupalGet($node->toUrl());
     $page = $this->getSession()->getPage();
-    $this->createScreenshot(\Drupal::root() . '/sites/default/files/simpletest/Extlink.png');
-    $this->assertSession()->statusCodeEquals(200);
     $this->assertTrue($page->hasLink('Google!'));
 
-    // Test that the page has the external link span.
-    $externalLink = $page->find('css', 'span.ext');
-    $this->assertTrue($externalLink->isVisible(), 'External Link Exists.');
+    // Test that the page has the external link svg.
+    $externalLink = $page->find('xpath', self::EXTLINK_EXT_XPATH);
+    $this->assertTrue(!is_null($externalLink) && $externalLink->isVisible(), 'External Link does not exist.');
     $link = $page->findLink('Google!');
 
     // Link should have target attribute.
     $this->assertTrue($link->getAttribute('target') === '_self', 'ExtLink target attribute is not "_self".');
 
-    // Link should have rel attribute 'noopener noreferrer'
+    // Link should have rel attribute 'noopener noreferrer'.
     $this->assertTrue($link->getAttribute('rel') === 'noopener noreferrer' || $link->getAttribute('rel') === 'noreferrer noopener', 'ExtLink rel attribute is not "noopener noreferrer".');
   }
 

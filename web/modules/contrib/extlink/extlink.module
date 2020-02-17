@@ -17,7 +17,7 @@ function extlink_modules_installed($modules) {
     // Be friendly to your users: what to do after install?
     $url = Url::fromRoute('extlink_admin.settings');
     if (PHP_SAPI != 'cli') {
-      drupal_set_message(t('You can now <a href="@extlink_admin">configure the External Links module</a> for your site.',
+      \Drupal::messenger()->addMessage(t('You can now <a href="@extlink_admin">configure the External Links module</a> for your site.',
         ['@extlink_admin' => $url->toString()]), 'status');
     }
   }
@@ -42,26 +42,42 @@ function extlink_page_attachments(array &$attachments) {
   $config = \Drupal::config('extlink.settings');
   $attachments['#attached']['library'][] = 'extlink/drupal.extlink';
 
+  $settings = $config->getRawData();
+
+  // Allow other modules to manipulate the settings.
+  \Drupal::moduleHandler()->alter('extlink_settings', $settings);
+
   // Allow other modules to alter the excluded CSS selector settings.
-  $cssExclude = $config->get('extlink_css_exclude');
-  \Drupal::moduleHandler()->alter('extlink_css_exclude', $cssExclude);
+  \Drupal::moduleHandler()->alter('extlink_css_exclude', $settings['extlink_css_exclude']);
+
+  $callback = [Html::class, 'cleanCssIdentifier'];
+  $fa_link_classes = $config->get('extlink_font_awesome_classes.links') ?: 'fa fa-external-link';
+  $fa_link_classes = array_map($callback, explode(' ', $fa_link_classes));
+
+  $fa_mailto_classes = $config->get('extlink_font_awesome_classes.mailto') ?: 'fa fa-envelope-o';
+  $fa_mailto_classes = array_map($callback, explode(' ', $fa_mailto_classes));
 
   $attachments['#attached']['drupalSettings']['data']['extlink'] = [
-    'extTarget'           => $config->get('extlink_target'),
-    'extTargetNoOverride' => $config->get('extlink_target_no_override'),
-    'extNofollow'         => $config->get('extlink_nofollow', 0),
-    'extFollowNoOverride' => $config->get('extlink_follow_no_override', 0),
-    'extClass'            => $config->get('extlink_class'),
-    'extLabel'            => Html::escape($config->get('extlink_label')),
-    'extImgClass'         => $config->get('extlink_img_class'),
-    'extSubdomains'       => $config->get('extlink_subdomains'),
-    'extExclude'          => $config->get('extlink_exclude'),
-    'extInclude'          => $config->get('extlink_include'),
-    'extCssExclude'       => $cssExclude,
-    'extCssExplicit'      => $config->get('extlink_css_explicit'),
-    'extAlert'            => $config->get('extlink_alert'),
-    'extAlertText'        => $config->get('extlink_alert_text'),
-    'mailtoClass'         => $config->get('extlink_mailto_class'),
-    'mailtoLabel'         => Html::escape($config->get('extlink_mailto_label')),
+    'extTarget'           => $settings['extlink_target'],
+    'extTargetNoOverride' => $settings['extlink_target_no_override'],
+    'extNofollow'         => $settings['extlink_nofollow'] ? $settings['extlink_nofollow'] : 0,
+    'extFollowNoOverride' => $settings['extlink_follow_no_override'] ? $settings['extlink_follow_no_override'] : 0,
+    'extClass'            => $settings['extlink_class'],
+    'extLabel'            => Html::escape($settings['extlink_label']),
+    'extImgClass'         => $settings['extlink_img_class'],
+    'extSubdomains'       => $settings['extlink_subdomains'],
+    'extExclude'          => $settings['extlink_exclude'],
+    'extInclude'          => $settings['extlink_include'],
+    'extCssExclude'       => $settings['extlink_css_exclude'],
+    'extCssExplicit'      => $settings['extlink_css_explicit'],
+    'extAlert'            => $settings['extlink_alert'],
+    'extAlertText'        => $settings['extlink_alert_text'],
+    'mailtoClass'         => $settings['extlink_mailto_class'],
+    'mailtoLabel'         => Html::escape($settings['extlink_mailto_label']),
+    'extUseFontAwesome'   => isset($settings['extlink_use_font_awesome']) ? $settings['extlink_use_font_awesome'] : FALSE,
+    'extIconPlacement'    => !empty($settings['extlink_icon_placement']) ? $settings['extlink_icon_placement'] : 'append',
+    'extFaLinkClasses'    => implode(' ', $fa_link_classes),
+    'extFaMailtoClasses'  => implode(' ', $fa_mailto_classes),
+    'whitelistedDomains'  => $config->get('whitelisted_domains'),
   ];
 }

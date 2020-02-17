@@ -160,6 +160,8 @@ interface QueryInterface extends ConditionSetInterface {
    *
    * @return \Drupal\search_api\Query\ConditionGroupInterface
    *   A condition group object that is set to use the specified conjunction.
+   *
+   * @todo Add $add_directly = TRUE parameter.
    */
   public function createConditionGroup($conjunction = 'AND', array $tags = []);
 
@@ -285,6 +287,11 @@ interface QueryInterface extends ConditionSetInterface {
 
   /**
    * Executes this search query.
+   *
+   * The results of the search will be cached on the query, so subsequent calls
+   * of this method will always return the same result set (even if conditions
+   * were changed in between). If you want to re-execute a query, use
+   * getOriginalQuery().
    *
    * @return \Drupal\search_api\Query\ResultSetInterface
    *   The results of the search.
@@ -427,12 +434,10 @@ interface QueryInterface extends ConditionSetInterface {
    *     access checks, if available and enabled for the index.
    *   - search_api_bypass_access: If set to TRUE, entity access checks will be
    *     skipped, even if enabled for the index.
-   *   - search_api_retrieved_properties: A list of properties that will be
-   *     required from results by the code displaying the results list. This
-   *     option, if present, should be an array keyed by datasource ID and
-   *     (datasource-internal) property path, with combined property paths as
-   *     the values. (The "_object" pseudo-property can be used where a whole
-   *     object (entity or other) is required.)
+   *   - search_api_retrieved_field_values: A list of IDs of fields whose values
+   *     should be returned along with the results by the backend, if possible.
+   *     For backends that support retrieving fields values, this allows them to
+   *     only retrieve the values that are actually needed.
    *   However, contrib modules might introduce arbitrary other keys with their
    *   own, special meaning. (Usually they should be prefixed with the module
    *   name, though, to avoid conflicts.)
@@ -519,5 +524,15 @@ interface QueryInterface extends ConditionSetInterface {
    *   existing tags.
    */
   public function &getTags();
+
+  /**
+   * Retrieves the original version of the query, before preprocessing occurred.
+   *
+   * Will be a clone of this query if preprocessing has not already run.
+   *
+   * @return \Drupal\search_api\Query\Query
+   *   The original, unpreprocessed version of this query.
+   */
+  public function getOriginalQuery();
 
 }

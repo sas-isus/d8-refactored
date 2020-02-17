@@ -8,6 +8,9 @@ views.query.search_api_query:
     skip_access:
       type: boolean
       label: Do not execute additional access checks for all items in the search results.
+    preserve_facet_query_args:
+      type: boolean
+      label: By default, changing an exposed filter would reset all selected facets. This option allows you to prevent this behavior.
 
 views.row.search_api:
   type: views_row
@@ -16,9 +19,11 @@ views.row.search_api:
     view_modes:
       type: sequence
       label: View modes for each datasource
+      orderby: key
       sequence:
         type: sequence
         label: A list of all the bundles and their configured view mode
+        orderby: key
         sequence:
           type: string
           label: View mode for the specific bundle
@@ -70,6 +75,7 @@ views.argument.search_api_fulltext:
     fields:
       type: sequence
       label: 'Fields'
+      orderby: value
       sequence:
         type: string
         label: 'Field'
@@ -81,9 +87,14 @@ views.argument.search_api_more_like_this:
     fields:
       type: sequence
       label: 'Fields'
+      orderby: value
       sequence:
         type: string
         label: 'Field'
+
+views.argument.search_api_term:
+  type: views.argument.search_api
+  label: 'Search API taxonomy term'
 
 views.field.search_api:
   type: views_field
@@ -92,6 +103,9 @@ views.field.search_api:
     link_to_item:
       type: boolean
       label: 'Link to item'
+    use_highlighting:
+      type: boolean
+      label: 'Use highlighted field data'
     multi_type:
       type: string
       label: 'Handling of multiple values'
@@ -106,6 +120,9 @@ views.field.search_api_boolean:
     link_to_item:
       type: boolean
       label: 'Link to item'
+    use_highlighting:
+      type: boolean
+      label: 'Use highlighted field data'
     multi_type:
       type: string
       label: 'Handling of multiple values'
@@ -120,6 +137,9 @@ views.field.search_api_date:
     link_to_item:
       type: boolean
       label: 'Link to item'
+    use_highlighting:
+      type: boolean
+      label: 'Use highlighted field data'
     multi_type:
       type: string
       label: 'Handling of multiple values'
@@ -134,6 +154,7 @@ views.field.search_api_entity:
     display_methods:
       type: sequence
       label: 'Display settings'
+      orderby: key
       sequence:
         type: mapping
         label: 'Display settings for bundle'
@@ -166,6 +187,9 @@ views.field.search_api_numeric:
     link_to_item:
       type: boolean
       label: 'Link to item'
+    use_highlighting:
+      type: boolean
+      label: 'Use highlighted field data'
     multi_type:
       type: string
       label: 'Handling of multiple values'
@@ -179,6 +203,22 @@ views.field.search_api_numeric:
         type: string
         label: 'Singular/Plural string'
 
+views.field.search_api_rendered_item:
+  type: views.field.search_api
+  label: 'Search API rendered item'
+  mapping:
+    view_modes:
+      type: sequence
+      label: 'View modes for each datasource'
+      orderby: key
+      sequence:
+        type: sequence
+        label: 'A list of all the bundles and their configured view mode'
+        orderby: key
+        sequence:
+          type: string
+          label: 'View mode for the specific bundle'
+
 views.filter.search_api_boolean:
   type: views.filter.boolean
   label: 'Search API boolean'
@@ -186,6 +226,10 @@ views.filter.search_api_boolean:
 views.filter.search_api_datasource:
   type: views.filter.search_api_options
   label: 'Search API datasource'
+
+views.filter.search_api_date:
+  type: views.filter.date
+  label: 'Search API date'
 
 views.filter.search_api_fulltext:
   type: views_filter
@@ -200,9 +244,17 @@ views.filter.search_api_fulltext:
     fields:
       type: sequence
       label: Fields to search on
+      orderby: value
       sequence:
         type: string
         label: Field name
+    expose:
+      type: mapping
+      label: 'Exposed'
+      mapping:
+        placeholder:
+          type: label
+          label: 'Placeholder'
 
 views.filter.search_api_language:
   type: views.filter.language
@@ -219,6 +271,10 @@ views.filter.search_api_options:
 views.filter.search_api_string:
   type: views.filter.search_api_numeric
   label: 'Search API string'
+
+views.filter.search_api_term:
+  type: views.filter.taxonomy_index_tid
+  label: 'Search API taxonomy term'
 
 views.filter.search_api_text:
   type: views.filter.search_api_string
@@ -249,12 +305,16 @@ views.filter_value.search_api_numeric:
 
 views.filter_value.search_api_options:
   type: sequence
+  orderby: value
   sequence:
     type: string
     label: 'Value'
 
 views.filter_value.search_api_string:
   type: views.filter_value.numeric
+
+views.filter_value.search_api_term:
+  type: string
 
 views.filter_value.search_api_text:
   type: views.filter_value.numeric

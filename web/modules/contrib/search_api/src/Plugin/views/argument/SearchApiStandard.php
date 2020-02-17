@@ -10,6 +10,10 @@ use Drupal\views\Plugin\views\argument\ArgumentPluginBase;
  *
  * @ingroup views_argument_handlers
  *
+ * @property bool argument_validated
+ *   Used by the parent class to remember that an argument value has already
+ *   been validated.
+ *
  * @ViewsArgument("search_api")
  */
 class SearchApiStandard extends ArgumentPluginBase {
@@ -168,9 +172,19 @@ class SearchApiStandard extends ArgumentPluginBase {
   public function query($group_by = FALSE) {
     $this->fillValue();
 
+    // If there are multiple arguments, add query conditions accordingly.
+    // E.g 1+2+3 (for OR) or 1,2,3 (for AND).
     if (count($this->value) > 1) {
-      $operator = empty($this->options['not']) ? 'IN' : 'NOT IN';
-      $this->query->addCondition($this->realField, $this->value, $operator);
+      if ($this->operator === 'or') {
+        $operator = empty($this->options['not']) ? 'IN' : 'NOT IN';
+        $this->query->addCondition($this->realField, $this->value, $operator);
+      }
+      else {
+        foreach ($this->value as $value) {
+          $operator = empty($this->options['not']) ? '=' : '<>';
+          $this->query->addCondition($this->realField, $value, $operator);
+        }
+      }
     }
     elseif ($this->value) {
       $operator = empty($this->options['not']) ? '=' : '<>';

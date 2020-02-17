@@ -8,19 +8,25 @@
 use Drupal\comment\Entity\Comment;
 use Drupal\Core\Config\ConfigImporter;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\ContentEntityType;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\IndexInterface;
+use Drupal\search_api\Plugin\search_api\datasource\ContentEntity;
 use Drupal\search_api\Plugin\search_api\datasource\ContentEntityTaskManager;
 use Drupal\search_api\Plugin\search_api\datasource\EntityDatasourceInterface;
+use Drupal\search_api\Plugin\views\argument\SearchApiTerm as TermArgument;
+use Drupal\search_api\Plugin\views\argument\SearchApiAllTerms;
+use Drupal\search_api\Plugin\views\filter\SearchApiTerm as TermFilter;
 use Drupal\search_api\Plugin\views\query\SearchApiQuery;
 use Drupal\search_api\SearchApiException;
-use Drupal\search_api\Plugin\search_api\datasource\ContentEntity;
 use Drupal\search_api\Task\IndexTaskManager;
 use Drupal\views\ViewEntityInterface;
+use Drupal\views\ViewExecutable;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
 /**
  * Implements hook_help().
@@ -154,9 +160,9 @@ function search_api_hook_info() {
     'search_api_query_alter',
     // Unfortunately, it's not possible to add hook infos for hooks with
     // "wildcards".
-//    'search_api_query_TAG_alter',
+    // 'search_api_query_TAG_alter',
     'search_api_results_alter',
-//    'search_api_results_TAG_alter',
+    // 'search_api_results_TAG_alter',
     'search_api_index_reindex',
   ];
   $info = [
@@ -337,7 +343,7 @@ function search_api_entity_delete(EntityInterface $entity) {
  * Marks the node and its comments changed for indexes that use the "Content
  * access" processor.
  */
-function search_api_node_access_records_alter(&$grants, NodeInterface $node) {
+function search_api_node_access_records_alter(array &$grants, NodeInterface $node) {
   /** @var \Drupal\search_api\IndexInterface $index */
   foreach (Index::loadMultiple() as $index) {
     if (!$index->hasValidTracker() || !$index->status()) {
@@ -519,6 +525,46 @@ function search_api_search_api_index_update(IndexInterface $index) {
 }
 
 /**
+ * Implements hook_views_plugins_argument_alter().
+ */
+function search_api_views_plugins_argument_alter(array &$plugins) {
+  // We have to include the term argument handler like this, since adding it
+  // directly (i.e., with an annotation) would cause fatal errors on sites
+  // without the Taxonomy module.
+  if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
+    $plugins['search_api_term'] = [
+      'plugin_type' => 'argument',
+      'id' => 'search_api_term',
+      'class' => TermArgument::class,
+      'provider' => 'search_api',
+    ];
+    $plugins['search_api_all_terms'] = [
+      'plugin_type' => 'argument',
+      'id' => 'search_api_all_terms',
+      'class' => SearchApiAllTerms::class,
+      'provider' => 'search_api',
+    ];
+  }
+}
+
+/**
+ * Implements hook_views_plugins_filter_alter().
+ */
+function search_api_views_plugins_filter_alter(array &$plugins) {
+  // We have to include the term filter handler like this, since adding it
+  // directly (i.e., with an annotation) would cause fatal errors on sites
+  // without the Taxonomy module.
+  if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
+    $plugins['search_api_term'] = [
+      'plugin_type' => 'filter',
+      'id' => 'search_api_term',
+      'class' => TermFilter::class,
+      'provider' => 'search_api',
+    ];
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_insert() for type "view".
  */
 function search_api_view_insert(ViewEntityInterface $view) {
@@ -536,7 +582,8 @@ function search_api_view_insert(ViewEntityInterface $view) {
     }
 
     if ($change) {
-      drupal_set_message(\Drupal::translation()->translate('The selected caching mechanism does not work with views on Search API indexes. Please either use one of the Search API-specific caching options or "None". Caching was turned off for this view.'), 'warning');
+      $warning = t('The selected caching mechanism does not work with views on Search API indexes. Please either use one of the Search API-specific caching options or "None". Caching was turned off for this view.');
+      \Drupal::messenger()->addWarning($warning);
       $view->set('display', $displays);
       $view->save();
     }
@@ -627,9 +674,103 @@ function _search_api_search_module_warning() {
   if (\Drupal::moduleHandler()->moduleExists('search')) {
     $args = [
       ':url' => Url::fromRoute('system.modules_uninstall')->toString(),
-      ':documentation' => 'https://www.drupal.org/node/2010146#core-search',
+      ':documentation' => 'https://www.drupal.org/docs/8/modules/search-api/getting-started/common-pitfalls#core-search',
     ];
     return t('The default Drupal core Search module is still enabled. If you are using Search API, you probably want to <a href=":url">uninstall</a> the Search module for performance reasons. For more information see <a href=":documentation">the Search API handbook</a>.', $args);
   }
   return NULL;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for views_exposed_form().
+ *
+ * Custom integration for facets. When a Views exposed filter is modified on a
+ * search results page it will lose any facets which have been already selected.
+ * This adds hidden fields for each facet so their values are retained.
+ */
+function search_api_form_views_exposed_form_alter(&$form, FormStateInterface $form_state) {
+  // Retrieve the view object and the query plugin.
+  $storage = $form_state->getStorage();
+  if (!isset($storage['view'])) {
+    return;
+  }
+  $view = $storage['view'];
+  if (!($view instanceof ViewExecutable)) {
+    return;
+  }
+  $query_plugin = $view->getQuery();
+
+  // Make sure the view is based on Search API and has the "Preserve facets"
+  // option enabled, and that the Facets module is installed.
+  $preserve_facets = !empty($query_plugin->options['preserve_facet_query_args'])
+    && $query_plugin instanceof SearchApiQuery
+    && \Drupal::moduleHandler()->moduleExists('facets');
+  if ($preserve_facets) {
+    // Retrieve the facet source.
+    $query = $query_plugin->getSearchApiQuery();
+    $display_id = $query->getSearchId(FALSE);
+    $facet_source_id = str_replace(':', '__', 'search_api:' . $display_id);
+    $facet_source = \Drupal::entityTypeManager()
+      ->getStorage('facets_facet_source')
+      ->load($facet_source_id);
+    if (!$facet_source) {
+      return;
+    }
+
+    // Get the active facet filters from the query parameters.
+    $filter_key = $facet_source->getFilterKey() ?: 'f';
+    $filters = \Drupal::request()->query->get($filter_key, []);
+    // Iterate through the facet filters.
+    foreach ($filters as $key => $value) {
+      if (!is_string($value)) {
+        continue;
+      }
+      // Add a hidden form field for the facet parameter.
+      $form["{$filter_key}[$key]"] = [
+        '#type' => 'hidden',
+        '#value' => $value,
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function search_api_entity_extra_field_info() {
+  $extra = [];
+
+  // Add an extra "excerpt" field to every content entity.
+  $entity_types = \Drupal::entityTypeManager()->getDefinitions();
+  $bundle_info = \Drupal::getContainer()->get('entity_type.bundle.info');
+  foreach ($entity_types as $entity_type_id => $entity_type) {
+    if ($entity_type instanceof ContentEntityType) {
+      $bundles = $bundle_info->getBundleInfo($entity_type_id);
+      foreach ($bundles as $bundle => $data) {
+        $extra[$entity_type_id][$bundle]['display']['search_api_excerpt'] = [
+          'label' => t('Search result excerpt'),
+          'description' => t('An excerpt provided by Search API when rendered in a search.'),
+          'weight' => 100,
+          'visible' => FALSE,
+        ];
+      }
+    }
+  }
+  return $extra;
+}
+
+/**
+ * Implements hook_entity_view().
+ */
+function search_api_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  $excerpt_component = $display->getComponent('search_api_excerpt');
+  if ($excerpt_component !== NULL && isset($build['#search_api_excerpt'])) {
+    $build['search_api_excerpt'] = [
+      '#type' => 'markup',
+      '#markup' => $build['#search_api_excerpt'],
+      '#cache' => [
+        'contexts' => ['url.query_args']
+      ],
+    ];
+  }
 }

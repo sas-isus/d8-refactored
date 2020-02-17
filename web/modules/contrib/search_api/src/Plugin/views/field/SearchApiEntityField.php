@@ -82,7 +82,7 @@ class SearchApiEntityField extends EntityField {
    * @return string|null
    *   The property path of the parent property.
    */
-  protected function getParentPath() {
+  public function getParentPath() {
     if (!isset($this->parentPath)) {
       $combined_property_path = $this->getCombinedPropertyPath();
       list(, $property_path) = Utility::splitCombinedId($combined_property_path);
@@ -280,7 +280,9 @@ class SearchApiEntityField extends EntityField {
       if (!isset($this->entityFieldRenderer)) {
         $entity_type = $this->entityManager->getDefinition($this->getEntityType());
         $this->entityFieldRenderer = new EntityFieldRenderer($this->view, $this->relationship, $this->languageManager, $entity_type, $this->entityManager);
-        $this->entityFieldRenderer->setDatasourceId($this->getDatasourceId());
+        $this->entityFieldRenderer
+          ->setDatasourceId($this->getDatasourceId())
+          ->setParentPath($this->getParentPath());
       }
     }
 
@@ -303,11 +305,12 @@ class SearchApiEntityField extends EntityField {
     }
 
     $parent_path = $this->getParentPath();
-    if (empty($values->_relationship_objects[$parent_path])) {
+    $combined_parent_path = $this->createCombinedPropertyPath($this->getDatasourceId(), $parent_path);
+    if (empty($values->_relationship_objects[$combined_parent_path])) {
       return [];
     }
     $build = [];
-    foreach (array_keys($values->_relationship_objects[$parent_path]) as $i) {
+    foreach (array_keys($values->_relationship_objects[$combined_parent_path]) as $i) {
       $this->valueIndex = $i;
       $build[] = parent::getItems($values);
     }

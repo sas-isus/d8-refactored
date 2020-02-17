@@ -13,9 +13,13 @@
       return;
     }
 
+    // Define the jQuery method (either 'append' or 'prepend') of placing the
+    // icon, defaults to 'append'.
+    var extIconPlacement = drupalSettings.data.extlink.extIconPlacement || 'append';
+
     // Strip the host name down, removing ports, subdomains, or www.
     var pattern = /^(([^\/:]+?\.)*)([^\.:]{1,})((\.[a-z0-9]{1,253})*)(:[0-9]{1,5})?$/;
-    var host = window.location.host.replace(pattern, '$2$3');
+    var host = window.location.host.replace(pattern, '$2$3$6');
     var subdomain = window.location.host.replace(host, '');
 
     // Determine what subdomains are considered internal.
@@ -30,8 +34,17 @@
       subdomains = subdomain.replace('.', '\\.');
     }
 
+    // Whitelisted domains.
+    var whitelistedDomains = false;
+    if (drupalSettings.data.extlink.whitelistedDomains) {
+      whitelistedDomains = [];
+      for (var i = 0; i < drupalSettings.data.extlink.whitelistedDomains.length; i++) {
+        whitelistedDomains.push(new RegExp('^https?:\\/\\/' + drupalSettings.data.extlink.whitelistedDomains[i].replace(/(\r\n|\n|\r)/gm,'') + '.*$', 'i'));
+      }
+    }
+
     // Build regular expressions that define an internal link.
-    var internal_link = new RegExp('^https?://' + subdomains + host, 'i');
+    var internal_link = new RegExp('^https?://([^@]*@)?' + subdomains + host, 'i');
 
     // Extra internal link matching.
     var extInclude = false;
@@ -65,7 +78,7 @@
     // available in jQuery 1.0 (Drupal 5 default).
     var external_links = [];
     var mailto_links = [];
-    $('a:not(.' + drupalSettings.data.extlink.extClass + ', .' + drupalSettings.data.extlink.mailtoClass + '), area:not(.' + drupalSettings.data.extlink.extClass + ', .' + drupalSettings.data.extlink.mailtoClass + ')', context).each(function (el) {
+    $('a:not([data-extlink]), area:not([data-extlink])', context).each(function (el) {
       try {
         var url = '';
         if (typeof this.href == 'string') {
@@ -80,7 +93,18 @@
           && !(extCssExclude && $(this).is(extCssExclude))
           && !(extCssExclude && $(this).parents(extCssExclude).length > 0)
           && !(extCssExplicit && $(this).parents(extCssExplicit).length < 1)) {
-          external_links.push(this);
+          var match = false;
+          if (whitelistedDomains) {
+            for (var i = 0; i < whitelistedDomains.length; i++) {
+              if (whitelistedDomains[i].test(url)) {
+                match = true;
+                break;
+              }
+            }
+          }
+          if (!match) {
+            external_links.push(this);
+          }
         }
         // Do not include area tags with begin with mailto: (this prohibits
         // icons from being added to image-maps).
@@ -100,11 +124,11 @@
     });
 
     if (drupalSettings.data.extlink.extClass !== '0' && drupalSettings.data.extlink.extClass !== '') {
-      Drupal.extlink.applyClassAndSpan(external_links, drupalSettings.data.extlink.extClass);
+      Drupal.extlink.applyClassAndSpan(external_links, drupalSettings.data.extlink.extClass, extIconPlacement);
     }
 
     if (drupalSettings.data.extlink.mailtoClass !== '0' && drupalSettings.data.extlink.mailtoClass !== '') {
-      Drupal.extlink.applyClassAndSpan(mailto_links, drupalSettings.data.extlink.mailtoClass);
+      Drupal.extlink.applyClassAndSpan(mailto_links, drupalSettings.data.extlink.mailtoClass, extIconPlacement);
     }
 
     if (drupalSettings.data.extlink.extTarget) {
@@ -112,7 +136,7 @@
       $(external_links).filter(function () {
         // Filter out links with target set if option specified.
         return !(drupalSettings.data.extlink.extTargetNoOverride && $(this).is('a[target]'));
-      }).attr({ target: '_blank' });
+      }).attr({target: '_blank'});
 
       // Add noopener and noreferrer rel attributes to combat phishing.
       $(external_links).attr('rel', function (i, val) {
@@ -168,7 +192,8 @@
       }
     };
 
-    $(external_links).click(function (e) {
+    $(external_links).off("click.extlink");
+    $(external_links).on("click.extlink", function (e) {
       return Drupal.extlink.popupClickHandler(e, this);
     });
   };
@@ -180,28 +205,41 @@
    *   An array of DOM elements representing the links.
    * @param {string} class_name
    *   The class to apply to the links.
+   * @param {string} icon_placement
+   *   'append' or 'prepend' the icon to the link.
    */
-  Drupal.extlink.applyClassAndSpan = function (links, class_name) {
+  Drupal.extlink.applyClassAndSpan = function (links, class_name, icon_placement) {
     var $links_to_process;
     if (drupalSettings.data.extlink.extImgClass) {
       $links_to_process = $(links);
     }
     else {
-      var links_with_images = $(links).find('img').parents('a');
+      var links_with_images = $(links).find('img, svg').parents('a');
       $links_to_process = $(links).not(links_with_images);
     }
-    if (class_name !== '0') {
-      $links_to_process.addClass(class_name);
-    }
+
+    // Add data-extlink attribute.
+    $links_to_process.attr('data-extlink', '');
+
     var i;
     var length = $links_to_process.length;
     for (i = 0; i < length; i++) {
       var $link = $($links_to_process[i]);
-      if (class_name === drupalSettings.data.extlink.mailtoClass) {
-        $link.append('<span class="' + class_name + '" aria-label="' + drupalSettings.data.extlink.mailtoLabel + '"></span>');
+      if (drupalSettings.data.extlink.extUseFontAwesome) {
+        if (class_name === drupalSettings.data.extlink.mailtoClass) {
+          $link[icon_placement]('<span class="fa-' + class_name + ' extlink"><span class="' + drupalSettings.data.extlink.extFaMailtoClasses + '" title="' + drupalSettings.data.extlink.mailtoLabel + '"></span><span class="visually-hidden">' + drupalSettings.data.extlink.mailtoLabel + '</span></span>');
+        }
+        else {
+          $link[icon_placement]('<span class="fa-' + class_name + ' extlink"><span class="' + drupalSettings.data.extlink.extFaLinkClasses + '" title="' + drupalSettings.data.extlink.extLabel + '"></span><span class="visually-hidden">' + drupalSettings.data.extlink.extLabel + '</span></span>');
+        }
       }
       else {
-        $link.append('<span class="' + class_name + '" aria-label="' + drupalSettings.data.extlink.extLabel + '"></span>');
+        if (class_name === drupalSettings.data.extlink.mailtoClass) {
+          $link[icon_placement]('<svg class="' + class_name + '" role="img" aria-label="' + drupalSettings.data.extlink.mailtoLabel + '" xmlns="http://www.w3.org/2000/svg" viewBox="0 10 70 20"><metadata><sfw xmlns="http://ns.adobe.com/SaveForWeb/1.0/"><sliceSourceBounds y="-8160" x="-8165" width="16389" height="16384" bottomLeftOrigin="true"/><optimizationSettings><targetSettings targetSettingsID="0" fileFormat="PNG24Format"><PNG24Format transparency="true" filtered="false" interlaced="false" noMatteColor="false" matteColor="#FFFFFF"/></targetSettings></optimizationSettings></sfw></metadata><title>' + drupalSettings.data.extlink.mailtoLabel + '</title><path d="M56 14H8c-1.1 0-2 0.9-2 2v32c0 1.1 0.9 2 2 2h48c1.1 0 2-0.9 2-2V16C58 14.9 57.1 14 56 14zM50.5 18L32 33.4 13.5 18H50.5zM10 46V20.3l20.7 17.3C31.1 37.8 31.5 38 32 38s0.9-0.2 1.3-0.5L54 20.3V46H10z"/></svg>');
+        }
+        else {
+          $link[icon_placement]('<svg class="' + class_name + '" role="img" aria-label="' + drupalSettings.data.extlink.extLabel + '" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 40"><metadata><sfw xmlns="http://ns.adobe.com/SaveForWeb/1.0/"><sliceSourceBounds y="-8160" x="-8165" width="16389" height="16384" bottomLeftOrigin="true"/><optimizationSettings><targetSettings targetSettingsID="0" fileFormat="PNG24Format"><PNG24Format transparency="true" filtered="false" interlaced="false" noMatteColor="false" matteColor="#FFFFFF"/></targetSettings></optimizationSettings></sfw></metadata><title>' + drupalSettings.data.extlink.extLabel + '</title><path d="M48 26c-1.1 0-2 0.9-2 2v26H10V18h26c1.1 0 2-0.9 2-2s-0.9-2-2-2H8c-1.1 0-2 0.9-2 2v40c0 1.1 0.9 2 2 2h40c1.1 0 2-0.9 2-2V28C50 26.9 49.1 26 48 26z"/><path d="M56 6H44c-1.1 0-2 0.9-2 2s0.9 2 2 2h7.2L30.6 30.6c-0.8 0.8-0.8 2 0 2.8C31 33.8 31.5 34 32 34s1-0.2 1.4-0.6L54 12.8V20c0 1.1 0.9 2 2 2s2-0.9 2-2V8C58 6.9 57.1 6 56 6z"/></svg>');
+        }
       }
     }
   };

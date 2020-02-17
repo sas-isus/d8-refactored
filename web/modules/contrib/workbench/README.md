@@ -13,7 +13,9 @@ easily access their own content.
 Workbench gains more features when you install and enable these modules:
 
 * Workbench Access - http://drupal.org/project/workbench_access
+* Content Moderation - part of Drupal 8.5 core
 * Workbench Moderation - http://drupal.org/project/workbench_moderation
+  (deprecated in favor of Content Moderation)
 
 One way to think about Workbench is that it becomes the Dashboard for Content
 Contributors.  Basically, putting all of the content needs of a user in one
@@ -109,9 +111,7 @@ Each item in the list links to the full content or you can click edit to
 start editing.
 
 Click the Create Content tab to view a list of types of content that you can
-create.  Remember, we're dealing with Entities now.  Initially, Workbench
-shows various Node Types that you have permission to create.  When
-Workbench Media is enabled, the Media item is added to this list as well.
+create.  Workbench shows various Node Types that you have permission to create.
 
 Click the type of content you want to add, then follow the usual procedure for
 adding content.
@@ -162,8 +162,21 @@ Note that the Create content tab is not a View and is not configurable.
 If you wish to override the display in code, you may do so. See workbench.api.php
 for details.
 
+Issues
+------
+Please file issues at https://drupal.org/project/workbench.
+
+Note that issues related to other modules in the Workbench suite (including
+Workbench Access, Workbench Moderation, and Workbench Files) should be filed
+under their proper modules.
+
 Credits
 -------
 Icons created by iconmonstr and used under license.
-
 https://iconmonstr.com/license/
+
+Help Pages
+----------
+This help text page will look better with the Markdown module installed.
+https://drupal.org/project/markdown
+
