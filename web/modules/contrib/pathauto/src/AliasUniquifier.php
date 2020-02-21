@@ -38,7 +38,7 @@ class AliasUniquifier implements AliasUniquifierInterface {
   /**
    * The route provider service.
    *
-   * @var \Drupal\Core\Routing\RouteProviderInterface.
+   * @var \Drupal\Core\Routing\RouteProviderInterface
    */
   protected $routeProvider;
 
@@ -60,6 +60,8 @@ class AliasUniquifier implements AliasUniquifierInterface {
    *   The module handler.
    * @param \Drupal\Core\Routing\RouteProviderInterface $route_provider
    *   The route provider service.
+   * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
+   *   The alias manager.
    */
   public function __construct(ConfigFactoryInterface $config_factory, AliasStorageHelperInterface $alias_storage_helper, ModuleHandlerInterface $module_handler, RouteProviderInterface $route_provider, AliasManagerInterface $alias_manager) {
     $this->configFactory = $config_factory;
@@ -88,7 +90,7 @@ class AliasUniquifier implements AliasUniquifierInterface {
     do {
       // Append an incrementing numeric suffix until we find a unique alias.
       $unique_suffix = $separator . $i;
-      $alias = Unicode::truncate($original_alias, $maxlength - Unicode::strlen($unique_suffix), TRUE) . $unique_suffix;
+      $alias = Unicode::truncate($original_alias, $maxlength - mb_strlen($unique_suffix), TRUE) . $unique_suffix;
       $i++;
     } while ($this->isReserved($alias, $source, $langcode));
   }
@@ -112,11 +114,11 @@ class AliasUniquifier implements AliasUniquifierInterface {
       return TRUE;
     }
     // Finally check if any other modules have reserved the alias.
-    $args = array(
+    $args = [
       $alias,
       $source,
       $langcode,
-    );
+    ];
     $implementations = $this->moduleHandler->getImplementations('pathauto_is_alias_reserved');
     foreach ($implementations as $module) {
 

@@ -11,6 +11,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\Context\Context;
 use Drupal\Core\Plugin\ContextAwarePluginBase;
+use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\pathauto\AliasTypeBatchUpdateInterface;
 use Drupal\pathauto\AliasTypeInterface;
 use Drupal\pathauto\PathautoState;
@@ -25,6 +26,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class EntityAliasTypeBase extends ContextAwarePluginBase implements AliasTypeInterface, AliasTypeBatchUpdateInterface, ContainerFactoryPluginInterface {
+
+  use MessengerTrait;
 
   /**
    * The module handler service.
@@ -144,19 +147,22 @@ class EntityAliasTypeBase extends ContextAwarePluginBase implements AliasTypeInt
     $id_key = $entity_type->getKey('id');
 
     $query = $this->database->select($entity_type->get('base_table'), 'base_table');
-    $query->leftJoin('url_alias', 'ua', "CONCAT('" . $this->getSourcePrefix() . "' , base_table.$id_key) = ua.source");
+    $query->leftJoin($this->getTableInfo()['table'], 'pa', "CONCAT('" . $this->getSourcePrefix() . "' , base_table.$id_key) = pa.{$this->getTableInfo()['fields']['path']}");
     $query->addField('base_table', $id_key, 'id');
 
     switch ($action) {
       case 'create':
-        $query->isNull('ua.source');
+        $query->isNull("pa.{$this->getTableInfo()['fields']['path']}");
         break;
+
       case 'update':
-        $query->isNotNull('ua.source');
+        $query->isNotNull("pa.{$this->getTableInfo()['fields']['path']}");
         break;
+
       case 'all':
         // Nothing to do. We want all paths.
         break;
+
       default:
         // Unknown action. Abort!
         return;
@@ -182,9 +188,9 @@ class EntityAliasTypeBase extends ContextAwarePluginBase implements AliasTypeInt
 
     $updates = $this->bulkUpdate($ids);
     $context['sandbox']['count'] += count($ids);
-    $context['sandbox']['current'] = max($ids);
+    $context['sandbox']['current'] = !empty($ids) ? max($ids) : 0;
     $context['results']['updates'] += $updates;
-    $context['message'] = $this->t('Updated alias for %label @id.', array('%label' => $entity_type->getLabel(), '@id' => end($ids)));
+    $context['message'] = $this->t('Updated alias for %label @id.', ['%label' => $entity_type->getLabel(), '@id' => end($ids)]);
 
     if ($context['sandbox']['count'] != $context['sandbox']['total']) {
       $context['finished'] = $context['sandbox']['count'] / $context['sandbox']['total'];
@@ -204,11 +210,11 @@ class EntityAliasTypeBase extends ContextAwarePluginBase implements AliasTypeInt
     $id_key = $entity_type->getKey('id');
 
     $query = $this->database->select($entity_type->get('base_table'), 'base_table');
-    $query->innerJoin('url_alias', 'ua', "CONCAT('" . $this->getSourcePrefix() . "' , base_table.$id_key) = ua.source");
+    $query->innerJoin($this->getTableInfo()['table'], 'pa', "CONCAT('" . $this->getSourcePrefix() . "' , base_table.$id_key) = pa.{$this->getTableInfo()['fields']['path']}");
     $query->addField('base_table', $id_key, 'id');
-    $query->addField('ua', 'pid');
-    $query->condition('ua.pid', $context['sandbox']['current'], '>');
-    $query->orderBy('ua.pid');
+    $query->addField('pa', $this->getTableInfo()['fields']['id']);
+    $query->condition("pa.{$this->getTableInfo()['fields']['id']}}", $context['sandbox']['current'], '>');
+    $query->orderBy("pa.{$this->getTableInfo()['fields']['id']}}");
     $query->addTag('pathauto_bulk_delete');
     $query->addMetaData('entity', $this->getEntityTypeId());
 
@@ -226,7 +232,7 @@ class EntityAliasTypeBase extends ContextAwarePluginBase implements AliasTypeInt
     $query->range(0, 100);
     $pids_by_id = $query->execute()->fetchAllKeyed();
 
-    $this->bulkDelete($pids_by_id);
+    PathautoState::bulkDelete($this->getEntityTypeId(), $pids_by_id);
     $context['sandbox']['count'] += count($pids_by_id);
     $context['sandbox']['current'] = max($pids_by_id);
     $context['results']['deletions'][] = $this->getLabel();
@@ -255,10 +261,10 @@ class EntityAliasTypeBase extends ContextAwarePluginBase implements AliasTypeInt
    *   An optional array of additional options.
    *
    * @return int
-   *  The number of updated URL aliases.
+   *   The number of updated URL aliases.
    */
-  protected function bulkUpdate(array $ids, array $options = array()) {
-    $options += array('message' => FALSE);
+  protected function bulkUpdate(array $ids, array $options = []) {
+    $options += ['message' => FALSE];
     $updates = 0;
 
     $entities = $this->entityTypeManager->getStorage($this->getEntityTypeId())->loadMultiple($ids);
@@ -274,7 +280,10 @@ class EntityAliasTypeBase extends ContextAwarePluginBase implements AliasTypeInt
     }
 
     if (!empty($options['message'])) {
-      drupal_set_message(\Drupal::translation()->formatPlural(count($ids), 'Updated 1 %label URL alias.', 'Updated @count %label URL aliases.'), array('%label' => $this->getLabel()));
+      $this->messenger->addMessage($this->translationManager
+        ->formatPlural(count($ids), 'Updated 1 %label URL alias.', 'Updated @count %label URL aliases.'), [
+          '%label' => $this->getLabel(),
+        ]);
     }
 
     return $updates;
@@ -285,19 +294,11 @@ class EntityAliasTypeBase extends ContextAwarePluginBase implements AliasTypeInt
    *
    * @param int[] $pids_by_id
    *   A list of path IDs keyed by entity ID.
+   *
+   * @deprecated Use \Drupal\pathauto\PathautoState::bulkDelete() instead.
    */
   protected function bulkDelete(array $pids_by_id) {
-    $collection = 'pathauto_state.' . $this->getEntityTypeId();
-    $states = $this->keyValue->get($collection)->getMultiple(array_keys($pids_by_id));
-
-    $pids = [];
-    foreach ($pids_by_id as $id => $pid) {
-      // Only delete aliases that were created by this module.
-      if (isset($states[$id]) && $states[$id] == PathautoState::CREATE) {
-        $pids[] = $pid;
-      }
-    }
-    \Drupal::service('pathauto.alias_storage_helper')->deleteMultiple($pids);
+    PathautoState::bulkDelete($this->getEntityTypeId(), $pids_by_id);
   }
 
   /**
@@ -338,5 +339,38 @@ class EntityAliasTypeBase extends ContextAwarePluginBase implements AliasTypeInt
     return $this;
   }
 
+  /**
+   * Returns information about the path alias table and field names.
+   *
+   * @return array
+   *   An array with the following structure:
+   *   - table: the name of the table where path aliases are stored;
+   *   - fields: an array containing the mapping of path alias properties to
+   *     their table column names.
+   */
+  private function getTableInfo() {
+    if (version_compare(\Drupal::VERSION, '8.8', '<')) {
+      return [
+        'table' => 'url_alias',
+        'fields' => [
+          'id' => 'pid',
+          'path' => 'source',
+          'alias' => 'alias',
+          'langcode' => 'langcode',
+        ],
+      ];
+    }
+    else {
+      return [
+        'table' => 'path_alias',
+        'fields' => [
+          'id' => 'id',
+          'path' => 'path',
+          'alias' => 'alias',
+          'langcode' => 'langcode',
+        ],
+      ];
+    }
+  }
 
 }
