@@ -5083,6 +5083,7 @@ return array(
     'Symfony\\Component\\HttpFoundation\\Session\\SessionBagInterface' => $vendorDir . '/symfony/http-foundation/Session/SessionBagInterface.php',
     'Symfony\\Component\\HttpFoundation\\Session\\SessionBagProxy' => $vendorDir . '/symfony/http-foundation/Session/SessionBagProxy.php',
     'Symfony\\Component\\HttpFoundation\\Session\\SessionInterface' => $vendorDir . '/symfony/http-foundation/Session/SessionInterface.php',
+    'Symfony\\Component\\HttpFoundation\\Session\\SessionUtils' => $vendorDir . '/symfony/http-foundation/Session/SessionUtils.php',
     'Symfony\\Component\\HttpFoundation\\Session\\Storage\\Handler\\AbstractSessionHandler' => $vendorDir . '/symfony/http-foundation/Session/Storage/Handler/AbstractSessionHandler.php',
     'Symfony\\Component\\HttpFoundation\\Session\\Storage\\Handler\\MemcacheSessionHandler' => $vendorDir . '/symfony/http-foundation/Session/Storage/Handler/MemcacheSessionHandler.php',
     'Symfony\\Component\\HttpFoundation\\Session\\Storage\\Handler\\MemcachedSessionHandler' => $vendorDir . '/symfony/http-foundation/Session/Storage/Handler/MemcachedSessionHandler.php',
