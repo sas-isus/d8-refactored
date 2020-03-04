@@ -10,6 +10,7 @@ return array(
     'WebDriver' => array($vendorDir . '/instaclick/php-webdriver/lib'),
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
     'Stack' => array($vendorDir . '/stack/builder/src'),
+    'PEAR' => array($vendorDir . '/pear/pear_exception'),
     'EasyRdf_' => array($vendorDir . '/easyrdf/easyrdf/lib'),
     'Drush' => array($vendorDir . '/drush/drush/lib'),
     'Drupal\\Tests\\Driver' => array($vendorDir . '/drupal/drupal-driver/tests'),

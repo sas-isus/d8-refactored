@@ -39,7 +39,7 @@ class ContainerControllerResolverTest extends ControllerResolverTest
 
         $controller = $resolver->getController($request);
 
-        $this->assertInstanceOf(static::class, $controller[0]);
+        $this->assertInstanceOf(\get_class($this), $controller[0]);
         $this->assertSame('controllerMethod1', $controller[1]);
     }
 
@@ -71,7 +71,7 @@ class ContainerControllerResolverTest extends ControllerResolverTest
     public function testGetControllerInvokableServiceWithClassNameAsName()
     {
         $invokableController = new InvokableController('bar');
-        $className = InvokableController::class;
+        $className = __NAMESPACE__.'\InvokableController';
 
         $container = $this->createMockContainer();
         $container->expects($this->once())

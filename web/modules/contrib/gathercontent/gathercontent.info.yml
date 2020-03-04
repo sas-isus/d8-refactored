@@ -1,7 +1,7 @@
 name: GatherContent
 description: 'Imports items from GatherContent to your Drupal CMS'
 package: GatherContent
-core: 8.x
+# core: 8.x
 type: module
 dependencies:
   - drupal:node
@@ -10,3 +10,9 @@ dependencies:
   - drupal:image
   - drupal:file
   - drupal:field
+
+# Information added by Drupal.org packaging script on 2019-07-10
+version: '8.x-4.2'
+core: '8.x'
+project: 'gathercontent'
+datestamp: 1562748488

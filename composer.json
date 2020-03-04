@@ -15,9 +15,8 @@
     },
     "require": {
         "cheppers/gathercontent-client": "dev-master",
-        "composer/installers": "^1.0.20",
+        "composer/installers": "^1.7",
         "cweagans/composer-patches": "^1.0",
-        "drupal-composer/drupal-scaffold": "^2.0.1",
         "drupal/address": "~1.0",
         "drupal/admin_toolbar": "^1.26",
         "drupal/bg_image_formatter": "^1.12",
@@ -28,7 +27,8 @@
         "drupal/config_direct_save": "^1.0",
         "drupal/config_installer": "^1.0",
         "drupal/console": "^1",
-        "drupal/core": "8.7.11",
+        "drupal/core-composer-scaffold": "^8.8",
+        "drupal/core-recommended": "^8.8",
         "drupal/crop": "^1.5",
         "drupal/ctools": "^3.2",
         "drupal/draggableviews": "^1.2",
@@ -79,8 +79,7 @@
         "drupal/workbench_moderation": "^1.2",
         "drush/drush": "~8",
         "guzzlehttp/guzzle": "^6.2@dev",
-        "rvtraveller/qs-composer-installer": "^1.1",
-        "webflo/drupal-core-strict": "^8"
+        "rvtraveller/qs-composer-installer": "^1.1"
     },
     "require-dev": {
         "mikey179/vfsstream": "^1.2",
@@ -164,7 +163,20 @@
                 "sites/default/default.services.yml": "sites/default/services.yml",
                 "sites/default/default.settings.php": "sites/default/settings.php"
             },
-            "omit-defaults": false
+            "omit-defaults": false,
+            "locations": {
+                "web-root": "web/"
+            },
+            "allowed-packages": [
+                "drupal/core"
+            ],
+            "file-mapping": {
+                "[web-root]/.htaccess": {
+                    "mode": "replace",
+                    "path": "web/core/assets/scaffold/files/htaccess",
+                    "overwrite": false
+                }
+            }
         }
     },
     "config": {

@@ -29,15 +29,15 @@ while ($read || $write) {
     $n = stream_select($r, $w, $e, 5);
 
     if (false === $n) {
-        exit(ERR_SELECT_FAILED);
+        die(ERR_SELECT_FAILED);
     } elseif ($n < 1) {
-        exit(ERR_TIMEOUT);
+        die(ERR_TIMEOUT);
     }
 
     if (in_array(STDOUT, $w) && strlen($out) > 0) {
         $written = fwrite(STDOUT, (string) $out, 32768);
         if (false === $written) {
-            exit(ERR_WRITE_FAILED);
+            die(ERR_WRITE_FAILED);
         }
         $out = (string) substr($out, $written);
     }
@@ -48,7 +48,7 @@ while ($read || $write) {
     if (in_array(STDERR, $w) && strlen($err) > 0) {
         $written = fwrite(STDERR, (string) $err, 32768);
         if (false === $written) {
-            exit(ERR_WRITE_FAILED);
+            die(ERR_WRITE_FAILED);
         }
         $err = (string) substr($err, $written);
     }
@@ -65,7 +65,7 @@ while ($read || $write) {
         if (false === $str || feof(STDIN)) {
             $read = null;
             if (!feof(STDIN)) {
-                exit(ERR_READ_FAILED);
+                die(ERR_READ_FAILED);
             }
         }
     }

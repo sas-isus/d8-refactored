@@ -3,6 +3,7 @@
 namespace Drupal\Tests\update\Functional;
 
 use Drupal\Core\DrupalKernel;
+use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\Tests\BrowserTestBase;
 
@@ -39,6 +40,20 @@ abstract class UpdateTestBase extends BrowserTestBase {
    * Denotes no update will be available in the test case.
    */
   const UPDATE_NONE = 'UPDATE_NONE';
+
+  /**
+   * The CSS locator for the update table run asserts on.
+   *
+   * @var string
+   */
+  protected $updateTableLocator;
+
+  /**
+   * The project that is being tested.
+   *
+   * @var string
+   */
+  protected $updateProject;
 
   protected function setUp() {
     parent::setUp();
@@ -92,7 +107,7 @@ abstract class UpdateTestBase extends BrowserTestBase {
    */
   protected function standardTests() {
     $this->assertRaw('<h3>' . t('Drupal core') . '</h3>');
-    $this->assertRaw(\Drupal::l(t('Drupal'), Url::fromUri('http://example.com/project/drupal')), 'Link to the Drupal project appears.');
+    $this->assertRaw(Link::fromTextAndUrl(t('Drupal'), Url::fromUri('http://example.com/project/drupal'))->toString(), 'Link to the Drupal project appears.');
     $this->assertNoText(t('No available releases found'));
   }
 
@@ -165,6 +180,28 @@ abstract class UpdateTestBase extends BrowserTestBase {
         $this->fail('Unexpected value for $expected_update_message_type: ' . $expected_update_message_type);
       }
     }
+  }
+
+  /**
+   * Asserts that an update version has the correct links.
+   *
+   * @param string $label
+   *   The label for the update.
+   * @param string $version
+   *   The project version.
+   * @param string|null $download_version
+   *   (optional) The version number as it appears in the download link. If
+   *   $download_version is not provided then $version will be used.
+   */
+  protected function assertVersionUpdateLinks($label, $version, $download_version = NULL) {
+    $download_version = $download_version ?? $version;
+    $update_element = $this->getSession()->getPage()->find('css', $this->updateTableLocator . " .project-update__version:contains(\"$label\")");
+    // In the release notes URL the periods are replaced with dashes.
+    $url_version = str_replace('.', '-', $version);
+
+    $this->assertEquals($update_element->findLink($version)->getAttribute('href'), "http://example.com/{$this->updateProject}-$url_version-release");
+    $this->assertEquals($update_element->findLink('Download')->getAttribute('href'), "http://example.com/{$this->updateProject}-$download_version.tar.gz");
+    $this->assertEquals($update_element->findLink('Release notes')->getAttribute('href'), "http://example.com/{$this->updateProject}-$url_version-release");
   }
 
 }

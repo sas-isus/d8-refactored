@@ -42,7 +42,7 @@ class ContainerAwareEventDispatcher extends EventDispatcher
     {
         $this->container = $container;
 
-        $class = static::class;
+        $class = \get_class($this);
         if ($this instanceof \PHPUnit_Framework_MockObject_MockObject || $this instanceof MockObject || $this instanceof \Prophecy\Doubler\DoubleInterface) {
             $class = get_parent_class($class);
         }
