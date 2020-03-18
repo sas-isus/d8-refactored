@@ -53,7 +53,7 @@ class WebformElementPrepopulateTest extends WebformElementBrowserTestBase {
 
     // Check 'managed_file_prepopulate' can not be prepopulated.
     // The #prepopulate property is not available to managed file elements.
-    // @see \Drupal\webform\Plugin\WebformElement\WebformManagedFileBase::getDefaultProperties
+    // @see \Drupal\webform\Plugin\WebformElement\WebformManagedFileBase::defaultProperties
     $edit = [
       'files[managed_file_prepopulate]' => \Drupal::service('file_system')->realpath($files[0]->uri),
     ];

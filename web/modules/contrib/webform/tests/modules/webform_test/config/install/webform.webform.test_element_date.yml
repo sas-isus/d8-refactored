@@ -77,7 +77,11 @@ elements: |
     '#date_days':
       - '0'
       - '6'
-  
+  date_datepicker_placeholder:
+    '#type': date
+    '#title': date_datepicker_placeholder
+    '#datepicker': true
+    '#placeholder': '{date}'
 css: ''
 javascript: ''
 settings:

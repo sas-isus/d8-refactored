@@ -62,7 +62,12 @@ elements: |
     '#description': '(14:00 to 18:00)'
     '#time_format': 'g:i A'
     '#default_value': '14:00'
-  
+  time_timepicker_placeholder:
+    '#type': webform_time
+    '#title': time_timepicker_placeholder
+    '#timepicker': true
+    '#placeholder': '{time}'
+
 css: ''
 javascript: ''
 settings:

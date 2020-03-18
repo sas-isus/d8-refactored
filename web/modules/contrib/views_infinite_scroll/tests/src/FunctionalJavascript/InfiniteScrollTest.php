@@ -30,6 +30,11 @@ class InfiniteScrollTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
+  protected $defaultTheme = 'classy';
+
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp() {
     parent::setUp();
     $this->createContentType([
@@ -70,6 +75,17 @@ class InfiniteScrollTest extends WebDriverTestBase {
     $this->scrollTo(500);
     $this->assertSession()->waitForElement('css', '.node--type-page:nth-child(4)');
     $this->assertTotalNodes(6);
+
+    // Test the view automatically loading with 0 items per page. This will
+    // result in there being no pager, which is a case that our preprocess
+    // function needs to handle.
+    // @see views_infinite_scroll_preprocess_views_infinite_scroll_pager()
+    $this->createView('automatic-load-0', [
+      'button_text' => 'Load More',
+      'automatically_load_content' => TRUE,
+    ], 0);
+    $this->drupalGet('automatic-load-0');
+    $this->assertTotalNodes(11);
 
     // Test @next_page_count and @total token.
     $this->createView('next-page-count', [

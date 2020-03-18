@@ -39,14 +39,12 @@ abstract class OptionsBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function getDefaultProperties() {
-    $properties = parent::getDefaultProperties();
-
-    $properties += [
+  protected function defineDefaultProperties() {
+    $properties = [
       // Options settings.
       'options' => [],
       'options_randomize' => FALSE,
-    ];
+    ] + parent::defineDefaultProperties();
 
     // Add other properties to elements that include the other text field.
     if ($this->isOptionsOther()) {
@@ -80,6 +78,8 @@ abstract class OptionsBase extends WebformElementBase {
 
     return $properties;
   }
+
+  /****************************************************************************/
 
   /**
    * Determine if the element plugin type includes an other option text field.
@@ -115,9 +115,9 @@ abstract class OptionsBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function getTranslatableProperties() {
+  protected function defineTranslatableProperties() {
     return array_merge(
-      parent::getTranslatableProperties(),
+      parent::defineTranslatableProperties(),
       ['options', 'empty_option', 'option_label']
     );
   }

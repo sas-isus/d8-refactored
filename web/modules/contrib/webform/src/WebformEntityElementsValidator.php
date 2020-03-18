@@ -450,7 +450,7 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
    *   If not valid, an array of error messages.
    */
   protected function validateVariants() {
-    if (!$this->webform->hasVariant()) {
+    if (!$this->webform->hasVariants()) {
       return NULL;
     }
 

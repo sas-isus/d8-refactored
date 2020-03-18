@@ -614,22 +614,8 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
    * {@inheritdoc}
    */
   public function getCustomColumns(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE) {
-    // Get custom columns from the webform's state.
-    if ($source_entity) {
-      $source_key = $source_entity->getEntityTypeId() . '.' . $source_entity->id();
-      $column_names = $webform->getState("results.custom.columns.$source_key", []);
-      // If the source entity does not have custom columns, then see if we
-      // can use the main webform as the default custom columns.
-      if (empty($column_names) && $webform->getState("results.custom.default", FALSE)) {
-        $column_names = $webform->getState('results.custom.columns', []);
-      }
-    }
-    else {
-      $column_names = $webform->getState('results.custom.columns', []);
-    }
-
-    // Get columns.
-    $column_names = $column_names ?: $this->getDefaultColumnNames($webform, $source_entity, $account, $include_elements);
+    $column_names = $this->getCustomSetting('columns', [], $webform, $source_entity)
+      ?: $this->getDefaultColumnNames($webform, $source_entity, $account, $include_elements);
     $columns = $this->getColumns($webform, $source_entity, $account, $include_elements);
     return $this->filterColumns($column_names, $columns);
   }
@@ -909,16 +895,29 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       return $default;
     }
 
+    $results_customize = $webform->getSetting('results_customize', TRUE);
+
     $key = "results.custom.$name";
     if (!$source_entity) {
-      return $webform->getState($key, $default);
+      if ($results_customize && $webform->hasUserData($key)) {
+        return $webform->getUserData($key);
+      }
+      elseif ($webform->hasState($key)) {
+        return $webform->getState($key);
+      }
+      else {
+        return $default;
+      }
     }
 
-    $source_key = $source_entity->getEntityTypeId() . '.' . $source_entity->id();
-    if ($webform->hasState("$key.$source_key")) {
-      return $webform->getState("$key.$source_key", $default);
+    $source_entity_key = $key .'.' . $source_entity->getEntityTypeId() . '.' . $source_entity->id();
+    if ($results_customize && $webform->hasUserData($source_entity_key)) {
+      return $webform->getUserData($source_entity_key);
     }
-    if ($webform->getState("results.custom.default", FALSE)) {
+    elseif ($webform->hasState($source_entity_key)) {
+      return $webform->getState($source_entity_key);
+    }
+    elseif ($webform->getState('results.custom.default', FALSE)) {
       return $webform->getState($key, $default);
     }
     else {

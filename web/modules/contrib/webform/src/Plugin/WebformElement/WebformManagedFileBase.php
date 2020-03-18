@@ -151,9 +151,9 @@ abstract class WebformManagedFileBase extends WebformElementBase implements Webf
   /**
    * {@inheritdoc}
    */
-  public function getDefaultProperties() {
+  protected function defineDefaultProperties() {
     $file_extensions = $this->getFileExtensions();
-    $properties = parent::getDefaultProperties() + [
+    $properties = parent::defineDefaultProperties() + [
       'multiple' => FALSE,
       'max_filesize' => '',
       'file_extensions' => $file_extensions,
@@ -175,9 +175,11 @@ abstract class WebformManagedFileBase extends WebformElementBase implements Webf
   /**
    * {@inheritdoc}
    */
-  public function getTranslatableProperties() {
-    return array_merge(parent::getTranslatableProperties(), ['file_placeholder']);
+  protected function defineTranslatableProperties() {
+    return array_merge(parent::defineTranslatableProperties(), ['file_placeholder']);
   }
+
+  /****************************************************************************/
 
   /**
    * {@inheritdoc}
@@ -270,14 +272,19 @@ abstract class WebformManagedFileBase extends WebformElementBase implements Webf
       $element['#access'] = FALSE;
       $this->displayDisabledWarning($element);
     }
-    else {
+    elseif ($webform_submission) {
       $element['#upload_location'] = $this->getUploadLocation($element, $webform_submission->getWebform());
     }
 
     // Get file limit.
-    $file_limit = $webform_submission->getWebform()->getSetting('form_file_limit')
-        ?: \Drupal::config('webform.settings')->get('settings.default_form_file_limit')
-        ?: '';
+    if ($webform_submission) {
+      $file_limit = $webform_submission->getWebform()->getSetting('form_file_limit')
+          ?: \Drupal::config('webform.settings')->get('settings.default_form_file_limit')
+          ?: '';
+    }
+    else {
+      $file_limit = '';
+    }
 
     // Validate callbacks.
     $element_validate = [];
@@ -780,7 +787,10 @@ abstract class WebformManagedFileBase extends WebformElementBase implements Webf
     if (!empty($element['#multiple']) && !empty($element['#files'])
       && (count($element['#files']) === $element['#multiple'])) {
       $element['upload']['#access'] = FALSE;
-      $element['upload_button']['#access'] = FALSE;
+      // We can't complete remove the upload button because it breaks
+      // the Ajax callback. Instead, we are going visually hide it from
+      // browsers with JavaScript disabled.
+      $element['upload_button']['#attributes']['style'] = 'display:none';
     }
 
     // Preview uploaded file.

@@ -31,7 +31,10 @@ class oEmbedUpdateTest extends BrowserTestBase {
     $sourceField = $mediaType->getSource()->getSourceFieldDefinition($mediaType);
     $this->assertEqual($sourceField->getType(), 'video_embed_field');
 
-    $formDisplay = entity_get_form_display('media', $mediaType->id(), 'default');
+    /** @var \Drupal\Core\Entity\EntityDisplayRepositoryInterface $display_repository */
+    $display_repository = $this->container->get('entity_display.repository');
+
+    $formDisplay = $display_repository->getFormDisplay('media', $mediaType->id());
     $formField = $formDisplay->getComponent($sourceField->getName());
 
     $this->assertEqual($formField['type'], 'video_embed_field_textfield');
@@ -47,7 +50,7 @@ class oEmbedUpdateTest extends BrowserTestBase {
     $sourceField = $mediaType->getSource()->getSourceFieldDefinition($mediaType);
     $this->assertEqual($sourceField->getType(), 'string');
 
-    $formDisplay = entity_get_form_display('media', $mediaType->id(), 'default');
+    $formDisplay = $display_repository->getFormDisplay('media', $mediaType->id());
     $formField = $formDisplay->getComponent($sourceField->getName());
 
     $this->assertEqual($formField['type'], 'oembed_textfield');

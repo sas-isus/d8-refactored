@@ -34,6 +34,9 @@ elements: |
     '#title': Message
     '#type': textarea
     '#required': true
+  document:
+    '#type': webform_document_file
+    '#title': Document
   administrator_notes:
     '#type': textarea
     '#title': 'Administrator Notes'

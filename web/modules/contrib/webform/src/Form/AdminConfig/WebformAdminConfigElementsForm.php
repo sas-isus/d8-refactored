@@ -393,7 +393,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
     ];
     $form['file']['file_private_redirect_message'] = [
       '#type' => 'webform_html_editor',
-      '#title' => $this->t('Login message when access denied to private file uploads.'),
+      '#title' => $this->t('Login message when access denied to private file uploads'),
       '#required' => TRUE,
       '#default_value' => $config->get('file.file_private_redirect_message'),
       '#states' => [

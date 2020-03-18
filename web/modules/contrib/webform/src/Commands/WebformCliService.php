@@ -98,6 +98,7 @@ class WebformCliService implements WebformCliServiceInterface {
         'multiple-delimiter' => 'Delimiter between an element with multiple values (defaults to site-wide setting).',
         // Document and managed file export options.
         'file-name' => 'File name used to export submission and uploaded filed. You may use tokens.',
+        'archive-type' => 'Archive file type for submission file uploadeds and generated records. (tar or zip)',
         // Tabular export options.
         'header-format' => 'Set to "label" (default) or "key"',
         'options-item-format' => 'Set to "label" (default) or "key". Set to "key" to print select list values by their keys instead of labels.',

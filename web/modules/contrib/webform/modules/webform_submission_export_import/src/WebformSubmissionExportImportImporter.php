@@ -219,7 +219,7 @@ class WebformSubmissionExportImportImporter implements WebformSubmissionExportIm
    * {@inheritdoc}
    */
   public function getImportOption($name) {
-    return $this->importOptions[$name];
+    return $this->importOptions[$name] ?? NULL;
   }
 
   /**

@@ -3,10 +3,9 @@ description: A mock provider for testing purposes only.
 type: module
 hidden: true
 package: Testing
-# core: 8.x
+core: 8.x
 
-# Information added by Drupal.org packaging script on 2019-07-26
-version: '8.x-2.2'
-core: '8.x'
+# Information added by Drupal.org packaging script on 2020-03-18
+version: '8.x-2.3'
 project: 'video_embed_field'
-datestamp: 1564103587
+datestamp: 1584489968

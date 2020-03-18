@@ -42,6 +42,11 @@ elements: |
     '#title': unique_error
     '#unique': true
     '#unique_error': 'unique_error error message.'
+  unique_error_html:
+    '#type': textfield
+    '#title': unique_error_html
+    '#unique': true
+    '#unique_error': 'unique_error <em>error message</em>.'
   unique_multiple:
     '#type': checkboxes
     '#title': unique_multiple
@@ -50,7 +55,7 @@ elements: |
     '#options':
       1: one
       2: two
-  
+
 css: ''
 javascript: ''
 settings:

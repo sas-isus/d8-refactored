@@ -48,13 +48,13 @@ abstract class WebformCompositeBase extends WebformElementBase {
   protected $elementsManagedFiles = [];
 
   /****************************************************************************/
-  // Property methods.
+  // Property definitions.
   /****************************************************************************/
 
   /**
    * {@inheritdoc}
    */
-  public function getDefaultProperties() {
+  protected function defineDefaultProperties() {
     $properties = [
       'default_value' => [],
       'title_display' => 'invisible',
@@ -66,7 +66,8 @@ abstract class WebformCompositeBase extends WebformElementBase {
       'chosen' => FALSE,
       // Wrapper.
       'wrapper_type' => 'fieldset',
-    ] + parent::getDefaultProperties() + $this->getDefaultMultipleProperties();
+    ] + parent::defineDefaultProperties()
+      + $this->defineDefaultMultipleProperties();
     unset($properties['required_error']);
 
     $composite_elements = $this->getCompositeElements();
@@ -98,12 +99,16 @@ abstract class WebformCompositeBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  protected function getDefaultMultipleProperties() {
+  protected function defineDefaultMultipleProperties() {
     return [
       'multiple__header' => FALSE,
       'multiple__header_label' => '',
-    ] + parent::getDefaultMultipleProperties();
+    ] + parent::defineDefaultMultipleProperties();
   }
+
+  /****************************************************************************/
+  // Property methods.
+  /****************************************************************************/
 
   /**
    * {@inheritdoc}
@@ -928,8 +933,6 @@ abstract class WebformCompositeBase extends WebformElementBase {
         '#access' => TRUE,
       ];
     }
-
-
 
     return $form;
   }

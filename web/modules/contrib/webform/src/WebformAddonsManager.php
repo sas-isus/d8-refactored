@@ -432,6 +432,15 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'recommended' => TRUE,
     ];
 
+    // Integrations: Webform Entity Handler.
+    $projects['webform_entity_handler'] = [
+      'title' => $this->t('Webform Entity Handler'),
+      'description' => $this->t('Provides the ability to create or update entities with the webform submission values.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_entity_handler'),
+      'category' => 'integration',
+      'recommended' => TRUE,
+    ];
+
     /**************************************************************************/
 
     // Integrations: Webform AddressFinder.
@@ -498,7 +507,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'integration',
     ];
 
-    // Integrations: GitLab API with Library
+    // Integrations: GitLab API with Library.
     $projects['gitlab_api'] = [
       'title' => $this->t('GitLab API with Library'),
       'description' => $this->t(' Integrates your Drupal site into GitLab using the GitLab API.'),
@@ -583,6 +592,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'title' => $this->t('Webform API Handler'),
       'description' => $this->t("Extends Webform's built it Remote Post handler to enable the creation of custom plugins for pre-processing the request Webform makes to an API endpoint, and for processing and displaying the result of the API request."),
       'url' => Url::fromUri('https://www.drupal.org/project/webform_api_handler'),
+      'category' => 'integration',
+    ];
+
+    // Integrations: Webform Authorize.Net.
+    $projects['authorizenetwebform'] = [
+      'title' => $this->t('Webform Authorize.Net'),
+      'description' => $this->t('Integrates Webform with Authorize.Net.'),
+      'url' => Url::fromUri('https://github.com/ivan-trokhanenko/authorizenetwebform'),
       'category' => 'integration',
     ];
 
@@ -1309,6 +1326,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'url' => Url::fromUri('https://www.drupal.org/project/maillog'),
       'category' => 'development',
       'recommended' => TRUE,
+    ];
+
+    // Devel: Webform Submissions List Decorator.
+    $projects['maillog'] = [
+      'title' => $this->t('Webform Submissions List Decorator'),
+      'description' => $this->t('Override submissions list and allows user hide columns of webform submissions in submissions list.'),
+      'url' => Url::fromUri('https://www.drupal.org/sandbox/antonkerbel/3098999'),
+      'category' => 'development',
     ];
 
     // Add logos.
