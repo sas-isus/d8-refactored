@@ -10,3 +10,9 @@ drupal.extlink:
     - core/drupal
     - core/drupalSettings
     - core/jquery.once
+
+extlink.settings:
+  js:
+    /extlink/settings.js: { preprocess: false }
+  dependencies:
+    - core/drupalSettings

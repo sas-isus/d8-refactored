@@ -60,7 +60,7 @@ class MultilingualTest extends PBTKernelTestBase {
   }
 
   public function testCanNotAccess() {
-    list($termDe, $nodeDe, $term, $node, $user) = $this->setupEntities();
+    [$termDe, $nodeDe, $term, $node, $user] = $this->setupEntities();
 
     $this->accessStorage->addTermPermissionsByUserIds([\Drupal::service('current_user')->id()], $term->id(), 'en');
     $this->accessStorage->addTermPermissionsByUserIds([$user->id()], $termDe->id(), 'de');

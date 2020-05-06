@@ -111,11 +111,6 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         array (
             'Masterminds\\' => 12,
         ),
-        'J' => 
-        array (
-            'JakubOnderka\\PhpConsoleHighlighter\\' => 35,
-            'JakubOnderka\\PhpConsoleColor\\' => 29,
-        ),
         'I' => 
         array (
             'Interop\\Container\\' => 18,
@@ -378,14 +373,6 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         'Masterminds\\' => 
         array (
             0 => __DIR__ . '/..' . '/masterminds/html5/src',
-        ),
-        'JakubOnderka\\PhpConsoleHighlighter\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/jakub-onderka/php-console-highlighter/src',
-        ),
-        'JakubOnderka\\PhpConsoleColor\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/jakub-onderka/php-console-color/src',
         ),
         'Interop\\Container\\' => 
         array (
@@ -3819,6 +3806,7 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         'Drupal\\Core\\TypedData\\Validation\\RecursiveValidator' => __DIR__ . '/../..' . '/web/core/lib/Drupal/Core/TypedData/Validation/RecursiveValidator.php',
         'Drupal\\Core\\TypedData\\Validation\\TypedDataAwareValidatorTrait' => __DIR__ . '/../..' . '/web/core/lib/Drupal/Core/TypedData/Validation/TypedDataAwareValidatorTrait.php',
         'Drupal\\Core\\TypedData\\Validation\\TypedDataMetadata' => __DIR__ . '/../..' . '/web/core/lib/Drupal/Core/TypedData/Validation/TypedDataMetadata.php',
+        'Drupal\\Core\\Update\\RemovedPostUpdateNameException' => __DIR__ . '/../..' . '/web/core/lib/Drupal/Core/Update/RemovedPostUpdateNameException.php',
         'Drupal\\Core\\Update\\UpdateBackend' => __DIR__ . '/../..' . '/web/core/lib/Drupal/Core/Update/UpdateBackend.php',
         'Drupal\\Core\\Update\\UpdateCacheBackendFactory' => __DIR__ . '/../..' . '/web/core/lib/Drupal/Core/Update/UpdateCacheBackendFactory.php',
         'Drupal\\Core\\Update\\UpdateCompilerPass' => __DIR__ . '/../..' . '/web/core/lib/Drupal/Core/Update/UpdateCompilerPass.php',
@@ -4240,9 +4228,6 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         'Interop\\Container\\ContainerInterface' => __DIR__ . '/..' . '/container-interop/container-interop/src/Interop/Container/ContainerInterface.php',
         'Interop\\Container\\Exception\\ContainerException' => __DIR__ . '/..' . '/container-interop/container-interop/src/Interop/Container/Exception/ContainerException.php',
         'Interop\\Container\\Exception\\NotFoundException' => __DIR__ . '/..' . '/container-interop/container-interop/src/Interop/Container/Exception/NotFoundException.php',
-        'JakubOnderka\\PhpConsoleColor\\ConsoleColor' => __DIR__ . '/..' . '/jakub-onderka/php-console-color/src/ConsoleColor.php',
-        'JakubOnderka\\PhpConsoleColor\\InvalidStyleException' => __DIR__ . '/..' . '/jakub-onderka/php-console-color/src/InvalidStyleException.php',
-        'JakubOnderka\\PhpConsoleHighlighter\\Highlighter' => __DIR__ . '/..' . '/jakub-onderka/php-console-highlighter/src/Highlighter.php',
         'Masterminds\\HTML5' => __DIR__ . '/..' . '/masterminds/html5/src/HTML5.php',
         'Masterminds\\HTML5\\Elements' => __DIR__ . '/..' . '/masterminds/html5/src/HTML5/Elements.php',
         'Masterminds\\HTML5\\Entities' => __DIR__ . '/..' . '/masterminds/html5/src/HTML5/Entities.php',
@@ -5033,6 +5018,7 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         'Psy\\CodeCleaner\\NoReturnValue' => __DIR__ . '/..' . '/psy/psysh/src/CodeCleaner/NoReturnValue.php',
         'Psy\\CodeCleaner\\PassableByReferencePass' => __DIR__ . '/..' . '/psy/psysh/src/CodeCleaner/PassableByReferencePass.php',
         'Psy\\CodeCleaner\\RequirePass' => __DIR__ . '/..' . '/psy/psysh/src/CodeCleaner/RequirePass.php',
+        'Psy\\CodeCleaner\\ReturnTypePass' => __DIR__ . '/..' . '/psy/psysh/src/CodeCleaner/ReturnTypePass.php',
         'Psy\\CodeCleaner\\StrictTypesPass' => __DIR__ . '/..' . '/psy/psysh/src/CodeCleaner/StrictTypesPass.php',
         'Psy\\CodeCleaner\\UseStatementPass' => __DIR__ . '/..' . '/psy/psysh/src/CodeCleaner/UseStatementPass.php',
         'Psy\\CodeCleaner\\ValidClassNamePass' => __DIR__ . '/..' . '/psy/psysh/src/CodeCleaner/ValidClassNamePass.php',
@@ -5083,6 +5069,7 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         'Psy\\Exception\\RuntimeException' => __DIR__ . '/..' . '/psy/psysh/src/Exception/RuntimeException.php',
         'Psy\\Exception\\ThrowUpException' => __DIR__ . '/..' . '/psy/psysh/src/Exception/ThrowUpException.php',
         'Psy\\Exception\\TypeErrorException' => __DIR__ . '/..' . '/psy/psysh/src/Exception/TypeErrorException.php',
+        'Psy\\Exception\\UnexpectedTargetException' => __DIR__ . '/..' . '/psy/psysh/src/Exception/UnexpectedTargetException.php',
         'Psy\\ExecutionClosure' => __DIR__ . '/..' . '/psy/psysh/src/ExecutionClosure.php',
         'Psy\\ExecutionLoopClosure' => __DIR__ . '/..' . '/psy/psysh/src/ExecutionLoopClosure.php',
         'Psy\\ExecutionLoop\\AbstractListener' => __DIR__ . '/..' . '/psy/psysh/src/ExecutionLoop/AbstractListener.php',
@@ -5092,7 +5079,9 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         'Psy\\Formatter\\CodeFormatter' => __DIR__ . '/..' . '/psy/psysh/src/Formatter/CodeFormatter.php',
         'Psy\\Formatter\\DocblockFormatter' => __DIR__ . '/..' . '/psy/psysh/src/Formatter/DocblockFormatter.php',
         'Psy\\Formatter\\Formatter' => __DIR__ . '/..' . '/psy/psysh/src/Formatter/Formatter.php',
+        'Psy\\Formatter\\ReflectorFormatter' => __DIR__ . '/..' . '/psy/psysh/src/Formatter/ReflectorFormatter.php',
         'Psy\\Formatter\\SignatureFormatter' => __DIR__ . '/..' . '/psy/psysh/src/Formatter/SignatureFormatter.php',
+        'Psy\\Formatter\\TraceFormatter' => __DIR__ . '/..' . '/psy/psysh/src/Formatter/TraceFormatter.php',
         'Psy\\Input\\CodeArgument' => __DIR__ . '/..' . '/psy/psysh/src/Input/CodeArgument.php',
         'Psy\\Input\\FilterOptions' => __DIR__ . '/..' . '/psy/psysh/src/Input/FilterOptions.php',
         'Psy\\Input\\ShellInput' => __DIR__ . '/..' . '/psy/psysh/src/Input/ShellInput.php',
@@ -5112,6 +5101,7 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         'Psy\\Reflection\\ReflectionConstant_' => __DIR__ . '/..' . '/psy/psysh/src/Reflection/ReflectionConstant_.php',
         'Psy\\Reflection\\ReflectionLanguageConstruct' => __DIR__ . '/..' . '/psy/psysh/src/Reflection/ReflectionLanguageConstruct.php',
         'Psy\\Reflection\\ReflectionLanguageConstructParameter' => __DIR__ . '/..' . '/psy/psysh/src/Reflection/ReflectionLanguageConstructParameter.php',
+        'Psy\\Reflection\\ReflectionNamespace' => __DIR__ . '/..' . '/psy/psysh/src/Reflection/ReflectionNamespace.php',
         'Psy\\Shell' => __DIR__ . '/..' . '/psy/psysh/src/Shell.php',
         'Psy\\Sudo' => __DIR__ . '/..' . '/psy/psysh/src/Sudo.php',
         'Psy\\Sudo\\SudoVisitor' => __DIR__ . '/..' . '/psy/psysh/src/Sudo/SudoVisitor.php',

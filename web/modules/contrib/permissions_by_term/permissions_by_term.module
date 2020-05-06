@@ -6,15 +6,12 @@
  */
 
 use Drupal\Core\Access\AccessResultForbidden;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
-use Drupal\permissions_by_term\KeyValueCache\CacheNegotiator;
-use Drupal\permissions_by_term\Model\NidToTidsModel;
 use Drupal\permissions_by_term\Service\AccessCheck;
 use Drupal\permissions_by_term\Service\AccessStorage;
 use Drupal\taxonomy\Entity\Term;
@@ -110,13 +107,12 @@ function permissions_by_term_submit($form, FormState $formState) {
 
   // Do we need to flush the cache and the node access records?
   if($rebuild_cache_and_node_access === true) {
-    /**
-     * @var CacheNegotiator $cacheNegotiator
-     */
-    $cacheNegotiator = \Drupal::service('permissions_by_term.cache_negotiator');
-    $cacheNegotiator->clear(NidToTidsModel::class);
     node_access_rebuild(TRUE);
-    Cache::invalidateTags(['search_index:node_search']);
+    /**
+     * @var \Drupal\permissions_by_term\Cache\CacheInvalidator $cacheInvalidator
+     */
+    $cacheInvalidator = \Drupal::service('permissions_by_term.cache_invalidator');
+    $cacheInvalidator->invalidate();
   }
 }
 
@@ -355,12 +351,11 @@ function permissions_by_term_node_access_records(\Drupal\node\NodeInterface $nod
  * Implements hook_user_insert().
  */
 function permissions_by_term_user_insert($user) {
-  Cache::invalidateTags(['search_index:node_search']);
   /**
-   * @var CacheNegotiator $cacheNegotiator
+   * @var \Drupal\permissions_by_term\Cache\CacheInvalidator $cacheInvalidator
    */
-  $cacheNegotiator = \Drupal::service('permissions_by_term.cache_negotiator');
-  $cacheNegotiator->clear(NidToTidsModel::class);
+  $cacheInvalidator = \Drupal::service('permissions_by_term.cache_invalidator');
+  $cacheInvalidator->invalidate();
 }
 
 /**
@@ -368,7 +363,11 @@ function permissions_by_term_user_insert($user) {
  */
 function permissions_by_term_user_update($user) {
   if (\Drupal::currentUser()->hasPermission('administer permissions')) {
-    Cache::invalidateTags(['search_index:node_search']);
+    /**
+     * @var \Drupal\permissions_by_term\Cache\CacheInvalidator $cacheInvalidator
+     */
+    $cacheInvalidator = \Drupal::service('permissions_by_term.cache_invalidator');
+    $cacheInvalidator->invalidate();
   }
 }
 
@@ -376,12 +375,11 @@ function permissions_by_term_user_update($user) {
  * Implements hook_node_insert().
  */
 function permissions_by_term_node_insert($node) {
-  Cache::invalidateTags(['search_index:node_search']);
   /**
-   * @var CacheNegotiator $cacheNegotiator
+   * @var \Drupal\permissions_by_term\Cache\CacheInvalidator $cacheInvalidator
    */
-  $cacheNegotiator = \Drupal::service('permissions_by_term.cache_negotiator');
-  $cacheNegotiator->clear(NidToTidsModel::class);
+  $cacheInvalidator = \Drupal::service('permissions_by_term.cache_invalidator');
+  $cacheInvalidator->invalidate();
 }
 
 /**
@@ -425,10 +423,10 @@ function permissions_by_term_user_cancel($edit, $account, $method) {
   $access_storage = \Drupal::service('permissions_by_term.access_storage');
   $access_storage->deleteAllTermPermissionsByUserId($deleted_user_id);
   /**
-   * @var CacheNegotiator $cacheNegotiator
+   * @var \Drupal\permissions_by_term\Cache\CacheInvalidator $cacheInvalidator
    */
-  $cacheNegotiator = \Drupal::service('permissions_by_term.cache_negotiator');
-  $cacheNegotiator->clear(NidToTidsModel::class);
+  $cacheInvalidator = \Drupal::service('permissions_by_term.cache_invalidator');
+  $cacheInvalidator->invalidate();
 }
 
 /**
@@ -441,8 +439,8 @@ function permissions_by_term_taxonomy_term_delete(EntityInterface $entity) {
   $access_storage = \Drupal::service('permissions_by_term.access_storage');
   $access_storage->deleteAllTermPermissionsByTid($entity->id());
   /**
-   * @var CacheNegotiator $cacheNegotiator
+   * @var \Drupal\permissions_by_term\Cache\CacheInvalidator $cacheInvalidator
    */
-  $cacheNegotiator = \Drupal::service('permissions_by_term.cache_negotiator');
-  $cacheNegotiator->clear(NidToTidsModel::class);
+  $cacheInvalidator = \Drupal::service('permissions_by_term.cache_invalidator');
+  $cacheInvalidator->invalidate();
 }

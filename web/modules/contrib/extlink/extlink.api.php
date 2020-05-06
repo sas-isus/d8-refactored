@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hooks related to the entlink module.
+ * Hooks related to the extlink module.
  */
 
 /**

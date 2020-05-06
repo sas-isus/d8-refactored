@@ -61,17 +61,17 @@ class ImceFileField {
    * Processes widget form.
    */
   public static function processWidget($element, FormStateInterface $form_state, $form) {
-    // Path input
+    // Path input.
     $element['imce_paths'] = [
       '#type' => 'hidden',
       '#attributes' => [
         'class' => ['imce-filefield-paths'],
         'data-imce-url' => Url::fromRoute('imce.page', ['scheme' => $element['#scheme']])->toString(),
       ],
-      // Reset value to prevent consistent errors
+      // Reset value to prevent consistent errors.
       '#value' => '',
     ];
-    // Library
+    // Library.
     $element['#attached']['library'][] = 'imce/drupal.imce.filefield';
     // Set the pre-renderer to conditionally disable the elements.
     $element['#pre_render'][] = [get_called_class(), 'preRenderWidget'];
@@ -91,6 +91,7 @@ class ImceFileField {
 
   /**
    * Sets widget file id values by validating and processing the submitted data.
+   *
    * Runs before processor callbacks.
    */
   public static function setWidgetValue($element, &$input, FormStateInterface $form_state) {
@@ -112,7 +113,7 @@ class ImceFileField {
     $file_usage = \Drupal::service('file.usage');
     $errors = [];
     foreach ($paths as $path) {
-      // Get entity by uri
+      // Get entity by uri.
       $file = Imce::getFileEntity($element['#scheme'] . '://' . $path, TRUE);
       if ($new_errors = file_validate($file, $element['#upload_validators'])) {
         $errors = array_merge($errors, $new_errors);
@@ -142,7 +143,8 @@ class ImceFileField {
         $message = array_pop($errors);
       }
       // May break the widget flow if set as a form error.
-      drupal_set_message($message, 'error');
+      \Drupal::messenger()
+        ->addMessage($message, 'error');
     }
   }
 

@@ -4,7 +4,7 @@ core: 8.x
 core_version_requirement: ^8 || ^9
 type: module
 
-# Information added by Drupal.org packaging script on 2020-02-03
-version: '8.x-1.12'
+# Information added by Drupal.org packaging script on 2020-04-27
+version: '8.x-1.14'
 project: 'bg_image_formatter'
-datestamp: 1580720303
+datestamp: 1588018379

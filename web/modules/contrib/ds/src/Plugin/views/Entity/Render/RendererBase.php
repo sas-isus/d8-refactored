@@ -23,7 +23,7 @@ abstract class RendererBase extends EntityTranslationRendererBase {
   protected function dsPreRender(array $result, $translation = FALSE) {
     if ($result) {
       // Get all entities which will be used to render in rows.
-      $view_builder = $this->view->rowPlugin->entityManager->getViewBuilder($this->entityType->id());
+      $view_builder = \Drupal::entityTypeManager()->getViewBuilder($this->entityType->id());
 
       $i = 0;
       $grouping = [];

@@ -45,8 +45,8 @@ class ExtlinkTest extends ExtlinkTestBase {
   }
 
   /**
-  * Checks to see if an image link gets extlink svg.
-  */
+   * Checks to see if an image link gets extlink svg.
+   */
   public function testExtlinkImg() {
     // Login.
     $this->drupalLogin($this->adminUser);

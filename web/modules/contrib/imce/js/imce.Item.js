@@ -326,6 +326,20 @@
   };
 
   /**
+   * Thumbnail change handler.
+   */
+  Item.onThumbnailChange = function (oldval) {
+    if (this.thumbnail) {
+      this.iconEl.innerHTML = '<img src="' + this.thumbnail + '" alt="thumbnail">';
+      this.iconEl.className += ' imce-item-thumbnail';
+    }
+    else {
+      this.iconEl.innerHTML = '';
+      $(this.iconEl).removeClass('imce-item-thumbnail');
+    }
+  };
+
+  /**
    * Size change handler.
    */
   Item.onSizeChange = function (oldval) {

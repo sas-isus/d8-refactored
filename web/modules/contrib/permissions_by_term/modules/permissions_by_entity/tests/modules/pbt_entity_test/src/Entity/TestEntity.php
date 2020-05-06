@@ -2,11 +2,11 @@
 
 namespace Drupal\pbt_entity_test\Entity;
 
+use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityPublishedTrait;
-use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 
 /**
  * Defines a content entity type that has a string ID.

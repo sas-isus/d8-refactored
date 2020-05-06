@@ -16,6 +16,11 @@ class QueueWorker {
 
   const REBUILD_QUEUE_CHUNK_ITEM_SIZE = 5000;
 
+  const GENERATE_TYPE_FORM = 'form';
+  const GENERATE_TYPE_DRUSH = 'drush';
+  const GENERATE_TYPE_CRON = 'cron';
+  const GENERATE_TYPE_BACKEND = 'backend';
+
   /**
    * @var \Drupal\simple_sitemap\SimplesitemapSettings
    */
@@ -133,7 +138,7 @@ class QueueWorker {
       ? $this->manager->getSitemapVariants()
       : array_filter(
         $this->manager->getSitemapVariants(),
-        function($name) use ($variants) { return in_array($name, (array) $variants); },
+        static function($name) use ($variants) { return in_array($name, (array) $variants); },
         ARRAY_FILTER_USE_KEY
       );
 
@@ -172,7 +177,7 @@ class QueueWorker {
     $this->getQueuedElementCount(TRUE);
 
     // Remove all sitemap instances of variants which did not yield any queue elements.
-    $this->manager->removeSitemap(array_keys(array_filter($queue_variants, function($e) { return empty($e['data']); })));
+    $this->manager->removeSitemap(array_keys(array_filter($queue_variants, static function($e) { return empty($e['data']); })));
 
     return $this;
   }
@@ -199,7 +204,7 @@ class QueueWorker {
    * @return $this
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
-  public function generateSitemap($from = 'form') {
+  public function generateSitemap($from = self::GENERATE_TYPE_FORM) {
 
     $this->generatorSettings = [
       'base_url' => $this->settings->getSetting('base_url', ''),
@@ -316,7 +321,7 @@ class QueueWorker {
           }
         }
       }
-    };
+    }
   }
 
   protected function publishCurrentVariant() {

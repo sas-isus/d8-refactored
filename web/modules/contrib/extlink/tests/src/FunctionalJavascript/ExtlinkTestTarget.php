@@ -46,7 +46,7 @@ class ExtlinkTestTarget extends ExtlinkTestBase {
     $this->assertTrue($link->getAttribute('target') === '_blank', 'ExtLink target attribute is not "_blank".');
 
     // Link should have rel attribute 'noopener noreferrer'.
-    $this->assertTrue($link->getAttribute('rel') === 'noopener noreferrer' || $link->getAttribute('rel') === 'noreferrer noopener', 'ExtLink rel attribute is not "noopener noreferrer".');
+    $this->assertTrue($link->getAttribute('rel') === 'noopener' || $link->getAttribute('rel') === 'noopener noreferrer' || $link->getAttribute('rel') === 'noreferrer noopener', 'ExtLink rel attribute is not "noopener".');
   }
 
   /**
@@ -87,7 +87,7 @@ class ExtlinkTestTarget extends ExtlinkTestBase {
     $this->assertTrue($link->getAttribute('target') === '_self', 'ExtLink target attribute is not "_self".');
 
     // Link should have rel attribute 'noopener noreferrer'.
-    $this->assertTrue($link->getAttribute('rel') === 'noopener noreferrer' || $link->getAttribute('rel') === 'noreferrer noopener', 'ExtLink rel attribute is not "noopener noreferrer".');
+    $this->assertTrue($link->getAttribute('rel') === 'noopener' || $link->getAttribute('rel') === 'noopener noreferrer' || $link->getAttribute('rel') === 'noreferrer noopener', 'ExtLink rel attribute is not "noopener".');
   }
 
 }

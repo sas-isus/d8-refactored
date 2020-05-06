@@ -1,9 +1,13 @@
+/**
+ * @file
+ */
+
 svg.ext {
   width: 14px;
   height: 14px;
   padding-right: 0.2em;
   fill: #727272;
-  font-weight:900;
+  font-weight: 900;
 }
 
 svg.mailto {
@@ -13,9 +17,10 @@ svg.mailto {
   fill: #727272;
 }
 
-svg.ext path, svg.mailto path {
-    stroke: #727272;
-    stroke-width: 3;
+svg.ext path,
+svg.mailto path {
+  stroke: #727272;
+  stroke-width: 3;
 }
 
 /* Hide the extra icons when printing. */

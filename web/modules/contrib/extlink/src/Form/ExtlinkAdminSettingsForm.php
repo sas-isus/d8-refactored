@@ -51,6 +51,13 @@ class ExtlinkAdminSettingsForm extends ConfigFormBase {
     $config = $this->config('extlink.settings');
     $renderer = $this->renderer;
 
+    $form['extlink_use_external_js_file'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Load exclusions and inclusions externally.'),
+      '#default_value' => $config->get('extlink_use_external_js_file'),
+      '#description' => $this->t('Whether the extlink JS settings should be added to the page via an external settings file. In the case of a large number of patterns, this will reduce the amount of markup added to each page.'),
+    ];
+
     $form['extlink_class'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Place an icon next to external links.'),
@@ -148,6 +155,12 @@ class ExtlinkAdminSettingsForm extends ConfigFormBase {
       ],
     ];
 
+    $form['extlink_noreferrer'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Tag external links as "noreferrer".'),
+      '#default_value' => $config->get('extlink_noreferrer'),
+    ];
+
     $form['extlink_nofollow'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Tag external links as "no follow".'),
@@ -190,7 +203,7 @@ class ExtlinkAdminSettingsForm extends ConfigFormBase {
       '#type' => 'textarea',
       '#title' => $this->t('Whitelisted domains.'),
       '#maxlength' => NULL,
-      '#default_value' => implode(PHP_EOL, $config->get('whitelisted_domains')),
+      '#default_value' => implode(PHP_EOL, (array) $config->get('whitelisted_domains')),
       '#description' => $this->t('Enter a line-separated list of whitelisted domains (ie "example.com").'),
     ];
 
@@ -283,6 +296,7 @@ class ExtlinkAdminSettingsForm extends ConfigFormBase {
     });
 
     $this->config('extlink.settings')
+      ->set('extlink_use_external_js_file', $values['extlink_use_external_js_file'])
       ->set('extlink_include', $values['extlink_include'])
       ->set('extlink_exclude', $values['extlink_exclude'])
       ->set('extlink_alert_text', $values['extlink_alert_text'])
@@ -290,6 +304,7 @@ class ExtlinkAdminSettingsForm extends ConfigFormBase {
       ->set('extlink_target', $values['extlink_target'])
       ->set('extlink_target_no_override', $values['extlink_target_no_override'])
       ->set('extlink_nofollow', $values['extlink_nofollow'])
+      ->set('extlink_noreferrer', $values['extlink_noreferrer'])
       ->set('extlink_follow_no_override', $values['extlink_follow_no_override'])
       ->set('extlink_subdomains', $values['extlink_subdomains'])
       ->set('extlink_mailto_class', $values['extlink_mailto_class'])

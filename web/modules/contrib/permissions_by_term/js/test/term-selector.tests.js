@@ -1,4 +1,3 @@
-import DomClient from '../src/client/dom-client.prototype.js';
 import TermCollector from '../src/client/term-collector.prototype';
 import _ from 'lodash';
 import sinon from 'sinon';

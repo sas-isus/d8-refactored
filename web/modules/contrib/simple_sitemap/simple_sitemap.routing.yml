@@ -23,6 +23,7 @@ simple_sitemap.sitemap_xsl:
   defaults:
     _controller: '\Drupal\simple_sitemap\Controller\SimplesitemapController::getSitemapXsl'
     _title: 'Sitemap XSL'
+    _disable_route_normalizer: 'TRUE'
   requirements:
     _access: 'TRUE'
 

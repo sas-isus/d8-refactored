@@ -4,6 +4,9 @@ extlink.settings:
   type: config_object
   label: 'External Links Settings'
   mapping:
+    extlink_use_external_js_file:
+      type: boolean
+      label: 'Load exclusions and inclusions externally'
     extlink_target:
       type: boolean
       label: 'Open external links in a new tab'
@@ -13,6 +16,9 @@ extlink.settings:
     extlink_nofollow:
       type: boolean
       label: 'Tag external links as "no follow"'
+    extlink_noreferrer:
+      type: boolean
+      label: 'Tag external links as "noreferrer"'
     extlink_follow_no_override:
       type: boolean
       label: 'Do not override rel="follow" if set'

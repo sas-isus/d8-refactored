@@ -8,13 +8,9 @@ use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Driver\Exception\Exception;
-use Drupal\node\Entity\Node;
-use Drupal\permissions_by_term\KeyValueCache\CacheNegotiator;
-use Drupal\permissions_by_term\Model\NidToTidsModel;
+use Drupal\permissions_by_term\Cache\KeyValueCache;
 use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
-use function GuzzleHttp\Promise\is_settled;
 
 /**
  * Class AccessStorage.
@@ -31,27 +27,6 @@ class AccessStorage {
   protected $database;
 
   /**
-   * The term name for which the access is set.
-   *
-   * @var string
-   */
-  protected $sTermName;
-
-  /**
-   * The user ids which gain granted access.
-   *
-   * @var array
-   */
-  protected $aUserIdsGrantedAccess;
-
-  /**
-   * The roles with granted access.
-   *
-   * @var array
-   */
-  protected $aSubmittedRolesGrantedAccess;
-
-  /**
    * @var TermHandler
    */
   protected $term;
@@ -59,7 +34,7 @@ class AccessStorage {
   /**
    * @var string
    */
-  const NODE_ACCESS_REALM = 'permissions_by_term';
+  public const NODE_ACCESS_REALM = 'permissions_by_term';
 
   /**
    * @var AccessCheck
@@ -67,19 +42,26 @@ class AccessStorage {
   protected $accessCheck;
 
   /**
-   * @var \Drupal\permissions_by_term\KeyValueCache\CacheNegotiator
+   * @var KeyValueCache
    */
-  private $cacheNegotiator;
+  private $keyValueCache;
 
-
+  /**
+   * @var LoggerChannelInterface
+   */
   private $logger;
 
-  public function __construct(Connection $database, TermHandler $term, AccessCheck $accessCheck, CacheNegotiator $cacheNegotiator, LoggerChannelInterface $logger) {
+  /**
+   * @var array
+   */
+  private $grantsCache;
+
+  public function __construct(Connection $database, TermHandler $term, AccessCheck $accessCheck, KeyValueCache $keyValueCache) {
     $this->database  = $database;
     $this->term = $term;
     $this->accessCheck = $accessCheck;
-    $this->cacheNegotiator = $cacheNegotiator;
-    $this->logger = $logger;
+    $this->keyValueCache = $keyValueCache;
+    $this->grantsCache = [];
   }
 
   /**
@@ -112,7 +94,7 @@ class AccessStorage {
       if (empty($aUserId)) {
         $form_state->setErrorByName('access][user',
           t('The user with ID %user_id does not exist.',
-          ['%user_id' => $sUserId]));
+            ['%user_id' => $sUserId]));
       }
     }
   }
@@ -308,7 +290,7 @@ class AccessStorage {
   }
 
   public function addTermPermissionsByUserIds(array $aUserIdsGrantedAccess, int $term_id, string $langcode = ''): void {
-		$langcode = ($langcode === '') ? \Drupal::languageManager()->getCurrentLanguage()->getId() : $langcode;
+    $langcode = ($langcode === '') ? \Drupal::languageManager()->getCurrentLanguage()->getId() : $langcode;
 
     foreach ($aUserIdsGrantedAccess as $iUserIdGrantedAccess) {
       $queryResult = $this->database->query("SELECT uid FROM {permissions_by_term_user} WHERE tid = :tid AND uid = :uid AND langcode = :langcode",
@@ -333,7 +315,7 @@ class AccessStorage {
    * @throws \Exception
    */
   public function addTermPermissionsByRoleIds($aRoleIdsGrantedAccess, $term_id, $langcode = '') {
-  	$langcode = ($langcode === '') ? \Drupal::languageManager()->getCurrentLanguage()->getId() : $langcode;
+    $langcode = ($langcode === '') ? \Drupal::languageManager()->getCurrentLanguage()->getId() : $langcode;
 
     $roles = Role::loadMultiple();
     foreach ($roles as $role => $roleObj) {
@@ -387,13 +369,13 @@ class AccessStorage {
     return $aUserIds;
   }
 
-	/**
-	 * @param FormState $formState
+  /**
+   * @param FormState $formState
    * @param int $term_id
-	 *
-	 * @return array
-	 * @throws \Exception
-	 */
+   *
+   * @return array
+   * @throws \Exception
+   */
   public function saveTermPermissions(FormStateInterface $formState, $term_id) {
     $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     if (!empty($formState->getValue('langcode'))) {
@@ -561,8 +543,8 @@ class AccessStorage {
   public function getTidsByNid($nid): array {
     $nidsToTidsPairs = [];
 
-    if ($this->cacheNegotiator->has(NidToTidsModel::class)) {
-      $nidsToTidsPairs = $this->cacheNegotiator->get(NidToTidsModel::class);
+    if ($this->keyValueCache->has()) {
+      $nidsToTidsPairs = $this->keyValueCache->get();
       if (!empty($nidsToTidsPairs[$nid])) {
         return $nidsToTidsPairs[$nid];
       }
@@ -576,7 +558,7 @@ class AccessStorage {
 
     if (!empty($tidsForNid)) {
       $nidsToTidsPairs[$nid] = $tidsForNid;
-      $this->cacheNegotiator->set(NidToTidsModel::class, $nidsToTidsPairs);
+      $this->keyValueCache->set($nidsToTidsPairs);
       return $tidsForNid;
     }
 
@@ -606,7 +588,7 @@ class AccessStorage {
       ->condition('n.nid', $nid);
 
     return $query->execute()
-      ->fetchAssoc()['type'];
+             ->fetchAssoc()['type'];
   }
 
   /**
@@ -621,7 +603,7 @@ class AccessStorage {
       ->condition('n.nid', $nid);
 
     return $query->execute()
-      ->fetchAssoc()['langcode'];
+             ->fetchAssoc()['langcode'];
   }
 
   /**
@@ -632,6 +614,10 @@ class AccessStorage {
   public function getGids(AccountInterface $user)
   {
     $grants = null;
+
+    if (isset($this->grantsCache[$user->id()])) {
+      return $this->grantsCache[$user->id()];
+    }
 
     if (!empty($permittedNids = $this->computePermittedTids($user))) {
       $query = $this->database->select('node_access', 'na')
@@ -645,6 +631,8 @@ class AccessStorage {
         $grants[self::NODE_ACCESS_REALM][] = $gid;
       }
     }
+
+    $this->grantsCache[$user->id()] = $grants;
 
     return $grants;
   }
@@ -741,11 +729,11 @@ class AccessStorage {
    */
   public function getNidsByTid($tid)
   {
-      $query = $this->database->select('taxonomy_index', 'ti')
-        ->fields('ti', ['nid'])
-        ->condition('ti.tid', $tid);
+    $query = $this->database->select('taxonomy_index', 'ti')
+      ->fields('ti', ['nid'])
+      ->condition('ti.tid', $tid);
 
-      return $query->execute()->fetchCol();
+    return $query->execute()->fetchCol();
   }
 
 }

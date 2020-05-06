@@ -15,6 +15,11 @@ class PanelizerIntegrationTest extends WebDriverTestBase {
   use PanelsIPETestTrait;
 
   /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
+
+  /**
    * The route that IPE tests should be ran on.
    */
   protected $test_route;

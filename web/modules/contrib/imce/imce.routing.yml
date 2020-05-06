@@ -15,6 +15,14 @@ imce.admin:
   requirements:
     _permission: 'administer imce'
 
+imce.help:
+  path: '/admin/imce/help'
+  defaults:
+    _controller: '\Drupal\imce\Controller\ImceHelpController::index'
+    _title: 'Help'
+  requirements:
+    _permission: 'administer imce'
+
 imce.profile_add:
   path: '/admin/config/media/imce/add-profile'
   defaults:

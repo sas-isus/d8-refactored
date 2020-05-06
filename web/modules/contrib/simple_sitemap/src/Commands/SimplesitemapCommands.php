@@ -2,6 +2,7 @@
 
 namespace Drupal\simple_sitemap\Commands;
 
+use Drupal\simple_sitemap\Queue\QueueWorker;
 use Drupal\simple_sitemap\Simplesitemap;
 use Drush\Commands\DrushCommands;
 
@@ -37,7 +38,7 @@ class SimplesitemapCommands extends DrushCommands {
    * @aliases ssg, simple-sitemap-generate
    */
   public function generate() {
-    $this->generator->generateSitemap('drush');
+    $this->generator->generateSitemap(QueueWorker::GENERATE_TYPE_DRUSH);
   }
 
   /**
@@ -66,8 +67,8 @@ class SimplesitemapCommands extends DrushCommands {
     if (strlen($options['variants']) > 0) {
       $chosen_variants = array_map('trim', array_filter(explode(',', $options['variants'])));
       if (!empty($erroneous_variants = array_diff($chosen_variants, $variants))) {
-        $message = "The following variants do not exist: " . implode(', ', $erroneous_variants)
-          . ". Available variants are: " . implode(', ', $variants) . '.';
+        $message = 'The following variants do not exist: ' . implode(', ', $erroneous_variants)
+          . '. Available variants are: ' . implode(', ', $variants) . '.';
         $this->logger()->log('error', $message);
         return;
       }

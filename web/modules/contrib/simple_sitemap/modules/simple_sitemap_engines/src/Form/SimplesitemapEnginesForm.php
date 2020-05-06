@@ -99,6 +99,7 @@ class SimplesitemapEnginesForm extends ConfigFormBase {
     $form['settings']['enabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Submit the sitemap to search engines'),
+      '#description' => $this->t('This enables/disables sitemap submitting; don\'t forget to choose variants below.'),
       '#default_value' => $config->get('enabled'),
     ];
 

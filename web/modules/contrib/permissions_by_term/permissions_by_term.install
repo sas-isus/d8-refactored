@@ -77,20 +77,20 @@ function permissions_by_term_requirements(string $phase) {
 
   if ($phase === 'update' || $phase === 'runtime') {
     if (!\Drupal::moduleHandler()->moduleExists('dynamic_page_cache')) {
-      $requirements['permissions_by_term_dynamic_page_cache'] = [
+      $requirements['permissions_by_term_dynamic_page_cache_missing'] = [
         'severity'    => REQUIREMENT_WARNING,
-        'title'       => t('Permissions by Term: Dynamic page cache is not installed.'),
-        'description' => t('The "Internal Dynamic Page Cache" module must be installed. Otherwise there cannot be run any permission check for your views pages.'),
+        'title'       => t('Permissions by Term: dynamic page cache is not installed.'),
+        'description' => t('The "Internal Dynamic Page Cache" module must be installed. Otherwise there cannot be run any permission check for your views pages. Ensure having the dynamic page cache module and page cache module installed.'),
         'value'       => t('No dynamic page cache'),
       ];
     }
 
-    if (\Drupal::moduleHandler()->moduleExists('dynamic_page_cache') && \Drupal::moduleHandler()->moduleExists('page_cache')) {
-      $requirements['permissions_by_term_both_cache_modules_installed'] = [
+    if (!\Drupal::moduleHandler()->moduleExists('page_cache')) {
+      $requirements['permissions_by_term_page_cache_missing'] = [
         'severity'    => REQUIREMENT_WARNING,
-        'title'       => t('Permissions by Term: Dynamic page cache and page cache installed'),
-        'description' => t('The "Internal Dynamic Page Cache" and the "Internal Page Cache" module are installed. It is recommended to install the "Internal Dynamic Page Cache" module only.'),
-        'value'       => t('Both cache modules are installed'),
+        'title'       => t('Permissions by Term: page cache module is not installed.'),
+        'description' => t("The 'Page Cache' module is not installed. Without this module your site's performance will be slow. Ensure having the dynamic page cache module and page cache module installed."),
+        'value'       => t('No page cache'),
       ];
     }
   }

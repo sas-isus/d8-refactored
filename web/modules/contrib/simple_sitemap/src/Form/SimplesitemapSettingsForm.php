@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\simple_sitemap\Simplesitemap;
 use Drupal\Component\Utility\UrlHelper;
-use Drupal\Core\Language\LanguageManager;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Class SimplesitemapSettingsForm
@@ -23,12 +23,12 @@ class SimplesitemapSettingsForm extends SimplesitemapFormBase {
    * SimplesitemapSettingsForm constructor.
    * @param \Drupal\simple_sitemap\Simplesitemap $generator
    * @param \Drupal\simple_sitemap\Form\FormHelper $form_helper
-   * @param \Drupal\Core\Language\LanguageManager $language_manager
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    */
   public function __construct(
     Simplesitemap $generator,
     FormHelper $form_helper,
-    LanguageManager $language_manager
+    LanguageManagerInterface $language_manager
   ) {
     parent::__construct(
       $generator,

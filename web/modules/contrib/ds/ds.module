@@ -162,7 +162,7 @@ function ds_theme_registry_alter(&$theme_registry) {
     // Escape the periods in the extension.
     $regex = '/' . str_replace('.', '\.', $extension) . '$/';
     // Get a listing of all template files in the path to search.
-    $files = file_scan_directory($theme_path, $regex, ['key' => 'filename']);
+    $files = \Drupal::service('file_system')->scanDirectory($theme_path, $regex, ['key' => 'filename']);
     $patterns = array_keys($files);
     $implementations = [];
 
@@ -771,7 +771,7 @@ function ds_preprocess_field(&$variables) {
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
  *
- * The suggestion alters for for field templates.
+ * The suggestion alters for field templates.
  */
 function ds_theme_suggestions_field_alter(&$suggestions, $variables) {
   $entity_type = $variables['element']['#entity_type'];

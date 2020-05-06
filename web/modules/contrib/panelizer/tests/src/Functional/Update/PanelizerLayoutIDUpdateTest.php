@@ -16,7 +16,8 @@ class PanelizerLayoutIDUpdateTest extends UpdatePathTestBase {
    */
   protected function setDatabaseDumpFiles() {
     $this->databaseDumpFiles = [
-      __DIR__ . '/../../../fixtures/update/drupal-8.panelizer.minimal.php.gz',
+      $this->getDrupalRoot() . '/core/modules/system/tests/fixtures/update/drupal-8.8.0.bare.standard.php.gz',
+      __DIR__ . '/../../../fixtures/update/drupal-8.8.panelizer.minimal.php.gz',
     ];
   }
 

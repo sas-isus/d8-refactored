@@ -122,10 +122,16 @@ class DsLayout extends LayoutDefault implements PluginFormInterface {
           ],
         ],
       ];
+
+      $token_types = 'all';
+      if ($entity = $form_state->getFormObject()->getEntity()) {
+        $token_types = [$entity->getTargetEntityTypeId()];
+      }
+
       $form['region_wrapper']['tokens']['help'] = [
         '#theme' => 'token_tree_link',
-        '#token_types' => 'all',
-        '#global_types' => FALSE,
+        '#token_types' => $token_types,
+        '#global_types' => TRUE,
         '#dialog' => TRUE,
       ];
     }

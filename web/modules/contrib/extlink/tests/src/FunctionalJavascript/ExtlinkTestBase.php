@@ -61,9 +61,7 @@ abstract class ExtlinkTestBase extends WebDriverTestBase {
    */
   const EXTLINK_MAILTO_XPATH = '//*[local-name() = "svg" and @class="mailto"]';
 
-  /**
-   * Set up file creation trait for image test.
-   */
+  // Set up file creation trait for image test.
   use TestFileCreationTrait {
     getTestFiles as drupalGetTestFiles;
   }

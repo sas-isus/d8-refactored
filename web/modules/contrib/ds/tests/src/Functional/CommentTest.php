@@ -14,6 +14,8 @@ class CommentTest extends CommentTestBase {
 
   use DsTestTrait;
 
+  protected $defaultTheme = 'classy';
+
   /**
    * Modules to install.
    *
@@ -31,7 +33,7 @@ class CommentTest extends CommentTestBase {
   /**
    * The created user.
    *
-   * @var User
+   * @var \Drupal\user\UserInterface
    */
   protected $adminUser;
 

@@ -5,3 +5,10 @@ extlink_admin.settings:
     _title: 'External Links'
   requirements:
     _permission: 'administer extlink'
+
+extlink.js.file:
+  path: '/extlink/settings.js'
+  defaults:
+    _controller: '\Drupal\extlink\Controller\ExternalSettingsJsController::extlinkJsFile'
+  requirements:
+    _custom_access: '\Drupal\extlink\Controller\ExternalSettingsJsController::access'

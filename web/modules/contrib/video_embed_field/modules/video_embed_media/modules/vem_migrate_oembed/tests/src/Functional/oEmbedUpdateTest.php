@@ -18,6 +18,11 @@ class oEmbedUpdateTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
   protected static $modules = ['vem_migrate_oembed'];
 
   /**

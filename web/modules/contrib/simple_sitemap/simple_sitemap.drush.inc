@@ -5,6 +5,8 @@
  * Drush (< 9) integration.
  */
 
+use Drupal\simple_sitemap\Queue\QueueWorker;
+
 /**
  * Implements hook_drush_command().
  */
@@ -32,7 +34,7 @@ function simple_sitemap_drush_command() {
  * Regenerate the XML sitemaps according to the module settings.
  */
 function drush_simple_sitemap_generate() {
-  \Drupal::service('simple_sitemap.generator')->generateSitemap('drush');
+  \Drupal::service('simple_sitemap.generator')->generateSitemap(QueueWorker::GENERATE_TYPE_DRUSH);
 }
 
 /**

@@ -6,6 +6,8 @@
  */
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Config\Config;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 
@@ -40,8 +42,32 @@ function extlink_help($route_name, RouteMatchInterface $arg) {
  */
 function extlink_page_attachments(array &$attachments) {
   $config = \Drupal::config('extlink.settings');
+
+  // Add the extlink.settings config as a cacheable dependency.
+  $cacheable_metadata = CacheableMetadata::createFromRenderArray($attachments);
+  $cacheable_metadata->addCacheableDependency($config);
+  $cacheable_metadata->applyTo($attachments);
+
   $attachments['#attached']['library'][] = 'extlink/drupal.extlink';
 
+  if (!empty($config->get('extlink_use_external_js_file'))) {
+    // If using an external JS file, stop here.
+    return;
+  }
+
+  $attachments['#attached']['drupalSettings']['data']['extlink'] = _extlink_get_settings_from_config($config);
+}
+
+/**
+ * Helper function to prepare extlink JS drupalSettings from configuration.
+ *
+ * @param \Drupal\Core\Config\Config $config
+ *   The extlink.settings config object.
+ *
+ * @return array
+ *   Associative array of extlink settings to use as JS drupalSettings.
+ */
+function _extlink_get_settings_from_config(Config $config) {
   $settings = $config->getRawData();
 
   // Allow other modules to manipulate the settings.
@@ -57,27 +83,43 @@ function extlink_page_attachments(array &$attachments) {
   $fa_mailto_classes = $config->get('extlink_font_awesome_classes.mailto') ?: 'fa fa-envelope-o';
   $fa_mailto_classes = array_map($callback, explode(' ', $fa_mailto_classes));
 
-  $attachments['#attached']['drupalSettings']['data']['extlink'] = [
-    'extTarget'           => $settings['extlink_target'],
-    'extTargetNoOverride' => $settings['extlink_target_no_override'],
-    'extNofollow'         => $settings['extlink_nofollow'] ? $settings['extlink_nofollow'] : 0,
-    'extFollowNoOverride' => $settings['extlink_follow_no_override'] ? $settings['extlink_follow_no_override'] : 0,
-    'extClass'            => $settings['extlink_class'],
-    'extLabel'            => Html::escape($settings['extlink_label']),
-    'extImgClass'         => $settings['extlink_img_class'],
-    'extSubdomains'       => $settings['extlink_subdomains'],
-    'extExclude'          => $settings['extlink_exclude'],
-    'extInclude'          => $settings['extlink_include'],
-    'extCssExclude'       => $settings['extlink_css_exclude'],
-    'extCssExplicit'      => $settings['extlink_css_explicit'],
-    'extAlert'            => $settings['extlink_alert'],
-    'extAlertText'        => $settings['extlink_alert_text'],
-    'mailtoClass'         => $settings['extlink_mailto_class'],
-    'mailtoLabel'         => Html::escape($settings['extlink_mailto_label']),
-    'extUseFontAwesome'   => isset($settings['extlink_use_font_awesome']) ? $settings['extlink_use_font_awesome'] : FALSE,
-    'extIconPlacement'    => !empty($settings['extlink_icon_placement']) ? $settings['extlink_icon_placement'] : 'append',
+  return [
+    'extTarget'           => ((isset($settings['extlink_target'])) ? $settings['extlink_target'] : FALSE),
+    'extTargetNoOverride' => ((isset($settings['extlink_target_no_override'])) ? $settings['extlink_target_no_override'] : FALSE),
+    'extNofollow'         => ((isset($settings['extlink_nofollow'])) ? $settings['extlink_nofollow'] : FALSE),
+    'extNoreferrer'         => ((isset($settings['extNoreferrer'])) ? $settings['extNoreferrer'] : FALSE),
+    'extFollowNoOverride' => ((isset($settings['extlink_follow_no_override'])) ? $settings['extlink_follow_no_override'] : FALSE),
+    'extClass'            => ((isset($settings['extlink_class'])) ? $settings['extlink_class'] : 'ext'),
+    'extLabel'            => ((isset($settings['extlink_label'])) ? Html::escape($settings['extlink_label']) : t('(link is external)')),
+    'extImgClass'         => ((isset($settings['extlink_img_class'])) ? $settings['extlink_img_class'] : FALSE),
+    'extSubdomains'       => ((isset($settings['extlink_subdomains'])) ? $settings['extlink_subdomains'] : TRUE),
+    'extExclude'          => ((isset($settings['extlink_exclude'])) ? $settings['extlink_exclude'] : ''),
+    'extInclude'          => ((isset($settings['extlink_include'])) ? $settings['extlink_include'] : ''),
+    'extCssExclude'       => ((isset($settings['extlink_css_exclude'])) ? $settings['extlink_css_exclude'] : ''),
+    'extCssExplicit'      => ((isset($settings['extlink_css_explicit'])) ? $settings['extlink_css_explicit'] : ''),
+    'extAlert'            => ((isset($settings['extlink_alert'])) ? $settings['extlink_alert'] : FALSE),
+    'extAlertText'        => ((isset($settings['extlink_alert_text'])) ? Html::escape($settings['extlink_alert_text']) : t('This link will take you to an external web site. We are not responsible for their content.')),
+    'mailtoClass'         => ((isset($settings['extlink_mailto_class'])) ? $settings['extlink_mailto_class'] : 'mailto'),
+    'mailtoLabel'         => ((isset($settings['extlink_mailto_label'])) ? Html::escape($settings['extlink_mailto_label']) : t('(link sends email)')),
+    'extUseFontAwesome'   => ((isset($settings['extlink_use_font_awesome'])) ? $settings['extlink_use_font_awesome'] : FALSE),
+    'extIconPlacement'    => ((!empty($settings['extlink_icon_placement'])) ? $settings['extlink_icon_placement'] : 'append'),
     'extFaLinkClasses'    => implode(' ', $fa_link_classes),
     'extFaMailtoClasses'  => implode(' ', $fa_mailto_classes),
     'whitelistedDomains'  => $config->get('whitelisted_domains'),
   ];
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function extlink_library_info_alter(&$libraries, $extension) {
+  if (($extension === 'extlink') &&
+      isset($libraries['drupal.extlink']) &&
+      \Drupal::config('extlink.settings')->get('extlink_use_external_js_file')) {
+
+    // Add the external settings JS file as a dependency to the drupal.extlink
+    // library so that it will be loaded when configuration is set to use the
+    // external file.
+    $libraries['drupal.extlink']['dependencies'][] = 'extlink/extlink.settings';
+  }
 }

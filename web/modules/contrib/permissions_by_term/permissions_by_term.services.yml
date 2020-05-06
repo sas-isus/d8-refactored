@@ -2,7 +2,7 @@ services:
 
     permissions_by_term.kernel_event_listener:
       class: Drupal\permissions_by_term\Listener\KernelEventListener
-      arguments: []
+      arguments: ['@permissions_by_term.access_check', '@permissions_by_term.access_storage', '@permissions_by_term.term_handler', '@event_dispatcher', '@page_cache_kill_switch']
       tags:
           - { name: event_subscriber }
 
@@ -12,7 +12,7 @@ services:
 
     permissions_by_term.access_storage:
       class: Drupal\permissions_by_term\Service\AccessStorage
-      arguments: ['@database',  '@permissions_by_term.term_handler', '@permissions_by_term.access_check', '@permissions_by_term.cache_negotiator', '@logger.channel.client_config_care']
+      arguments: ['@database', '@permissions_by_term.term_handler', '@permissions_by_term.access_check', '@permissions_by_term.key_value_cache']
 
     permissions_by_term.node_access_record_factory:
       class: \Drupal\permissions_by_term\Factory\NodeAccessRecordFactory
@@ -29,19 +29,27 @@ services:
       class: \Drupal\permissions_by_term\Service\NodeEntityBundleInfo
       arguments: ['@permissions_by_term.access_storage', '@permissions_by_term.term_handler', '@twig', '@database']
 
-    permissions_by_term.cache_negotiator:
-      class: Drupal\permissions_by_term\KeyValueCache\CacheNegotiator
-      autowire: true
-
-    permissions_by_term.shared_temp_store:
-      class: Drupal\permissions_by_term\KeyValueCache\SharedTempStore
-      arguments: ['@user.shared_tempstore', '@logger.channel.client_config_care']
-
-    permissions_by_term.static_storage:
-      class: Drupal\permissions_by_term\KeyValueCache\StaticStorage
-      autowire: true
-
-    logger.channel.client_config_care:
+    logger.channel.permissions_by_term:
       class: Drupal\Core\Logger\LoggerChannel
       factory: logger.factory:get
       arguments: ['permissions_by_term']
+
+    cache.permissions_by_term:
+      class: Drupal\Core\Cache\CacheBackendInterface
+      tags:
+        - { name: cache.bin }
+      factory: cache_factory:get
+      arguments:
+        - permissions_by_term
+
+    permissions_by_term.access_result_cache:
+      class: Drupal\permissions_by_term\Cache\AccessResultCache
+      arguments: ['@cache.permissions_by_term']
+
+    permissions_by_term.key_value_cache:
+      class: Drupal\permissions_by_term\Cache\KeyValueCache
+      arguments: ['@cache.permissions_by_term']
+
+    permissions_by_term.cache_invalidator:
+      class: Drupal\permissions_by_term\Cache\CacheInvalidator
+      autowire: true

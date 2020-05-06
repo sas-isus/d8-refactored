@@ -93,7 +93,7 @@ trait PanelizerTestTrait {
     $this->drupalPostForm(NULL, $edit, t('Save'));
     $this->assertResponse(200);
 
-    entity_get_form_display('node', $content_type, 'default')
+    \Drupal::service('entity_display.repository')->getFormDisplay('node', $content_type, 'default')
       ->setComponent('panelizer', [
         'type' => 'panelizer',
       ])
@@ -123,7 +123,7 @@ trait PanelizerTestTrait {
     $this->drupalPostForm(NULL, $edit, t('Save'));
     $this->assertResponse(200);
 
-    entity_get_form_display('node', $content_type, 'default')
+    \Drupal::service('entity_display.repository')->getFormDisplay('node', $content_type, 'default')
       ->removeComponent('panelizer')
       ->save();
   }
@@ -217,7 +217,7 @@ trait PanelizerTestTrait {
    *   (optional) The default ID.
    */
   protected function assertDefaultExists($content_type = 'page', $display = 'default', $id = 'default') {
-    $settings = entity_get_display('node', $content_type, $display)
+    $settings = \Drupal::service('entity_display.repository')->getViewDisplay('node', $content_type, $display)
       ->getThirdPartySettings('panelizer');
 
     $display_exists = isset($settings['displays'][$id]);
@@ -236,7 +236,7 @@ trait PanelizerTestTrait {
    *   The default ID.
    */
   protected function assertDefaultNotExists($content_type = 'page', $display = 'default', $id = 'default') {
-    $settings = entity_get_display('node', $content_type, $display)
+    $settings = \Drupal::service('entity_display.repository')->getViewDisplay('node', $content_type, $display)
       ->getThirdPartySettings('panelizer');
 
     $display_exists = isset($settings['displays'][$id]);

@@ -9,8 +9,9 @@ conf:
   maxwidth: 0
   maxheight: 0
   replace: 0
+  thumbnail_style: ''
   folders:
-    - 
+    -
       path: '.'
       permissions:
         all: true
