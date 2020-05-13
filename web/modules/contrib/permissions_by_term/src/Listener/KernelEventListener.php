@@ -3,6 +3,7 @@
 namespace Drupal\permissions_by_term\Listener;
 
 use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\PageCache\ResponsePolicy\KillSwitch;
 use Drupal\Core\Url;
 use Drupal\permissions_by_term\Event\PermissionsByTermDeniedEvent;
@@ -12,11 +13,11 @@ use Drupal\permissions_by_term\Service\TermHandler;
 use Drupal\taxonomy\Entity\Term;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -52,34 +53,46 @@ class KernelEventListener implements EventSubscriberInterface
   private $pageCacheKillSwitch;
 
   /**
-   * Instantiating of objects on class construction.
+   * @var bool
    */
-  public function __construct(AccessCheck $accessCheck, AccessStorage $accessStorage, TermHandler $termHandler, ContainerAwareEventDispatcher $eventDispatcher, KillSwitch $pageCacheKillSwitch)
+  private $disabledNodeAccessRecords;
+
+  public function __construct(
+    AccessCheck $accessCheck,
+    AccessStorage $accessStorage,
+    TermHandler $termHandler,
+    ContainerAwareEventDispatcher $eventDispatcher,
+    KillSwitch $pageCacheKillSwitch,
+    ConfigFactoryInterface $configFactory
+  )
   {
     $this->accessCheckService = $accessCheck;
     $this->accessStorageService = $accessStorage;
     $this->term = $termHandler;
     $this->eventDispatcher = $eventDispatcher;
     $this->pageCacheKillSwitch = $pageCacheKillSwitch;
+    $this->disabledNodeAccessRecords = $configFactory->get('permissions_by_term.settings')->get('disable_node_access_records');
   }
 
   /**
    * Access restriction on kernel request.
    */
-  public function onKernelRequest(GetResponseEvent $event): ?Response {
-    if (($result = $this->handleAccessToNodePages($event)) instanceof Response) {
-      return $result;
-    }
+  public function onKernelRequest(GetResponseEvent $event) {
+    if ($event->isMasterRequest()) {
 
-    if (($result = $this->handleAccessToTermAutocompleteLists($event)) instanceof Response) {
-      return $result;
-    }
+      if (($result = $this->handleAccessToNodePages($event)) instanceof Response) {
+        $event->setResponse($result);
+      }
 
-    if (($result = $this->handleAccessToTaxonomyTermViewsPages()) instanceof Response) {
-      return $result;
-    }
+      if (($result = $this->handleAccessToTermAutocompleteLists($event)) instanceof Response) {
+        $event->setResponse($result);
+      }
 
-    return null;
+      if (($result = $this->handleAccessToTaxonomyTermViewsPages()) instanceof Response) {
+        $event->setResponse($result);
+      }
+
+    }
   }
 
   /**
@@ -93,8 +106,8 @@ class KernelEventListener implements EventSubscriberInterface
    * Restricts access to terms on AJAX auto completion.
    */
   private function restrictTermAccessAtAutoCompletion(FilterResponseEvent $event) {
-    if ($event->getRequest()->attributes->get('target_type') == 'taxonomy_term' &&
-      $event->getRequest()->attributes->get('_route') == 'system.entity_autocomplete'
+    if ($event->getRequest()->attributes->get('target_type') === 'taxonomy_term' &&
+      $event->getRequest()->attributes->get('_route') === 'system.entity_autocomplete'
     ) {
       $json_suggested_terms = $event->getResponse()->getContent();
       $suggested_terms = json_decode($json_suggested_terms);
@@ -122,15 +135,14 @@ class KernelEventListener implements EventSubscriberInterface
   /**
    * The subscribed events.
    */
-  public static function getSubscribedEvents()
-  {
+  public static function getSubscribedEvents(): array {
     return [
       KernelEvents::REQUEST => 'onKernelRequest',
       KernelEvents::RESPONSE => 'onKernelResponse',
     ];
   }
 
-  private function canRequestGetNode(Request $request) {
+  private function canRequestGetNode(Request $request): bool {
     if (method_exists($request->attributes, 'get') && !empty($request->attributes->get('node'))) {
       if (method_exists($request->attributes->get('node'), 'get')) {
         return TRUE;
@@ -140,28 +152,19 @@ class KernelEventListener implements EventSubscriberInterface
     return FALSE;
   }
 
-  private function sendUserToAccessDeniedPage(): Response {
-    $redirect_url = new Url('system.403');
-    $response = new RedirectResponse($redirect_url->toString());
-    $response->send();
-    return $response;
-  }
-
-  private function handleAccessToTaxonomyTermViewsPages(): ?Response {
+  private function handleAccessToTaxonomyTermViewsPages() {
     $url_object = \Drupal::service('path.validator')->getUrlIfValid(\Drupal::service('path.current')->getPath());
     if ($url_object instanceof Url && $url_object->getRouteName() === 'entity.taxonomy_term.canonical') {
       $route_parameters = $url_object->getrouteParameters();
       $termLangcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
       if (!$this->accessCheckService->isAccessAllowedByDatabase($route_parameters['taxonomy_term'], \Drupal::currentUser()->id(), $termLangcode)) {
         $this->pageCacheKillSwitch->trigger();
-        return $this->sendUserToAccessDeniedPage();
+        throw new AccessDeniedHttpException();
       }
     }
-
-    return NULL;
   }
 
-  private function handleAccessToNodePages(GetResponseEvent $event): ?Response {
+  private function handleAccessToNodePages(GetResponseEvent $event) {
     // Restricts access to nodes (views/edit).
     if ($this->canRequestGetNode($event->getRequest())) {
       $nid = $event->getRequest()->attributes->get('node')->get('nid')->getValue()['0']['value'];
@@ -169,17 +172,19 @@ class KernelEventListener implements EventSubscriberInterface
         $accessDeniedEvent = new PermissionsByTermDeniedEvent($nid);
         $this->eventDispatcher->dispatch(PermissionsByTermDeniedEvent::NAME, $accessDeniedEvent);
 
-        return $this->sendUserToAccessDeniedPage();
+        if ($this->disabledNodeAccessRecords) {
+          $this->pageCacheKillSwitch->trigger();
+        }
+
+        throw new AccessDeniedHttpException();
       }
     }
-
-    return null;
   }
 
-  private function handleAccessToTermAutocompleteLists(GetResponseEvent $event): ?Response {
+  private function handleAccessToTermAutocompleteLists(GetResponseEvent $event) {
     // Restrict access to taxonomy terms by autocomplete list.
-    if ($event->getRequest()->attributes->get('target_type') == 'taxonomy_term' &&
-      $event->getRequest()->attributes->get('_route') == 'system.entity_autocomplete') {
+    if ($event->getRequest()->attributes->get('target_type') === 'taxonomy_term' &&
+      $event->getRequest()->attributes->get('_route') === 'system.entity_autocomplete') {
       $query_string = $event->getRequest()->get('q');
       $query_string = trim($query_string);
 
@@ -192,11 +197,10 @@ class KernelEventListener implements EventSubscriberInterface
       }
 
       if (!$this->accessCheckService->isAccessAllowedByDatabase($tid, \Drupal::currentUser()->id(), $termLangcode)) {
-        return $this->sendUserToAccessDeniedPage();
+        throw new AccessDeniedHttpException();
       }
     }
 
-    return null;
   }
 
 }

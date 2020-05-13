@@ -124,6 +124,14 @@ class GatherContentClient implements GatherContentClientInterface
                 case 'apiKey':
                     $this->setApiKey($value);
                     break;
+
+                case 'frameworkVersion':
+                    $this->setFrameworkVersion($value);
+                    break;
+
+                case 'frameworkName':
+                    $this->setFrameworkName($value);
+                    break;
             }
         }
 
@@ -495,7 +503,62 @@ class GatherContentClient implements GatherContentClientInterface
     {
         return $base + [
             'Accept' => 'application/vnd.gathercontent.v0.5+json',
+            'User-Agent' => $this->getVersionString(),
         ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getFrameworkName()
+    {
+        return $this->framework['name'];
+    }
+
+    protected $framework = ['name' => 'PHP', 'version' => 'UKNOWN'];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFrameworkName($value)
+    {
+        $this->framework['name'] = $value;
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getFrameworkVersion()
+    {
+        return $this->framework['version'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFrameworkVersion($version)
+    {
+        $this->framework['version'] = $version;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIntegrationVersion()
+    {
+        return static::INTEGRATION_VERSION;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getVersionString()
+    {
+        $frameworkName = $this->getFrameworkName();
+        $frameworkVersion = $this->getFrameworkVersion();
+        $integrationVersion = $this->getIntegrationVersion();
+        return sprintf('Integration-%s-%s/%s', $frameworkName, $frameworkVersion, $integrationVersion);
     }
 
     /**

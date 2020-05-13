@@ -19,6 +19,17 @@ use GuzzleHttp\Psr7\Response;
  */
 class GatherContentClientTest extends GcBaseTestCase
 {
+    public function testVersionString()
+    {
+        $client = new Client();
+        $gc = new GatherContentClient($client);
+        $gc->setOptions([
+            'frameworkName' => 'Drupal',
+            'frameworkVersion' => '8.3.4',
+        ]);
+        static::assertEquals('Integration-Drupal-8.3.4/1.0', $gc->getVersionString());
+    }
+
     public function testGetSetEmail()
     {
         $client = new Client();

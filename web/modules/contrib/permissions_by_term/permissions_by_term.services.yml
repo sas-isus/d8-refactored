@@ -2,7 +2,7 @@ services:
 
     permissions_by_term.kernel_event_listener:
       class: Drupal\permissions_by_term\Listener\KernelEventListener
-      arguments: ['@permissions_by_term.access_check', '@permissions_by_term.access_storage', '@permissions_by_term.term_handler', '@event_dispatcher', '@page_cache_kill_switch']
+      arguments: ['@permissions_by_term.access_check', '@permissions_by_term.access_storage', '@permissions_by_term.term_handler', '@event_dispatcher', '@page_cache_kill_switch', '@config.factory']
       tags:
           - { name: event_subscriber }
 
