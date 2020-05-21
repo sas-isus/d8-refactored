@@ -4,12 +4,13 @@ jobs:
     # @todo, separate build and test phases.
     build:
         docker:
+            # @todo, update container
             - image: quay.io/pantheon-public/build-tools-ci:1.x
         working_directory: ~/pantheon_advanced_page_cache
         environment:
             BASH_ENV: ~/.bashrc
             TZ: "/usr/share/zoneinfo/America/Los_Angeles"
-            TERMINUS_SITE: d8papc
+            TERMINUS_SITE: d9-papc2
         steps:
             - checkout
             - restore_cache:
@@ -31,27 +32,61 @@ jobs:
                 command: composer phpunit
             - run:
                 name: login-pantheon
-                command: |
-                  terminus auth:login -n --machine-token="$TERMINUS_TOKEN"
-                  terminus env:list --field=id $TERMINUS_SITE | grep -v '[a-z]' | grep -Eo '[0-9]{1,9}' | sort --numeric-sort --reverse | sed 1,7d | xargs -n1 -I ENV terminus env:delete --yes $TERMINUS_SITE.ENV
+                command: terminus auth:login -n --machine-token="$TERMINUS_TOKEN"
             - run:
-                name: make-multidev
+                name: delete old sites
+                command: terminus env:list --field=id $TERMINUS_SITE | grep -v '[a-z]' | grep -Eo '[0-9]{1,9}' | sort --numeric-sort --reverse | sed 1,7d | xargs -n1 -I ENV terminus env:delete --yes $TERMINUS_SITE.ENV
+            - run:
+                name: ssh
                 command: |
                   touch $HOME/.ssh/config
                   echo "StrictHostKeyChecking no" >> "$HOME/.ssh/config"
-                  terminus env:create $TERMINUS_SITE.dev ${CIRCLE_BUILD_NUM}
+            - run:
+                # @todo, update core update mechanism for D9
+                name: apply upstream updates in dev
+                command: terminus connection:set $TERMINUS_SITE.dev git && terminus upstream:updates:apply $TERMINUS_SITE && terminus connection:set $TERMINUS_SITE.dev sftp
+            - run:
+                name: make-multidev
+                command: terminus env:create $TERMINUS_SITE.dev ${CIRCLE_BUILD_NUM} || echo "mystery errors were being thrown by env:create so I am adding this OR (https://circleci.com/gh/pantheon-systems/pantheon_advanced_page_cache/610)"
+            - run:
+                name: site install
+                command: |
                   terminus connection:set ${TERMINUS_SITE}.${CIRCLE_BUILD_NUM} sftp
                   terminus drush ${TERMINUS_SITE}.${CIRCLE_BUILD_NUM} -- site-install -y
                   terminus drush ${TERMINUS_SITE}.${CIRCLE_BUILD_NUM} -- cset system.performance cache.page.max_age 600 -y
+
             - run:
-                name: Composer require
+                name: Permissions
+                command: |
+                  # composer will write to the default directory 
+                  $(terminus connection:info ${TERMINUS_SITE}.${CIRCLE_BUILD_NUM} --field=sftp_command) <<EOF
+                  chmod 755 code/web/sites/default
+                  exit
+                  EOF
+
+            - run:
+                name: Composer require papc
                 command: |
                   terminus composer ${TERMINUS_SITE}.${CIRCLE_BUILD_NUM} -- config repositories.papc vcs git@github.com:pantheon-systems/pantheon_advanced_page_cache.git
-                  terminus composer ${TERMINUS_SITE}.${CIRCLE_BUILD_NUM} -- require drupal/pantheon_advanced_page_cache:dev-8.x-1.x#$CIRCLE_SHA1
-                  terminus composer ${TERMINUS_SITE}.${CIRCLE_BUILD_NUM} -- require drush-ops/behat-drush-endpoint
-                  # drush dl is faster than composer require so use it where possible.
-                  terminus drush ${TERMINUS_SITE}.${CIRCLE_BUILD_NUM} -- dl devel-8.x-1.0-rc2 views_custom_cache_tag
-                  terminus drush ${TERMINUS_SITE}.${CIRCLE_BUILD_NUM} -- en -y devel_generate views_custom_cache_tag_demo pantheon_advanced_page_cache
+                  terminus composer ${TERMINUS_SITE}.${CIRCLE_BUILD_NUM} -- require drupal/pantheon_advanced_page_cache:dev-${CIRCLE_BRANCH}#${CIRCLE_SHA1}
+            - run:
+                name: composer require drupal/views_custom_cache_tag
+                command: |
+                  terminus composer ${TERMINUS_SITE}.${CIRCLE_BUILD_NUM} -- require drupal/views_custom_cache_tag
+            - run:
+                name: en -y views_custom_cache_tag_demo pantheon_advanced_page_cache
+                command: |
+                  terminus drush ${TERMINUS_SITE}.${CIRCLE_BUILD_NUM} -- en -y views_custom_cache_tag_demo pantheon_advanced_page_cache
+            - run:
+                # Giving anon users permission to make nodes makes the Behat test execute much faster.
+                # Perms are changed back at the end of the build.
+                name: allow anon content creation
+                command: |
+                  terminus drush ${TERMINUS_SITE}.${CIRCLE_BUILD_NUM} -- role-add-perm anonymous "create page content,create article content"
             - run:
                 name: run behat
-                command: ./tests/behat/run-behat.sh
+                command: export TERMINUS_ENV=$CIRCLE_BUILD_NUM && ./tests/behat/run-behat.sh
+            - run:
+                name: Cleanup
+                command: |
+                  terminus drush ${TERMINUS_SITE}.${CIRCLE_BUILD_NUM} -- role-remove-perm anonymous "create page content,create article content"
