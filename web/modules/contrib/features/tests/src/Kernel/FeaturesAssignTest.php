@@ -8,14 +8,16 @@ use Drupal\features\FeaturesManagerInterface;
 use Drupal\Core\Config\InstallStorage;
 
 /**
+ * The Feature Assign test.
+ *
  * @group features
  */
 class FeaturesAssignTest extends KernelTestBase {
 
   const PACKAGE_NAME = 'my_test_package';
-  // Installed test feature package
+  // Installed test feature package.
   const TEST_INSTALLED_PACKAGE = 'test_mybundle_core';
-  // Uninstalled test feature package
+  // Uninstalled test feature package.
   const TEST_UNINSTALLED_PACKAGE = 'test_feature';
 
   /**
@@ -24,21 +26,30 @@ class FeaturesAssignTest extends KernelTestBase {
   public static $modules = ['features', 'node', 'system', 'user', self::TEST_INSTALLED_PACKAGE];
 
   /**
+   * The Feature Manager.
+   *
    * @var \Drupal\features\FeaturesManager
    */
   protected $featuresManager;
 
   /**
+   * The Feature Assigner.
+   *
    * @var \Drupal\features\FeaturesAssigner
    */
   protected $assigner;
 
   /**
+   * The Feature Bundle.
+   *
    * @var \Drupal\features\FeaturesBundleInterface
    */
   protected $bundle;
 
   /**
+   * The variable.
+   *
+   * @var mixed
    * @todo Remove the disabled strict config schema checking.
    */
   protected $strictConfigSchema = FALSE;
@@ -155,13 +166,13 @@ class FeaturesAssignTest extends KernelTestBase {
 
     $example_settings_data = $config['example.settings']->getData();
     $this->assertFalse(isset($example_settings_data['_core']), 'Unexpected _core value present.');
-    // uuid should be retained for simple configuration.
+    // Uuid should be retained for simple configuration.
     $this->assertEquals($example_settings_data['uuid'], 'something', 'Expected uuid value missing.');
 
     $node_type_data = $config['node.type.article']->getData();
     $this->assertFalse(isset($node_type_data['_core']), 'Unexpected _core value present.');
     $this->assertFalse(isset($node_type_data['uuid']), 'Unexpected uuid value present.');
-    // permissions should be stripped only for user_role configuration.
+    // Permissions should be stripped only for user_role configuration.
     $this->assertEquals($node_type_data['permissions'], [
       'first',
       'second',
@@ -184,7 +195,6 @@ class FeaturesAssignTest extends KernelTestBase {
     $this->enableAssignmentMethod($method_id);
 
     // Test the default options for the base assignment method.
-
     // Test node type assignments.
     // Declare the node_type entity 'article'.
     $this->addConfigurationItem('node.type.article', [], [
@@ -228,7 +238,6 @@ class FeaturesAssignTest extends KernelTestBase {
     $this->enableAssignmentMethod($method_id);
 
     // Test the default options for the core assignment method.
-
     // Add a piece of configuration of a core type.
     $this->addConfigurationItem('field.storage.node.body', [], [
       'shortName' => 'node.body',
@@ -267,7 +276,6 @@ class FeaturesAssignTest extends KernelTestBase {
     $this->enableAssignmentMethod($method_id);
 
     // Test the default options for the base assignment method.
-
     // Test node type assignments.
     // Declare the node_type entity 'article'.
     $this->addConfigurationItem('node.type.article', [], [
@@ -316,7 +324,7 @@ class FeaturesAssignTest extends KernelTestBase {
     $this->enableAssignmentMethod('packages', FALSE);
     $this->enableAssignmentMethod('core', FALSE);
 
-    // Apply the bundle
+    // Apply the bundle.
     $this->bundle = $this->assigner->loadBundle('test_mybundle');
 
     $this->assigner->applyAssignmentMethod('packages');
@@ -325,7 +333,7 @@ class FeaturesAssignTest extends KernelTestBase {
 
     // 1. When Required is set to True, config should stay with the module
     // First, test with "Required" set to True.
-    $packages[self::TEST_INSTALLED_PACKAGE]->setRequired(true);
+    $packages[self::TEST_INSTALLED_PACKAGE]->setRequired(TRUE);
     $this->featuresManager->setPackages($packages);
 
     $this->assigner->applyAssignmentMethod('exclude');
@@ -348,8 +356,8 @@ class FeaturesAssignTest extends KernelTestBase {
     $packages = $this->featuresManager->getPackages();
     $this->assertNotEmpty($packages[self::TEST_INSTALLED_PACKAGE], 'Expected test_mybundle_core package not created.');
 
-    // Set "Required" set to False
-    $packages[self::TEST_INSTALLED_PACKAGE]->setRequired(false);
+    // Set "Required" set to False.
+    $packages[self::TEST_INSTALLED_PACKAGE]->setRequired(FALSE);
     $this->featuresManager->setPackages($packages);
 
     $this->assigner->applyAssignmentMethod('exclude');
@@ -366,7 +374,7 @@ class FeaturesAssignTest extends KernelTestBase {
     // 3. When Required is set to False and module is NOT installed,
     // Config stays with module if it doesn't match the current namespace
     $this->reset();
-    // Load a bundle different from TEST_UNINSTALLED_PACKAGE
+    // Load a bundle different from TEST_UNINSTALLED_PACKAGE.
     $this->bundle = $this->assigner->loadBundle('test_mybundle');
 
     $this->assigner->applyAssignmentMethod('packages');
@@ -374,8 +382,8 @@ class FeaturesAssignTest extends KernelTestBase {
     $this->assertNotEmpty($packages[self::TEST_UNINSTALLED_PACKAGE], 'Expected test_feature package not created.');
     $this->assertNotEmpty($packages[self::TEST_INSTALLED_PACKAGE], 'Expected test_mybundle_core package not created.');
 
-    // Mark package as uninstalled, set "Required" set to False
-    $packages[self::TEST_UNINSTALLED_PACKAGE]->setRequired(false);
+    // Mark package as uninstalled, set "Required" set to False.
+    $packages[self::TEST_UNINSTALLED_PACKAGE]->setRequired(FALSE);
     $this->featuresManager->setPackages($packages);
 
     $this->assigner->applyAssignmentMethod('exclude');
@@ -393,11 +401,11 @@ class FeaturesAssignTest extends KernelTestBase {
     // 4. When Required is set to False and module is NOT installed,
     // Config is reassigned within modules that match the namespace.
     $this->reset();
-    // Load the bundle used in TEST_UNINSTALLED_PACKAGE
+    // Load the bundle used in TEST_UNINSTALLED_PACKAGE.
     $this->bundle = $this->assigner->loadBundle('test');
     if (empty($this->bundle) || $this->bundle->isDefault()) {
       // Since we uninstalled the test_feature, we probably need to create
-      // an empty "test" bundle
+      // an empty "test" bundle.
       $this->bundle = $this->assigner->createBundleFromDefault('test');
     }
 
@@ -405,8 +413,8 @@ class FeaturesAssignTest extends KernelTestBase {
     $packages = $this->featuresManager->getPackages();
     $this->assertNotEmpty($packages[self::TEST_UNINSTALLED_PACKAGE], 'Expected test_feature package not created.');
 
-    // Set "Required" set to False
-    $packages[self::TEST_UNINSTALLED_PACKAGE]->setRequired(false);
+    // Set "Required" set to False.
+    $packages[self::TEST_UNINSTALLED_PACKAGE]->setRequired(FALSE);
     $this->featuresManager->setPackages($packages);
 
     $this->assigner->applyAssignmentMethod('exclude');
@@ -416,10 +424,10 @@ class FeaturesAssignTest extends KernelTestBase {
     $this->assertNotEmpty($packages['core'], 'Expected Core package not created.');
 
     // Ensure "core" package is not confused with "test_core" module
-    // Since we are in a bundle
+    // Since we are in a bundle.
     $this->assertEmpty($packages['core']->getExtension(), 'Autogenerated core package should not have an extension');
 
-    // Core config should be reassigned from TEST_UNINSTALLED_PACKAGE into Core
+    // Core config should be reassigned from TEST_UNINSTALLED_PACKAGE into Core.
     $expected_config_items = [
       'system.cron',
     ];
@@ -450,9 +458,9 @@ class FeaturesAssignTest extends KernelTestBase {
     $this->assertNotEmpty($packages[self::TEST_INSTALLED_PACKAGE], 'Expected package not created.');
     $this->assertNotEmpty($packages[self::TEST_UNINSTALLED_PACKAGE], 'Expected package not created.');
 
-    // Turn off any "required" option in package to let config get reassigned
+    // Turn off any "required" option in package to let config get reassigned.
     $package = $packages[self::TEST_INSTALLED_PACKAGE];
-    $package->setRequired(true);
+    $package->setRequired(TRUE);
 
     $expected_config_items = [
       'core.date_format.long',
@@ -548,7 +556,7 @@ class FeaturesAssignTest extends KernelTestBase {
     // Enable the method.
     $this->enableAssignmentMethod($method_id);
 
-    // Apply the bundle
+    // Apply the bundle.
     $this->bundle = $this->assigner->loadBundle('test_mybundle');
 
     $package_data = [
@@ -629,10 +637,10 @@ class FeaturesAssignTest extends KernelTestBase {
 
     // Add some config that should not be matched.
     $config_short_names = [
-     'example',
-     'example_something',
-     'article~',
-     'myarticle',
+      'example',
+      'example_something',
+      'article~',
+      'myarticle',
     ];
     foreach ($config_short_names as $short_name) {
       $this->addConfigurationItem('node.type.' . $short_name, [], [
@@ -646,7 +654,7 @@ class FeaturesAssignTest extends KernelTestBase {
 
     foreach ($package_data as $machine_name => $config_short_names) {
       $this->assertNotEmpty($packages[$machine_name], 'Expected package ' . $machine_name . ' not created.');
-      array_walk($config_short_names, function(&$value) {
+      array_walk($config_short_names, function (&$value) {
         $value = 'node.type.' . $value;
       });
       sort($config_short_names);
@@ -780,7 +788,6 @@ class FeaturesAssignTest extends KernelTestBase {
     $this->enableAssignmentMethod($method_id);
 
     // Test the default options for the site assignment method.
-
     // Add a piece of configuration of a site type.
     $this->addConfigurationItem('filter.format.plain_text', [], [
       'shortName' => 'plain_text',
@@ -845,11 +852,12 @@ class FeaturesAssignTest extends KernelTestBase {
   }
 
   /**
-   * Reset the config to reapply assignment plugins
+   * Reset the config to reapply assignment plugins.
    */
   protected function reset() {
     $this->assigner->reset();
     // Start with an empty configuration collection.
     $this->featuresManager->setConfigCollection([]);
   }
+
 }

@@ -11,7 +11,7 @@ use Drupal\features\ConfigurationItem;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-Use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\config_update\ConfigRevertInterface;
 
 /**
@@ -111,6 +111,12 @@ class FeaturesEditForm extends FormBase {
    *
    * @param \Drupal\features\FeaturesManagerInterface $features_manager
    *   The features manager.
+   * @param \Drupal\features\FeaturesAssignerInterface $assigner
+   *   The feature assigner.
+   * @param \Drupal\features\FeaturesGeneratorInterface $generator
+   *   The features generator.
+   * @param \Drupal\config_update\ConfigRevertInterface $config_revert
+   *   The config revert.
    */
   public function __construct(FeaturesManagerInterface $features_manager, FeaturesAssignerInterface $assigner, FeaturesGeneratorInterface $generator, ConfigRevertInterface $config_revert) {
     $this->featuresManager = $features_manager;
@@ -148,11 +154,11 @@ class FeaturesEditForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state, $featurename = '') {
     $session = $this->getRequest()->getSession();
     $trigger = $form_state->getTriggeringElement();
-    if ($trigger['#name'] == 'package') {
+    if (isset($trigger['#name']) && $trigger['#name'] == 'package') {
       // Save current bundle name for later ajax callback.
       $this->oldBundle = $this->bundle;
     }
-    elseif ($trigger['#name'] == 'conflicts') {
+    elseif (isset($trigger['#name']) && $trigger['#name'] == 'conflicts') {
       if (isset($session)) {
         $session->set('features_allow_conflicts', $form_state->getValue('conflicts'));
       }
@@ -192,7 +198,7 @@ class FeaturesEditForm extends FormBase {
       // But only do this if the Package value hasn't been manually changed.
       $bundle = $this->assigner->getBundle($this->package->getBundle());
       if (empty($bundle)) {
-        // Create bundle if it doesn't exist yet
+        // Create bundle if it doesn't exist yet.
         $bundle = $this->assigner->createBundleFromDefault($this->package->getBundle());
       }
       $this->bundle = $bundle->getMachineName();
@@ -396,9 +402,11 @@ class FeaturesEditForm extends FormBase {
 
   /**
    * Callback for machine_name exists()
+   *
    * @param $value
    * @param $element
    * @param $form_state
+   *
    * @return bool
    */
   public function featureExists($value, $element, $form_state) {
@@ -504,10 +512,8 @@ class FeaturesEditForm extends FormBase {
         foreach ($sections as $section) {
           $element[$component][$section] = [
             '#type' => 'checkboxes',
-            '#options' => !empty($component_info['_features_options'][$section]) ?
-              $this->domDecodeOptions($component_info['_features_options'][$section]) : [],
-            '#default_value' => !empty($component_info['_features_selected'][$section]) ?
-              $this->domDecodeOptions($component_info['_features_selected'][$section], FALSE) : [],
+            '#options' => !empty($component_info['_features_options'][$section]) ?  $this->domDecodeOptions($component_info['_features_options'][$section]) : [],
+            '#default_value' => !empty($component_info['_features_selected'][$section]) ? $this->domDecodeOptions($component_info['_features_selected'][$section], FALSE) : [],
             '#attributes' => ['class' => ['component-' . $section]],
             '#prefix' => "<span class='component-$section'>",
             '#suffix' => '</span>',
@@ -525,9 +531,7 @@ class FeaturesEditForm extends FormBase {
       '#theme' => 'item_list',
       '#items' => $export['missing'],
       '#title' => $this->t('Configuration missing from active site:'),
-      '#suffix' => '<div class="description">' .
-        $this->t('Import the feature to create the missing config listed above.') .
-        '</div>',
+      '#suffix' => '<div class="description">' . $this->t('Import the feature to create the missing config listed above.') . '</div>',
     ];
 
     $element['features_legend'] = [
@@ -567,9 +571,9 @@ class FeaturesEditForm extends FormBase {
    *     detected - options that have been auto-detected
    *     added - newly added options to the feature
    *
-   * NOTE: This routine gets a bit complex to handle all of the different
-   * possible user checkbox selections and de-selections.
-   * Cases to test:
+   *   NOTE: This routine gets a bit complex to handle all of the different
+   *   possible user checkbox selections and de-selections.
+   *   Cases to test:
    *   1a) uncheck Included item -> mark as Added but unchecked
    *   1b) re-check unchecked Added item -> return it to Included check item
    *   2a) check Sources item -> mark as Added and checked
@@ -626,8 +630,8 @@ class FeaturesEditForm extends FormBase {
       // configuration storage.
       if (isset($config[$item_name])) {
         $item = $config[$item_name];
-      // Remove any conflicts if those are not being allowed.
-          // if ($this->allowConflicts || !isset($this->conflicts[$item['type']][$item['name_short']])) {
+        // Remove any conflicts if those are not being allowed.
+        // if ($this->allowConflicts || !isset($this->conflicts[$item['type']][$item['name_short']])) {
         $exported_features_info[$item->getType()][$item->getShortName()] = $item->getLabel();
         // }
       }
@@ -673,18 +677,20 @@ class FeaturesEditForm extends FormBase {
       $config_count[$component] = 0;
       // Add selected items from Sources checkboxes.
       if (!$form_state->isValueEmpty([$component, 'sources', 'selected'])) {
-        $config_new[$component] = array_merge($config_new[$component], $this->domDecodeOptions(array_filter($form_state->getValue([
+        // Don't use the array_merge function, otherwise configs like
+        // "metatag.metatag_defaults.404" will have the key "404" be reindexed.
+        $config_new[$component] = $config_new[$component] + $this->domDecodeOptions(array_filter($form_state->getValue([
           $component,
           'sources',
           'selected',
-        ]))));
+        ])));
         $config_count[$component]++;
       }
       // Add selected items from already Included, newly Added, auto-detected
       // checkboxes.
       foreach (['included', 'added', 'detected'] as $section) {
         if (!$form_state->isValueEmpty([$component, $section])) {
-          $config_new[$component] = array_merge($config_new[$component], $this->domDecodeOptions(array_filter($form_state->getValue([$component, $section]))));
+          $config_new[$component] = $config_new[$component] + $this->domDecodeOptions(array_filter($form_state->getValue([$component, $section])));
           $config_count[$component]++;
         }
       }
@@ -958,7 +964,7 @@ class FeaturesEditForm extends FormBase {
   }
 
   /**
-   * Imports the configuration missing from the active store
+   * Imports the configuration missing from the active store.
    */
   protected function importMissing() {
     $config = $this->featuresManager->getConfigCollection();
@@ -969,10 +975,10 @@ class FeaturesEditForm extends FormBase {
         $type = ConfigurationItem::fromConfigStringToConfigType($item['type']);
         try {
           $this->configRevert->import($type, $item['name_short']);
-          drupal_set_message($this->t('Imported @name', ['@name' => $config_name]));
+          $this->messenger()->addStatus($this->t('Imported @name', ['@name' => $config_name]));
         } catch (\Exception $e) {
-          drupal_set_message($this->t('Error importing @name : @message',
-            ['@name' => $config_name, '@message' => $e->getMessage()]), 'error');
+          $this->messenger()->addError($this->t('Error importing @name : @message',
+            ['@name' => $config_name, '@message' => $e->getMessage()]));
         }
       }
     }
@@ -1005,6 +1011,7 @@ class FeaturesEditForm extends FormBase {
    *
    * @param string $constraint
    *   The constraint (excluded or required).
+   *
    * @return array
    *   The list of constrained config in a simple array of full config names
    *   suitable for storing in the info.yml file.

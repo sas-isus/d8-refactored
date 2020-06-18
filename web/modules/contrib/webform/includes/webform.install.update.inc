@@ -5,7 +5,6 @@
  * Archived Webform update hooks.
  */
 
-use Drupal\Core\Path\Entity\PathAlias;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\Component\Uuid\Php as Uuid;
 use Drupal\Core\Cache\Cache;
@@ -3669,8 +3668,14 @@ function webform_update_8191() {
  * Unsafe HMAC construction.
  */
 function webform_update_8192() {
+  // Check if the webform directory exists.
+  $webform_uri = 'public://webform';
+  if (!\Drupal::service('file_system')->prepareDirectory($webform_uri)) {
+    return NULL;
+  }
+
   $invalid_signatures = [];
-  $files = file_scan_directory('public://webform/', '/signature-/');
+  $files = \Drupal::service('file_system')->scanDirectory('public://webform/', '/signature-/');
   foreach ($files as $file) {
     $value = file_get_contents($file->uri);
     $value = 'data:image/png;base64,' . base64_encode($value);
@@ -3684,7 +3689,7 @@ function webform_update_8192() {
     }
 
     // Delete invalid invalid signature file.
-    file_unmanaged_delete($file->uri);
+    \Drupal::service('file_system')->delete($file->uri);
   }
 
   // Exit if all signatures are valid.
@@ -3724,4 +3729,12 @@ function webform_update_8192() {
     ];
     return \Drupal::service('renderer')->renderPlain($build);
   }
+}
+
+/**
+ * Issue #3137964: Make it easier to embed/share a webform.
+ */
+function webform_update_8193() {
+  _webform_update_admin_settings();
+  _webform_update_webform_settings();
 }

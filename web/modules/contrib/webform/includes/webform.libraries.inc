@@ -82,19 +82,6 @@ function webform_library_info_alter(&$libraries, $extension) {
     }
   }
 
-  // Remove dependency issue fixed in Drupal 8.8.x for webform.element.buttons.
-  //
-  // @see https://www.drupal.org/project/drupal/issues/2933980
-  // @see https://www.drupal.org/project/drupal/issues/2926155
-  if (isset($libraries['webform.element.buttons'])
-    && (floatval(\Drupal::VERSION) >= 8.8)) {
-    unset(
-      $libraries['webform.element.buttons']['js']['/core/assets/vendor/jquery.ui/ui/form-reset-mixin-min.js'],
-      $libraries['webform.element.buttons']['js']['/core/assets/vendor/jquery.ui/ui/escape-selector-min.js'],
-      $libraries['webform.element.buttons']['js']['/core/assets/vendor/jquery.ui/ui/widgets/checkboxradio-min.js']
-    );
-  }
-
   /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
   $libraries_manager = \Drupal::service('webform.libraries_manager');
 

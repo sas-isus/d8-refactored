@@ -2,7 +2,12 @@
 
 namespace Drupal\features_ui\Form;
 
+use Drupal\features\FeaturesManagerInterface;
+use Drupal\features\FeaturesAssignerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ExtensionList;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Configures the selected configuration assignment method for this site.
@@ -10,6 +15,55 @@ use Drupal\Core\Form\FormStateInterface;
 class AssignmentExcludeForm extends AssignmentFormBase {
 
   const METHOD_ID = 'exclude';
+
+  /**
+   * The install profile extension list.
+   *
+   * @var \Drupal\Core\Extension\ExtensionList
+   */
+  protected $profileList;
+
+  /**
+   * The install profile.
+   *
+   * @var string
+   */
+  protected $installProfile;
+
+  /**
+   * Constructs a AssignmentExcludeForm object.
+   *
+   * @param \Drupal\Core\Extension\ExtensionList $extension_list
+   *   The install profile extension list.
+   * @param string $install_profile
+   *   The install profile.
+   * @param \Drupal\features\FeaturesManagerInterface $features_manager
+   *   The features manager.
+   * @param \Drupal\features\FeaturesAssignerInterface $assigner
+   *   The assigner.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+
+   */
+  public function __construct(FeaturesManagerInterface $features_manager, FeaturesAssignerInterface $assigner, EntityTypeManagerInterface $entity_type_manager, ExtensionList $profile_list, $install_profile) {
+    parent::__construct($features_manager, $assigner, $entity_type_manager);
+
+    $this->profileList = $profile_list;
+    $this->installProfile = $install_profile;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('features.manager'),
+      $container->get('features_assigner'),
+      $container->get('entity_type.manager'),
+      $container->get('extension.list.profile'),
+      $container->getParameter('install_profile')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -60,7 +114,7 @@ class AssignmentExcludeForm extends AssignmentFormBase {
       ],
     ];
 
-    $info = system_get_info('module', drupal_get_profile());
+    $info = $this->profileList->getExtensionInfo($this->installProfile);
     $form['module']['profile'] = [
       '#type' => 'checkbox',
       '#title' => $this->t("Don't exclude install profile's configuration"),
@@ -103,7 +157,7 @@ class AssignmentExcludeForm extends AssignmentFormBase {
     return $form;
   }
 
- /**
+  /**
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
@@ -125,7 +179,7 @@ class AssignmentExcludeForm extends AssignmentFormBase {
     $this->currentBundle->setAssignmentSettings(self::METHOD_ID, $settings)->save();
 
     $this->setRedirect($form_state);
-    drupal_set_message($this->t('Package assignment configuration saved.'));
+    $this->messenger()->addStatus($this->t('Package assignment configuration saved.'));
   }
 
 }

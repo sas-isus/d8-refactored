@@ -5,7 +5,7 @@ namespace Drupal\Tests\webform\Functional\Element;
 /**
  * Tests for rating element.
  *
- * @group Webform
+ * @group webform
  */
 class WebformElementRatingTest extends WebformElementBrowserTestBase {
 
@@ -43,13 +43,13 @@ class WebformElementRatingTest extends WebformElementBrowserTestBase {
       'rating_advanced' => '2',
       'rating_required' => '3',
     ];
-    $this->drupalPostForm('/webform/test_element_rating', $edit, t('Submit'));
+    $this->drupalPostForm('/webform/test_element_rating', $edit, 'Submit');
     $this->assertRaw("rating_basic: '1'
 rating_advanced: '2'
 rating_required: '3'");
 
     // Check required validation.
-    $this->drupalPostForm('/webform/test_element_rating', [], t('Submit'));
+    $this->drupalPostForm('/webform/test_element_rating', [], 'Submit');
     $this->assertRaw('rating_required field is required.');
   }
 

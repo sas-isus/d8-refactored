@@ -6,7 +6,7 @@
  */
 
 use Drupal\Core\Render\Element;
-Use \Drupal\Component\Render\FormattableMarkup;
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Html;
 
 /**
@@ -51,7 +51,7 @@ function theme_features_listing(array $variables) {
     $description = t('@details', ['@details' => $renderer->render($element['details'])]);
     $details = [
       '#type' => 'details',
-      '#title' => new FormattableMarkup('<span class="text">@desc</span>', [ '@desc' => $renderer->render($element['description'])]),
+      '#title' => new FormattableMarkup('<span class="text">@desc</span>', ['@desc' => $renderer->render($element['description'])]),
       '#attributes' => ['id' => $element['enable']['#id'] . '-description'],
       '#description' => $description,
     ];
@@ -87,7 +87,7 @@ function theme_features_listing(array $variables) {
  *   An associative array containing:
  *   - form: A render element representing the form.
  */
-function template_preprocess_features_assignment_configure_form(&$variables) {
+function template_preprocess_features_assignment_configure_form(array &$variables) {
   $form =& $variables['form'];
 
   $header = [

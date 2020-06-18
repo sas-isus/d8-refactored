@@ -3,6 +3,7 @@
 namespace Cheppers\GatherContent\Tests\Unit\DataTypes;
 
 use Cheppers\GatherContent\DataTypes\ElementText;
+use Cheppers\GatherContent\DataTypes\ElementTextMeta;
 
 /**
  * @group GatherContentClient
@@ -21,34 +22,26 @@ class ElementTextTest extends BaseTest
     {
         $cases = parent::casesConstructor();
         $cases['basic'][0] = [
-            'limitType' => 'a',
-            'limit' => 42,
-            'plainText' => true,
-            'value' => 'b',
+            'id' => 'uuid-123',
+            'type' => 'text',
+            'label' => 'label string',
+            'instructions' => 'instruction string',
+            'metaData' => new ElementTextMeta([
+                'is_plain' => true,
+                'validation' => [],
+            ]),
         ];
         $cases['basic'][1] = [
-            'limit_type' => 'a',
-            'limit' => 42,
-            'plain_text' => true,
-            'value' => 'b',
+            'uuid' => 'uuid-123',
+            'field_type' => 'text',
+            'label' => 'label string',
+            'instructions' => 'instruction string',
+            'metadata' => [
+                'is_plain' => true,
+                'validation' => [],
+            ],
         ];
 
         return $cases;
-    }
-
-    public function testGetSetValue()
-    {
-        /** @var \Cheppers\GatherContent\DataTypes\ElementText $element */
-        $element = new $this->className([]);
-
-        static::assertEquals('', $element->value);
-        static::assertEquals('', $element->getValue());
-
-        $element->setValue('a');
-        static::assertEquals('a', $element->value);
-        static::assertEquals('a', $element->getValue());
-
-        $element->value = 'b';
-        static::assertEquals('b', $element->getValue());
     }
 }

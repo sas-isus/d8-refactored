@@ -101,7 +101,7 @@ class WebformElementMultiple extends FormElement {
     array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformElementMultiple']);
 
     // Set #type to item to apply #states.
-    // @see drupal_process_states
+    // @see \Drupal\Core\Form\FormHelper::processStates
     $element['#type'] = 'item';
 
     return $element;

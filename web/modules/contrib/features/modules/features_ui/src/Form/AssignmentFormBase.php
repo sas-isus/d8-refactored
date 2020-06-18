@@ -160,7 +160,8 @@ abstract class AssignmentFormBase extends FormBase {
     $form['#attached'] = [
       'library' => [
         'features_ui/drupal.features_ui.admin',
-    ]];
+      ],
+    ];
   }
 
   /**

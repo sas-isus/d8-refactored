@@ -15,8 +15,11 @@ class FeaturesBundleIntegrationTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules  = ['features'];
+  public static $modules = ['features'];
 
+  /**
+   * {@inheritDoc}
+   */
   public function testCrud() {
     $bundle = FeaturesBundle::create([
       'machine_name' => 'test',
@@ -55,12 +58,14 @@ class FeaturesBundleIntegrationTest extends KernelTestBase {
    * @covers ::getFullName
    */
   public function testGetFullName() {
+    $this->markTestSkipped('Not yet implemented');
   }
 
   /**
    * @covers ::getShortName
    */
   public function testGetShortName() {
+    $this->markTestSkipped('Not yet implemented');
   }
 
   /**

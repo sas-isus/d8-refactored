@@ -3,12 +3,13 @@
 namespace Drupal\Tests\features\Unit;
 
 use Drupal\features\Package;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Drupal\features\Package
  * @group features
  */
-class PackageTest extends \PHPUnit_Framework_TestCase {
+class PackageTest extends TestCase {
 
   /**
    * @covers ::setFeaturesInfo
@@ -22,6 +23,9 @@ class PackageTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('test_bundle', $package->getBundle());
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public function testGetConfig() {
     $package = new Package('test_feature', ['config' => ['test_config_a', 'test_config_b']]);
     $this->assertEquals(['test_config_a', 'test_config_b'], $package->getConfig());
@@ -29,6 +33,8 @@ class PackageTest extends \PHPUnit_Framework_TestCase {
   }
 
   /**
+   * The test append config.
+   *
    * @depends testGetConfig
    * @covers ::appendConfig
    */
@@ -41,6 +47,8 @@ class PackageTest extends \PHPUnit_Framework_TestCase {
   }
 
   /**
+   * The test remove config.
+   *
    * @depends testAppendConfig
    * @covers ::removeConfig
    */

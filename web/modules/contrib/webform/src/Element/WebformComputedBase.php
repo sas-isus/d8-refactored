@@ -88,7 +88,7 @@ abstract class WebformComputedBase extends FormElement implements WebformCompute
       $element['#tree'] = TRUE;
 
       // Set #type to item to trigger #states behavior.
-      // @see drupal_process_states;
+      // @see \Drupal\Core\Form\FormHelper::processStates;
       $element['#type'] = 'item';
 
       $value = static::computeValue($element, $webform_submission);

@@ -8,7 +8,7 @@ use Drupal\webform\Utility\WebformElementHelper;
 /**
  * Tests for webform element definitions.
  *
- * @group Webform
+ * @group webform
  */
 class WebformElementPluginDefinitionsTest extends WebformElementBrowserTestBase {
 
@@ -24,7 +24,10 @@ class WebformElementPluginDefinitionsTest extends WebformElementBrowserTestBase 
     'taxonomy',
     'webform',
     'webform_attachment',
-    'webform_entity_print_attachment',
+    // Issue #3110478: [Webform 8.x-6.x] Track the D9 readiness state of the
+    // Webform module's (optional) dependencies
+    // @see https://www.drupal.org/project/webform/issues/3110478
+    // 'webform_entity_print_attachment',
     'webform_image_select',
     'webform_location_geocomplete',
     'webform_options_custom',
@@ -45,6 +48,12 @@ class WebformElementPluginDefinitionsTest extends WebformElementBrowserTestBase 
     // Comparing all element's expected and actual definitions ensures
     // that there are not unexpected changes to any element's definitions.
     $expected_definitions = $this->getExpectedElementDefinitions();
+
+    // Issue #3110478: [Webform 8.x-6.x] Track the D9 readiness state of the
+    // Webform module's (optional) dependencies
+    // @see https://www.drupal.org/project/webform/issues/3110478
+    unset($expected_definitions['webform_entity_print_attachment:pdf']);
+
     $actual_definitions = $this->getActualElementDefinitions();
     $this->htmlOutput('<pre>' . htmlentities(Yaml::encode($actual_definitions)) . '</pre>');
     foreach ($actual_definitions as $key => $actual_definition) {

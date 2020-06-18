@@ -5,7 +5,7 @@ namespace Drupal\Tests\webform\Functional\Element;
 /**
  * Tests for webform element radios.
  *
- * @group Webform
+ * @group webform
  */
 class WebformElementRadiosTest extends WebformElementBrowserTestBase {
 
@@ -61,7 +61,7 @@ class WebformElementRadiosTest extends WebformElementBrowserTestBase {
       'radios_description' => 'one',
       'radios_help' => 'two',
     ];
-    $this->drupalPostForm('/webform/test_element_radios', $edit, t('Preview'));
+    $this->drupalPostForm('/webform/test_element_radios', $edit, 'Preview');
     $this->assertPattern('#<label>radios_description</label>\s+One#');
     $this->assertPattern('#<label>radios_help</label>\s+Two#');
   }

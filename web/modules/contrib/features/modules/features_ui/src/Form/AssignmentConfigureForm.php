@@ -69,8 +69,11 @@ class AssignmentConfigureForm extends FormBase {
   /**
    * Load the values from the bundle into the user input.
    * Used during Ajax callback since updating #default_values is ignored.
-   * @param $bundle_name
+   *
+   * @param mixed $bundle_name
+   *   The bundle name.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form values.
    */
   protected function loadBundleValues($bundle_name, FormStateInterface &$form_state, $current_bundle, $enabled_methods, $methods_weight) {
     $input = $form_state->getUserInput();
@@ -85,14 +88,14 @@ class AssignmentConfigureForm extends FormBase {
       $input['bundle']['name'] = $current_bundle->getName();
       $input['bundle']['machine_name'] = $current_bundle->getMachineName();
       $input['bundle']['description'] = $current_bundle->getDescription();
-      $input['bundle']['is_profile'] = $current_bundle->isProfile() ? 1 : null;
+      $input['bundle']['is_profile'] = $current_bundle->isProfile() ? 1 : NULL;
       $input['bundle']['profile_name'] = $current_bundle->isProfile() ? $current_bundle->getProfileName() : '';
     }
 
     foreach ($methods_weight as $method_id => $weight) {
       $enabled = isset($enabled_methods[$method_id]);
       $input['weight'][$method_id] = $weight;
-      $input['enabled'][$method_id] = $enabled ? 1 : null;
+      $input['enabled'][$method_id] = $enabled ? 1 : NULL;
     }
 
     $form_state->setUserInput($input);
@@ -131,14 +134,14 @@ class AssignmentConfigureForm extends FormBase {
       }
       $load_values = TRUE;
     }
-    elseif ($trigger['#name'] == 'bundle[bundle_select]') {
+    elseif (isset($trigger['#name']) && $trigger['#name'] == 'bundle[bundle_select]') {
       $bundle_name = $form_state->getValue(['bundle', 'bundle_select']);
       if ($bundle_name != self::NEW_BUNDLE_SELECT_VALUE) {
         $this->assigner->setCurrent($this->assigner->getBundle($bundle_name));
       }
       $load_values = TRUE;
     }
-    elseif ($trigger['#name'] == 'removebundle') {
+    elseif (isset($trigger['#name']) && $trigger['#name'] == 'removebundle') {
       $current_bundle = $this->assigner->loadBundle($bundle_name);
       $bundle_name = $current_bundle->getMachineName();
       $this->assigner->removeBundle($bundle_name);
@@ -151,9 +154,11 @@ class AssignmentConfigureForm extends FormBase {
           $current_bundle = $this->assigner->loadBundle();
           $bundle_name = $current_bundle->getMachineName();
           break;
+
         case self::NEW_BUNDLE_SELECT_VALUE:
           $current_bundle = $this->assigner->loadBundle(FeaturesBundleInterface::DEFAULT_BUNDLE);
           break;
+
         default:
           $current_bundle = $this->assigner->loadBundle($bundle_name);
           break;
@@ -329,7 +334,7 @@ class AssignmentConfigureForm extends FormBase {
 
       $form['weight'][$method_id] = [
         '#type' => 'weight',
-        '#title' => $this->t('Weight for @title package assignment method', ['@title' => Unicode::strtolower($method_name)]),
+        '#title' => $this->t('Weight for @title package assignment method', ['@title' => mb_strtolower($method_name)]),
         '#title_display' => 'invisible',
         '#default_value' => $weight,
         '#attributes' => ['class' => ['assignment-method-weight']],
@@ -340,7 +345,7 @@ class AssignmentConfigureForm extends FormBase {
 
       $form['enabled'][$method_id] = [
         '#type' => 'checkbox',
-        '#title' => $this->t('Enable @title package assignment method', ['@title' => Unicode::strtolower($method_name)]),
+        '#title' => $this->t('Enable @title package assignment method', ['@title' => mb_strtolower($method_name)]),
         '#title_display' => 'invisible',
         '#default_value' => $enabled,
       ];
@@ -427,14 +432,16 @@ class AssignmentConfigureForm extends FormBase {
     $this->assigner->setCurrent($bundle);
 
     $form_state->setRedirect('features.assignment');
-    drupal_set_message($this->t('Package assignment configuration saved.'));
+    $this->messenger()->addStatus($this->t('Package assignment configuration saved.'));
   }
 
   /**
    * Callback for machine_name exists()
+   *
    * @param $value
    * @param $element
    * @param $form_state
+   *
    * @return bool
    */
   public function bundleExists($value, $element, $form_state) {

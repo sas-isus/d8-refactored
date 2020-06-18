@@ -16,7 +16,7 @@ use Drupal\webform\Utility\WebformElementHelper;
  * Webform submission conditions (#states) validator.
  *
  * @see \Drupal\webform\Element\WebformElementStates
- * @see drupal_process_states()
+ * @see \Drupal\Core\Form\FormHelper::processStates
  */
 class WebformSubmissionConditionsValidator implements WebformSubmissionConditionsValidatorInterface {
 

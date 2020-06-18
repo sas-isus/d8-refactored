@@ -4,7 +4,7 @@ namespace Drupal\features_ui\Tests;
 
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Archiver\ArchiveTar;
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -12,10 +12,13 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *
  * @group features_ui
  */
-class FeaturesCreateUITest extends WebTestBase {
+class FeaturesCreateUITest extends BrowserTestBase {
   use StringTranslationTrait;
 
   /**
+   * The variable.
+   *
+   * @var mixed
    * @todo Remove the disabled strict config schema checking.
    */
   protected $strictConfigSchema = FALSE;
@@ -29,7 +32,7 @@ class FeaturesCreateUITest extends WebTestBase {
    * Tests creating a feature via UI and download it.
    */
   public function testCreateFeaturesUI() {
-    list($major, $minor, ) = explode('.', \Drupal::VERSION);
+    list($major, $minor,) = explode('.', \Drupal::VERSION);
     // In D8.3 the module category was removed from the module name field.
     $name_prefix = (intval($major) == 8 && intval($minor) > 2) ? 'modules[' : 'modules[Other][';
 
@@ -70,9 +73,7 @@ class FeaturesCreateUITest extends WebTestBase {
     file_put_contents($info_filename, $archive->extractInString($feature_name . '/' . $feature_name . '.info.yml'));
     $features_info_filename = tempnam($this->tempFilesDirectory, 'feature');
     file_put_contents($features_info_filename, $archive->extractInString($feature_name . '/' . $feature_name . '.features.yml'));
-    /** @var \Drupal\Core\Extension\InfoParser $info_parser */
-    $info_parser = \Drupal::service('info_parser');
-    $parsed_info = $info_parser->parse($info_filename);
+    $parsed_info = Yaml::decode(file_get_contents($info_filename));
     $this->assertEqual('Test feature', $parsed_info['name']);
     $parsed_features_info = Yaml::decode(file_get_contents($features_info_filename));
     $this->assertEqual([
@@ -103,14 +104,14 @@ class FeaturesCreateUITest extends WebTestBase {
     $this->drupalPostForm(NULL, $edit, $this->t('Write'));
     $info_filename = $module_path . '/' . $feature_name . '.info.yml';
 
-    $parsed_info = $info_parser->parse($info_filename);
+    $parsed_info = Yaml::decode(file_get_contents($info_filename));
     $this->assertEqual('Test feature', $parsed_info['name']);
 
     $features_info_filename = $module_path . '/' . $feature_name . '.features.yml';
     $parsed_features_info = Yaml::decode(file_get_contents($features_info_filename));
     $this->assertEqual([
       'excluded' => ['system.theme'],
-      'required' => true,
+      'required' => TRUE,
     ], $parsed_features_info);
 
     $this->drupalGet('admin/modules');

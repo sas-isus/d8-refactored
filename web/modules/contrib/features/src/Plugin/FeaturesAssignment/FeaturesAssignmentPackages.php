@@ -15,6 +15,7 @@ use Drupal\features\FeaturesAssignmentMethodBase;
  * )
  */
 class FeaturesAssignmentPackages extends FeaturesAssignmentMethodBase {
+
   /**
    * {@inheritdoc}
    */
@@ -42,7 +43,7 @@ class FeaturesAssignmentPackages extends FeaturesAssignmentMethodBase {
       if ($package->getRequired() !== FALSE) {
         $config = $package->getRequired();
         if (empty($config) || !is_array($config)) {
-          // if required is "true" or empty, add all config as required
+          // If required is "true" or empty, add all config as required.
           $config = $this->featuresManager->listExtensionConfig($extension);
         }
         $this->featuresManager->assignConfigPackage($short_name, $config);

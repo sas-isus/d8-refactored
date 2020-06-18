@@ -75,7 +75,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
   protected $messageManager;
 
   /**
-   * A webform element plugin manager.
+   * The webform element plugin manager.
    *
    * @var \Drupal\webform\Plugin\WebformElementManagerInterface
    */
@@ -525,7 +525,8 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       $message = $this->t('Remote post request return @status_code status code.', ['@status_code' => $response->getStatusCode()]);
       $this->handleError($state, $message, $request_url, $request_method, $request_type, $request_options, $response);
       return;
-    } else {
+    }
+    else {
       $this->displayCustomResponseMessage($response, FALSE);
     }
 
@@ -710,6 +711,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
    *   Custom data.
    *
    * @return array
+   *   The custom data with value casted
    */
   protected function castCustomData(array $data) {
     if (empty($this->configuration['cast'])) {
@@ -1074,7 +1076,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
    *   A custom response message.
    */
   protected function getCustomResponseMessage($response, $default = TRUE) {
-    if ($response instanceof ResponseInterface) {
+    if (!empty($this->configuration['messages']) && $response instanceof ResponseInterface) {
       $status_code = $response->getStatusCode();
       foreach ($this->configuration['messages'] as $message_item) {
         if ($message_item['code'] == $status_code) {
@@ -1082,7 +1084,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
         }
       }
     }
-    return ($default && !empty($this->configuration['message'])) ? $this->configuration['message'] : '';
+    return (!empty($this->configuration['message']) && $default) ? $this->configuration['message'] : '';
   }
 
   /**

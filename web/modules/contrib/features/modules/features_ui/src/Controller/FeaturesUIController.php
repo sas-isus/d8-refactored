@@ -31,7 +31,9 @@ class FeaturesUIController implements ContainerInjectionInterface {
    * Constructs a new FeaturesUIController object.
    *
    * @param \Drupal\features\FeaturesManagerInterface $features_manager
-   *    The features manager.
+   *   The features manager.
+   * @param \Drupal\features\FeaturesAssignerInterface $assigner
+   *   The feature assigner.
    */
   public function __construct(FeaturesManagerInterface $features_manager, FeaturesAssignerInterface $assigner) {
     $this->featuresManager = $features_manager;
@@ -110,7 +112,7 @@ class FeaturesUIController implements ContainerInjectionInterface {
       $item_names = array_keys($config_collection);
     }
 
-    // Add any existing auto-detected items already in the package config
+    // Add any existing auto-detected items already in the package config.
     $this->package = $packages[$package_name];
     $package_config = isset($this->package) ? $this->package->getConfig() : [];
     $package_config = !empty($package_config) ? array_unique(array_merge($package_config, $item_names)) : $item_names;
@@ -120,7 +122,7 @@ class FeaturesUIController implements ContainerInjectionInterface {
       }
     }
 
-    // Now add dependents of the items selected
+    // Now add dependents of the items selected.
     foreach ($item_names as $item_name) {
       if ($config_collection[$item_name]->getPackage()) {
         foreach ($config_collection[$item_name]->getDependents() as $dependent_item_name) {

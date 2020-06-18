@@ -55,7 +55,7 @@ class WebformElementHelper {
    * @var array
    */
   public static $allowedProperties = [
-    # webform_validation.module.
+    // webform_validation.module.
     '#equal_stepwise_validate' => '#equal_stepwise_validate',
   ];
 
@@ -452,7 +452,7 @@ class WebformElementHelper {
       $allowedSubProperties = self::$allowedProperties;
       $ignoredSubProperties = self::$ignoredProperties;
       // Allow #weight as sub property. This makes it easier for developer to
-      // sort composite sub-elements
+      // sort composite sub-elements.
       unset($ignoredSubProperties['#weight']);
       self::$ignoredSubPropertiesRegExp = '/__(' . implode('|', array_keys(WebformArrayHelper::removePrefix($ignoredSubProperties))) . ')$/';
       self::$allowedSubPropertiesRegExp = '/__(' . implode('|', array_keys(WebformArrayHelper::removePrefix($allowedSubProperties))) . ')$/';

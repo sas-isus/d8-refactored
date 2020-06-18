@@ -37,7 +37,7 @@ class WebformResultsExportController extends ControllerBase implements Container
   protected $submissionExporter;
 
   /**
-   * Webform request handler.
+   * The webform request handler.
    *
    * @var \Drupal\webform\WebformRequestInterface
    */

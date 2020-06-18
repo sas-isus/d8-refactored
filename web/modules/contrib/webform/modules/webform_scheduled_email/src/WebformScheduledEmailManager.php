@@ -60,14 +60,14 @@ class WebformScheduledEmailManager implements WebformScheduledEmailManagerInterf
   protected $configFactory;
 
   /**
-   * Webform storage.
+   * The webform storage.
    *
    * @var \Drupal\webform\WebformEntityStorageInterface
    */
   protected $webformStorage;
 
   /**
-   * Webform submission storage.
+   * The webform submission storage.
    *
    * @var \Drupal\webform\WebformSubmissionStorageInterface
    */

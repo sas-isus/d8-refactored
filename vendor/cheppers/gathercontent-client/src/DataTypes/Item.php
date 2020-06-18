@@ -10,11 +10,6 @@ class Item extends Base
     public $projectId = 0;
 
     /**
-     * @var int
-     */
-    public $parentId = 0;
-
-    /**
      * @var string
      */
     public $folderUuid = '';
@@ -25,9 +20,14 @@ class Item extends Base
     public $templateId = 0;
 
     /**
-     * @var int
+     * @var string
      */
-    public $customStateId = 0;
+    public $structureUuid = '';
+
+    /**
+     * @var \Cheppers\GatherContent\DataTypes\Structure
+     */
+    public $structure = null;
 
     /**
      * @var string
@@ -40,49 +40,64 @@ class Item extends Base
     public $name = '';
 
     /**
-     * @var \Cheppers\GatherContent\DataTypes\Tab[]
-     */
-    public $config = [];
-
-    /**
-     * @var string
-     */
-    public $notes = '';
-
-    /**
-     * @var bool
-     */
-    public $overdue = false;
-
-    /**
      * @var null|int
      */
     public $archivedBy = null;
 
     /**
-     * @var null|\Cheppers\GatherContent\DataTypes\Date
+     * @var string
      */
-    public $archivedAt = null;
+    public $archivedAt = '';
 
     /**
-     * @var \Cheppers\GatherContent\DataTypes\Date
+     * @var string
      */
-    public $createdAt = null;
+    public $createdAt = '';
 
     /**
-     * @var null|\Cheppers\GatherContent\DataTypes\Date
+     * @var string
      */
-    public $updatedAt = null;
+    public $updatedAt = '';
 
     /**
-     * @var \Cheppers\GatherContent\DataTypes\Status
+     * @var string
      */
-    public $status = null;
+    public $nextDueAt = '';
 
     /**
-     * @var \Cheppers\GatherContent\DataTypes\Date[]
+     * @var string
      */
-    public $dueDates = [];
+    public $completedAt = '';
+
+    /**
+     * @var \Cheppers\GatherContent\DataTypes\ElementBase[]
+     */
+    public $content = [];
+
+    /**
+     * @var null|int
+     */
+    public $statusId = null;
+
+    /**
+     * @var array
+     */
+    public $assignedUserIds = [];
+
+    /**
+     * @var null|int
+     */
+    public $assigneeCount = null;
+
+    /**
+     * @var null|int
+     */
+    public $approvalCount = null;
+
+    /**
+     * @var array
+     */
+    public $assets = [];
 
     protected function initPropertyMapping()
     {
@@ -91,45 +106,67 @@ class Item extends Base
             $this->propertyMapping,
             [
                 'project_id' => 'projectId',
-                'parent_id' => 'parentId',
                 'folder_uuid' => 'folderUuid',
                 'template_id' => 'templateId',
-                'custom_state_id' => 'customStateId',
+                'structure' => [
+                    'type' => 'subConfig',
+                    'class' => Structure::class,
+                ],
+                'structure_uuid' => 'structureUuid',
                 'position' => 'position',
                 'name' => 'name',
-                'config' => [
-                    'type' => 'subConfigs',
-                    'class' => Tab::class,
-                ],
-                'notes' => 'notes',
-                'type' => 'item',
-                'overdue' => 'overdue',
                 'archived_by' => 'archivedBy',
                 'archived_at' => 'archivedAt',
-                'created_at' => [
-                    'type' => 'subConfig',
-                    'destination' => 'createdAt',
-                    'class' => Date::class,
+                'created_at' => 'createdAt',
+                'updated_at' => 'updatedAt',
+                'next_due_at' => 'nextDueAt',
+                'completed_at' => 'completedAt',
+                'status_id' => 'statusId',
+                'assigned_user_ids' => 'assignedUserIds',
+                'assignee_count' => 'assigneeCount',
+                'approval_count' => 'approvalCount',
+                'content' => [
+                    'type' => 'closure',
+                    'closure' => function (array $data) {
+                        $elements = [];
+                        foreach ($data as $key => $elementData) {
+                            if (!is_array($elementData)) {
+                                $elements[$key] = new ElementSimpleText(['value' => $elementData]);
+                                continue;
+                            }
+
+                            $elements[$key] = $this->getSubElements($elementData);
+                        }
+
+                        return $elements;
+                    },
                 ],
-                'updated_at' => [
-                    'type' => 'subConfig',
-                    'destination' => 'updatedAt',
-                    'class' => Date::class,
-                ],
-                'status' => [
-                    'type' => 'subConfig',
-                    'class' => Status::class,
-                    'parents' => ['data'],
-                ],
-                'due_dates' => [
-                    'type' => 'subConfigs',
-                    'destination' => 'dueDates',
-                    'class' => Date::class,
-                    'parents' => ['data'],
-                ],
+                'assets' => 'assets',
             ]
         );
 
         return $this;
+    }
+
+    /**
+     * Return sub element type.
+     *
+     * @param  array  $elementData
+     * @return array|ElementBase[]
+     */
+    protected function getSubElements(array $elementData)
+    {
+        $elements = [];
+
+        foreach ($elementData as $element) {
+            $class = ElementSimpleChoice::class;
+            if (isset($element['file_id'])) {
+                $class = ElementSimpleFile::class;
+            }
+            /** @var \Cheppers\GatherContent\DataTypes\ElementBase[] $elements */
+            $elements[] = new $class($element);
+        }
+
+        return $elements;
     }
 }

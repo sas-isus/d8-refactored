@@ -111,6 +111,7 @@ elements: |
       Y: Y
       Z: Z
     '#default_value': X
+  
 css: ''
 javascript: ''
 settings:
@@ -152,6 +153,11 @@ settings:
   form_access_denied_message: ''
   form_access_denied_attributes: {  }
   form_file_limit: ''
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
   submission_label: ''
   submission_log: true
   submission_views: {  }
@@ -448,7 +454,7 @@ handlers:
       element_key: options_limit_tableselect_single
       limits:
         X: 1
-        Y: 2
+        'Y': 2
       limit_reached_message: '@name is not available.'
       limit_source_entity: true
       limit_user: false
@@ -459,5 +465,5 @@ handlers:
       option_none_message: '[@remaining remaining]'
       option_unlimited_message: '[Unlimited]'
       option_error_message: '@name: @label is unavailable.'
-      tableselect_header: 'Limits'
+      tableselect_header: Limits
 variants: {  }

@@ -16,6 +16,7 @@ use Drupal\features\FeaturesAssignmentMethodBase;
  * )
  */
 class FeaturesAssignmentDependency extends FeaturesAssignmentMethodBase {
+
   /**
    * {@inheritdoc}
    */

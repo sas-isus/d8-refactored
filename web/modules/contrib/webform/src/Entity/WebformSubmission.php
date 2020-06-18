@@ -249,6 +249,21 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
   /**
    * {@inheritdoc}
    */
+  public function getLangcode() {
+    return $this->get('langcode')->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setLangcode($langcode) {
+    $this->set('langcode', $langcode);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getCreatedTime() {
     if (isset($this->get('created')->value)) {
       return $this->get('created')->value;

@@ -17,17 +17,15 @@ class ItemTest extends BaseTest
     public function testJsonSerialize()
     {
         $itemArray = static::getUniqueResponseItem([
-          ['text', 'files', 'choice_radio', 'choice_checkbox'],
-        ]);
+            'text', 'files', 'choice_radio', 'choice_checkbox'
+        ], static::getUniqueResponseStructure([
+            ['text', 'files', 'choice_radio', 'choice_checkbox'],
+        ]));
 
         $item1 = new $this->className($itemArray);
 
         $item1->name .= '-MODIFIED';
         $itemArray['name'] .= '-MODIFIED';
-
-        $statusId = key($item1->config);
-        $item1->config[$statusId]->label .= '-MODIFIED';
-        $itemArray['config'][0]['label'] .= '-MODIFIED';
 
         $json1 = json_encode($item1);
         $actual1 = json_decode($json1, true);

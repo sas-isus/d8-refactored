@@ -37,11 +37,6 @@ class Folder extends Base
     /**
      * {@inheritdoc}
      */
-    protected $unusedProperties = ['uuid'];
-
-    /**
-     * {@inheritdoc}
-     */
     protected function initPropertyMapping()
     {
         parent::initPropertyMapping();

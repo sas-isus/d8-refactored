@@ -2,12 +2,11 @@
 
 namespace Drupal\Tests\features\Kernel;
 
-use Drupal\Core\Config\StorageInterface;
-use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\features\FeaturesBundleInterface;
 use Drupal\KernelTests\KernelTestBase;
 
 /**
+ * The Feature assigner test.
+ *
  * @group features
  */
 class FeaturesAssignerTest extends KernelTestBase {

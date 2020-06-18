@@ -26,8 +26,9 @@ function features_help($route_name, RouteMatchInterface $route_match) {
  * Implements hook_file_download().
  */
 function features_file_download($uri) {
-  $scheme = file_uri_scheme($uri);
-  $target = file_uri_target($uri);
+  $stream_wrapper_manager = \Drupal::service('stream_wrapper_manager');
+  $scheme = $stream_wrapper_manager->getScheme($uri);
+  $target = $stream_wrapper_manager->getTarget($uri);
 
   if ($scheme == 'temporary' && $target) {
     $request = \Drupal::request();

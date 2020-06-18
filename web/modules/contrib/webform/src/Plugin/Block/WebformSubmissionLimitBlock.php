@@ -55,7 +55,7 @@ class WebformSubmissionLimitBlock extends BlockBase implements ContainerFactoryP
   protected $entityTypeManager;
 
   /**
-   * Webform request handler.
+   * The webform request handler.
    *
    * @var \Drupal\webform\WebformRequestInterface
    */

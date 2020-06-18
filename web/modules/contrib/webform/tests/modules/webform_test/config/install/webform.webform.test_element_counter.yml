@@ -55,7 +55,7 @@ elements: |
       '#counter_maximum': 10
       '#counter_minimum_message': '<script>alert(''XSS'');</script><em>%d</em> character(s) entered.'
       '#counter_maximum_message': '<script>alert(''XSS'');</script><em>%d</em> character(s) remaining.'
-
+  
   counter_word:
     '#type': details
     '#title': counter_word
@@ -130,6 +130,11 @@ settings:
   form_access_denied_message: ''
   form_access_denied_attributes: {  }
   form_file_limit: ''
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
   submission_label: ''
   submission_log: false
   submission_views: {  }

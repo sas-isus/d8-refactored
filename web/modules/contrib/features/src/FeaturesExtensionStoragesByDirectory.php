@@ -3,8 +3,7 @@
 namespace Drupal\features;
 
 /**
- * Wraps FeaturesInstallStorage to support multiple configuration
- * directories.
+ * Wraps FeaturesInstallStorage to support multiple configuration directories.
  */
 class FeaturesExtensionStoragesByDirectory extends FeaturesExtensionStorages implements FeaturesExtensionStoragesByDirectoryInterface {
 

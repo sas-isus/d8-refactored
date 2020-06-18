@@ -4,8 +4,6 @@ namespace Drupal\Tests\features\Unit;
 
 use Drupal\features\Entity\FeaturesBundle;
 use Drupal\Tests\UnitTestCase;
-use Drupal\Core\DependencyInjection\ContainerBuilder;
-use Drupal\Core\Site\Settings;
 
 /**
  * @coversDefaultClass Drupal\features\Entity\FeaturesBundle
@@ -13,6 +11,9 @@ use Drupal\Core\Site\Settings;
  */
 class FeaturesBundleTest extends UnitTestCase {
 
+  /**
+   * {@inheritDoc}
+   */
   public function setUp() {
     parent::setUp();
 
@@ -157,7 +158,7 @@ class FeaturesBundleTest extends UnitTestCase {
   public function testFullname() {
     $bundle = new FeaturesBundle([
       'machine_name' => 'mybundle',
-      'profile_name' => 'mybundle'
+      'profile_name' => 'mybundle',
     ], 'mybundle');
     $this->assertFalse($bundle->isProfile());
     // Settings:get('profile_name') isn't defined in test, so this returns NULL.
@@ -192,6 +193,10 @@ class FeaturesBundleTest extends UnitTestCase {
  * A dummy plugin manager, to help testing.
  */
 class DummyPluginManager {
+
+  /**
+   * {@inheritDoc}
+   */
   public function getDefinition($method_id) {
     $definition = [
       'enabled' => TRUE,

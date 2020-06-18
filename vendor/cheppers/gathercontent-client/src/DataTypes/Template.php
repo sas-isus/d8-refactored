@@ -12,11 +12,6 @@ class Template extends Base
     /**
      * @var int
      */
-    public $createdBy = 0;
-
-    /**
-     * @var int
-     */
     public $updatedBy = 0;
 
     /**
@@ -25,34 +20,19 @@ class Template extends Base
     public $name = '';
 
     /**
-     * @var string
-     */
-    public $description = '';
-
-    /**
-     * @var \Cheppers\GatherContent\DataTypes\TemplateTab[]
-     */
-    public $config = [];
-
-    /**
-     * @var string
-     */
-    public $usedAt = '';
-
-    /**
      * @var int
      */
-    public $createdAt = 0;
+    public $numberOfItemsUsing = 0;
+
+    /**
+     * @var string
+     */
+    public $structureUuid = '';
 
     /**
      * @var int
      */
     public $updatedAt = 0;
-
-    /**
-     * @var null|\Cheppers\GatherContent\DataTypes\Usage
-     */
-    public $usage = null;
 
     /**
      * {@inheritdoc}
@@ -63,22 +43,12 @@ class Template extends Base
         $this->propertyMapping = array_replace(
             $this->propertyMapping,
             [
-                'project_id' => 'projectId',
-                'created_by' => 'createdBy',
-                'updated_by' => 'updatedBy',
                 'name' => 'name',
-                'description' => 'description',
-                'config' => [
-                    'type' => 'subConfigs',
-                    'class' => TemplateTab::class,
-                ],
-                'used_at' => 'usedAt',
-                'created_at' => 'createdAt',
+                'number_of_items_using' => 'numberOfItemsUsing',
+                'structure_uuid' => 'structureUuid',
+                'project_id' => 'projectId',
                 'updated_at' => 'updatedAt',
-                'usage' => [
-                    'type' => 'subConfig',
-                    'class' => Usage::class,
-                ],
+                'updated_by' => 'updatedBy',
             ]
         );
 

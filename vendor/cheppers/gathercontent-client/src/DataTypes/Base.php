@@ -29,7 +29,15 @@ class Base implements JsonSerializable, \Serializable
      */
     protected $dataDefaultValues = [];
 
+    /**
+     * @var array
+     */
     protected $unusedProperties = [];
+
+    /**
+     * @var bool
+     */
+    protected $skipEmptyProperties = false;
 
     public function __construct(array $data = [])
     {
@@ -38,6 +46,24 @@ class Base implements JsonSerializable, \Serializable
             ->initPropertyMapping()
             ->expandPropertyMappingShortCuts()
             ->populateProperties();
+    }
+
+    /**
+     * @param $value
+     * @return $this
+     */
+    public function setSkipEmptyProperties($value)
+    {
+        $this->skipEmptyProperties = $value;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSkipEmptyProperties()
+    {
+        return $this->skipEmptyProperties;
     }
 
     /**
@@ -68,6 +94,24 @@ class Base implements JsonSerializable, \Serializable
                         array_pop($handler['parents']) => $value,
                     ];
                 }
+            }
+
+            if ($value instanceof Base) {
+                $value->setSkipEmptyProperties($this->getSkipEmptyProperties());
+            }
+
+            if (is_array($value)) {
+                foreach ($value as $object) {
+                    if ($object instanceof Base) {
+                        $object->setSkipEmptyProperties($this->getSkipEmptyProperties());
+                    }
+                }
+            }
+
+            if ($this->getSkipEmptyProperties()
+                && empty($value)
+            ) {
+                continue;
             }
 
             $export[$src] = $value;

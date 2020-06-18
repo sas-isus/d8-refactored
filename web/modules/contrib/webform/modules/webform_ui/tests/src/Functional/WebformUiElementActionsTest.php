@@ -7,7 +7,7 @@ use Drupal\Tests\webform\Functional\WebformBrowserTestBase;
 /**
  * Tests for webform UI actions element.
  *
- * @group WebformUi
+ * @group webform_ui
  */
 class WebformUiElementActionsTest extends WebformBrowserTestBase {
 

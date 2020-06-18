@@ -67,7 +67,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   protected $fileSystem;
 
   /**
-   * Webform access rules manager service.
+   * The webform access rules manager service.
    *
    * @var \Drupal\webform\WebformAccessRulesManagerInterface
    */
@@ -311,6 +311,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       ->fields('sd', ['sid'])
       ->condition('sd.webform_id', $webform->id())
       ->condition('sd.name', $element_key)
+      ->range(0, 1)
       ->execute();
     return $result->fetchAssoc() ? TRUE : FALSE;
   }
@@ -1168,7 +1169,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
           $file_directory = $stream_wrapper . '://webform/' . $webform->id() . '/' . $entity->id();
           // Clear empty webform submission directory.
           if (file_exists($file_directory)
-            && empty(file_scan_directory($file_directory, '/.*/'))) {
+            && empty($this->fileSystem->scanDirectory($file_directory, '/.*/'))) {
             $this->fileSystem->deleteRecursive($file_directory);
           }
         }

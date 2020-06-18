@@ -35,6 +35,7 @@ class FeaturesGenerationWrite extends FeaturesGenerationMethodBase implements Co
 
   /**
    * The file_system service.
+   *
    * @var \Drupal\Core\File\FileSystemInterface
    */
   protected $fileSystem;
@@ -44,6 +45,8 @@ class FeaturesGenerationWrite extends FeaturesGenerationMethodBase implements Co
    *
    * @param string $root
    *   The app root.
+   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
+   *   The filesystem service.
    */
   public function __construct($root, FileSystemInterface $fileSystem) {
     $this->root = $root;
@@ -63,7 +66,7 @@ class FeaturesGenerationWrite extends FeaturesGenerationMethodBase implements Co
   /**
    * Reads and merges in existing files for a given package or profile.
    *
-   * @param \Drupal\features\Package &$package
+   * @param \Drupal\features\Package $package
    *   The package.
    * @param array $existing_packages
    *   An array of existing packages.
@@ -92,7 +95,7 @@ class FeaturesGenerationWrite extends FeaturesGenerationMethodBase implements Co
         ->getExtensionStorages()) as $directory) {
         $config_directory = $this->root . '/' . $existing_directory . '/' . $directory;
         if (is_dir($config_directory)) {
-          file_unmanaged_delete_recursive($config_directory);
+          $this->fileSystem->deleteRecursive($config_directory);
         }
       }
     }
@@ -111,8 +114,8 @@ class FeaturesGenerationWrite extends FeaturesGenerationMethodBase implements Co
 
     // Add package files.
     // We need to update the system.module.files state because it's cached.
-    // Cannot just call system_rebuild_module_data() because $listing->scan() has
-    // it's own internal static cache that we cannot clear at this point.
+    // Cannot just call system_rebuild_module_data() because $listing->scan()
+    // has it's own internal static cache that we cannot clear at this point.
     $files = \Drupal::state()->get('system.module.files');
     foreach ($packages as $package) {
       $this->generatePackage($return, $package);
@@ -121,7 +124,7 @@ class FeaturesGenerationWrite extends FeaturesGenerationMethodBase implements Co
       }
     }
 
-    // Rebuild system module cache
+    // Rebuild system module cache.
     \Drupal::state()->set('system.module.files', $files);
 
     return $return;

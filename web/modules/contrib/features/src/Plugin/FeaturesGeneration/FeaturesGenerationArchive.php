@@ -2,9 +2,11 @@
 
 namespace Drupal\features\Plugin\FeaturesGeneration;
 
+use Drupal\Core\Access\CsrfTokenGenerator;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\features\FeaturesGenerationMethodBase;
 use Drupal\Core\Archiver\ArchiveTar;
+use Drupal\Core\File\FileSystem;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\features\FeaturesBundleInterface;
 use Drupal\features\Package;
@@ -37,16 +39,26 @@ class FeaturesGenerationArchive extends FeaturesGenerationMethodBase implements 
   protected $csrfToken;
 
   /**
+   * The file system service.
+   *
+   * @var \Drupal\Core\File\FileSystem
+   */
+  protected $fileSystem;
+
+  /**
    * Creates a new FeaturesGenerationArchive instance.
    *
    * @param string $root
    *   The app root.
    * @param \Drupal\Core\Access\CsrfTokenGenerator $csrf_token
    *   The CSRF token generator.
+   * @param \Drupal\Core\File\FileSystem $file_system
+   *   The file system service.
    */
-  public function __construct($root, \Drupal\Core\Access\CsrfTokenGenerator $csrf_token) {
+  public function __construct($root, CsrfTokenGenerator $csrf_token, FileSystem $file_system) {
     $this->root = $root;
     $this->csrfToken = $csrf_token;
+    $this->fileSystem = $file_system;
   }
 
   /**
@@ -55,7 +67,8 @@ class FeaturesGenerationArchive extends FeaturesGenerationMethodBase implements 
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $container->get('app.root'),
-      $container->get('csrf_token')
+      $container->get('csrf_token'),
+      $container->get('file_system')
     );
   }
 
@@ -85,7 +98,7 @@ class FeaturesGenerationArchive extends FeaturesGenerationMethodBase implements 
 
     if (is_dir($existing_directory)) {
       // Scan for all files.
-      $files = file_scan_directory($existing_directory, '/.*/');
+      $files = $this->fileSystem->scanDirectory($existing_directory, '/.*/');
       // Skip any existing .features.yml as it will be replaced.
       $exclude_files = [
         $package->getMachineName() . '.features',
@@ -118,7 +131,7 @@ class FeaturesGenerationArchive extends FeaturesGenerationMethodBase implements 
           $package->appendFile([
             'filename' => $file->filename,
             'subdirectory' => $subdirectory,
-            'string' => file_get_contents($file->uri)
+            'string' => file_get_contents($file->uri),
           ]);
         }
       }
@@ -156,9 +169,9 @@ class FeaturesGenerationArchive extends FeaturesGenerationMethodBase implements 
     $return = [];
 
     $this->archiveName = $filename . '.tar.gz';
-    $archive_name = file_directory_temp() . '/' . $this->archiveName;
+    $archive_name = $this->fileSystem->getTempDirectory() . '/' . $this->archiveName;
     if (file_exists($archive_name)) {
-      file_unmanaged_delete($archive_name);
+      $this->fileSystem->delete($archive_name);
     }
 
     $archiver = new ArchiveTar($archive_name);
@@ -182,7 +195,7 @@ class FeaturesGenerationArchive extends FeaturesGenerationMethodBase implements 
    *   The return value, passed by reference.
    * @param \Drupal\features\Package $package
    *   The package or profile.
-   * @param ArchiveTar $archiver
+   * @param \Drupal\Core\Archiver\ArchiveTar $archiver
    *   The archiver.
    */
   protected function generatePackage(array &$return, Package $package, ArchiveTar $archiver) {
@@ -264,7 +277,7 @@ class FeaturesGenerationArchive extends FeaturesGenerationMethodBase implements 
    *   - 'subdirectory': any subdirectory of the file within the extension
    *      directory.
    *   - 'string': the contents of the file.
-   * @param ArchiveTar $archiver
+   * @param \Drupal\Core\Archiver\ArchiveTar $archiver
    *   The archiver.
    *
    * @throws Exception

@@ -23,6 +23,7 @@ use Drupal\features\FeaturesAssignmentMethodBase;
  * )
  */
 class FeaturesAssignmentBaseType extends FeaturesAssignmentMethodBase {
+
   /**
    * {@inheritdoc}
    */
@@ -37,7 +38,7 @@ class FeaturesAssignmentBaseType extends FeaturesAssignmentMethodBase {
     foreach ($config_collection as $item_name => $item) {
       if (in_array($item->getType(), $config_base_types)) {
         if (is_null($this->featuresManager->findPackage($item->getShortName())) && !$item->getPackage()) {
-          $description = $this->t('Provides @label @type and related configuration.', ['@label' => $item->getLabel(), '@type' => Unicode::strtolower($config_types[$item->getType()])]);
+          $description = $this->t('Provides @label @type and related configuration.', ['@label' => $item->getLabel(), '@type' => mb_strtolower($config_types[$item->getType()])]);
           if (isset($item->getData()['description'])) {
             $description .= ' ' . $item->getData()['description'];
           }

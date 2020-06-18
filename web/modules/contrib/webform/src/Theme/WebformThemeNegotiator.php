@@ -28,14 +28,14 @@ class WebformThemeNegotiator implements ThemeNegotiatorInterface {
   protected $configFactory;
 
   /**
-   * Webform request handler.
+   * The webform request handler.
    *
    * @var \Drupal\webform\WebformRequestInterface
    */
   protected $requestHandler;
 
   /**
-   * Creates a new AdminNegotiator instance.
+   * Creates a new WebformThemeNegotiator instance.
    *
    * @param \Drupal\Core\Session\AccountInterface $user
    *   The current user.

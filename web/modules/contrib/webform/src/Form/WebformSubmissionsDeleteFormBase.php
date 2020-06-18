@@ -57,7 +57,7 @@ abstract class WebformSubmissionsDeleteFormBase extends WebformDeleteFormBase {
   protected $submissionStorage;
 
   /**
-   * Webform request handler.
+   * The webform request handler.
    *
    * @var \Drupal\webform\WebformRequestInterface
    */

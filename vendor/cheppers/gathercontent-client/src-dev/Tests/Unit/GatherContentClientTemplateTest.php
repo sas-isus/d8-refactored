@@ -2,6 +2,8 @@
 
 namespace Cheppers\GatherContent\Tests\Unit;
 
+use Cheppers\GatherContent\DataTypes\Related;
+use Cheppers\GatherContent\DataTypes\Structure;
 use Cheppers\GatherContent\DataTypes\Template;
 use Cheppers\GatherContent\GatherContentClient;
 use Cheppers\GatherContent\GatherContentClientException;
@@ -13,26 +15,13 @@ class GatherContentClientTemplateTest extends GcBaseTestCase
     public function casesTemplatesGet()
     {
         $data = [
-            static::getUniqueResponseTemplate([
-                ['text', 'files', 'choice_radio', 'choice_checkbox'],
-            ]),
-            static::getUniqueResponseTemplate([
-                ['text', 'choice_radio', 'choice_checkbox'],
-                ['text', 'choice_radio'],
-            ]),
-            static::getUniqueResponseTemplate([
-                ['choice_radio', 'choice_checkbox'],
-            ]),
+            static::getUniqueResponseTemplate(),
+            static::getUniqueResponseTemplate()
         ];
 
-        $templates = static::reKeyArray($data, 'id');
-        foreach (array_keys($templates) as $templateId) {
-            foreach (array_keys($templates[$templateId]['config']) as $tabId) {
-                $templates[$templateId]['config'][$tabId]['elements'] = static::reKeyArray(
-                    $templates[$templateId]['config'][$tabId]['elements'],
-                    'name'
-                );
-            }
+        $templates = [];
+        foreach ($data as $template) {
+            $templates[] = new Template($template);
         }
 
         return [
@@ -43,7 +32,7 @@ class GatherContentClientTemplateTest extends GcBaseTestCase
             ],
             'basic' => [
                 $templates,
-                ['data' => $data],
+                ['data' => $templates],
                 42,
             ],
         ];
@@ -71,8 +60,8 @@ class GatherContentClientTemplateTest extends GcBaseTestCase
             ->templatesGet($projectId);
 
         static::assertEquals(
-            json_encode($expected, JSON_PRETTY_PRINT),
-            json_encode($actual, JSON_PRETTY_PRINT)
+            \GuzzleHttp\json_encode($expected, JSON_PRETTY_PRINT),
+            \GuzzleHttp\json_encode($actual['data'], JSON_PRETTY_PRINT)
         );
 
         /** @var Request $request */
@@ -80,10 +69,10 @@ class GatherContentClientTemplateTest extends GcBaseTestCase
 
         static::assertEquals(1, count($container));
         static::assertEquals('GET', $request->getMethod());
-        static::assertEquals(['application/vnd.gathercontent.v0.5+json'], $request->getHeader('Accept'));
+        static::assertEquals(['application/vnd.gathercontent.v2+json'], $request->getHeader('Accept'));
         static::assertEquals(['api.example.com'], $request->getHeader('Host'));
         static::assertEquals(
-            "{$this->gcClientOptions['baseUri']}/templates?project_id=$projectId",
+            "{$this->gcClientOptions['baseUri']}/projects/$projectId/templates",
             (string) $request->getUri()
         );
     }
@@ -96,15 +85,14 @@ class GatherContentClientTemplateTest extends GcBaseTestCase
             [
                 'class' => GatherContentClientException::class,
                 'code' => GatherContentClientException::API_ERROR,
-                'msg' => 'API Error: "Project Not Found"',
+                'msg' => 'API Error: "Project Not Found", Code: 404',
             ],
             [
                 'code' => 200,
                 'headers' => ['Content-Type' => 'application/json'],
                 'body' => [
-                    'data' => [
-                        'message' => 'Project Not Found'
-                    ]
+                    'error' => 'Project Not Found',
+                    'code' => 404
                 ],
             ],
             42
@@ -141,27 +129,21 @@ class GatherContentClientTemplateTest extends GcBaseTestCase
 
     public function casesTemplateGet()
     {
-        $data = static::getUniqueResponseTemplate([
-            ['text', 'files', 'section', 'choice_radio', 'choice_checkbox'],
+        $data = static::getUniqueResponseTemplate();
+        $structure = static::getUniqueResponseRelated([
+            ['text', 'files', 'choice_radio', 'choice_checkbox'],
+            ['text', 'choice_checkbox'],
         ]);
-
-        $template = $data;
-        foreach (array_keys($template['config']) as $tabId) {
-            $template['config'][$tabId]['elements'] = static::reKeyArray(
-                $template['config'][$tabId]['elements'],
-                'name'
-            );
-        }
 
         return [
             'empty' => [
-                [],
-                ['data' => []],
+                ['data' => [], 'related' => []],
+                ['data' => [], 'related' => []],
                 42,
             ],
             'basic' => [
-                $template,
-                ['data' => $data],
+                ['data' => $data, 'related' => $structure],
+                ['data' => $data, 'related' => $structure],
                 42,
             ],
         ];
@@ -188,14 +170,28 @@ class GatherContentClientTemplateTest extends GcBaseTestCase
             ->setOptions($this->gcClientOptions)
             ->templateGet($templateId);
 
-        if ($expected) {
-            static::assertTrue($actual instanceof Template, 'Data type of the return is Template');
+        if (!empty($expected['data'])) {
+            static::assertTrue($actual['data'] instanceof Template, 'Data type of the return is Template');
             static::assertEquals(
-                json_encode($expected, JSON_PRETTY_PRINT),
-                json_encode($actual, JSON_PRETTY_PRINT)
+                \GuzzleHttp\json_encode($expected['data'], JSON_PRETTY_PRINT),
+                \GuzzleHttp\json_encode($actual['data'], JSON_PRETTY_PRINT)
             );
         } else {
-            static::assertNull($actual);
+            static::assertNull($actual['data']);
+        }
+
+        if (!empty($expected['related'])) {
+            static::assertTrue($actual['related'] instanceof Related, 'Data type of the return is Related');
+            static::assertTrue(
+                $actual['related']->structure instanceof Structure,
+                'Data type of the return is Structure'
+            );
+            static::assertEquals(
+                \GuzzleHttp\json_encode($expected['related'], JSON_PRETTY_PRINT),
+                \GuzzleHttp\json_encode($actual['related'], JSON_PRETTY_PRINT)
+            );
+        } else {
+            static::assertNull($actual['related']);
         }
 
         /** @var Request $request */
@@ -203,7 +199,7 @@ class GatherContentClientTemplateTest extends GcBaseTestCase
 
         static::assertEquals(1, count($container));
         static::assertEquals('GET', $request->getMethod());
-        static::assertEquals(['application/vnd.gathercontent.v0.5+json'], $request->getHeader('Accept'));
+        static::assertEquals(['application/vnd.gathercontent.v2+json'], $request->getHeader('Accept'));
         static::assertEquals(['api.example.com'], $request->getHeader('Host'));
         static::assertEquals(
             "{$this->gcClientOptions['baseUri']}/templates/$templateId",
@@ -219,15 +215,14 @@ class GatherContentClientTemplateTest extends GcBaseTestCase
             [
                 'class' => GatherContentClientException::class,
                 'code' => GatherContentClientException::API_ERROR,
-                'msg' => 'API Error: "Template Not Found"',
+                'msg' => 'API Error: "Template Not Found", Code: 404',
             ],
             [
                 'code' => 200,
                 'headers' => ['Content-Type' => 'application/json'],
                 'body' => [
-                    'data' => [
-                        'message' => 'Template Not Found'
-                    ]
+                    'error' => 'Template Not Found',
+                    'code' => 404
                 ],
             ],
             42
@@ -260,5 +255,473 @@ class GatherContentClientTemplateTest extends GcBaseTestCase
         static::expectExceptionMessage($expected['msg']);
 
         $gc->templateGet($templateId);
+    }
+
+    public function casesTemplatePost()
+    {
+        $templateArray = static::getUniqueResponseTemplate();
+        $template = new Template($templateArray);
+
+        $structureArray = static::getUniqueResponseStructure([
+            ['text', 'files', 'choice_radio', 'choice_checkbox']
+        ]);
+        $structure = new Structure($structureArray);
+
+        $emptyStructure = new Structure();
+
+        return [
+            'basic' => [
+                $template,
+                $template->name,
+                $structure,
+                131313,
+                $template->id,
+            ],
+            'empty' => [
+                $template,
+                $template->name,
+                $emptyStructure,
+                131313,
+                $template->id,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider casesTemplatePost
+     */
+    public function testTemplatePost(Template $expected, $name, $structure, $projectId, $resultItemId)
+    {
+        $tester = $this->getBasicHttpClientTester([
+            new Response(
+                201,
+                [
+                    'Content-Type' => 'application/json',
+                ],
+                \GuzzleHttp\json_encode(['data' => $expected])
+            ),
+        ]);
+        $client = $tester['client'];
+        $container = &$tester['container'];
+
+        $actual = (new GatherContentClient($client))
+            ->setOptions($this->gcClientOptions)
+            ->templatePost($projectId, $name, $structure);
+
+        $actual->setSkipEmptyProperties(true);
+
+        static::assertEquals($resultItemId, $actual->id);
+
+        static::assertTrue($actual instanceof Template, 'Data type of the return is Template');
+        static::assertEquals(
+            \GuzzleHttp\json_encode($expected, JSON_PRETTY_PRINT),
+            \GuzzleHttp\json_encode($actual, JSON_PRETTY_PRINT)
+        );
+
+        /** @var Request $request */
+        $request = $container[0]['request'];
+
+        static::assertEquals(1, count($container));
+        static::assertEquals('POST', $request->getMethod());
+        static::assertEquals(['application/vnd.gathercontent.v2+json'], $request->getHeader('Accept'));
+        static::assertEquals(['api.example.com'], $request->getHeader('Host'));
+        static::assertEquals(
+            "{$this->gcClientOptions['baseUri']}/projects/$projectId/templates",
+            (string) $request->getUri()
+        );
+
+        $requestBody = $request->getBody();
+        $sentQueryVariables = \GuzzleHttp\json_decode($requestBody, true);
+
+        static::assertArrayHasKey('name', $sentQueryVariables);
+        static::assertEquals($sentQueryVariables['name'], $expected->name);
+    }
+
+    public function casesTemplatePostFail()
+    {
+        $cases['wrong_type'] = [
+            [
+                'class' => GatherContentClientException::class,
+                'code' => GatherContentClientException::UNEXPECTED_CONTENT_TYPE,
+                'msg' => 'Unexpected Content-Type',
+            ],
+            [
+                'code' => 201,
+                'headers' => ['Content-Type' => 'image/jpeg'],
+                'body' => [],
+            ],
+            1,
+            ''
+        ];
+        $cases['not_found'] = [
+            [
+                'class' => GatherContentClientException::class,
+                'code' => GatherContentClientException::API_ERROR,
+                'msg' => 'API Error: "Template Not Found", Code: 404',
+            ],
+            [
+                'code' => 200,
+                'headers' => ['Content-Type' => 'application/json'],
+                'body' => [
+                    'error' => 'Template Not Found',
+                    'code' => 404
+                ],
+            ],
+            42
+        ];
+
+        return $cases;
+    }
+
+    /**
+     * @dataProvider casesTemplatePostFail
+     */
+    public function testTemplatePostFail(array $expected, array $response, $projectId)
+    {
+        $tester = $this->getBasicHttpClientTester(
+            [
+                new Response(
+                    $response['code'],
+                    $response['headers'],
+                    \GuzzleHttp\json_encode($response['body'])
+                ),
+            ]
+        );
+        $client = $tester['client'];
+
+        $gc = (new GatherContentClient($client))
+            ->setOptions($this->gcClientOptions);
+
+        static::expectException($expected['class']);
+        static::expectExceptionCode($expected['code']);
+        static::expectExceptionMessage($expected['msg']);
+
+        $gc->templatePost($projectId, 'name', new Structure());
+    }
+
+    public function casesTemplateRenamePost()
+    {
+        $templateArray = static::getUniqueResponseTemplate();
+        $template = new Template($templateArray);
+
+        return [
+            'basic' => [
+                $template,
+                13,
+                $template->name,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider casesTemplateRenamePost
+     */
+    public function testTemplateRenamePost(Template $template, $templateId, $name)
+    {
+        $tester = $this->getBasicHttpClientTester([
+            new Response(
+                200,
+                [
+                    'Content-Type' => 'application/json',
+                ],
+                \GuzzleHttp\json_encode(['data' => $template])
+            ),
+        ]);
+        $client = $tester['client'];
+        $container = &$tester['container'];
+
+        $actual = (new GatherContentClient($client))
+            ->setOptions($this->gcClientOptions)
+            ->templateRenamePost($templateId, $name);
+
+        static::assertTrue($actual instanceof Template, 'Data type of the return is Template');
+        static::assertEquals(
+            \GuzzleHttp\json_encode($template, JSON_PRETTY_PRINT),
+            \GuzzleHttp\json_encode($actual, JSON_PRETTY_PRINT)
+        );
+
+        /** @var Request $request */
+        $request = $container[0]['request'];
+
+        static::assertEquals(1, count($container));
+        static::assertEquals('POST', $request->getMethod());
+        static::assertEquals(['application/vnd.gathercontent.v2+json'], $request->getHeader('Accept'));
+        static::assertEquals(['api.example.com'], $request->getHeader('Host'));
+        static::assertEquals(
+            "{$this->gcClientOptions['baseUri']}/templates/$templateId/rename",
+            (string) $request->getUri()
+        );
+
+        $requestBody = $request->getBody();
+        $sentQueryVariables = \GuzzleHttp\json_decode($requestBody, true);
+
+        static::assertArrayHasKey('name', $sentQueryVariables);
+        static::assertArrayNotHasKey('content', $sentQueryVariables);
+        static::assertEquals($sentQueryVariables['name'], $name);
+    }
+
+    public function casesTemplateRenamePostFail()
+    {
+        $cases['wrong_type'] = [
+            [
+                'class' => GatherContentClientException::class,
+                'code' => GatherContentClientException::UNEXPECTED_CONTENT_TYPE,
+                'msg' => 'Unexpected Content-Type',
+            ],
+            [
+                'code' => 200,
+                'headers' => ['Content-Type' => 'image/jpeg'],
+                'body' => [],
+            ],
+            1,
+            ''
+        ];
+        $cases['missing_item'] = [
+            [
+                'class' => GatherContentClientException::class,
+                'code' => GatherContentClientException::API_ERROR,
+                'msg' => 'API Error: "Template Not Found", Code: 404',
+            ],
+            [
+                'code' => 200,
+                'headers' => ['Content-Type' => 'application/json'],
+                'body' => [
+                    'error' => 'Template Not Found',
+                    'code' => 404
+                ],
+            ],
+            1,
+            ''
+        ];
+        $cases['empty'] = [
+            [
+                'class' => \Exception::class,
+                'code' => 400,
+                'msg' => '{"error":"Missing template_id","code":400}',
+            ],
+            [
+                'code' => 400,
+                'headers' => ['Content-Type' => 'application/json'],
+                'body' => [
+                    'error' => 'Missing template_id',
+                    'code' => 400
+                ],
+            ],
+            1,
+            ''
+        ];
+
+        return $cases;
+    }
+
+    /**
+     * @dataProvider casesTemplateRenamePostFail
+     */
+    public function testTemplateRenamePostFail(array $expected, array $response, $templateId, $name)
+    {
+        $tester = $this->getBasicHttpClientTester([
+            new Response(
+                $response['code'],
+                $response['headers'],
+                \GuzzleHttp\json_encode($response['body'])
+            ),
+        ]);
+        $client = $tester['client'];
+
+        $gc = (new GatherContentClient($client))
+            ->setOptions($this->gcClientOptions);
+
+        static::expectException($expected['class']);
+        static::expectExceptionCode($expected['code']);
+        static::expectExceptionMessage($expected['msg']);
+
+        $gc->templateRenamePost($templateId, $name);
+    }
+
+    public function casesTemplateDuplicatePost()
+    {
+        $templateArray = static::getUniqueResponseItem();
+        $template = new Template($templateArray);
+
+        return [
+            'basic' => [
+                $template,
+                $template->id,
+                $template->projectId
+            ],
+            'empty_project' => [
+                $template,
+                $template->id,
+                null
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider casesTemplateDuplicatePost
+     */
+    public function testTemplateDuplicateTemplatePost(Template $template, $templateId, $projectId = null)
+    {
+        $tester = $this->getBasicHttpClientTester([
+            new Response(
+                201,
+                ['Content-Type' => 'application/json'],
+                \GuzzleHttp\json_encode(['data' => $template])
+            ),
+        ]);
+        $client = $tester['client'];
+        $container = &$tester['container'];
+
+        $client = (new GatherContentClient($client));
+        $actual = $client->setOptions($this->gcClientOptions)
+            ->templateDuplicatePost($templateId, $projectId);
+
+        static::assertTrue($actual instanceof Template, 'Data type of the return is Template');
+        static::assertEquals(
+            \GuzzleHttp\json_encode($template, JSON_PRETTY_PRINT),
+            \GuzzleHttp\json_encode($actual, JSON_PRETTY_PRINT)
+        );
+
+        /** @var Request $request */
+        $request = $container[0]['request'];
+
+        static::assertEquals(1, count($container));
+        static::assertEquals('POST', $request->getMethod());
+        static::assertEquals(['application/vnd.gathercontent.v2+json'], $request->getHeader('Accept'));
+        static::assertEquals(['api.example.com'], $request->getHeader('Host'));
+        static::assertEquals(
+            "{$this->gcClientOptions['baseUri']}/templates/$templateId/duplicate",
+            (string) $request->getUri()
+        );
+
+        $requestBody = $request->getBody();
+        $sentQueryVariables = \GuzzleHttp\json_decode($requestBody, true);
+
+        if (!empty($projectId)) {
+            static::assertArrayHasKey('project_id', $sentQueryVariables);
+            static::assertEquals($sentQueryVariables['project_id'], $projectId);
+        } else {
+            static::assertArrayNotHasKey('project_id', $sentQueryVariables);
+        }
+    }
+
+    public function casesTemplateDuplicatePostFail()
+    {
+        $cases['wrong_type'] = [
+            [
+                'class' => GatherContentClientException::class,
+                'code' => GatherContentClientException::UNEXPECTED_CONTENT_TYPE,
+                'msg' => 'Unexpected Content-Type',
+            ],
+            [
+                'code' => 201,
+                'headers' => ['Content-Type' => 'image/jpeg'],
+                'body' => [],
+            ],
+            1
+        ];
+        $cases['missing_item'] = [
+            [
+                'class' => GatherContentClientException::class,
+                'code' => GatherContentClientException::API_ERROR,
+                'msg' => 'API Error: "Template Not Found", Code: 404',
+            ],
+            [
+                'code' => 200,
+                'headers' => ['Content-Type' => 'application/json'],
+                'body' => [
+                    'error' => 'Template Not Found',
+                    'code' => 404
+                ],
+            ],
+            0
+        ];
+        $cases['empty'] = [
+            [
+                'class' => \Exception::class,
+                'code' => 400,
+                'msg' => '{"error":"Missing template_id","code":400}',
+            ],
+            [
+                'code' => 400,
+                'headers' => ['Content-Type' => 'application/json'],
+                'body' => [
+                    'error' => 'Missing template_id',
+                    'code' => 400
+                ],
+            ],
+            42
+        ];
+
+        return $cases;
+    }
+
+    /**
+     * @dataProvider casesTemplateDuplicatePostFail
+     */
+    public function testTemplateDuplicatePostFail(array $expected, array $response, $templateId)
+    {
+        $tester = $this->getBasicHttpClientTester([
+            new Response(
+                $response['code'],
+                $response['headers'],
+                \GuzzleHttp\json_encode($response['body'])
+            ),
+        ]);
+        $client = $tester['client'];
+
+        $gc = (new GatherContentClient($client))
+            ->setOptions($this->gcClientOptions);
+
+        static::expectException($expected['class']);
+        static::expectExceptionCode($expected['code']);
+        static::expectExceptionMessage($expected['msg']);
+
+        $gc->templateDuplicatePost($templateId);
+    }
+
+    public function casesTemplateDelete()
+    {
+        return [
+            'basic' => [
+                13
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider casesTemplateDelete
+     */
+    public function testTemplateDelete($templateId)
+    {
+        $tester = $this->getBasicHttpClientTester([
+            new Response(
+                204,
+                [
+                    'Content-Type' => 'application/json',
+                ]
+            ),
+        ]);
+        $client = $tester['client'];
+        $container = &$tester['container'];
+
+        (new GatherContentClient($client))
+            ->setOptions($this->gcClientOptions)
+            ->templateDelete($templateId);
+
+        /** @var Request $request */
+        $request = $container[0]['request'];
+
+        static::assertEquals(1, count($container));
+        static::assertEquals('DELETE', $request->getMethod());
+        static::assertEquals(['application/vnd.gathercontent.v2+json'], $request->getHeader('Accept'));
+        static::assertEquals(['api.example.com'], $request->getHeader('Host'));
+        static::assertEquals(
+            "{$this->gcClientOptions['baseUri']}/templates/$templateId",
+            (string) $request->getUri()
+        );
+
+        $requestBody = $request->getBody();
+        static::assertEmpty($requestBody->getContents());
     }
 }

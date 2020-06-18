@@ -2,6 +2,8 @@
 
 namespace Drupal\features;
 
+use Drupal\Core\Extension\Extension;
+
 /**
  * Defines a value object for storing package related data.
  *
@@ -10,104 +12,138 @@ namespace Drupal\features;
 class Package {
 
   /**
+   * The variable.
+   *
    * @var string
    */
   protected $machineName = '';
 
   /**
+   * The variable.
+   *
    * @var string
    */
   protected $name = '';
 
   /**
+   * The variable.
+   *
    * @var string
    */
   protected $description = '';
 
   /**
-   * @todo This could be fetched from the extension object.
+   * The variable.
    *
    * @var string
+   * @todo This could be fetched from the extension object.
    */
   protected $version = '';
 
   /**
+   * The variable.
+   *
    * @var string
    */
   protected $core = '8.x';
 
   /**
-   * @todo This could be fetched from the extension object.
+   * The variable.
    *
    * @var string
+   * @todo This could be fetched from the extension object.
    */
   protected $type = 'module';
 
   /**
+   * The variable.
+   *
    * @var string[]
    */
   protected $themes = [];
 
   /**
+   * The variable.
+   *
    * @var string
    */
   protected $bundle;
 
   /**
+   * The variable.
+   *
    * @var string[]
    */
   protected $excluded = [];
 
   /**
+   * The variable.
+   *
    * @var string[]|bool
    */
-  protected $required = false;
+  protected $required = FALSE;
 
   /**
+   * The variable.
+   *
    * @var array
    */
   protected $info = [];
 
   /**
+   * The variable.
+   *
    * @var string[]
    */
   protected $dependencies = [];
 
   /**
-   * @todo This could be fetched from the extension object.
+   * The variable.
    *
    * @var int
+   * @todo This could be fetched from the extension object.
    */
   protected $status;
 
   /**
+   * The variable.
+   *
    * @var int
    */
   protected $state;
 
   /**
-   * @todo This could be fetched from the extension object.
+   * The variable.
    *
    * @var string
+   * @todo This could be fetched from the extension object.
    */
   protected $directory;
 
   /**
+   * The variable.
+   *
    * @var string[]
    */
   protected $files;
 
   /**
+   * The extension.
+   *
    * @var \Drupal\Core\Extension\Extension
    */
   protected $extension;
 
   /**
+   * The variable.
+   *
    * @var string[]
    */
   protected $config = [];
 
   /**
+   * The variable.
+   *
    * @var string[]
    */
   protected $configOrig = [];
@@ -144,6 +180,7 @@ class Package {
    *
    * @param string $machine_name
    * @param string $bundle_name
+   *
    * @return bool
    */
   protected function inBundle($machine_name, $bundle_name) {
@@ -151,7 +188,7 @@ class Package {
   }
 
   /**
-   * Return the full name of the package by prefixing it with bundle as needed
+   * Return the full name of the package by prefixing it with bundle as needed.
    *
    * NOTE: When possible, use the Bundle::getFullName method since it can
    * better handle cases where a bundle is a profile.
@@ -215,6 +252,9 @@ class Package {
     return $this;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public function removeConfig($name) {
     $this->config = array_diff($this->config, [$name]);
     return $this;
@@ -324,15 +364,24 @@ class Package {
     return $this->extension;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public function getDependencies() {
     return $this->dependencies;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public function removeDependency($name) {
     $this->dependencies = array_diff($this->dependencies, [$name]);
     return $this;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public function getDependencyInfo() {
     return isset($this->info['dependencies']) ? $this->info['dependencies'] : [];
   }
@@ -360,7 +409,7 @@ class Package {
    * Sets a new machine name.
    *
    * @param string $machine_name
-   *   The machine name
+   *   The machine name.
    *
    * @return $this
    */
@@ -414,13 +463,13 @@ class Package {
    *
    * @return $this
    */
-  public function setInfo($info) {
+  public function setInfo(array $info) {
     $this->info = $info;
     return $this;
   }
 
   /**
-   * @param \string[] $features_info
+   * @param array|TRUE $features_info
    *
    * @return $this
    */
@@ -428,7 +477,7 @@ class Package {
     if (isset($features_info['bundle'])) {
       $this->setBundle($features_info['bundle']);
     }
-    $this->setRequired(isset($features_info['required']) ? $features_info['required'] : false);
+    $this->setRequired(isset($features_info['required']) ? $features_info['required'] : FALSE);
     $this->setExcluded(isset($features_info['excluded']) ? $features_info['excluded'] : []);
 
     return $this;
@@ -439,7 +488,7 @@ class Package {
    *
    * @return $this
    */
-  public function setDependencies($dependencies) {
+  public function setDependencies(array $dependencies) {
     $this->dependencies = $dependencies;
     return $this;
   }
@@ -447,7 +496,7 @@ class Package {
   /**
    * @param string $dependency
    *
-   * return $this
+   * @return $this
    */
   public function appendDependency($dependency) {
     $this->dependencies[] = $dependency;
@@ -469,7 +518,7 @@ class Package {
    *
    * @return $this
    */
-  public function setConfig($config) {
+  public function setConfig(array $config) {
     $this->config = $config;
     return $this;
   }
@@ -526,7 +575,7 @@ class Package {
   /**
    * @param \string[] $files
    */
-  public function setFiles($files) {
+  public function setFiles(array $files) {
     $this->files = $files;
   }
 
@@ -547,15 +596,16 @@ class Package {
 
   /**
    * @param \Drupal\Core\Extension\Extension $extension
+   *   The extension.
    */
-  public function setExtension($extension) {
+  public function setExtension(Extension $extension) {
     $this->extension = $extension;
   }
 
   /**
    * @param \string[] $configOrig
    */
-  public function setConfigOrig($configOrig) {
+  public function setConfigOrig(array $configOrig) {
     $this->configOrig = $configOrig;
   }
 

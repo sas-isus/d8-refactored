@@ -83,6 +83,9 @@ settings:
 
   default_limit_total_message: 'No more submissions are permitted.'
   default_limit_user_message: 'No more submissions are permitted.'
+  default_share: false
+  default_share_node: false
+  default_share_theme_name: ''
   dialog: false
   dialog_options:
     narrow:

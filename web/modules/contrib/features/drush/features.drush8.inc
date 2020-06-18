@@ -5,7 +5,6 @@
  * Features module drush integration.
  */
 
-use Drupal\features\ConfigurationItem;
 use Drupal\features\FeaturesBundleInterface;
 use Drupal\features\FeaturesManagerInterface;
 use Drupal\features\Plugin\FeaturesGeneration\FeaturesGenerationWrite;
@@ -138,7 +137,7 @@ function features_drush_command() {
  * The option --name="bundle_name" sets the bundle namespace.
  *
  * @return \Drupal\features\FeaturesAssignerInterface
-*/
+ */
 function _drush_features_options() {
   /** @var \Drupal\features\FeaturesAssignerInterface $assigner */
   $assigner = \Drupal::service('features_assigner');
@@ -161,7 +160,6 @@ function _drush_features_options() {
 function drush_features_status() {
   $args = func_get_args();
   $assigner = _drush_features_options();
-
 
   /** @var \Drupal\features\FeaturesManagerInterface $manager */
   $manager = \Drupal::service('features.manager');
@@ -229,9 +227,7 @@ function drush_features_list_packages($package_name = '') {
         'machine_name' => $package->getMachineName(),
         'status' => $manager->statusLabel($package->getStatus()),
         'version' => $package->getVersion(),
-        'state' => ($state != FeaturesManagerInterface::STATE_DEFAULT)
-          ? $manager->stateLabel($state)
-          : '',
+        'state' => ($state != FeaturesManagerInterface::STATE_DEFAULT) ? $manager->stateLabel($state) : '',
       ];
     }
     return $result;
@@ -265,7 +261,6 @@ function drush_features_list_packages($package_name = '') {
 
 /**
  * Drush command callback for features-import-all.
- *
  */
 function drush_features_import_all() {
   $assigner = _drush_features_options();
@@ -834,7 +829,7 @@ function _drush_features_component_filter($all_components, $patterns = [], $opti
       }
       else {
         // No matches. If the source was a pattern, just carry on, else
-        // error out. Allows for patterns like :*field*
+        // error out. Allows for patterns like :*field*.
         if ($preg_source_pattern[0] != '^') {
           return drush_set_error('', dt('No @state @source components match "@component"', [
             '@state' => $state_string,

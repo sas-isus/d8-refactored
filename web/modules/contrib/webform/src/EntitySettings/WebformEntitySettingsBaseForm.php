@@ -4,6 +4,7 @@ namespace Drupal\webform\EntitySettings;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Form\OptGroup;
 use Drupal\webform\Utility\WebformDialogHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 
@@ -82,6 +83,12 @@ abstract class WebformEntitySettingsBaseForm extends EntityForm {
         // Append default value to an element's description.
         $value = $default_settings["default_$key"];
         if (!is_array($value)) {
+          if (isset($element['#options'])) {
+            $flattened_options = OptGroup::flattenOptions($element['#options']);
+            if (isset($flattened_options[$value])) {
+              $value = $flattened_options[$value];
+            }
+          }
           $element['#description'] .= ($element['#description'] ? '<br /><br />' : '');
           $element['#description'] .= $this->t('Defaults to: %value', ['%value' => $value]);
         }

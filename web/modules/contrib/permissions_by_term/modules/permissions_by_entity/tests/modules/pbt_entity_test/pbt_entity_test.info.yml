@@ -4,7 +4,7 @@ description: 'Permissions by term - Entity test module'
 core: 8.x
 package: Testing
 
-# Information added by Drupal.org packaging script on 2020-05-12
-version: '8.x-2.22'
+# Information added by Drupal.org packaging script on 2020-05-28
+version: '8.x-2.24'
 project: 'permissions_by_term'
-datestamp: 1589297733
+datestamp: 1590654262

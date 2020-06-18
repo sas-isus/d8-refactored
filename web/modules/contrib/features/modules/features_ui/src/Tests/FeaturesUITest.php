@@ -2,7 +2,7 @@
 
 namespace Drupal\features_ui\Tests;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -10,10 +10,13 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *
  * @group features_ui
  */
-class FeaturesUITest extends WebTestBase {
+class FeaturesUITest extends BrowserTestBase {
   use StringTranslationTrait;
 
   /**
+   * The variable.
+   *
+   * @var mixed
    * @todo Remove the disabled strict config schema checking.
    */
   protected $strictConfigSchema = FALSE;
@@ -34,7 +37,8 @@ class FeaturesUITest extends WebTestBase {
     $this->assertText($this->t('You have not yet created any bundles. Before generating features, you may wish to create a bundle to group your features within.'));
     // Creating custom bundle.
     $this->drupalGet('admin/config/development/features/bundle');
-    $this->drupalPostAjaxForm(NULL, ['bundle[bundle_select]' => 'new'], 'bundle[bundle_select]');
+    // @todo: text the AJAX case with a JavaScript test.
+    $this->drupalPostForm(NULL, ['bundle[bundle_select]' => 'new'], 'bundle[bundle_select]');
     $edit = [
       'bundle[name]' => 'foo',
       'bundle[machine_name]' => 'foo',

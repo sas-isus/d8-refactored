@@ -135,11 +135,7 @@ class GcBaseTestCase extends TestCase
 
     public static function getUniqueResponseDate()
     {
-        return [
-            'date' => static::getUniqueDate(),
-            'timezone_type' => static::getUniqueInt(),
-            'timezone' => static::getUniqueString('timezone'),
-        ];
+        return static::getUniqueDate();
     }
 
     public static function getUniqueResponseStatus()
@@ -155,243 +151,267 @@ class GcBaseTestCase extends TestCase
         ];
     }
 
-    public static function getUniqueResponseTab(array $elements)
+    public static function getUniqueResponseElements(array $elementTypes)
     {
-        $tab = [
-            'name' => static::getUniqueString('tab'),
-            'label' => static::getUniqueString('label'),
-            'hidden' => false,
-            'elements' => [],
-        ];
+        $elements = [];
 
-        foreach ($elements as $elementType) {
+        foreach ($elementTypes as $elementType) {
             switch ($elementType) {
                 case 'text':
-                    $tab['elements'][] = static::getUniqueResponseElementText();
+                case 'guideline':
+                    $elements[static::getUniqueString('uuid')] = static::getUniqueResponseElementText();
                     break;
 
                 case 'files':
-                    $tab['elements'][] = static::getUniqueResponseElementFiles();
-                    break;
-
-                case 'section':
-                    $tab['elements'][] = static::getUniqueResponseElementSection();
-                    break;
-
                 case 'choice_radio':
-                    $tab['elements'][] = static::getUniqueResponseElementChoiceRadio();
-                    break;
-
                 case 'choice_checkbox':
-                    $tab['elements'][] = static::getUniqueResponseElementChoiceCheckbox();
+                    $elements[static::getUniqueString('uuid')] = static::getUniqueResponseElementArray($elementType);
                     break;
             }
         }
 
-        return $tab;
+        return $elements;
     }
 
-    public static function getUniqueResponseTemplateTab(array $elements)
+    public static function getUniqueResponseGroup(array $elementTypes)
     {
-        $tab = [
-            'name' => static::getUniqueString('tab'),
-            'label' => static::getUniqueString('label'),
-            'hidden' => false,
-            'elements' => [],
+        $group = [
+            'uuid' => static::getUniqueString('uuid'),
+            'name' => static::getUniqueString('name'),
+            'fields' => [],
         ];
 
-        foreach ($elements as $elementType) {
+        foreach ($elementTypes as $elementType) {
             switch ($elementType) {
                 case 'text':
-                    $tab['elements'][] = static::getUniqueResponseElementText();
+                    $group['fields'][] = static::getUniqueResponseElementTemplateText();
                     break;
 
                 case 'files':
-                    $tab['elements'][] = static::getUniqueResponseElementTemplateFiles();
+                    $group['fields'][] = static::getUniqueResponseElementTemplateFiles();
                     break;
 
-                case 'section':
-                    $tab['elements'][] = static::getUniqueResponseElementSection();
+                case 'guideline':
+                    $group['fields'][] = static::getUniqueResponseElementTemplateGuideline();
                     break;
 
                 case 'choice_radio':
-                    $tab['elements'][] = static::getUniqueResponseElementChoiceRadio();
+                    $group['fields'][] = static::getUniqueResponseElementTemplateChoiceRadio();
                     break;
 
                 case 'choice_checkbox':
-                    $tab['elements'][] = static::getUniqueResponseElementChoiceCheckbox();
+                    $group['fields'][] = static::getUniqueResponseElementTemplateChoiceCheckbox();
                     break;
             }
         }
 
-        return $tab;
-    }
-
-    public static function getUniqueResponseElementTemplateFiles()
-    {
-        return [
-            'name' => static::getUniqueString('el'),
-            'type' => 'files',
-            'label' => static::getUniqueString('label'),
-            'required' => false,
-            'microcopy' => '',
-        ];
+        return $group;
     }
 
     public static function getUniqueResponseElementText()
     {
-        return [
-            'name' => static::getUniqueString('el'),
-            'type' => 'text',
-            'label' => static::getUniqueString('label'),
-            'required' => false,
-            'microcopy' => '',
-            'limit_type' => static::getUniqueString('limit_type'),
-            'limit' => static::getUniqueInt(),
-            'plain_text' => true,
-            'value' => static::getUniqueString('value'),
-        ];
+        return static::getUniqueString('value');
     }
 
-    public static function getUniqueResponseElementFiles()
+    public static function getUniqueResponseElementArray($elementType, $amount = null)
+    {
+        $elements = [];
+        if (!$amount) {
+            $amount = rand(1, 5);
+        }
+
+        for ($i = 0; $i < $amount; $i++) {
+            switch ($elementType) {
+                case 'files':
+                    $elements[] = static::getUniqueResponseElementFile();
+                    break;
+
+                case 'choice_radio':
+                case 'choice_checkbox':
+                    $elements[] = static::getUniqueResponseElementChoice();
+                    break;
+            }
+        }
+
+        return $elements;
+    }
+
+    public static function getUniqueResponseElementFile()
     {
         return [
-            'name' => static::getUniqueString('el'),
-            'type' => 'files',
-            'label' => static::getUniqueString('label'),
-            'required' => false,
-            'microcopy' => '',
-            'user_id' => static::getUniqueInt(),
-            'item_id' => static::getUniqueInt(),
-            'field' => static::getUniqueString('el'),
-            'url' => static::getUniqueString('https://'),
-            'filename' => static::getUniqueString('myFileName'),
+            'file_id' => static::getUniqueInt(),
+            'filename' => static::getUniqueString('file'),
+            'mime_type' => static::getUniqueString('mime_type'),
+            'url' => static::getUniqueString('url'),
+            'optimised_image_url' => self::getUniqueString('optimised_image_url'),
             'size' => static::getUniqueInt(),
-            'created_at' => static::getUniqueDate(),
-            'updated_at' => static::getUniqueDate(),
         ];
     }
 
-    public static function getUniqueResponseElementSection()
+    public static function getUniqueResponseElementChoice()
     {
         return [
-            'name' => static::getUniqueString('el'),
-            'type' => 'section',
-            'title' => static::getUniqueString('title'),
-            'subtitle' => static::getUniqueString('subtitle'),
-        ];
-    }
-
-    public static function getUniqueResponseElementChoiceRadio()
-    {
-        return [
-            'name' => static::getUniqueString('el'),
-            'type' => 'choice_radio',
+            'id' => static::getUniqueInt(),
             'label' => static::getUniqueString('label'),
-            'required' => false,
-            'microcopy' => '',
-            'options' => static::getUniqueResponseElementChoiceOptions(false),
-            'other_option' => false,
         ];
     }
 
-    public static function getUniqueResponseElementChoiceCheckbox()
+    public static function getUniqueResponseElement()
     {
         return [
-            'name' => static::getUniqueString('el'),
-            'type' => 'choice_checkbox',
+            'uuid' => static::getUniqueString('uuid'),
+            'field_type' => '',
             'label' => static::getUniqueString('label'),
-            'required' => false,
-            'microcopy' => '',
-            'options' => static::getUniqueResponseElementChoiceOptions(true),
+            'instructions' => static::getUniqueString('instructions'),
+            'metadata' => [],
         ];
     }
 
-    public static function getUniqueResponseElementChoiceOptions($multiple)
+    public static function getUniqueResponseElementTemplateFiles()
+    {
+        $element = static::getUniqueResponseElement();
+        $element['field_type'] = 'attachment';
+        return $element;
+    }
+
+    public static function getUniqueResponseElementTemplateText()
+    {
+        $element = static::getUniqueResponseElement();
+        $element['field_type'] = 'attachment';
+        $element['metadata'] = [
+            'is_plain' => true,
+            'validation' => [
+                'rule' => static::getUniqueString('rule'),
+                'limit' => static::getUniqueInt(),
+            ],
+        ];
+        return $element;
+    }
+
+    public static function getUniqueResponseElementTemplateGuideline()
+    {
+        $element = static::getUniqueResponseElement();
+        $element['field_type'] = 'guidelines';
+        return $element;
+    }
+
+    public static function getUniqueResponseElementTemplateChoiceRadio()
+    {
+        $element = static::getUniqueResponseElement();
+        $element['field_type'] = 'choice_radio';
+        $element['metadata'] = [
+            'choice_fields' => [
+                'options' => static::getUniqueResponseElementChoiceOptions(),
+            ],
+        ];
+        return $element;
+    }
+
+    public static function getUniqueResponseElementTemplateChoiceCheckbox()
+    {
+        $element = static::getUniqueResponseElement();
+        $element['field_type'] = 'choice_checkbox';
+        $element['metadata'] = [
+            'choice_fields' => [
+                'options' => static::getUniqueResponseElementChoiceOptions(),
+            ],
+        ];
+        return $element;
+    }
+
+    public static function getUniqueResponseElementChoiceOptions()
     {
         $amount = rand(1, 5);
         $keys = range(1, $amount);
         shuffle($keys);
-        $selected = array_slice($keys, 0, rand(0, ($multiple ? $amount : 1)));
         $options = [];
         for ($i = 0; $i < $amount; $i++) {
             $options[] = [
-                'name' => static::getUniqueString('name'),
+                'optionId' => static::getUniqueString('optionId'),
                 'label' => static::getUniqueString('label'),
-                'selected' => in_array($i, $selected),
             ];
         }
 
         return $options;
     }
 
-    public static function getUniqueResponseItem(array $tabs)
+    public static function getUniqueResponseAssignedUsers()
+    {
+        $amount = rand(1, 5);
+        $userIds = [];
+        for ($i = 0; $i < $amount; $i++) {
+            $userIds[] = static::getUniqueInt();
+        }
+
+        return $userIds;
+    }
+
+    public static function getUniqueResponseItem(array $elementTypes = [], array $structure = null)
     {
         $item = [
             'id' => static::getUniqueInt(),
             'project_id' => static::getUniqueInt(),
-            'parent_id' => static::getUniqueInt(),
             'folder_uuid' => static::getUniqueString('folder_uuid'),
             'template_id' => static::getUniqueInt(),
-            'custom_state_id' => static::getUniqueInt(),
+            'structure' => $structure,
+            'structure_uuid' => static::getUniqueString('structure_uuid'),
             'position' => static::getUniqueString('position'),
             'name' => static::getUniqueString('name'),
-            'config' => [],
-            'notes' => static::getUniqueString('notes'),
-            'type' => 'item',
-            'overdue' => false,
             'archived_by' => static::getUniqueInt(),
             'archived_at' => static::getUniqueInt(),
-            'created_at' => static::getUniqueResponseDate(),
-            'updated_at' => static::getUniqueResponseDate(),
-            'status' => [
-                'data' => static::getUniqueResponseStatus(),
-            ],
-            'due_dates' => [
-                'data' => [
-                    static::getUniqueResponseDate(),
-                    static::getUniqueResponseDate(),
-                    static::getUniqueResponseDate(),
-                ],
-            ],
+            'created_at' => static::getUniqueDate(),
+            'updated_at' => static::getUniqueDate(),
+            'next_due_at' => static::getUniqueDate(),
+            'completed_at' => static::getUniqueDate(),
+            'status_id' => static::getUniqueInt(),
+            'assigned_user_ids' => static::getUniqueResponseAssignedUsers(),
+            'assignee_count' => static::getUniqueInt(),
+            'approval_count' => static::getUniqueInt(),
         ];
 
-        foreach ($tabs as $elements) {
-            $item['config'][] = static::getUniqueResponseTab($elements);
+        if (!empty($elementTypes)) {
+            $item['content'] = static::getUniqueResponseElements($elementTypes);
         }
 
         return $item;
     }
 
-    public static function getUniqueResponseTemplate(array $tabs)
+    public static function getUniqueResponseTemplate()
     {
-        $template = [
+        return [
             'id' => static::getUniqueInt(),
-            'project_id' => static::getUniqueInt(),
-            'created_by' => static::getUniqueInt(),
-            'updated_by' => static::getUniqueInt(),
             'name' => static::getUniqueString('name'),
-            'description' => static::getUniqueString('description'),
-            'config' => [],
-            'used_at' => null,
-            'created_at' => static::getUniqueResponseDate(),
+            'number_of_items_using' => static::getUniqueInt(),
+            'structure_uuid' => static::getUniqueString('structure_uuid'),
+            'project_id' => static::getUniqueInt(),
             'updated_at' => static::getUniqueResponseDate(),
-            'usage' => [
-                'item_count' => static::getUniqueInt(),
-            ],
+            'updated_by' => static::getUniqueInt(),
+        ];
+    }
+
+    public static function getUniqueResponseRelated(array $groups = [])
+    {
+        return ['structure' => static::getUniqueResponseStructure($groups)];
+    }
+
+    public static function getUniqueResponseStructure(array $groups = [])
+    {
+        $structure = [
+            'uuid' => static::getUniqueString('uuid'),
+            'groups' => [],
         ];
 
-        foreach ($tabs as $elements) {
-            $template['config'][] = static::getUniqueResponseTemplateTab($elements);
+        foreach ($groups as $elementTypes) {
+            $structure['groups'][] = static::getUniqueResponseGroup($elementTypes);
         }
 
-        return $template;
+        return $structure;
     }
 
     protected static function getUniqueResponseFolder()
     {
         return [
-            'id' => static::getUniqueInt(),
+            'uuid' => static::getUniqueInt(),
             'name' => static::getUniqueString('name'),
             'position' => static::getUniqueString('position'),
             'parent_uuid' => static::getUniqueInt(),

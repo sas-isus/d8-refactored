@@ -77,14 +77,14 @@ class WebformSubmissionForm extends ContentEntityForm {
   protected $pathValidator;
 
   /**
-   * The webform element (plugin) manager.
+   * The webform element plugin manager.
    *
    * @var \Drupal\webform\Plugin\WebformElementManagerInterface
    */
   protected $elementManager;
 
   /**
-   * Webform request handler.
+   * The webform request handler.
    *
    * @var \Drupal\webform\WebformRequestInterface
    */
@@ -181,8 +181,6 @@ class WebformSubmissionForm extends ContentEntityForm {
    *
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   The entity repository.
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
-   *   The entity manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
    * @param \Drupal\Core\Render\RendererInterface $renderer
@@ -497,7 +495,13 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Must be called after WebformHandler::overrideSettings which resets all
     // overridden settings.
     // @see \Drupal\webform\Entity\Webform::invokeHandlers
-    if ($this->getRequest()->query->get('_webform_dialog') && !$webform->getSetting('ajax')) {
+    if ($this->getRequest()->query->get('_webform_dialog') && !$webform->getSetting('ajax', TRUE)) {
+      $webform->setSettingOverride('ajax', TRUE);
+    }
+
+    // If share page (i.e. /webform_share/{webform}), enable Ajax support
+    // when this form is embedded in an iframe.
+    if ($this->isSharePage() && !$webform->getSetting('ajax', TRUE)) {
       $webform->setSettingOverride('ajax', TRUE);
     }
   }
@@ -948,8 +952,8 @@ class WebformSubmissionForm extends ContentEntityForm {
     $webform = $this->getWebform();
     $source_entity = $this->getSourceEntity();
 
-    // Display test message.
-    if ($this->isGet() && $this->operation === 'test') {
+    // Display test message, except on share page.
+    if ($this->isGet() && $this->operation === 'test' && !$this->isSharePage()) {
       $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_TEST, 'warning');
 
       // Display devel generate link for webform or source entity.
@@ -2922,6 +2926,20 @@ class WebformSubmissionForm extends ContentEntityForm {
     else {
       return $default_value;
     }
+  }
+
+  /****************************************************************************/
+  // Share functions.
+  /****************************************************************************/
+
+  /**
+   * Determine if the submission form is being embedded in a share page.
+   *
+   * @return bool
+   *   TRUE the submission form is being embedded in a share page.
+   */
+  protected function isSharePage() {
+    return (strpos($this->getRouteMatch()->getRouteName(), 'entity.webform.share_page') === 0);
   }
 
   /****************************************************************************/

@@ -2,6 +2,7 @@
 
 namespace Cheppers\GatherContent\Tests\Unit;
 
+use Cheppers\GatherContent\DataTypes\Pagination;
 use Cheppers\GatherContent\DataTypes\User;
 use Cheppers\GatherContent\GatherContentClient;
 use GuzzleHttp\Client;
@@ -190,5 +191,51 @@ class GatherContentClientTest extends GcBaseTestCase
         static::expectExceptionMessage($expected['msg']);
 
         $gc->meGet();
+    }
+
+    public function casesParsePagination()
+    {
+        $pagination = new Pagination([
+            'total' => 10,
+            'count' => 100,
+            'per_page' => 10,
+            'current_page' => 1,
+            'total_pages' => 10,
+            'links' => [
+                'next' => 'https://api.gathercontent.com/projects/876243786/items?&page=2',
+            ],
+        ]);
+        return [
+            'basic' => [
+                $pagination,
+                [
+                    'data' => [],
+                    'pagination' => $pagination,
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider casesParsePagination
+     */
+    public function testParsePagination($expected, $responseBody)
+    {
+        $tester = $this->getBasicHttpClientTester([
+            new Response(
+                200,
+                ['Content-Type' => 'application/json'],
+                \GuzzleHttp\json_encode($responseBody)
+            ),
+        ]);
+        $client = $tester['client'];
+        $actual = (new GatherContentClient($client))
+            ->setOptions($this->gcClientOptions)
+            ->itemsGet(123);
+
+        static::assertEquals(
+            json_encode($expected, JSON_PRETTY_PRINT),
+            json_encode($actual['pagination'], JSON_PRETTY_PRINT)
+        );
     }
 }

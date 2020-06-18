@@ -81,4 +81,62 @@ class BaseTest extends GcBaseTestCase
             static::assertEquals($value, $date->{$key}, "Constructor - $key");
         }
     }
+
+    public function casesSerialize()
+    {
+        return [
+            'basic' => [
+                serialize(['id' => 'foo']),
+                [
+                    'id' => 'foo',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider casesSerialize
+     */
+    public function testSerialize($expected, array $data)
+    {
+        $base = new Base($data);
+        static::assertEquals($expected, $base->serialize());
+    }
+
+    public function casesUnserialize()
+    {
+        return [
+            'basic' => [
+                [
+                    'id' => 'foo',
+                ],
+                serialize(['id' => 'foo']),
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider casesUnserialize
+     */
+    public function testUnserialize(array $expected, $data)
+    {
+        $baseExpected = new Base($expected);
+
+        $base = new Base();
+        $base->unserialize($data);
+
+        static::assertEquals($baseExpected->id, $base->id);
+    }
+
+    public function casesSetDefaultContent()
+    {
+        return [
+            'basic' => [
+                'foo',
+                [
+                    'id' => 'foo',
+                ],
+            ],
+        ];
+    }
 }

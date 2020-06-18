@@ -162,6 +162,21 @@
         form_file_limit:
           type: string
           label: 'Form file upload limit'
+        share:
+          type: boolean
+          label: 'Enable form sharing'
+        share_node:
+          type: boolean
+          label: 'Enable form sharing for webform nodes'
+        share_theme_name:
+          type: string
+          label: 'Shared form theme'
+        share_title:
+          type: boolean
+          label: 'Display shared form title'
+        share_page_body_attributes:
+          type: ignore
+          label: 'Shared form page attributes'
         submission_label:
           type: label
           label: 'Default submission label'

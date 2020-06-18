@@ -993,7 +993,7 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    * @param string $variant_id
    *   The webform variant ID.
    *
-   * @return boolean
+   * @return bool
    *   TRUE if a specific webform variant exists.
    */
   public function hasVariant($variant_id);
@@ -1071,7 +1071,7 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    * @throws \Exception
    *   Throws exception if submission was not created using this webform.
    */
-  public function applyVariants(WebformSubmissionInterface $webform_submission = NULL, $variants = [], $force = FALSE);
+  public function applyVariants(WebformSubmissionInterface $webform_submission = NULL, array $variants = [], $force = FALSE);
 
   /**
    * Get variants data from a webform submission.

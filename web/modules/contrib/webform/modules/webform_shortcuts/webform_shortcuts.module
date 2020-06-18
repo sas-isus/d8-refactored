@@ -103,7 +103,7 @@ function webform_shortcuts_preprocess_block(&$variables) {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_FORM_ID_alter() for admin config advanced form.
  */
 function webform_shortcuts_form_webform_admin_config_advanced_form_alter(&$form, FormStateInterface $form_state) {
   $config = \Drupal::config('webform_shortcuts.settings');

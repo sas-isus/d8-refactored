@@ -9,7 +9,7 @@ use Drupal\Tests\webform\Functional\WebformBrowserTestBase;
 /**
  * Tests for webform submission permissions.
  *
- * @group Webform
+ * @group webform
  */
 class WebformAccessSubmissionPermissionsTest extends WebformBrowserTestBase {
 

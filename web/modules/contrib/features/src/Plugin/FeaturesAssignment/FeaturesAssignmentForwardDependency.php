@@ -16,6 +16,7 @@ use Drupal\features\FeaturesAssignmentMethodBase;
  * )
  */
 class FeaturesAssignmentForwardDependency extends FeaturesAssignmentMethodBase {
+
   /**
    * {@inheritdoc}
    */
@@ -57,7 +58,7 @@ class FeaturesAssignmentForwardDependency extends FeaturesAssignmentMethodBase {
    * @return string[]
    *   The names of configuration items, in dependency order.
    */
-  protected function dependencyOrder($config_collection) {
+  protected function dependencyOrder(array $config_collection) {
     // Populate a graph.
     $graph = [];
     foreach ($config_collection as $config) {

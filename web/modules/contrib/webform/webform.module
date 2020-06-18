@@ -23,8 +23,8 @@ use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Plugin\WebformElement\ManagedFile;
 use Drupal\webform\Utility\Mail;
-use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
+use Drupal\webform\Utility\WebformFormHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\WebformInterface;
 
@@ -261,7 +261,7 @@ function webform_menu_local_tasks_alter(&$data, $route_name, RefinableCacheableD
     }
   }
 
-  // Allow webform query string parameters to be transfered
+  // Allow webform query string parameters to be transferred
   // from canonical to test URL.
   $route_names = [
     'entity.webform.canonical', 'entity.webform.test_form',
@@ -345,7 +345,7 @@ function webform_token_info_alter(&$data) {
   $more = _webform_token_render_more(t('Learn about token suffixes'), $token_suffixes);
   foreach ($data['types'] as $type => &$info) {
     if (strpos($type, 'webform') === 0) {
-      if (!empty($info['description'] && isset($info['description']))) {
+      if (isset($info['description']) && !empty($info['description'])) {
         $description = $info['description'] . $more;
       }
       else {
@@ -587,7 +587,16 @@ function _webform_page_attachments(array &$attachments) {
 
   // Attach variant randomization JavaScript.
   $route_name = \Drupal::routeMatch()->getRouteName();
-  if (in_array($route_name, ['entity.webform.canonical', 'entity.webform.test_form', 'entity.node.canonical', 'entity.node.webform.test_form'])) {
+  $route_names = [
+    'entity.webform.canonical',
+    'entity.webform.test_form',
+    'entity.node.canonical',
+    'entity.node.webform.test_form',
+    // Webform Share module routes.
+    'entity.webform.share_page',
+    'entity.webform.share_page.javascript',
+  ];
+  if (in_array($route_name, $route_names)) {
     $variants = [];
     $element_keys = $webform->getElementsVariant();
     foreach ($element_keys as $element_key) {
@@ -623,7 +632,7 @@ function _webform_page_attachments(array &$attachments) {
   }
   if (search !== location.search) {
     location.replace(location.pathname + search);
-  } 
+  }
 })();
 "),
           '#weight' => 1000,
@@ -765,19 +774,11 @@ function webform_webform_access_rules() {
  * @param string $key
  *   The element property to add the states attribute to.
  *
- * @see drupal_process_states()
+ * @deprecated Scheduled for removal in Webform 8.x-6.x
+ *   Use \Drupal\Core\Form\FormHelper::processStates instead.
  */
 function webform_process_states(array &$elements, $key = '#attributes') {
-  if (empty($elements['#states'])) {
-    return;
-  }
-
-  $elements['#attached']['library'][] = 'core/drupal.states';
-  $elements[$key]['data-drupal-states'] = Json::encode($elements['#states']);
-  // Make sure to include target class for this container.
-  if (empty($elements[$key]['class']) || !WebformArrayHelper::inArray(['js-form-item', 'js-form-submit', 'js-form-wrapper'], $elements[$key]['class'])) {
-    $elements[$key]['class'][] = 'js-form-item';
-  }
+  WebformFormHelper::processStates($elements, $key);
 }
 
 /******************************************************************************/

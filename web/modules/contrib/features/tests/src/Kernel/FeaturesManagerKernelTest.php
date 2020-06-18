@@ -7,6 +7,8 @@ use Drupal\features\ConfigurationItem;
 use Drupal\features\Package;
 
 /**
+ * The Feature Manager Kernel Test.
+ *
  * @group features
  */
 class FeaturesManagerKernelTest extends KernelTestBase {
@@ -18,11 +20,15 @@ class FeaturesManagerKernelTest extends KernelTestBase {
   protected $strictConfigSchema = FALSE;
 
   /**
+   * The Feature Manager Interface.
+   *
    * @var \Drupal\features\FeaturesManagerInterface
    */
   protected $featuresManager;
 
   /**
+   * The Config Factory.
+   *
    * @var \Drupal\Core\Config\ConfigFactory
    */
   protected $configFactory;

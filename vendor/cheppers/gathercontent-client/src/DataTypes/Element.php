@@ -5,15 +5,9 @@ namespace Cheppers\GatherContent\DataTypes;
 class Element extends Base
 {
     /**
-     * @var array
+     * {@inheritdoc}
      */
-    public static $type2Class = [
-        'text' => ElementText::class,
-        'files' => ElementFiles::class,
-        'section' => ElementSection::class,
-        'choice_checkbox' => ElementCheckbox::class,
-        'choice_radio' => ElementRadio::class,
-    ];
+    protected $unusedProperties = ['id'];
 
     /**
      * @see https://docs.gathercontent.com/reference#tab-structure
@@ -23,11 +17,6 @@ class Element extends Base
     public $type = '';
 
     /**
-     * @var bool
-     */
-    public $required = false;
-
-    /**
      * @var string
      */
     public $label = '';
@@ -35,30 +24,12 @@ class Element extends Base
     /**
      * @var string
      */
-    public $microCopy = '';
+    public $instructions = '';
 
     /**
-     * {@inheritdoc}
+     * @var array
      */
-    protected $unusedProperties = ['id'];
-
-    /**
-     * @return mixed
-     */
-    public function getValue()
-    {
-        return null;
-    }
-
-    /**
-     * @param mixed $value
-     *
-     * @return $this
-     */
-    public function setValue($value)
-    {
-        return $this;
-    }
+    public $metaData = [];
 
     /**
      * {@inheritdoc}
@@ -69,11 +40,11 @@ class Element extends Base
         $this->propertyMapping = array_replace(
             $this->propertyMapping,
             [
-                'name' => 'id',
-                'type' => 'type',
+                'uuid' => 'id',
+                'field_type' => 'type',
                 'label' => 'label',
-                'required' => 'required',
-                'microcopy' => 'microCopy',
+                'instructions' => 'instructions',
+                'metadata' => 'metaData',
             ]
         );
 

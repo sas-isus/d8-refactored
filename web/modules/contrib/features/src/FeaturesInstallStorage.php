@@ -25,25 +25,25 @@ class FeaturesInstallStorage extends ExtensionInstallStorage {
    * Sets includeProfile to FALSE.
    *
    * @param \Drupal\Core\Config\StorageInterface $config_storage
-   *   The active configuration store where the list of installed modules and
+   *   The active configuration store where the list of enabled modules and
    *   themes is stored.
    * @param string $directory
    *   The directory to scan in each extension to scan for files. Defaults to
-   *   'config/install'.
+   *   'config/install'. This parameter will be mandatory in Drupal 9.0.0.
    * @param string $collection
    *   (optional) The collection to store configuration in. Defaults to the
-   *   default collection.
+   *   default collection. This parameter will be mandatory in Drupal 9.0.0.
+   * @param bool $include_profile
+   *   (optional) Whether to include the install profile in extensions to
+   *   search and to get overrides from. This parameter will be mandatory in
+   *   Drupal 9.0.0.
+   * @param string|null $profile
+   *   (optional) The current installation profile. This parameter will be
+   *   mandatory in Drupal 9.0.0.
    */
-  public function __construct(StorageInterface $config_storage, $directory = self::CONFIG_INSTALL_DIRECTORY, $collection = StorageInterface::DEFAULT_COLLECTION) {
-    list($major, $minor, ) = explode('.', \Drupal::VERSION);
-    if ($major == 8 && $minor > 2) {
-      // D8.3 added the %profile% argument.
-      $profile = \Drupal::installProfile();
-      parent::__construct($config_storage, $directory, $collection, FALSE, $profile);
-    }
-    else {
-      parent::__construct($config_storage, $directory, $collection, FALSE);
-    }
+  public function __construct(StorageInterface $config_storage, $directory = self::CONFIG_INSTALL_DIRECTORY, $collection = StorageInterface::DEFAULT_COLLECTION, $include_profile = TRUE, $profile = NULL) {
+    // @todo: determine if we should be setting $include_profile to FALSE.
+    parent::__construct($config_storage, $directory, $collection, FALSE, $profile);
   }
 
   /**
@@ -57,25 +57,28 @@ class FeaturesInstallStorage extends ExtensionInstallStorage {
    * \Drupal\Core\Config\ConfigInstaller and
    * \Drupal\Core\Config\TypedConfigManager.
    *
-   * NOTE: This code is copied from ExtensionInstallStorage::getAllFolders() with
-   * the following changes (Notes in CHANGED below)
+   * NOTE: This code is copied from ExtensionInstallStorage::getAllFolders()
+   * with the following changes (Notes in CHANGED below)
    *   - Load all modules whether installed or not
    *
    * @return array
    *   An array mapping config object names with directories.
    */
   public function getAllFolders() {
+    // @todo: update to bring in upstream changes from the method this was
+    // forked from.
     if (!isset($this->folders)) {
       $this->folders = [];
       $this->folders += $this->getCoreNames();
 
       $install_profile = Settings::get('install_profile');
-      $profile = drupal_get_profile();
+      $profile = $this->installProfile;
       $extensions = $this->configStorage->read('core.extension');
       // @todo Remove this scan as part of https://www.drupal.org/node/2186491
       $listing = new ExtensionDiscovery(\Drupal::root());
 
-      // CHANGED START: Add profile directories for any bundles that use a profile.
+      // CHANGED START: Add profile directories for any bundles that use a
+      // profile.
       $listing->setProfileDirectoriesFromSettings();
       $profile_directories = $listing->getProfileDirectories();
       if ($this->includeProfile) {
@@ -94,16 +97,14 @@ class FeaturesInstallStorage extends ExtensionInstallStorage {
         }
       }
       $listing->setProfileDirectories($profile_directories);
-      // CHANGED END
-
+      // CHANGED END.
       if (!empty($extensions['module'])) {
 
         // CHANGED START: Find ANY modules, not just installed ones.
-        //$modules = $extensions['module'];
+        // $modules = $extensions['module'];.
         $module_list_scan = $listing->scan('module');
         $modules = $module_list_scan;
-        // CHANGED END
-
+        // CHANGED END.
         // Remove the install profile as this is handled later.
         unset($modules[$install_profile]);
         $profile_list = $listing->scan('profile');
@@ -129,7 +130,7 @@ class FeaturesInstallStorage extends ExtensionInstallStorage {
         }
         $this->folders += $this->getComponentNames($features_list);
         $this->folders += $this->getComponentNames($module_list);
-        // CHANGED END
+        // CHANGED END.
       }
       if (!empty($extensions['theme'])) {
         $theme_list_scan = $listing->scan('theme');

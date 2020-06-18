@@ -40,6 +40,11 @@
               })
               .click(function () {
                 $button.click();
+              })
+              .keydown(function (event) {
+                if (event.which === 13) {
+                  $button.click();
+                }
               });
             // Only allow the marker to be tabbable.
             $progress.find('.progress-marker').attr('tabindex', 0);

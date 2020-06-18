@@ -283,14 +283,14 @@ class ConfigurationItem {
   }
 
   /**
-   * @return boolean
+   * @return bool
    */
   public function isExcluded() {
     return $this->excluded;
   }
 
   /**
-   * @param boolean $excluded
+   * @param bool $excluded
    *
    * @return ConfigurationItem
    */
@@ -300,14 +300,14 @@ class ConfigurationItem {
   }
 
   /**
-   * @return boolean
+   * @return bool
    */
   public function isProviderExcluded() {
     return $this->providerExcluded;
   }
 
   /**
-   * @param boolean $providerExcluded
+   * @param bool $providerExcluded
    *
    * @return ConfigurationItem
    */
@@ -343,7 +343,7 @@ class ConfigurationItem {
    *
    * @return ConfigurationItem
    */
-  public function setPackageExcluded($packageExcluded) {
+  public function setPackageExcluded(array $packageExcluded) {
     $this->packageExcluded = $packageExcluded;
     return $this;
   }

@@ -15,6 +15,7 @@ use Drupal\features\FeaturesAssignmentMethodBase;
  * )
  */
 class FeaturesAssignmentNamespace extends FeaturesAssignmentMethodBase {
+
   /**
    * {@inheritdoc}
    */

@@ -810,6 +810,11 @@ abstract class OptionsBase extends WebformElementBase {
         }
       }
       else {
+        // If the trigger is 'filled or 'empty' then return the value.
+        if ($trigger === 'filled' || $trigger === 'empty') {
+          return $value;
+        }
+
         if ($this->hasMultipleValues($element)) {
           // Return array of valid #options.
           return array_intersect($value, array_keys($options));
@@ -905,12 +910,28 @@ abstract class OptionsBase extends WebformElementBase {
       ],
     ];
 
+    // Sort options (only applies to select menus).
+    // @see template_preprocess_select()
+    // @see webform_preprocess_select()
+    $form['options']['sort_options'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Sort options'),
+      '#description' => $this->t('Sort the options by their (translated) labels.'),
+      '#return_value' => TRUE,
+    ];
+
     $form['options']['options_randomize'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Randomize options'),
       '#description' => $this->t('Randomizes the order of the options when they are displayed in the webform.'),
       '#return_value' => TRUE,
     ];
+
+    if ($this->hasProperty('options_randomize') && $this->hasProperty('sort_options')) {
+      $form['options']['options_randomize']['#states']['visible'] = [
+        ':input[name="properties[sort_options]"]' => ['checked' => FALSE],
+      ];
+    }
 
     // Other.
     $states_textfield_or_number = [

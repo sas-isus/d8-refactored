@@ -878,7 +878,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         return ($is_raw) ? $source_entity->getEntityTypeId . ':' . $source_entity->id() : ($source_entity->hasLinkTemplate('canonical') ? $source_entity->toLink() : $source_entity->label());
 
       case 'langcode':
-        $langcode = $entity->langcode->value;
+        $langcode = $entity->getLangcode();
         if (!$langcode) {
           return '';
         }
@@ -1306,7 +1306,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       // Must manually initialize the pager because the DISTINCT clause in the
       // query is breaking the row counting.
       // @see webform_query_alter()
-      pager_default_initialize($this->total, $this->limit);
+      \Drupal::service('pager.manager')->createPager($this->total, $this->limit);
       return $result;
     }
     else {

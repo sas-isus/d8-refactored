@@ -65,6 +65,11 @@ settings:
   form_access_denied_message: ''
   form_access_denied_attributes: {  }
   form_file_limit: ''
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
   submission_label: ''
   submission_log: false
   submission_views: {  }
@@ -255,5 +260,21 @@ variants:
         results_disabled: true
         confirmation_message: 'No results were saved to the database.'
       elements: ''
+      handlers: {  }
+      debug: true
+  custom_form_properties:
+    id: override
+    label: Elements
+    notes: 'Alters custom form properties.'
+    variant_id: elements
+    element_key: variant
+    status: true
+    weight: 0
+    settings:
+      settings: {  }
+      elements: |
+        '#method': get
+        '#action': 'https://drupal.org'
+        
       handlers: {  }
       debug: true

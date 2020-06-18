@@ -9,7 +9,7 @@ span.features-item-list span {
 
 .features-listing span.features-override,
 .features-listing a.features-override {
-  background: #FFCE6F;
+  background: #ffce6f;
   border-radius: 5px;
   margin-right: 5px;
   padding: 2px 5px;
@@ -18,8 +18,8 @@ span.features-item-list span {
 
 .features-listing span.features-detected,
 .features-listing a.features-detected {
-  color:#68a;
-  background:#def;
+  color: #68a;
+  background: #def;
   border-radius: 5px;
   margin-right: 5px;
   padding: 2px 5px;
@@ -49,7 +49,7 @@ span.features-item-list span {
 .features-listing span.features-missing,
 .features-listing a.features-missing {
   color: #fff;
-  background-color: #0E5EA9 !important;
+  background-color: #0e5ea9 !important;
   border-radius: 5px;
   margin-right: 5px;
   padding: 2px 5px;
@@ -129,21 +129,21 @@ tr.features-export-header-row td {
   clear: left;
 }
 
-div.features-export-list  {
+div.features-export-list {
   font-weight: normal;
   font-size: 12px;
-  border: 1px solid #CCC;
+  border: 1px solid #ccc;
   border-top-width: 0;
   overflow: hidden;
   padding: 0 10px 0 30px;
 }
 
 span.features-component-list span {
-  white-space:nowrap;
-  margin-right:5px;
-  padding:2px 5px;
-  background:#eee;
-  border-radius:5px;
+  white-space: nowrap;
+  margin-right: 5px;
+  padding: 2px 5px;
+  background: #eee;
+  border-radius: 5px;
 }
 
 div.features-export-empty {
@@ -156,13 +156,13 @@ span.features-component-list span.features-conflict {
 }
 
 span.features-component-list .features-detected {
-  color:#68a;
-  background:#def;
+  color: #68a;
+  background: #def;
 }
 
 span.features-component-list .features-dependency {
-  color:#999;
-  background:#f8f8f8;
+  color: #999;
+  background: #f8f8f8;
 }
 
 #features-legend .fieldset-wrapper span {
@@ -170,7 +170,7 @@ span.features-component-list .features-dependency {
   color: black;
   display: inline-block;
   background: transparent;
-  border: 1px solid #DDD;
+  border: 1px solid #ddd;
   border-radius: 5px;
   white-space: nowrap;
   padding: 0 8px;
@@ -182,14 +182,14 @@ span.features-component-list .features-dependency {
 #features-export-wrapper .component-detected .form-type-checkbox,
 #features-legend .fieldset-wrapper .component-detected {
   font-style: italic;
-  color:#68a;
-  background:#def;
+  color: #68a;
+  background: #def;
   border-width: 0;
 }
 #features-export-wrapper .component-added .form-type-checkbox,
 #features-legend .fieldset-wrapper .component-added {
   font-weight: bold;
-  background: #EEE;
+  background: #eee;
   border-width: 0;
 }
 #features-export-wrapper .component-conflict.form-type-checkbox,
@@ -235,12 +235,12 @@ span.features-component-list .features-dependency {
   margin: 5px 5px;
   padding: 0 5px;
   background: transparent;
-  background: #EEE;
+  background: #eee;
   border-radius: 5px;
   cursor: pointer;
 }
 #features-filter span:hover {
-  background:#def;
+  background: #def;
 }
 
 #features-export-wrapper div.features-export-parent {
@@ -248,8 +248,8 @@ span.features-component-list .features-dependency {
   margin: 0 0 10px;
 }
 
-details.features-export-component  {
-  background: #F3F8FB;
+details.features-export-component {
+  background: #f3f8fb;
   margin: 0;
   padding: 0 5px;
 }

@@ -2,6 +2,7 @@
 
 namespace Drupal\features\Plugin\FeaturesAssignment;
 
+use Drupal\Core\Extension\Extension;
 use Drupal\features\FeaturesAssignmentMethodBase;
 use Drupal\features\FeaturesManagerInterface;
 
@@ -16,6 +17,7 @@ use Drupal\features\FeaturesManagerInterface;
  * )
  */
 class FeaturesAssignmentExisting extends FeaturesAssignmentMethodBase {
+
   /**
    * Calls assignConfigPackage without allowing exceptions to abort us.
    *
@@ -24,7 +26,7 @@ class FeaturesAssignmentExisting extends FeaturesAssignmentMethodBase {
    * @param \Drupal\Core\Extension\Extension $extension
    *   An Extension object.
    */
-  protected function safeAssignConfig($machine_name, $extension) {
+  protected function safeAssignConfig($machine_name, Extension $extension) {
     $config = $this->featuresManager->listExtensionConfig($extension);
     try {
       $this->featuresManager->assignConfigPackage($machine_name, $config);

@@ -158,10 +158,10 @@ interface FeaturesAssignerInterface {
   /**
    * Creates a new bundle by duplicating the default bundle and customizing.
    *
-   * @param string $machine_name
-   *   Machine name.
    * @param string $name
    *   (optional) Human readable name of the bundle.
+   * @param string $machine_name
+   *   Machine name.
    * @param string $description
    *   (optional) Description of the bundle.
    * @param bool $is_profile

@@ -8,7 +8,6 @@ use Drupal\Core\Config\ExtensionInstallStorage;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\features\Entity\FeaturesBundle;
 
 /**
  * Class responsible for performing package assignment.
@@ -61,7 +60,7 @@ class FeaturesAssigner implements FeaturesAssignerInterface {
   /**
    * Bundles.
    *
-   * @var array of \Drupal\features\FeaturesBundleInterface
+   * @var \Drupal\features\FeaturesBundleInterface[]
    */
   protected $bundles;
 
@@ -76,7 +75,7 @@ class FeaturesAssigner implements FeaturesAssignerInterface {
    * Constructs a new FeaturesAssigner object.
    *
    * @param \Drupal\features\FeaturesManagerInterface $features_manager
-   *    The features manager.
+   *   The features manager.
    * @param \Drupal\Component\Plugin\PluginManagerInterface $assigner_manager
    *   The package assignment methods plugin manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -134,7 +133,7 @@ class FeaturesAssigner implements FeaturesAssignerInterface {
   }
 
   /**
-   * Clean up the package list after all config has been assigned
+   * Clean up the package list after all config has been assigned.
    */
   protected function cleanup() {
     $packages = $this->featuresManager->getPackages();

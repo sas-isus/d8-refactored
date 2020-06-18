@@ -33,7 +33,7 @@ class FeaturesController implements ContainerInjectionInterface {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      new FileDownloadController(),
+      FileDownloadController::create($container),
       $container->get('csrf_token')
     );
   }

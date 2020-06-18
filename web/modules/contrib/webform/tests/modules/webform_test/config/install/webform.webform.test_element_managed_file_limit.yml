@@ -34,6 +34,7 @@ elements: |
       managed_file:
         '#type': managed_file
         '#title': managed_file
+  
 css: ''
 javascript: ''
 settings:
@@ -75,6 +76,11 @@ settings:
   form_access_denied_message: ''
   form_access_denied_attributes: {  }
   form_file_limit: '1 MB'
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
   submission_label: ''
   submission_log: false
   submission_views: {  }

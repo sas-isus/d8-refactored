@@ -7,8 +7,7 @@ use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Extension\Extension;
 
 /**
- * Wraps FeaturesInstallStorage to support multiple configuration
- * directories.
+ * Wraps FeaturesInstallStorage to support multiple configuration directories.
  */
 class FeaturesExtensionStorages implements FeaturesExtensionStoragesInterface {
 

@@ -7,7 +7,7 @@ use Drupal\webform\Entity\Webform;
 /**
  * Tests for webform conditional wizard.
  *
- * @group Webform
+ * @group webform
  */
 class WebformWizardConditionalTest extends WebformWizardTestBase {
 
@@ -33,9 +33,9 @@ class WebformWizardConditionalTest extends WebformWizardTestBase {
     ];
     $this->drupalPostForm('/webform/test_form_wizard_conditional', $edit, 'Next Page >');
     $this->assertCurrentPage('Page 2', 'page_2');
-    $this->drupalPostForm(NULL, [], t('Next Page >'));
+    $this->drupalPostForm(NULL, [], 'Next Page >');
     $this->assertCurrentPage('Page 4', 'page_4');
-    $this->drupalPostForm(NULL, [], t('Submit'));
+    $this->drupalPostForm(NULL, [], 'Submit');
     $this->assertCurrentPage('Complete', 'webform_confirmation');
     $sid = $this->getLastSubmissionId($webform);
     $this->assertNotEmpty($sid);

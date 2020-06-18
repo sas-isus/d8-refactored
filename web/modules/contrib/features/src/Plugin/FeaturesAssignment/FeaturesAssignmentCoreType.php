@@ -21,6 +21,7 @@ use Drupal\features\FeaturesAssignmentMethodBase;
  * )
  */
 class FeaturesAssignmentCoreType extends FeaturesAssignmentMethodBase {
+
   /**
    * {@inheritdoc}
    */
@@ -32,6 +33,5 @@ class FeaturesAssignmentCoreType extends FeaturesAssignmentMethodBase {
     $package = $this->featuresManager->initPackage($machine_name, $name, $description, 'module', $current_bundle);
     $this->assignPackageByConfigTypes($package->getMachineName(), $force);
   }
-
 
 }

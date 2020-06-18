@@ -31,6 +31,11 @@ class FeaturesGenerateTest extends KernelTestBase {
    */
   protected $generator;
 
+  /**
+   * @var \Drupal\Core\File\FileSystem
+   */
+  protected $fileSystem;
+
   protected $strictConfigSchema = FALSE;
 
   /**
@@ -50,6 +55,7 @@ class FeaturesGenerateTest extends KernelTestBase {
     $this->featuresManager = \Drupal::service('features.manager');
     $this->generator = \Drupal::service('features_generator');
     $this->assigner = \Drupal::service('features_assigner');
+    $this->fileSystem = \Drupal::service('file_system');
 
     $this->featuresManager->initPackage(self::PACKAGE_NAME, 'My test package');
     $package = $this->featuresManager->getPackage(self::PACKAGE_NAME);
@@ -61,7 +67,7 @@ class FeaturesGenerateTest extends KernelTestBase {
    * @covers \Drupal\features\Plugin\FeaturesGeneration\FeaturesGenerationArchive
    */
   public function testExportArchive() {
-    $filename = file_directory_temp() . '/' . self::PACKAGE_NAME . '.tar.gz';
+    $filename = $this->fileSystem->getTempDirectory() . '/' . self::PACKAGE_NAME . '.tar.gz';
     if (file_exists($filename)) {
       unlink($filename);
     }
@@ -87,15 +93,18 @@ class FeaturesGenerateTest extends KernelTestBase {
     $this->assertEquals($expected_info, $info, 'Incorrect info file generated');
   }
 
+  /**
+   *
+   */
   public function testGeneratorWithBundle() {
-    $filename = file_directory_temp() . '/' . self::BUNDLE_NAME . '_' . self::PACKAGE_NAME . '.tar.gz';
+    $filename = $this->fileSystem->getTempDirectory() . '/' . self::BUNDLE_NAME . '_' . self::PACKAGE_NAME . '.tar.gz';
     if (file_exists($filename)) {
       unlink($filename);
     }
     $this->assertFalse(file_exists($filename), 'Archive file already exists.');
 
     $bundle = FeaturesBundle::create([
-      'machine_name' =>  self::BUNDLE_NAME
+      'machine_name' => self::BUNDLE_NAME,
     ]);
 
     $this->generator->generatePackages('archive', $bundle, [self::PACKAGE_NAME]);
@@ -103,7 +112,7 @@ class FeaturesGenerateTest extends KernelTestBase {
     $package = $this->featuresManager->getPackage(self::PACKAGE_NAME);
     $this->assertNull($package);
 
-    $package = $this->featuresManager->getPackage( self::BUNDLE_NAME . '_' . self::PACKAGE_NAME);
+    $package = $this->featuresManager->getPackage(self::BUNDLE_NAME . '_' . self::PACKAGE_NAME);
     $this->assertEquals(self::BUNDLE_NAME . '_' . self::PACKAGE_NAME, $package->getMachineName());
     $this->assertEquals(self::BUNDLE_NAME, $package->getBundle());
 
@@ -120,7 +129,7 @@ class FeaturesGenerateTest extends KernelTestBase {
     $this->featuresManager->setRoot('vfs://drupal');
 
     $package = $this->featuresManager->getPackage(self::PACKAGE_NAME);
-    // Find out where package will be exported
+    // Find out where package will be exported.
     list($full_name, $path) = $this->featuresManager->getExportInfo($package, $this->assigner->getBundle());
     $path = 'vfs://drupal/' . $path . '/' . $full_name;
     if (file_exists($path)) {
@@ -179,7 +188,7 @@ class FeaturesGenerateTest extends KernelTestBase {
     $this->assertEquals($file_contents, file_get_contents($css_file), 'Extra file contents not retained');
 
     // Next, test that generating an Archive picks up the extra files.
-    $filename = file_directory_temp() . '/' . self::PACKAGE_NAME . '.tar.gz';
+    $filename = $this->fileSystem->getTempDirectory() . '/' . self::PACKAGE_NAME . '.tar.gz';
     if (file_exists($filename)) {
       unlink($filename);
     }
@@ -207,4 +216,5 @@ class FeaturesGenerateTest extends KernelTestBase {
     $this->assertEquals($expected_info, $info, 'Incorrect info file generated');
     $this->assertEquals($file_contents, $archive->extractInString(self::PACKAGE_NAME . '/' . self::PACKAGE_NAME . '.css'), 'Extra file contents not retained');
   }
+
 }

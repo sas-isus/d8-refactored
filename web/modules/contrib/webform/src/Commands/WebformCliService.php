@@ -577,7 +577,7 @@ class WebformCliService implements WebformCliServiceInterface {
       $dependencies = FALSE;
     }
 
-    $files = file_scan_directory($file_directory_path, ($prefix) ? '/^' . preg_quote($prefix, '/.') . '.*\.yml$/' : '/.*\.yml$/');
+    $files = \Drupal::service('file_system')->scanDirectory($file_directory_path, ($prefix) ? '/^' . preg_quote($prefix, '/.') . '.*\.yml$/' : '/.*\.yml$/');
     $this->drush_print($this->dt("Reviewing @count YAML configuration '@prefix.*' files in '@module'.", ['@count' => count($files), '@module' => $target, '@prefix' => $prefix]));
 
     $total = 0;

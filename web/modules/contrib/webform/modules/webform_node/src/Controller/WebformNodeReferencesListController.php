@@ -35,21 +35,21 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
   protected $dateFormatter;
 
   /**
-   * Webform submission storage.
+   * The webform submission storage.
    *
    * @var \Drupal\webform\WebformSubmissionStorageInterface
    */
   protected $submissionStorage;
 
   /**
-   * Node type storage.
+   * The node type storage.
    *
    * @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface
    */
   protected $nodeTypeStorage;
 
   /**
-   * Field config storage.
+   * The field config storage.
    *
    * @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface
    */
@@ -359,6 +359,14 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
       $operations['results'] = [
         'title' => $this->t('Results'),
         'url' => Url::fromRoute('entity.node.webform.results_submissions', $route_parameters),
+      ];
+    }
+    if ($entity->access('update')
+      && $this->webform->getSetting('share_node', TRUE)
+      && $this->moduleHandler()->moduleExists('webform_share')) {
+      $operations['share'] = [
+        'title' => $this->t('Share'),
+        'url' => Url::fromRoute('entity.node.webform.share_embed', $route_parameters),
       ];
     }
     if ($entity->access('delete')) {

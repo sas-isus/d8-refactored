@@ -70,7 +70,7 @@ class AssignmentAlterForm extends AssignmentFormBase {
     $this->currentBundle->setAssignmentSettings(self::METHOD_ID, $settings)->save();
 
     $this->setRedirect($form_state);
-    drupal_set_message($this->t('Package assignment configuration saved.'));
+    $this->messenger()->addStatus($this->t('Package assignment configuration saved.'));
   }
 
 }

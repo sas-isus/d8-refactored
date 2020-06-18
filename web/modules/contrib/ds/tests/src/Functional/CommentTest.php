@@ -118,8 +118,8 @@ class CommentTest extends CommentTestBase {
     $content = $display->get('content');
     $hidden = $display->get('hidden');
 
-    $this->assertFalse(isset($content['comment']), 'Comment is not part of the content region');
-    $this->assertTrue(isset($hidden['comment']), 'Comment is part of the hidden region');
+    $this->assertArrayNotHasKey('comment', $content, 'Comment is not part of the content region');
+    $this->assertArrayHasKey('comment', $hidden, 'Comment is part of the hidden region');
   }
 
   /**

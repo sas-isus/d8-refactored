@@ -224,6 +224,15 @@ webform.settings:
         confirmation_back_classes:
           type: string
           label: 'Confirmation back link CSS classes'
+        default_share:
+          type: boolean
+          label: 'Enable form sharing'
+        default_share_node:
+          type: boolean
+          label: 'Enable form sharing for webform nodes'
+        default_share_theme_name:
+          type: string
+          label: 'Default shared form theme'
         dialog:
           type: boolean
           label: 'Enable webform dialog support'

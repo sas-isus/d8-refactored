@@ -37,7 +37,9 @@ interface FeaturesManagerInterface {
    * Set the app.root.
    *
    * Should only be used by tests.
+   *
    * @param string $root
+   *   The root.
    */
   public function setRoot($root);
 
@@ -154,7 +156,7 @@ interface FeaturesManagerInterface {
 
   /**
    * Gets a specific package.
-   * Similar to getPackage but will also match package FullName
+   * Similar to getPackage but will also match package FullName.
    *
    * @param string $machine_name
    *   Full machine name of package.
@@ -200,7 +202,7 @@ interface FeaturesManagerInterface {
    * @param string $namespace
    *   The namespace to use.
    * @param bool $only_exported
-   *   If true, only filter out packages that are exported
+   *   If true, only filter out packages that are exported.
    *
    * @return \Drupal\features\Package[]
    *   An array of packages.
@@ -269,9 +271,11 @@ interface FeaturesManagerInterface {
   public function getExtensionInfo(Extension $extension);
 
   /**
-   * Determine if extension is enabled
+   * Determine if extension is enabled.
    *
    * @param \Drupal\Core\Extension\Extension $extension
+   *   The extension.
+   *
    * @return bool
    */
   public function extensionEnabled(Extension $extension);
@@ -291,6 +295,7 @@ interface FeaturesManagerInterface {
    *   (optional) Bundle to use to add profile directories to the scan.
    * @param \Drupal\Core\Extension\Extension $extension
    *   (optional) An Extension object.
+   *
    * @return \Drupal\features\Package
    *   The created package array.
    */
@@ -379,8 +384,8 @@ interface FeaturesManagerInterface {
   /**
    * Assigns dependencies from config items into the package.
    *
-   * @param \Drupal\features\Package[] $packages
-   *   An array of packages. NULL for all packages
+   * @param \Drupal\features\Package[] $package
+   *   An array of packages. NULL for all packages.
    */
   public function assignPackageDependencies(Package $package = NULL);
 
@@ -419,7 +424,7 @@ interface FeaturesManagerInterface {
   /**
    * Lists the types of configuration available on the site.
    *
-   * @param boolean $bundles_only
+   * @param bool $bundles_only
    *   Whether to list only configuration types that provide bundles.
    *
    * @return array
@@ -508,7 +513,8 @@ interface FeaturesManagerInterface {
    * Returns the short name and type of a full config name.
    *
    * @param string $fullname
-   *   The full configuration name
+   *   The full configuration name.
+   *
    * @return array
    *   'type' => string the config type
    *   'name_short' => string the short config name, without prefix.
@@ -585,7 +591,10 @@ interface FeaturesManagerInterface {
 
   /**
    * Sort the Missing config into order by dependencies.
-   * @param array $missing config items
+   *
+   * @param array $missing
+   *   config items.
+   *
    * @return array of config items in dependency order
    */
   public function reorderMissing(array $missing);
@@ -626,6 +635,7 @@ interface FeaturesManagerInterface {
    *
    * @param array $config_to_create
    *   An array of configuration data to create, keyed by name.
+   *
    * @return array of config imported
    *   'new': list of new config created keyed by name.
    *   'updated': list of updated config keyed by name.
@@ -633,10 +643,12 @@ interface FeaturesManagerInterface {
   public function createConfiguration(array $config_to_create);
 
   /**
+   * The import function.
+   *
    * @param array $modules
    *   An array of module names to import (revert)
    * @param bool $any
-   *   Set to TRUE to import config from non-Features modules
+   *   Set to TRUE to import config from non-Features modules.
    * @return array of config imported
    *   keyed by name of module, then:
    *     'new': list of new config created keyed by name.

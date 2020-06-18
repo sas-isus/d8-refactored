@@ -40,7 +40,7 @@ class WebformTranslationManager implements WebformTranslationManagerInterface {
   protected $configFactory;
 
   /**
-   * Webform element manager.
+   * The webform element manager.
    *
    * @var \Drupal\webform\Plugin\WebformElementManagerInterface
    */

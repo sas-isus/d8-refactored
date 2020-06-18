@@ -6,6 +6,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RedirectDestinationInterface;
+use Drupal\Core\Url;
 use Drupal\webform\Entity\Webform;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -108,6 +109,13 @@ class WebformTestAjaxBlock extends BlockBase implements ContainerFactoryPluginIn
           'class' => ['webform-dialog', 'webform-dialog-normal'],
         ],
       ],
+      'javascript' => [
+        'title' => "Drupal.webformOpenDialog('" . $webform->toUrl('canonical')->toString() . "', 'webform-dialog-normal'); return false;",
+        'url' => Url::fromRoute('<none>'),
+        'attributes' => [
+          'onclick' => "Drupal.webformOpenDialog('" . $webform->toUrl('canonical')->toString() . "', 'webform-dialog-normal'); return false;",
+        ],
+      ],
     ];
 
     $webform_style_guide = Webform::load('example_style_guide');
@@ -128,7 +136,7 @@ class WebformTestAjaxBlock extends BlockBase implements ContainerFactoryPluginIn
         ],
       ],
     ];
-    return [
+    $build = [
       'ajax' => [
         '#prefix' => '<h3>' . $this->t('Ajax links') . '</h3>',
         '#theme' => 'links',
@@ -144,8 +152,10 @@ class WebformTestAjaxBlock extends BlockBase implements ContainerFactoryPluginIn
         '#theme' => 'links',
         '#links' => $dialog_links,
       ],
-      '#attached' => ['library' => ['core/drupal.ajax']],
     ];
+    $build['#attached']['library'][] = 'webform/webform.dialog';
+    $build['#attached']['drupalSettings']['webform']['dialog']['options'] = \Drupal::config('webform.settings')->get('settings.dialog_options');
+    return $build;
   }
 
   /**

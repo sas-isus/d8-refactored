@@ -6,13 +6,13 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Render\RendererInterface;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Url;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
+use Drupal\webform\Utility\WebformYaml;
 
 /**
  * Webform elements validator.
@@ -166,8 +166,8 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
       return [$message];
     }
 
-    $this->elements = Yaml::decode($this->elementsRaw);
-    $this->originalElements = Yaml::decode($this->originalElementsRaw);
+    $this->elements = WebformYaml::decode($this->elementsRaw);
+    $this->originalElements = WebformYaml::decode($this->originalElementsRaw);
 
     $this->elementKeys = [];
     if (is_array($this->elements)) {
@@ -235,7 +235,7 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
    */
   protected function validateYaml() {
     try {
-      Yaml::decode($this->elementsRaw);
+      WebformYaml::decode($this->elementsRaw);
       return NULL;
     }
     catch (\Exception $exception) {

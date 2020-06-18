@@ -23,6 +23,7 @@ use Drupal\features\FeaturesAssignmentMethodBase;
  * )
  */
 class FeaturesAssignmentOptionalType extends FeaturesAssignmentMethodBase {
+
   /**
    * {@inheritdoc}
    */

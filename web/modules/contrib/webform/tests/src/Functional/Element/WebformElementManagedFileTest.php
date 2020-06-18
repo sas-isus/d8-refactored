@@ -9,7 +9,7 @@ use Drupal\webform\Entity\WebformSubmission;
 /**
  * Test for webform element managed file handling.
  *
- * @group Webform
+ * @group webform
  */
 class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
 
@@ -48,7 +48,7 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  protected function setUp() {
     parent::setUp();
 
     $this->webform = Webform::load('test_element_managed_file');
@@ -101,7 +101,7 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
         \Drupal::service('file_system')->realpath($this->files[2]->uri),
       ],
     ];
-    $this->drupalPostForm('/webform/test_element_managed_file', $edit, t('Upload'));
+    $this->drupalPostForm('/webform/test_element_managed_file', $edit, 'Upload');
     $this->assertRaw('<em class="placeholder">managed_file_multiple_two</em> can only hold 2 values but there were 3 uploaded. The following files have been omitted as a result: <em class="placeholder">text-2.txt</em>.');
 
     // Check file input is removed.
@@ -341,11 +341,11 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
     // Remove the uploaded file.
     if ($type == 'multiple') {
       $edit = ['managed_file_multiple[file_' . $fid . '][selected]' => TRUE];
-      $submit = t('Remove selected');
+      $submit = 'Remove selected';
     }
     else {
       $edit = [];
-      $submit = t('Remove');
+      $submit = 'Remove';
     }
     $this->drupalPostForm('/admin/structure/webform/manage/test_element_managed_file/submission/' . $sid . '/edit', $edit, $submit);
 
@@ -353,10 +353,10 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
     $edit = [
       $parameter_name => \Drupal::service('file_system')->realpath($second_file->uri),
     ];
-    $this->drupalPostForm(NULL, $edit, t('Upload'));
+    $this->drupalPostForm(NULL, $edit, 'Upload');
 
     // Submit the new file.
-    $this->drupalPostForm(NULL, [], t('Save'));
+    $this->drupalPostForm(NULL, [], 'Save');
 
     /** @var \Drupal\file\FileInterface $test_file_0 */
     $new_fid = $this->getLastFileId();

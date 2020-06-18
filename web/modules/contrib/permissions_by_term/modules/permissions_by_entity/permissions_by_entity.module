@@ -22,7 +22,7 @@ function permissions_by_entity_entity_access(EntityInterface $entity, $operation
   $accessResult = AccessResult::neutral();
 
   /** @var \Drupal\permissions_by_entity\Service\AccessChecker $accessChecker */
-  if ($operation === 'view' && $entity instanceof FieldableEntityInterface) {
+  if ($operation === 'view' && $entity instanceof FieldableEntityInterface && !$entity->isNew()) {
     if ($cache->hasAccessResultsCache($account->id(), $entity->id())) {
       return $cache->getAccessResultsCache($account->id(), $entity->id());
     }

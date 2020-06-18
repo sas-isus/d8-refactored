@@ -9,7 +9,7 @@ use Drupal\Tests\webform\Functional\WebformBrowserTestBase;
 /**
  * Tests for webform entity access rules.
  *
- * @group Webform
+ * @group webform
  */
 class WebformAccessEntityRulesTest extends WebformBrowserTestBase {
 

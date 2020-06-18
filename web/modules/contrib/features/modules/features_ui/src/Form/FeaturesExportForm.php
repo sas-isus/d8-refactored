@@ -8,18 +8,18 @@ use Drupal\features\FeaturesAssignerInterface;
 use Drupal\features\FeaturesGeneratorInterface;
 use Drupal\features\FeaturesManagerInterface;
 use Drupal\features\FeaturesBundleInterface;
+use Drupal\features\Package;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
-use Drupal\features\Package;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines the configuration export form.
  */
-class FeaturesExportForm extends FormBase {
+class FeaturesExportForm extends FormBase implements TrustedCallbackInterface {
 
   /**
    * The features manager.
@@ -53,13 +53,13 @@ class FeaturesExportForm extends FormBase {
    * Constructs a FeaturesExportForm object.
    *
    * @param \Drupal\features\FeaturesManagerInterface $features_manager
-   *    The features manager.
-   * @param \Drupal\features\FeaturesAssignerInterface $features_assigner
-   *    The features assigner.
-   * @param \Drupal\features\FeaturesGeneratorInterface $features_generator
-   *    The features generator.
+   *   The features manager.
+   * @param \Drupal\features\FeaturesAssignerInterface $assigner
+   *   The features assigner.
+   * @param \Drupal\features\FeaturesGeneratorInterface $generator
+   *   The features generator.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *    The features generator.
+   *   The features generator.
    */
   public function __construct(FeaturesManagerInterface $features_manager, FeaturesAssignerInterface $assigner, FeaturesGeneratorInterface $generator, ModuleHandlerInterface $module_handler) {
     $this->featuresManager = $features_manager;
@@ -78,6 +78,15 @@ class FeaturesExportForm extends FormBase {
       $container->get('features_generator'),
       $container->get('module_handler')
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function trustedCallbacks() {
+    return [
+      'preRenderRemoveInvalidCheckboxes',
+    ];
   }
 
   /**
@@ -117,7 +126,7 @@ class FeaturesExportForm extends FormBase {
       $bundle_name = $input['bundle'];
       $this->assigner->setCurrent($this->assigner->getBundle($bundle_name));
     }
-    elseif ($trigger['#name'] == 'bundle') {
+    elseif (isset($trigger['#name']) && $trigger['#name'] == 'bundle') {
       $bundle_name = $form_state->getValue('bundle', '');
       $this->assigner->setCurrent($this->assigner->getBundle($bundle_name));
     }
@@ -148,7 +157,7 @@ class FeaturesExportForm extends FormBase {
 
     // If there are no custom bundles, provide message.
     if (count($bundle_options) < 2) {
-      drupal_set_message($this->t('You have not yet created any bundles. Before generating features, you may wish to <a href=":create">create a bundle</a> to group your features within.', [':create' => Url::fromRoute('features.assignment')->toString()]));
+      $this->messenger()->addStatus($this->t('You have not yet created any bundles. Before generating features, you may wish to <a href=":create">create a bundle</a> to group your features within.', [':create' => Url::fromRoute('features.assignment')->toString()]));
     }
 
     $form['#prefix'] = '<div id="edit-features-wrapper">';
@@ -223,7 +232,7 @@ class FeaturesExportForm extends FormBase {
    * @param \Drupal\features\Package[] $packages
    *   The packages.
    * @param \Drupal\features\FeaturesBundleInterface $bundle
-   *   The current bundle
+   *   The current bundle.
    *
    * @return array
    *   A render array of a form element.
@@ -278,7 +287,7 @@ class FeaturesExportForm extends FormBase {
    *
    * @param \Drupal\features\Package $package
    *   The package.
-   * @param \Drupal\features\FeaturesBundleInterface
+   * @param \Drupal\features\FeaturesBundleInterface $bundle
    *   The current bundle.
    *
    * @return array
@@ -290,7 +299,7 @@ class FeaturesExportForm extends FormBase {
     $url = Url::fromRoute('features.edit', ['featurename' => $package->getMachineName()]);
 
     $element['name'] = [
-      'data' => \Drupal::l($package->getName(), $url),
+      'data' => \Drupal::service('link_generator')->generate($package->getName(), $url),
       'class' => ['feature-name'],
     ];
     $machine_name = $package->getMachineName();
@@ -328,8 +337,7 @@ class FeaturesExportForm extends FormBase {
         $package_config[$item->getType()][] = [
           'name' => Html::escape($item_name),
           'label' => Html::escape($item->getLabel()),
-          'class' => in_array($item_name, $overrides) ? 'features-override' :
-            (in_array($item_name, $new_config) ? 'features-detected' : ''),
+          'class' => in_array($item_name, $overrides) ? 'features-override' : (in_array($item_name, $new_config) ? 'features-detected' : ''),
         ];
       }
     }
@@ -433,53 +441,53 @@ class FeaturesExportForm extends FormBase {
     $config_types['missing'] = $this->t('Missing');
     uasort($config_types, 'strnatcasecmp');
 
-    $rows = array();
+    $rows = [];
     // Use sorted array for order.
     foreach ($config_types as $type => $label) {
       // For each component type, offer alternating rows.
-      $row = array();
+      $row = [];
       if (isset($package_config[$type])) {
-        $row[] = array(
-          'data' => array(
+        $row[] = [
+          'data' => [
             '#type' => 'html_tag',
             '#tag' => 'span',
             '#value' => Html::escape($label),
-            '#attributes' => array(
+            '#attributes' => [
               'title' => Html::escape($type),
               'class' => 'features-item-label',
-            ),
-          ),
-        );
-        $row[] = array(
-          'data' => array(
+            ],
+          ],
+        ];
+        $row[] = [
+          'data' => [
             '#theme' => 'features_items',
             '#items' => $package_config[$type],
             '#value' => Html::escape($label),
             '#title' => Html::escape($type),
-          ),
+          ],
           'class' => 'item',
-        );
+        ];
         $rows[] = $row;
       }
     }
-    $element['table'] = array(
+    $element['table'] = [
       '#type' => 'table',
       '#rows' => $rows,
-    );
+    ];
 
-    $details = array();
-    $details['description'] = array(
+    $details = [];
+    $details['description'] = [
       '#markup' => Xss::filterAdmin($package->getDescription()),
-    );
-    $details['table'] = array(
+    ];
+    $details['table'] = [
       '#type' => 'details',
       '#title' => $this->t('Included configuration'),
-      '#description' => array('data' => $element['table']),
-    );
-    $element['details'] = array(
-      'class' => array('description', 'expand'),
+      '#description' => ['data' => $element['table']],
+    ];
+    $element['details'] = [
+      'class' => ['description', 'expand'],
       'data' => $details,
-    );
+    ];
 
     return $element;
   }
@@ -541,7 +549,7 @@ class FeaturesExportForm extends FormBase {
     $package_names = array_filter($form_state->getValue('preview'));
 
     if (empty($package_names)) {
-      drupal_set_message($this->t('Please select one or more packages to export.'), 'warning');
+      $this->messenger()->addWarning($this->t('Please select one or more packages to export.'));
       return;
     }
 

@@ -21,6 +21,7 @@ use Drupal\features\FeaturesAssignmentMethodBase;
  * )
  */
 class FeaturesAssignmentSiteType extends FeaturesAssignmentMethodBase {
+
   /**
    * {@inheritdoc}
    */

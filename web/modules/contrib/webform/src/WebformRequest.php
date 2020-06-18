@@ -68,7 +68,7 @@ class WebformRequest implements WebformRequestInterface {
   protected $webformEntityReferenceManager;
 
   /**
-   * Webform source entity plugin manager.
+   * The webform source entity plugin manager.
    *
    * @var \Drupal\webform\Plugin\WebformSourceEntityManagerInterface
    */
@@ -133,6 +133,7 @@ class WebformRequest implements WebformRequestInterface {
     else {
       $this->isAdminRoute = (preg_match('/^(webform\.|^entity\.([^.]+\.)?webform)/', $route_name)) ? TRUE : FALSE;
     }
+
     return $this->isAdminRoute;
   }
 

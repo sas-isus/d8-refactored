@@ -36,14 +36,14 @@ class WebformEntityAccessControlHandler extends EntityAccessControlHandler imple
   protected $entityTypeManager;
 
   /**
-   * Webform source entity plugin manager.
+   * The webform source entity plugin manager.
    *
    * @var \Drupal\webform\Plugin\WebformSourceEntityManagerInterface
    */
   protected $webformSourceEntityManager;
 
   /**
-   * Webform access rules manager service.
+   * The webform access rules manager service.
    *
    * @var \Drupal\webform\WebformAccessRulesManagerInterface
    */

@@ -26,6 +26,7 @@ use Drupal\features\FeaturesAssignmentMethodBase;
  * )
  */
 class FeaturesAssignmentExclude extends FeaturesAssignmentMethodBase {
+
   /**
    * {@inheritdoc}
    */
@@ -66,7 +67,7 @@ class FeaturesAssignmentExclude extends FeaturesAssignmentMethodBase {
           // FeaturesBundleInterface::getProfileName() would return the profile
           // for the current bundle, if any. We want the profile that was
           // installed.
-          $profile_name = drupal_get_profile();
+          $profile_name = \Drupal::installProfile();
           if (isset($all_modules[$profile_name])) {
             $profile_list = $this->featuresManager->listExtensionConfig($all_modules[$profile_name]);
             // If the configuration has been assigned to a feature that's
@@ -84,7 +85,7 @@ class FeaturesAssignmentExclude extends FeaturesAssignmentMethodBase {
           $modules = $this->featuresManager->getFeaturesModules($current_bundle);
           foreach ($modules as $extension) {
             // Only make exception for uninstalled modules or
-            // if namespace_any is set
+            // if namespace_any is set.
             if (!empty($exclude_module['namespace_any']) || !$this->featuresManager->extensionEnabled($extension)) {
               $extension_list = array_merge($extension_list, $this->featuresManager->listExtensionConfig($extension));
             }

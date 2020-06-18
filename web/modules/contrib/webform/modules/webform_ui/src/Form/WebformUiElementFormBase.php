@@ -58,14 +58,14 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
   protected $entityFieldManager;
 
   /**
-   * Webform element manager.
+   * The webform element manager.
    *
    * @var \Drupal\webform\Plugin\WebformElementManagerInterface
    */
   protected $elementManager;
 
   /**
-   * Webform element validator.
+   * The webform element validator.
    *
    * @var \Drupal\webform\WebformEntityElementsValidatorInterface
    */
@@ -466,7 +466,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
 
     // Still set the redirect URL just to be safe.
     // Variants require the entire page to be reloaded so that Variants tab
-    // is made visible,
+    // is made visible.
     if ($this->getWebformElementPlugin() instanceof WebformElementVariantInterface) {
       $query = ['reload' => 'true'];
     }

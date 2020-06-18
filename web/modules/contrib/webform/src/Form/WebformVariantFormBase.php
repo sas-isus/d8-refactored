@@ -21,7 +21,7 @@ abstract class WebformVariantFormBase extends FormBase {
   use WebformDialogFormTrait;
 
   /**
-   * Machine name maxlenght.
+   * Machine name maxlength.
    */
   const MACHINE_NAME_MAXLENGHTH = 64;
 

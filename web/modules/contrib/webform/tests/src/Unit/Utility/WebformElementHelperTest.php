@@ -132,7 +132,7 @@ class WebformElementHelperTest extends UnitTestCase {
       ['#tree' => TRUE, '#value' => 'text', '#element_validate' => 'some_function'],
       ['#value' => 'text'],
     ];
-    // Remove #ajax: string
+    // Remove #ajax: string.
     $tests[] = [
       ['#ajax' => 'some_function'],
       [],

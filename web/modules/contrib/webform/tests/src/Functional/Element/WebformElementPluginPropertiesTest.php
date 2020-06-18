@@ -8,7 +8,7 @@ use Drupal\webform\Utility\WebformElementHelper;
 /**
  * Tests for webform element properties.
  *
- * @group Webform
+ * @group webform
  */
 class WebformElementPluginPropertiesTest extends WebformElementBrowserTestBase {
 
@@ -24,7 +24,10 @@ class WebformElementPluginPropertiesTest extends WebformElementBrowserTestBase {
     'taxonomy',
     'webform',
     'webform_attachment',
-    'webform_entity_print_attachment',
+    // Issue #3110478: [Webform 8.x-6.x] Track the D9 readiness state of the
+    // Webform module's (optional) dependencies
+    // @see https://www.drupal.org/project/webform/issues/3110478
+    // 'webform_entity_print_attachment',
     'webform_image_select',
     'webform_location_geocomplete',
     'webform_options_custom',
@@ -46,6 +49,12 @@ class WebformElementPluginPropertiesTest extends WebformElementBrowserTestBase {
     // that there are not unexpected changes to any element's
     // default properties.
     $expected_elements = $this->getExpectedElementDefaultProperties();
+
+    // Issue #3110478: [Webform 8.x-6.x] Track the D9 readiness state of the
+    // Webform module's (optional) dependencies
+    // @see https://www.drupal.org/project/webform/issues/3110478
+    unset($expected_elements['webform_entity_print_attachment:pdf']);
+
     $actual_elements = $this->getActualElementDefaultProperties();
     $this->htmlOutput('<pre>' . htmlentities(Yaml::encode($actual_elements)) . '</pre>');
     foreach ($actual_elements as $element_key => $actual_element) {
@@ -1331,6 +1340,7 @@ select:
   required_error: ''
   select2: false
   size: ''
+  sort_options: false
   states: {  }
   states_clear: true
   title: ''
@@ -2980,6 +2990,7 @@ webform_entity_select:
   selection_handler: ''
   selection_settings: {  }
   size: ''
+  sort_options: false
   states: {  }
   states_clear: true
   target_type: ''
@@ -3125,6 +3136,7 @@ webform_image_select:
   required_error: ''
   show_label: false
   size: ''
+  sort_options: false
   states: {  }
   states_clear: true
   title: ''
@@ -3623,6 +3635,7 @@ webform_name:
   required: false
   required_error: ''
   select2: false
+  sort_options: false
   size: ''
   states: {  }
   states_clear: true
@@ -3687,6 +3700,7 @@ webform_name:
   required_error: ''
   select2: false
   size: ''
+  sort_options: false
   states: {  }
   states_clear: true
   title: ''
@@ -3977,6 +3991,7 @@ webform_select_other:
   required_error: ''
   select2: false
   size: ''
+  sort_options: false
   states: {  }
   states_clear: true
   title: ''

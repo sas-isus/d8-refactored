@@ -43,7 +43,7 @@ abstract class WebformExporterBase extends PluginBase implements WebformExporter
   protected $entityTypeManager;
 
   /**
-   * Webform submission storage.
+   * The webform submission storage.
    *
    * @var \Drupal\webform\WebformSubmissionStorageInterface
    */
@@ -263,7 +263,7 @@ abstract class WebformExporterBase extends PluginBase implements WebformExporter
    * {@inheritdoc}
    */
   public function getFileTempDirectory() {
-    return $this->configFactory->get('webform.settings')->get('export.temp_directory') ?: file_directory_temp();
+    return $this->configFactory->get('webform.settings')->get('export.temp_directory') ?: \Drupal::service('file_system')->getTempDirectory();
   }
 
   /**
@@ -439,7 +439,7 @@ abstract class WebformExporterBase extends PluginBase implements WebformExporter
       }
       else {
         // Add file to ZIP file.
-        // Get file name from the path and remove path option..
+        // Get file name from the path and remove path option.
         $file_name = $path;
         if ($options['remove_path']) {
           $file_name = preg_replace('#^' . $options['remove_path'] . '#', '', $file_name);

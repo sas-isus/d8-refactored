@@ -32,6 +32,8 @@ abstract class WebformOtherBase extends FormElement {
    * The properties of the element.
    *
    * @var array
+   *
+   * @see \Drupal\webform\Element\WebformSelectOther::$properties
    */
   protected static $properties = [
     '#title',
@@ -114,6 +116,7 @@ abstract class WebformOtherBase extends FormElement {
 
     $element[$type]['#type'] = static::$type;
     $element[$type]['#webform_element'] = TRUE;
+    $element[$type]['#webform_other'] = TRUE;
     $element[$type] += array_intersect_key($element, array_combine($properties, $properties));
     $element[$type]['#title_display'] = 'invisible';
     if (!isset($element[$type]['#options'][static::OTHER_OPTION])) {

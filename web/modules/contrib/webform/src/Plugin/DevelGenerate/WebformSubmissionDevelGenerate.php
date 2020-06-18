@@ -208,10 +208,12 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
       $form['submitted'] = [
         '#type' => 'item',
         '#title' => $this->t('Submitted to'),
-        '#field_prefix' => '<div class="container-inline">',
-        '#field_suffix' => '</div>',
       ];
-      $form['submitted']['entity-type'] = [
+      $form['submitted']['container'] = [
+        '#prefix' => '<div class="container-inline">',
+        '#suffix' => '</div>',
+      ];
+      $form['submitted']['container']['entity-type'] = [
         '#type' => 'select',
         '#title' => $this->t('Entity type'),
         '#title_display' => 'invisible',
@@ -219,7 +221,7 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
         '#options' => $entity_types,
         '#default_value' => $this->getSetting('entity-type'),
       ];
-      $form['submitted']['entity-id'] = [
+      $form['submitted']['container']['entity-id'] = [
         '#type' => 'number',
         '#title' => $this->t('Entity id'),
         '#title_display' => 'invisible',

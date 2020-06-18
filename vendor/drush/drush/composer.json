@@ -39,7 +39,7 @@
     "consolidation/annotated-command": "^2.12.0",
     "consolidation/output-formatters": "~3",
     "symfony/yaml": "~2.3|^3|^4.4",
-    "symfony/var-dumper": "~2.7|^3|^4.4",
+    "symfony/var-dumper": "~2.7|^3|^4.4|^5",
     "symfony/console": "~2.7|^3|^4.4",
     "symfony/event-dispatcher": "~2.7|^3|^4.4",
     "symfony/finder": "~2.7|^3|^4.4",

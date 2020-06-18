@@ -119,7 +119,7 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
   protected $tokenManager;
 
   /**
-   * A webform element plugin manager.
+   * The webform element plugin manager.
    *
    * @var \Drupal\webform\Plugin\WebformElementManagerInterface
    */

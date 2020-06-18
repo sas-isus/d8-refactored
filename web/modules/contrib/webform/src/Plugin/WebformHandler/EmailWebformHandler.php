@@ -121,7 +121,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   protected $themeManager;
 
   /**
-   * A webform element plugin manager.
+   * The webform element plugin manager.
    *
    * @var \Drupal\webform\Plugin\WebformElementManagerInterface
    */
@@ -1144,8 +1144,6 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $from = $message['from_mail'];
 
     // Remove less than (<) and greater (>) than from name.
-    // @todo Figure out the proper way to encode special characters.
-    // Note: PhpMail call.
     $message['from_name'] = preg_replace('/[<>]/', '', $message['from_name']);
 
     if (!empty($message['from_name'])) {
@@ -1178,13 +1176,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $theme_name = $this->configuration['theme_name'];
     $message['body'] = trim((string) $this->themeManager->renderPlain($build, $theme_name));
 
+    // Html body needs to be Markup so that relative URLs are converted
+    // to absolute.
+    // @see \Drupal\Core\Mail\MailManager::doMail
     if ($this->configuration['html']) {
-      switch ($this->getMailSystemFormatter()) {
-        case 'swiftmailer':
-          // SwiftMailer requires that the body be valid Markup.
-          $message['body'] = Markup::create($message['body']);
-          break;
-      }
+      $message['body'] = Markup::create($message['body']);
     }
 
     // Send message.

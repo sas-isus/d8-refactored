@@ -29,7 +29,7 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
   protected $type;
 
   /**
-   * Webform request handler.
+   * The webform request handler.
    *
    * @var \Drupal\webform\WebformRequestInterface
    */
@@ -271,6 +271,16 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     $breadcrumb->addCacheContexts(['route']);
 
     return $breadcrumb;
+  }
+
+  /**
+   * Get the type of webform breadcrumb.
+   *
+   * @return string
+   *   The type of webform breadcrumb.
+   */
+  public function getType() {
+    return $this->type;
   }
 
 }

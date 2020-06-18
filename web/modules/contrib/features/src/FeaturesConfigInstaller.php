@@ -36,9 +36,9 @@ class FeaturesConfigInstaller extends ConfigInstaller {
    * Constructs the configuration installer.
    *
    * @param \Drupal\Core\Config\ConfigInstallerInterface $config_installer
-   *    The configuration installer.
+   *   The configuration installer.
    * @param \Drupal\features\FeaturesManagerInterface $features_manager
-   *    The features manager.
+   *   The features manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration factory.
    * @param \Drupal\Core\Config\StorageInterface $active_storage
@@ -49,20 +49,13 @@ class FeaturesConfigInstaller extends ConfigInstaller {
    *   The configuration manager.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
    *   The event dispatcher.
+   * @param string $install_profile
+   *   The name of the currently active installation profile.
    */
-  public function __construct(ConfigInstallerInterface $config_installer, FeaturesManagerInterface $features_manager, ConfigFactoryInterface $config_factory, StorageInterface $active_storage, TypedConfigManagerInterface $typed_config, ConfigManagerInterface $config_manager, EventDispatcherInterface $event_dispatcher) {
+  public function __construct(ConfigInstallerInterface $config_installer, FeaturesManagerInterface $features_manager, ConfigFactoryInterface $config_factory, StorageInterface $active_storage, TypedConfigManagerInterface $typed_config, ConfigManagerInterface $config_manager, EventDispatcherInterface $event_dispatcher, $install_profile) {
+    parent::__construct($config_factory, $active_storage, $typed_config, $config_manager, $event_dispatcher, $install_profile);
     $this->configInstaller = $config_installer;
     $this->featuresManager = $features_manager;
-
-    list($major, $minor, ) = explode('.', \Drupal::VERSION);
-    if ($major == 8 && $minor > 2) {
-      // D8.3 added the %install_profile% argument.
-      $install_profile = \Drupal::installProfile();
-      parent::__construct($config_factory, $active_storage, $typed_config, $config_manager, $event_dispatcher, $install_profile);
-    }
-    else {
-      parent::__construct($config_factory, $active_storage, $typed_config, $config_manager, $event_dispatcher);
-    }
   }
 
   /**

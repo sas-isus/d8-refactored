@@ -16,7 +16,7 @@ git diff 8.x-5.x > [project_name]-[issue-description]-[issue-number]-00.patch
 curl https://www.drupal.org/files/issues/[project_name]-[issue-description]-[issue-number]-00.patch | git apply -
 
 # Force apply patch
-patch -p1 < 3037968-2.patch	
+patch -p1 < 3037968-2.patch
 
 # Remove patch and untracked files
 git reset --hard; git clean -f -d
@@ -27,6 +27,13 @@ interdiff \
   [issue-number]-[new-comment-number].patch \
   > interdiff-[issue-number]-[old-comment-number]-[new-comment-number].txt
 cat interdiff-[issue-number]-[old-comment-number]-[new-comment-number].txt
+
+# Commit remove patch
+git checkout 8.x-5.x
+curl https://www.drupal.org/files/issues/[project_name]-[issue-description]-[issue-number]-00.patch | git apply -
+git add .
+git commit -m 'Issue #[issue-number]: [issue-description]'
+git push
 
 # Merge branch with all commits
 git checkout 8.x-5.x
@@ -165,7 +172,7 @@ drush en -y webform\
   webform_templates\
   webform_test\
   webform_test_element\
-  webform_test_entity_reference_views\  
+  webform_test_entity_reference_views\
   webform_test_handler\
   webform_test_handler_remote_post\
   webform_test_options\
@@ -175,8 +182,8 @@ drush en -y webform\
   webform_test_translation\
   webform_test_views\
   webform_attachment_test\
-  webform_entity_print_test\  
-  webform_entity_print_attachment_test\  
+  webform_entity_print_test\
+  webform_entity_print_attachment_test\
   webform_icheck_test\
   webform_image_select_test\
   webform_location_geocomplete_test\

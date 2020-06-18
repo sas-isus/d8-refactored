@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 class WebformPluginHandlerController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
-   * A webform handler plugin manager.
+   * The webform handler plugin manager.
    *
    * @var \Drupal\webform\Plugin\WebformHandlerManagerInterface
    */

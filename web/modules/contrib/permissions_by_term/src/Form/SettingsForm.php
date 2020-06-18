@@ -51,13 +51,16 @@ have access to <strong>all</strong> related taxonomy terms to access an node.'),
     $form['disable_node_access_records'] = [
       '#type'          => 'checkbox',
       '#title'         => t('Disable node access records'),
-      '#description'   => t('By disabling node access records, PbT won\'t hide nodes in:
+      '#description'   => t('By disabling node access records, nodes won\'t be hidden in:
 <br />- listings made by the Views module (e.g. search result pages)
-<br />- menus<br />
-This setting can be useful, if you just want to restrict nodes on node view and 
-node edit. Like hiding unpublished nodes from editors during a content 
-moderation workflow. Disabling node access records will save you some time on 
-node save and taxonomy save, since the node access records must not be rebuild.'),
+<br />- menus
+<br />- other Drupal core systems, which are based on <a href="https://www.drupal.org/docs/8/modules/permissions-by-term#s-node-access-records" target="_blank" title="Node Access records documentation">Node Access records</a><br />
+This setting can be useful, if you just want to restrict nodes on node view and
+node edit. Like hiding unpublished nodes from editors during a content
+moderation workflow. Disabling node access records will save you some time on
+node save and taxonomy save, since the node access records must not be rebuild. Also it will provide major performance
+benefit on large, non-cached content listings like the "/admin/content" page. If you want to restrict nodes on your
+overall website and you are using a warmed page cache, then it is recommended to leave this setting disabled.'),
       '#default_value' => \Drupal::config('permissions_by_term.settings')->get('disable_node_access_records'),
     ];
 

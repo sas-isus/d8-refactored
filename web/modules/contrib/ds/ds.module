@@ -643,7 +643,7 @@ function ds_theme_suggestions_alter(&$suggestions, $variables, $base_theme_hook)
  * Implements hook_contextual_links_view_alter().
  */
 function ds_contextual_links_view_alter(&$element, $items) {
-  $def = \Drupal::service('entity.manager')->getDefinitions();
+  $def = \Drupal::service('entity_type.manager')->getDefinitions();
   $entity_type = array_keys($element['#contextual_links'])[0];
 
   if (isset($def[$entity_type]) && $def[$entity_type]->get('field_ui_base_route')) {

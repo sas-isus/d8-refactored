@@ -171,8 +171,10 @@ class WebformMultiple extends FormElement {
     $ajax_attributes = $element['#ajax_attributes'];
     $ajax_attributes['id'] = $table_id;
     $element += ['#prefix' => '', '#suffix' => ''];
-    $element['#prefix'] = $element['#prefix'] . '<div' . new Attribute($ajax_attributes) . '>';
-    $element['#suffix'] = '</div>' . $element['#suffix'];
+    $element['#ajax_prefix'] = '<div' . new Attribute($ajax_attributes) . '>';
+    $element['#ajax_suffix'] = '</div>';
+    $element['#prefix'] = $element['#prefix'] . $element['#ajax_prefix'];
+    $element['#suffix'] = $element['#ajax_suffix'] . $element['#suffix'];
 
     // DEBUG:
     // Disable Ajax callback by commenting out the below callback and wrapper.
@@ -903,6 +905,9 @@ class WebformMultiple extends FormElement {
     $button = $form_state->getTriggeringElement();
     $parent_length = (isset($button['#row_index'])) ? -4 : -2;
     $element = NestedArray::getValue($form, array_slice($button['#array_parents'], 0, $parent_length));
+    // Make sure only the ajax prefix and suffix is used.
+    $element['#prefix'] = $element['#ajax_prefix'];
+    $element['#suffix'] = $element['#ajax_suffix'];
     return $element;
   }
 
