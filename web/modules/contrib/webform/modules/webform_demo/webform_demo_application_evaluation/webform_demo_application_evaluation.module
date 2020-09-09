@@ -11,7 +11,7 @@ use Drupal\webform\WebformSubmissionInterface;
  * Implements hook_ENTITY_TYPE_presave() for webform_submission entities.
  */
 function webform_demo_application_evaluation_webform_submission_presave(WebformSubmissionInterface $webform_submission) {
-  if ($webform_submission->getWebform()->id() != 'demo_application') {
+  if ($webform_submission->getWebform()->id() !== 'demo_application') {
     return;
   }
 
@@ -28,7 +28,7 @@ function webform_demo_application_evaluation_webform_submission_presave(WebformS
   // datetime. For example, if the current state is 'completed' the related
   // datetime element is called 'completed_date'.
   // @see /admin/structure/webform/manage/demo_application
-  if ($original_data['state'] != $current_data['state']) {
+  if ($original_data['state'] !== $current_data['state']) {
     /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
     $date_formatter = \Drupal::service('date.formatter');
     $current_data[$current_data['state'] . '_date'] = $date_formatter->format(time(), 'html_datetime');

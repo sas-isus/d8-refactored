@@ -61,7 +61,7 @@ class WebformPluginHandlerController extends ControllerBase implements Container
           $definition['description'],
           $definition['category'],
           (isset($excluded_handlers[$plugin_id])) ? $this->t('Yes') : $this->t('No'),
-          ($definition['cardinality'] == -1) ? $this->t('Unlimited') : $definition['cardinality'],
+          ($definition['cardinality'] === -1) ? $this->t('Unlimited') : $definition['cardinality'],
           $definition['conditions'] ? $this->t('Yes') : $this->t('No'),
           $definition['submission'] ? $this->t('Required') : $this->t('Optional'),
           $definition['results'] ? $this->t('Processed') : $this->t('Ignored'),

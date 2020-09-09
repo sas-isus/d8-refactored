@@ -21,7 +21,7 @@
         var $message = $container.find('.webform-share-admin-copy-message');
         // Copy code from textarea to the clipboard.
         // @see https://stackoverflow.com/questions/37658524/copying-text-of-textarea-in-clipboard-when-button-is-clicked
-        $button.click(function(){
+        $button.click(function () {
           $textarea.select();
           document.execCommand('copy');
           $message.show().delay(1500).fadeOut('slow');

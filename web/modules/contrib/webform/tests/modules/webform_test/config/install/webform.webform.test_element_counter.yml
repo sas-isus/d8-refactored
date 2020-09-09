@@ -55,7 +55,7 @@ elements: |
       '#counter_maximum': 10
       '#counter_minimum_message': '<script>alert(''XSS'');</script><em>%d</em> character(s) entered.'
       '#counter_maximum_message': '<script>alert(''XSS'');</script><em>%d</em> character(s) remaining.'
-  
+
   counter_word:
     '#type': details
     '#title': counter_word
@@ -88,7 +88,7 @@ elements: |
       '#counter_type': word
       '#counter_maximum': 10
       '#counter_maximum_message': '%d character(s) remaining. This is custom text'
-  
+
 css: ''
 javascript: ''
 settings:
@@ -100,7 +100,7 @@ settings:
   page: true
   page_submit_path: ''
   page_confirm_path: ''
-  page_admin_theme: false
+  page_theme_name: ''
   form_title: source_entity_webform
   form_submit_once: false
   form_exception_message: ''
@@ -160,11 +160,17 @@ settings:
   wizard_progress_percentage: false
   wizard_progress_link: false
   wizard_progress_states: false
+  wizard_auto_forward: true
   wizard_start_label: ''
   wizard_preview_link: false
   wizard_confirmation: true
   wizard_confirmation_label: ''
   wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: false
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
   preview: 0
   preview_label: ''
   preview_title: ''

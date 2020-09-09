@@ -5,6 +5,7 @@
  * Preprocessors and helper functions to make theming easier.
  */
 
+use Drupal\Component\Utility\Html;
 use Drupal\views_bootstrap\ViewsBootstrap;
 use Drupal\Core\Template\Attribute;
 
@@ -21,26 +22,28 @@ use Drupal\Core\Template\Attribute;
 function template_preprocess_views_bootstrap_accordion(array &$vars) {
   $view = $vars['view'];
   $vars['id'] = ViewsBootstrap::getUniqueId($view);
+  $group_title_field = isset($view->style_plugin->options['grouping'][0]) ? $view->style_plugin->options['grouping'][0]['field'] : "";
   $panel_title_field = $view->style_plugin->options['panel_title_field'];
   $vars['attributes']['class'][] = 'panel-group';
   if ($panel_title_field) {
     foreach ($vars['rows'] as $id => $row) {
+      $vars['group_title'] = $group_title_field ? $view->style_plugin->getField($id, $group_title_field) : "";
       $vars['rows'][$id] = [];
       $vars['rows'][$id]['content'] = $row;
       $vars['rows'][$id]['title'] = $view->style_plugin->getField($id, $panel_title_field);
     }
   }
   else {
-    // @TODO: This would be better as valdiation errors on the style plugin options form.
-    drupal_set_message(t('@style style will not display without the "@field" setting.',
-      [
+    // @TODO: This would be better as validation errors on the style plugin options form.
+    Drupal::messenger()->addWarning(
+      t('@style style will not display without the "@field" setting.', [
         '@style' => $view->style_plugin->definition['title'],
         '@field' => 'Panel title',
       ]
-    ), 'warning');
+    ));
   }
-  // @TODO: Make sure that $vars['rows'] is rendered array.
-  // @SEE: Have a look template_preprocess_views_view_unformatted()
+  // @TODO: Make sure that $vars['rows'] is a rendered array.
+  // @SEE: Have a look at template_preprocess_views_view_unformatted()
   // and views-view-unformatted.html.twig
 }
 
@@ -68,22 +71,46 @@ function template_preprocess_views_bootstrap_carousel(array &$vars) {
   $vars['wrap'] = $view->style_plugin->options['wrap'];
 
   // Carousel rows.
-  $image = $view->style_plugin->options['image'];
-  $title = $view->style_plugin->options['title'];
-  $description = $view->style_plugin->options['description'];
-  $fieldLabels = $view->display_handler->getFieldLabels(TRUE);
+  if ($view->style_plugin->usesFields()) {
+    $image = $view->style_plugin->options['image'];
+    $title = $view->style_plugin->options['title'];
+    $description = $view->style_plugin->options['description'];
+    $fieldLabels = $view->display_handler->getFieldLabels(TRUE);
+    $vars['display'] = 'fields';
+  }
+  else {
+    $vars['display'] = 'content';
+  }
 
   foreach ($vars['rows'] as $id => $row) {
     $vars['rows'][$id] = [];
-    $vars['rows'][$id]['image'] = $view->style_plugin->getField($id, $image);
-    $vars['rows'][$id]['title'] = $view->style_plugin->getField($id, $title);
-    $vars['rows'][$id]['description'] = $view->style_plugin->getField($id, $description);
-    // Add any additional fields to result.
-    foreach (array_keys($fieldLabels) as $label) {
-      if (!in_array($label, [$image, $title, $description])) {
-        $vars['rows'][$id][$label] = $view->style_plugin->getField($id, $label);
+    $row_attributes = ['class' => []];
+    $class = $view->style_plugin->options['row_class'];
+    if ($view->style_plugin->usesFields()) {
+      $vars['rows'][$id]['image'] = $view->style_plugin->getField($id, $image);
+      $vars['rows'][$id]['title'] = $view->style_plugin->getField($id, $title);
+      $vars['rows'][$id]['description'] = $view->style_plugin->getField($id, $description);
+      // Add any additional fields to result.
+      foreach (array_keys($fieldLabels) as $label) {
+        if (!in_array($label, [$image, $title, $description])) {
+          $vars['rows'][$id][$label] = $view->style_plugin->getField($id, $label);
+        }
       }
+      $class = strip_tags($view->style_plugin->tokenizeValue($class, $id));
+      $class = Html::cleanCssIdentifier($class);
     }
+    else {
+      $vars['rows'][$id]['content'] = $row;
+    }
+    $classes = explode(' ', $class);
+    foreach ($classes as &$class) {
+      $class = Html::cleanCssIdentifier($class);
+    }
+    $row_class = array_filter($classes);
+    if (!empty($row_class)) {
+      $row_attributes['class'] = array_merge($row_attributes['class'], $row_class);
+    }
+    $vars['rows'][$id]['attributes'] = new Attribute($row_attributes);
   }
 
 }
@@ -103,8 +130,7 @@ function template_preprocess_views_bootstrap_grid(array &$vars) {
   $vars['id'] = ViewsBootstrap::getUniqueId($view);
   $vars['attributes']['class'][] = 'grid';
   $options = $view->style_plugin->options;
-  $options['automatic_width'] = ['default' => TRUE];
-  $horizontal = ($options['alignment'] === 'horizontal');
+  $options['automatic_width'] = ['default' => FALSE];
 
   foreach (['xs', 'sm', 'md', 'lg'] as $size) {
     $vars["col_" . $size] = $options["col_" . $size];
@@ -154,15 +180,53 @@ function template_preprocess_views_bootstrap_media_object(array &$vars) {
   $image_field = $vars['view']->style_plugin->options['image_field'];
   $heading_field = $vars['view']->style_plugin->options['heading_field'];
   $body_field = $vars['view']->style_plugin->options['body_field'];
+  $vars['attributes']['class'][] = 'media-object';
 
   foreach ($vars['rows'] as $id => $row) {
     $vars['rows'][$id] = [];
-    $vars['classes'][$id] .= ' media-object';
     $vars['rows'][$id]['image_class'] = $image_class;
     $vars['rows'][$id]['image'] = $vars['view']->style_plugin->getField($id, $image_field);
     $vars['rows'][$id]['heading'] = $vars['view']->style_plugin->getField($id, $heading_field);
     $vars['rows'][$id]['body'] = $vars['view']->style_plugin->getField($id, $body_field);
   }
+}
+
+/**
+ * Prepares variables for views panel templates.
+ *
+ * Default template: views-bootstrap-panel.html.twig.
+ *
+ * @param array $vars
+ *   An associative array containing:
+ *   - view: A ViewExecutable object.
+ *   - rows: The raw row data.
+ */
+function template_preprocess_views_bootstrap_panel(array &$vars) {
+  $view = $vars['view'];
+  $vars['id'] = ViewsBootstrap::getUniqueId($view);
+  $group_title_field = isset($view->style_plugin->options['grouping'][0]) ? $view->style_plugin->options['grouping'][0]['field'] : "";
+  $panel_title_field = $view->style_plugin->options['panel_title_field'];
+  $vars['attributes']['class'][] = 'panel-group';
+  if ($panel_title_field) {
+    foreach ($vars['rows'] as $id => $row) {
+      $vars['group_title'] = $group_title_field ? $view->style_plugin->getField($id, $group_title_field) : "";
+      $vars['rows'][$id] = [];
+      $vars['rows'][$id]['content'] = $row;
+      $vars['rows'][$id]['title'] = $view->style_plugin->getField($id, $panel_title_field);
+    }
+  }
+  else {
+    // @TODO: This would be better as validation errors on the style plugin options form.
+    Drupal::messenger()->addWarning(t('@style style will not display without the "@field" setting.',
+      [
+        '@style' => $view->style_plugin->definition['title'],
+        '@field' => 'Panel title',
+      ]
+    ));
+  }
+  // @TODO: Make sure that $vars['rows'] is rendered array.
+  // @SEE: Have a look template_preprocess_views_view_unformatted()
+  // and views-view-unformatted.html.twig
 }
 
 /**
@@ -178,19 +242,22 @@ function template_preprocess_views_bootstrap_media_object(array &$vars) {
 function template_preprocess_views_bootstrap_tab(array &$vars) {
   $vars['id'] = ViewsBootstrap::getUniqueId($vars['view']);
   $view = $vars['view'];
+  $group_title_field = isset($view->style_plugin->options['grouping'][0]) ? $view->style_plugin->options['grouping'][0]['field'] : "";
   $tab_field = $view->style_plugin->options['tab_field'];
   $vars['tab_type'] = $view->style_plugin->options['tab_type'];
-  $vars['justified'] = $view->style_plugin->options['justified'];
+  $vars['tab_position'] = $view->style_plugin->options['tab_position'];
+  $vars['tab_fade'] = $view->style_plugin->options['tab_fade'] ? 'fade' : '';
 
   // Get tabs.
   if ($tab_field) {
     if (isset($view->field[$tab_field])) {
       foreach (array_keys($vars['rows']) as $key) {
-        $vars['tabs'][$key] = $view->style_plugin->getFieldValue($key, $tab_field);
+        $vars['tabs'][$key] = $view->style_plugin->getField($key, $tab_field);
       }
     }
     foreach ($vars['rows'] as $id => $row) {
-      $vars['rows'][$id] = array();
+      $vars['group_title'] = $group_title_field ? $view->style_plugin->getField($id, $group_title_field) : "";
+      $vars['rows'][$id] = [];
       $vars['rows'][$id]['content'] = $row;
       $vars['rows'][$id]['attributes'] = new Attribute();
       if ($row_class = $view->style_plugin->getRowClass($id)) {
@@ -199,13 +266,13 @@ function template_preprocess_views_bootstrap_tab(array &$vars) {
     }
   }
   else {
-    // @TODO: This would be better as valdiation errors on the style plugin options form.
-    drupal_set_message(t('@style style will not display without the "@field" setting.',
-      [
+    // @TODO: This would be better as validation errors on the style plugin options form.
+    Drupal::messenger()->addWarning(
+      t('@style style will not display without the "@field" setting.', [
         '@style' => $view->style_plugin->definition['title'],
         '@field' => 'Tab title',
       ]
-    ), 'warning');
+    ));
   }
 }
 
@@ -227,3 +294,59 @@ function template_preprocess_views_bootstrap_table(array &$vars) {
   }
 }
 
+/**
+ * Prepares variables for views dropdown templates.
+ *
+ * Adds 'dropdown' classes and some aria roles to the list structure.
+ *
+ * Default template: views-bootstrap-dropdown.html.twig.
+ *
+ * @param array $vars
+ *   An associative array containing:
+ *   - view: A ViewExecutable object.
+ *   - rows: The raw row data.
+ *
+ * @see template_preprocess_views_view_list()
+ */
+function template_preprocess_views_bootstrap_dropdown(array &$vars) {
+  /** @var \Drupal\views\ViewExecutable $view */
+  $view = $vars['view'];
+  $vars['id'] = ViewsBootstrap::getUniqueId($view);
+
+  /** @var  \Drupal\views\Plugin\views\style\StylePluginBase $handler */
+  $handler = $vars['view']->style_plugin;
+
+  // Fetch classes from handler options. Sanitize user input.
+  $wrapper_class = explode(' ', $handler->options['wrapper_class']);
+  $wrapper_class[] = 'dropdown';
+  $wrapper_class = array_map('\Drupal\Component\Utility\Html::cleanCssIdentifier', $wrapper_class);
+  $vars['attributes'] = new Attribute(['class' => $wrapper_class]);
+
+  $class = explode(' ', $handler->options['class']);
+  $class[] = "dropdown-menu";
+  $class = array_map('\Drupal\Component\Utility\Html::cleanCssIdentifier', $class);
+  $vars['list']['attributes'] = new Attribute(['class' => $class]);
+
+  $vars['button']['text'] = $handler->options['button_text'];
+  $button_class = explode(' ', $handler->options['button_class']);
+  $button_class[] = 'dropdown-toggle';
+  $button_class = array_map('\Drupal\Component\Utility\Html::cleanCssIdentifier', $button_class);
+  $vars['button']['attributes'] = new Attribute(['class' => $button_class]);
+
+  // Inject additional dropdown aria attributes into the individual rows to
+  // make them behave as menu items.
+  // The most common case should be one linked field, but there seems
+  // no reason why the whole rendered row can't be here if that's what you want.
+  foreach ($vars['rows'] as $id => $row) {
+    $vars['rows'][$id] = [];
+    $vars['rows'][$id]['content'] = $row;
+    // Using role=presentation here is supposed to diminish the screen readers
+    // treatment of list items as "List Items". Being a menu item is sufficient.
+    // tabindex -1 means that all these links will not waylay keyboard
+    // navigation (until the user deliberately opens that list).
+    $vars['rows'][$id]['attributes'] = new Attribute(['role' => 'menuitem presentation', 'tabindex' => -1]);
+    if ($row_class = $handler->getRowClass($id)) {
+      $vars['rows'][$id]['attributes']->addClass($row_class);
+    }
+  }
+}

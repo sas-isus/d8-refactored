@@ -31,6 +31,12 @@ class WebformElementCheckboxesTest extends WebformElementBrowserTestBase {
     $this->assertRaw('<input data-drupal-selector="edit-checkboxes-buttons-yes" class="visually-hidden form-checkbox" type="checkbox" id="edit-checkboxes-buttons-yes" name="checkboxes_buttons[Yes]" value="Yes" />');
     $this->assertRaw('<label class="webform-options-display-buttons-label option" for="edit-checkboxes-buttons-yes">Yes</label>');
 
+    // Check checkboxes displayed as buttons_horizontal.
+    $this->assertRaw('<div id="edit-checkboxes-buttons-horizontal" class="js-webform-checkboxes webform-options-display-buttons webform-options-display-buttons-horizontal form-checkboxes"><div class="webform-options-display-buttons-wrapper">');
+
+    // Check checkboxes displayed as buttons_vertical.
+    $this->assertRaw('<div id="edit-checkboxes-buttons-vertical" class="js-webform-checkboxes webform-options-display-buttons webform-options-display-buttons-vertical form-checkboxes"><div class="webform-options-display-buttons-wrapper">');
+
     // Check checkboxes displayed as buttons with description.
     $this->assertRaw('<label class="webform-options-display-buttons-label option" for="edit-checkboxes-buttons-description-one"><div class="webform-options-display-buttons-title">One</div><div class="webform-options-display-buttons-description description">This is a description</div></label>');
 

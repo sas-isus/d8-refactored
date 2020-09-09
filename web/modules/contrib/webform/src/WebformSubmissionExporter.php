@@ -577,7 +577,9 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
           'latest' => $this->t('Latest'),
           'serial' => $this->t('Submission number'),
           'sid' => $this->t('Submission ID'),
-          'date' => $this->t('Date'),
+          'date' => $this->t('Created date'),
+          'date_completed' => $this->t('Completed date'),
+          'date_changed' => $this->t('Changed date'),
         ],
         '#default_value' => $export_options['range_type'],
       ];
@@ -600,6 +602,8 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
         'serial' => ['#type' => 'number'],
         'sid' => ['#type' => 'number'],
         'date' => ['#type' => 'date'],
+        'date_completed' => ['#type' => 'date'],
+        'date_changed' => ['#type' => 'date'],
       ];
       foreach ($ranges as $key => $range_element) {
         $form['export']['download'][$key] = [
@@ -657,7 +661,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
           'completed' => $this->t('Completed submissions only'),
           'draft' => $this->t('Drafts only'),
         ],
-        '#access' => ($webform->getSetting('draft') != WebformInterface::DRAFT_NONE),
+        '#access' => ($webform->getSetting('draft') !== WebformInterface::DRAFT_NONE),
       ];
     }
 
@@ -866,11 +870,16 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
         break;
 
       case 'date':
+      case 'date_completed':
+      case 'date_changed':
+        $date_field = preg_match('/date_(completed|changed)/', $export_options['range_type'], $match)
+          ? $match[1]
+          : 'created';
         if ($export_options['range_start']) {
-          $query->condition('created', strtotime($export_options['range_start']), '>=');
+          $query->condition($date_field, strtotime($export_options['range_start']), '>=');
         }
         if ($export_options['range_end']) {
-          $query->condition('created', strtotime('+1 day', strtotime($export_options['range_end'])), '<');
+          $query->condition($date_field, strtotime('+1 day', strtotime($export_options['range_end'])), '<');
         }
         break;
     }
@@ -893,7 +902,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
     }
 
     // Filter by latest.
-    if ($export_options['range_type'] == 'latest' && $export_options['range_latest']) {
+    if ($export_options['range_type'] === 'latest' && $export_options['range_latest']) {
       // Clone the query and use it to get latest sid starting sid.
       $latest_query = clone $query;
       $latest_query->sort('created', 'DESC');

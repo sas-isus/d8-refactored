@@ -365,14 +365,14 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
    * {@inheritdoc}
    */
   public function isSubmissionOptional() {
-    return ($this->pluginDefinition['submission'] === self::SUBMISSION_OPTIONAL);
+    return ($this->pluginDefinition['submission'] === WebformHandlerInterface::SUBMISSION_OPTIONAL);
   }
 
   /**
    * {@inheritdoc}
    */
   public function isSubmissionRequired() {
-    return ($this->pluginDefinition['submission'] === self::SUBMISSION_REQUIRED);
+    return ($this->pluginDefinition['submission'] === WebformHandlerInterface::SUBMISSION_REQUIRED);
   }
 
   /**

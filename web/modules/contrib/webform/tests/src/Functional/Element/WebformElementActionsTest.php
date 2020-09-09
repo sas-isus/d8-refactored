@@ -42,7 +42,7 @@ class WebformElementActionsTest extends WebformElementBrowserTestBase {
     $this->assertNoRaw('id="edit-actions-wizard-prev-wizard-prev"');
 
     // Move to next page.
-    $this->drupalPostForm(NULL, [], 'Next Page >');
+    $this->drupalPostForm(NULL, [], 'Next >');
 
     // Check no wizard next.
     $this->assertNoRaw('id="edit-actions-wizard-next-wizard-next"');
@@ -67,7 +67,7 @@ class WebformElementActionsTest extends WebformElementBrowserTestBase {
     // Check custom update action.
     $this->drupalLogin($this->rootUser);
     $this->drupalGet("/admin/structure/webform/manage/test_element_actions/submission/$sid/edit");
-    $this->drupalPostForm(NULL, [], 'Next Page >');
+    $this->drupalPostForm(NULL, [], 'Next >');
     $this->assertRaw('<input class="webform-button--submit custom-update button button--primary js-form-submit form-submit" style="font-weight: bold" data-custom-update data-drupal-selector="edit-actions-custom-submit" type="submit" id="edit-actions-custom-submit" name="op" value="{Custom update}" />');
 
     /**************************************************************************/
@@ -83,12 +83,12 @@ class WebformElementActionsTest extends WebformElementBrowserTestBase {
     // Check draft button.
     $this->assertRaw('<input formnovalidate="formnovalidate" class="webform-button--draft draft_button_attributes button js-form-submit form-submit" style="color: blue" data-drupal-selector="edit-actions-draft" type="submit" id="edit-actions-draft" name="op" value="Save Draft" />');
     // Check next button.
-    $this->assertRaw('<input class="webform-button--next wizard_next_button_attributes button js-form-submit form-submit" style="color: yellow" data-drupal-selector="edit-actions-wizard-next" type="submit" id="edit-actions-wizard-next" name="op" value="Next Page &gt;" />');
+    $this->assertRaw('<input class="webform-button--next wizard_next_button_attributes button js-form-submit form-submit" style="color: yellow" data-drupal-selector="edit-actions-wizard-next" type="submit" id="edit-actions-wizard-next" name="op" value="Next &gt;" />');
 
-    $this->drupalPostForm('/webform/test_element_actions_buttons', [], 'Next Page >');
+    $this->drupalPostForm('/webform/test_element_actions_buttons', [], 'Next >');
 
     // Check previous button.
-    $this->assertRaw('<input formnovalidate="formnovalidate" class="webform-button--previous wizard_prev_button_attributes button js-form-submit form-submit" style="color: yellow" data-drupal-selector="edit-actions-wizard-prev" type="submit" id="edit-actions-wizard-prev" name="op" value="&lt; Previous Page" />');
+    $this->assertRaw('<input formnovalidate="formnovalidate" class="webform-button--previous wizard_prev_button_attributes button js-form-submit form-submit" style="color: yellow" data-drupal-selector="edit-actions-wizard-prev" type="submit" id="edit-actions-wizard-prev" name="op" value="&lt; Previous" />');
     // Check preview button.
     $this->assertRaw('<input class="webform-button--preview preview_next_button_attributes button js-form-submit form-submit" style="color: orange" data-drupal-selector="edit-actions-preview-next" type="submit" id="edit-actions-preview-next" name="op" value="Preview" />');
 
@@ -104,7 +104,7 @@ class WebformElementActionsTest extends WebformElementBrowserTestBase {
 
     // Check update button.
     $this->drupalGet("/admin/structure/webform/manage/test_element_actions_buttons/submission/$sid/edit");
-    $this->drupalPostForm(NULL, [], 'Next Page >');
+    $this->drupalPostForm(NULL, [], 'Next >');
     $this->assertRaw('<input class="webform-button--submit form_update_attributes button button--primary js-form-submit form-submit" style="color: purple" data-drupal-selector="edit-actions-submit" type="submit" id="edit-actions-submit" name="op" value="Save" />');
   }
 

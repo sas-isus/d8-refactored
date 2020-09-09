@@ -18,29 +18,57 @@
     options.alignment,
   ]
 %}
+{%
+  set row_classes = [
+    'row',
+  ]
+%}
+{%
+  set col_classes = [
+  'col',
+  col_xs,
+  col_sm,
+  col_md,
+  col_lg,
+  ]
+%}
 {% if title %}
   <h3>{{ title }}</h3>
 {% endif %}
 <div id="{{ id }}" {{ attributes.addClass(classes) }}>
   {% if options.alignment  == 'horizontal' %}
     {% for row in items %}
-      <div class="row">
+      <div{{ row.attributes.addClass(row_classes, options.row_class_default ? 'row-' ~ loop.index) }}>
         {% for column in row.content %}
-          <div class="col {{ col_xs }} {{ col_sm }} {{ col_md }} {{ col_lg }} {{ options.row_class }}">
+          <div{{ column.attributes.addClass(col_classes, options.col_class_default ? 'col-' ~ loop.index) }}>
             {{ column.content }}
           </div>
         {% endfor %}
+        {% if loop.index is divisible by (sizes.xs) %}
+          <div class="clearfix visible-xs-block"></div>
+        {% endif %}
+
+        {% if loop.index is divisible by (sizes.sm) %}
+          <div class="clearfix visible-sm-block"></div>
+        {% endif %}
+
+        {% if loop.index is divisible by (sizes.md) %}
+          <div class="clearfix visible-md-block"></div>
+        {% endif %}
+
+        {% if loop.index is divisible by (sizes.lg) %}
+          <div class="clearfix visible-lg-block"></div>
+        {% endif %}
       </div>
     {% endfor %}
   {% else %}
-    <div class="row">
+    <div{{ row.attributes.addClass(row_classes, options.row_class_default ? 'row-' ~ loop.index) }}>
       {% for column in items %}
-        <div class="col {{ col_xs }} {{ col_sm }} {{ col_md }} {{ col_lg }} {{ options.row_class }}">
+        <div{{ column.attributes.addClass(col_classes, options.col_class_default ? 'col-' ~ loop.index) }}>
           {% for row in column.content %}
             {{ row.content }}
           {% endfor %}
         </div>
-
         {% if loop.index is divisible by (sizes.xs) %}
           <div class="clearfix visible-xs-block"></div>
         {% endif %}

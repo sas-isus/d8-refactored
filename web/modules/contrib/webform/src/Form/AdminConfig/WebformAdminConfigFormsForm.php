@@ -375,6 +375,20 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       '#size' => 20,
       '#default_value' => $settings['default_wizard_confirmation_label'],
     ];
+    $form['wizard_settings']['default_wizard_toggle_show_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default wizard show all elements label'),
+      '#required' => TRUE,
+      '#size' => 20,
+      '#default_value' => $settings['default_wizard_toggle_show_label'],
+    ];
+    $form['wizard_settings']['default_wizard_toggle_hide_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default wizard hide all elements label'),
+      '#required' => TRUE,
+      '#size' => 20,
+      '#default_value' => $settings['default_wizard_toggle_hide_label'],
+    ];
 
     // Preview settings.
     $form['preview_settings'] = [
@@ -715,7 +729,7 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
 
     // Track if we need to trigger an update of all webform paths
     // because the 'default_page_base_path' changed.
-    $update_paths = ($settings['default_page_base_path'] != $this->config('webform.settings')->get('settings.default_page_base_path')) ? TRUE : FALSE;
+    $update_paths = ($settings['default_page_base_path'] !== $this->config('webform.settings')->get('settings.default_page_base_path')) ? TRUE : FALSE;
 
     // Filter empty dialog options.
     foreach ($settings['dialog_options'] as $dialog_name => $dialog_options) {

@@ -29,13 +29,6 @@ class ViewsBootstrapGrid extends StylePluginBase {
   protected $usesRowPlugin = TRUE;
 
   /**
-   * Overrides \Drupal\views\Plugin\views\style\StylePluginBase::usesRowClass.
-   *
-   * @var bool
-   */
-  protected $usesRowClass = TRUE;
-
-  /**
    * Return the token-replaced row or column classes for the specified result.
    *
    * @param int $result_index
@@ -51,6 +44,7 @@ class ViewsBootstrapGrid extends StylePluginBase {
       $class = $this->options[$type . '_class_custom'];
       if ($this->usesFields() && $this->view->field) {
         $class = strip_tags($this->tokenizeValue($class, $result_index));
+        $class = Html::cleanCssIdentifier($class);
       }
 
       $classes = explode(' ', $class);
@@ -59,6 +53,7 @@ class ViewsBootstrapGrid extends StylePluginBase {
       }
       return implode(' ', $classes);
     }
+    return '';
   }
 
   /**
@@ -128,24 +123,16 @@ class ViewsBootstrapGrid extends StylePluginBase {
     $options = parent::defineOptions();
 
     $options['alignment'] = ['default' => 'horizontal'];
-    $options['columns'] = ['default' => '4'];
+    $options['columns'] = ['default' => '12'];
     $options['col_xs'] = ['default' => 'col-xs-12'];
-    $options['col_sm'] = ['default' => 'col-sm-12'];
-    $options['col_md'] = ['default' => 'col-md-12'];
-    $options['col_lg'] = ['default' => 'col-lg-12'];
-    $options['automatic_width'] = ['default' => TRUE];
+    $options['col_sm'] = ['default' => 'col-sm-6'];
+    $options['col_md'] = ['default' => 'col-md-4'];
+    $options['col_lg'] = ['default' => 'col-lg-3'];
+    $options['automatic_width'] = ['default' => FALSE];
     $options['col_class_custom'] = ['default' => ''];
     $options['col_class_default'] = ['default' => TRUE];
     $options['row_class_custom'] = ['default' => ''];
     $options['row_class_default'] = ['default' => TRUE];
-    $options['default'] = ['default' => ''];
-    $options['info'] = ['default' => []];
-    $options['override'] = ['default' => TRUE];
-    $options['sticky'] = ['default' => FALSE];
-    $options['order'] = ['default' => 'asc'];
-    $options['caption'] = ['default' => ''];
-    $options['summary'] = ['default' => ''];
-    $options['description'] = ['default' => ''];
     return $options;
   }
 
@@ -166,27 +153,42 @@ class ViewsBootstrapGrid extends StylePluginBase {
       Vertical alignment will place items starting in the upper left and moving down.'),
       '#default_value' => $this->options['alignment'],
     ];
-
-    $form['columns'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Number of columns per row'),
-      '#required' => TRUE,
-      '#default_value' => isset($this->options['columns']) ? $this->options['columns'] : NULL,
-      '#options' => [
-        1 => 1,
-        2 => 2,
-        3 => 3,
-        4 => 4,
-        6 => 6,
-        12 => 12,
-        999 => $this->t('All'),
-      ],
+    $form['col_class_default'] = [
+      '#title' => $this->t('Default column classes'),
+      '#description' => $this->t('Add the default views column classes like views-col, col-1 and clearfix to the output. You can use this to quickly reduce the amount of markup the view provides by default, at the cost of making it more difficult to apply CSS.'),
+      '#type' => 'checkbox',
+      '#default_value' => $this->options['col_class_default'],
     ];
+    $form['col_class_custom'] = [
+      '#title' => $this->t('Custom column class'),
+      '#description' => $this->t('Additional classes to provide on each column. Separated by a space.'),
+      '#type' => 'textfield',
+      '#default_value' => $this->options['col_class_custom'],
+    ];
+    if ($this->usesFields()) {
+      $form['col_class_custom']['#description'] .= ' ' . $this->t('You may use field tokens from as per the "Replacement patterns" used in "Rewrite the output of this field" for all fields.');
+    }
+    $form['row_class_default'] = [
+      '#title' => $this->t('Default row classes'),
+      '#description' => $this->t('Adds the default views row classes like views-row, row-1 and clearfix to the output. You can use this to quickly reduce the amount of markup the view provides by default, at the cost of making it more difficult to apply CSS.'),
+      '#type' => 'checkbox',
+      '#default_value' => $this->options['row_class_default'],
+    ];
+    $form['row_class_custom'] = [
+      '#title' => $this->t('Custom row class'),
+      '#description' => $this->t('Additional classes to provide on each row. Separated by a space.'),
+      '#type' => 'textfield',
+      '#default_value' => $this->options['row_class_custom'],
+    ];
+    if ($this->usesFields()) {
+      $form['row_class_custom']['#description'] .= ' ' . $this->t('You may use field tokens from as per the "Replacement patterns" used in "Rewrite the output of this field" for all fields.');
+    }
 
     foreach (['xs', 'sm', 'md', 'lg'] as $size) {
       $form["col_${size}"] = [
         '#type' => 'select',
-        '#title' => $this->t("Number of columns (col-${size})"),
+        '#title' => $this->t("Number of columns (col-@size)", ['@size' => $size]),
+        '#description' => $this->t("This adds col-@size to the div.", ['@size' => $size]),
         '#required' => TRUE,
         '#default_value' => isset($this->options["col_${size}"]) ? $this->options["col_${size}"] : NULL,
         '#options' => [

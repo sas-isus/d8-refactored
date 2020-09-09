@@ -115,7 +115,7 @@ class WebformEntityStorage extends ConfigEntityStorage implements WebformEntityS
    * {@inheritdoc}
    */
   protected function doPostSave(EntityInterface $entity, $update) {
-    if ($update && $entity->getAccessRules() != $entity->original->getAccessRules()) {
+    if ($update && $entity->getAccessRules() !== $entity->original->getAccessRules()) {
       // Invalidate webform_submission listing cache tags because due to the
       // change in access rules of this webform, some listings might have
       // changed for users.
@@ -197,7 +197,7 @@ class WebformEntityStorage extends ConfigEntityStorage implements WebformEntityS
     $webforms = $this->loadMultiple();
     $categories = [];
     foreach ($webforms as $webform) {
-      if ($template !== NULL && $webform->get('template') != $template) {
+      if ($template !== NULL && $webform->get('template') !== $template) {
         continue;
       }
       if ($category = $webform->get('category')) {
@@ -220,7 +220,7 @@ class WebformEntityStorage extends ConfigEntityStorage implements WebformEntityS
     $categorized_options = [];
     foreach ($webforms as $id => $webform) {
       // Skip templates.
-      if ($template !== NULL && $webform->get('template') != $template) {
+      if ($template !== NULL && $webform->get('template') !== $template) {
         continue;
       }
       // Skip archived.

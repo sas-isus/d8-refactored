@@ -83,7 +83,7 @@ class WebformElementMediaFileTest extends WebformElementManagedFileTestBase {
    */
   protected function checkFileUpload($type, $first_file, $second_file) {
     $key = 'managed_file_' . $type;
-    $parameter_name = ($type == 'multiple') ? "files[$key][]" : "files[$key]";
+    $parameter_name = ($type === 'multiple') ? "files[$key][]" : "files[$key]";
 
     $edit = [
       $parameter_name => \Drupal::service('file_system')->realpath($first_file->uri),
@@ -98,7 +98,7 @@ class WebformElementMediaFileTest extends WebformElementManagedFileTestBase {
     $file = File::load($fid);
 
     // Check that test file was uploaded to the current submission.
-    $second = ($type == 'multiple') ? [$fid] : $fid;
+    $second = ($type === 'multiple') ? [$fid] : $fid;
     $this->assertEqual($submission->getElementData($key), $second, 'Test file was upload to the current submission');
 
     // Check test file file usage.
@@ -115,14 +115,14 @@ class WebformElementMediaFileTest extends WebformElementManagedFileTestBase {
 
     // Check managed file formatting.
     $this->drupalGet('/admin/structure/webform/manage/test_element_managed_file/submission/' . $sid);
-    if ($type == 'multiple') {
+    if ($type === 'multiple') {
       $this->assertRaw('<label>managed_file_multiple</label>');
       $this->assertRaw('<div class="item-list">');
     }
     $this->assertRaw('<span class="file file--mime-text-plain file--text"> <a href="' . file_create_url($file->getFileUri()) . '" type="text/plain; length=' . $file->getSize() . '">' . $file->getFilename() . '</a></span>');
 
     // Remove the uploaded file.
-    if ($type == 'multiple') {
+    if ($type === 'multiple') {
       $edit = ['managed_file_multiple[file_' . $fid . '][selected]' => TRUE];
       $submit = 'Remove selected';
     }
@@ -149,7 +149,7 @@ class WebformElementMediaFileTest extends WebformElementManagedFileTestBase {
     $submission = WebformSubmission::load($sid);
 
     // Check that test new file was uploaded to the current submission.
-    $second = ($type == 'multiple') ? [$new_fid] : $new_fid;
+    $second = ($type === 'multiple') ? [$new_fid] : $new_fid;
     $this->assertEqual($submission->getElementData($key), $second, 'Test new file was upload to the current submission');
 
     // Check that test file was deleted from the disk and database.

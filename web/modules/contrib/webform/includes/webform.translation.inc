@@ -62,11 +62,11 @@ function webform_form_locale_translate_edit_form_alter(&$form, FormStateInterfac
 function webform_form_config_translation_add_form_alter(&$form, FormStateInterface $form_state, $is_new = TRUE) {
   // Manually apply YAML editor to text field that store YAML data.
   foreach ($form['config_names'] as $config_name => &$config_element) {
-    if ($config_name == 'webform.settings') {
+    if ($config_name === 'webform.settings') {
       _webform_form_config_translate_add_form_alter_yaml_element($config_element['test']['types']);
       _webform_form_config_translate_add_form_alter_yaml_element($config_element['test']['names']);
     }
-    elseif ($config_name == 'block.block.webform') {
+    elseif ($config_name === 'block.block.webform') {
       _webform_form_config_translate_add_form_alter_yaml_element($config_element['settings']['default_data']);;
     }
     elseif (strpos($config_name, 'field.field.') === 0
@@ -189,7 +189,7 @@ function _webform_form_config_translate_add_form_filter_elements(array &$transla
       continue;
     }
     $source_element = $source_elements[$key];
-    if ($translation_element == $source_element) {
+    if ($translation_element === $source_element) {
       unset($translation_elements[$key]);
     }
     elseif (is_array($translation_element)) {

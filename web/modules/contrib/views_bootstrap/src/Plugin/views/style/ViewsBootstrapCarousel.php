@@ -21,11 +21,18 @@ use Drupal\views\Plugin\views\style\StylePluginBase;
  */
 class ViewsBootstrapCarousel extends StylePluginBase {
   /**
-   * Does the style plugin for itself support to add fields to it's output.
+   * Whether or not this style uses a row plugin.
    *
    * @var bool
    */
-  protected $usesFields = TRUE;
+  protected $usesRowPlugin = TRUE;
+
+  /**
+   * Whether the config form exposes the class to provide on each row.
+   *
+   * @var bool
+   */
+  protected $usesRowClass = TRUE;
 
   /**
    * Definition.
@@ -52,13 +59,13 @@ class ViewsBootstrapCarousel extends StylePluginBase {
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
 
-    $fields = ['' => t('<None>')];
+    $fields = ['' => $this->t('<None>')];
     $fields += $this->displayHandler->getFieldLabels(TRUE);
 
     $form['interval'] = [
       '#type' => 'number',
       '#title' => $this->t('Interval'),
-      '#description' => t('The amount of time to delay between automatically cycling an item. If false, carousel will not automatically cycle.'),
+      '#description' => $this->t('The amount of time to delay between automatically cycling an item. If false, carousel will not automatically cycle.'),
       '#default_value' => $this->options['interval'],
     ];
 
@@ -77,37 +84,40 @@ class ViewsBootstrapCarousel extends StylePluginBase {
     $form['pause'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Pause on hover'),
-      '#description' => t('Pauses the cycling of the carousel on mouseenter and resumes the cycling of the carousel on mouseleave.'),
+      '#description' => $this->t('Pauses the cycling of the carousel on mouseenter and resumes the cycling of the carousel on mouseleave.'),
       '#default_value' => $this->options['pause'],
     ];
 
     $form['wrap'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Wrap'),
-      '#description' => t('The carousel should cycle continuously or have hard stops.'),
+      '#description' => $this->t('The carousel should cycle continuously or have hard stops.'),
       '#default_value' => $this->options['wrap'],
     ];
 
-    $form['image'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Image'),
-      '#options' => $fields,
-      '#default_value' => $this->options['image'],
-    ];
+    if ($this->usesFields()) {
+      $form['image'] = [
+        '#type' => 'select',
+        '#title' => $this->t('Image'),
+        '#options' => $fields,
+        '#default_value' => $this->options['image'],
+      ];
 
-    $form['title'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Title'),
-      '#options' => $fields,
-      '#default_value' => $this->options['title'],
-    ];
+      $form['title'] = [
+        '#type' => 'select',
+        '#title' => $this->t('Title'),
+        '#options' => $fields,
+        '#default_value' => $this->options['title'],
+      ];
 
-    $form['description'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Description'),
-      '#options' => $fields,
-      '#default_value' => $this->options['description'],
-    ];
+      $form['description'] = [
+        '#type' => 'select',
+        '#title' => $this->t('Description'),
+        '#options' => $fields,
+        '#default_value' => $this->options['description'],
+      ];
+    }
+
   }
 
 }

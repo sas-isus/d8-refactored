@@ -5,7 +5,9 @@
  * Allows access to terms in a vocabulary to be limited by user or role.
  */
 
+use Drupal\Component\Utility\Tags;
 use Drupal\Core\Access\AccessResultForbidden;
+use Drupal\Core\Entity\Element\EntityAutocomplete;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
@@ -15,6 +17,7 @@ use Drupal\node\NodeInterface;
 use Drupal\permissions_by_term\Service\AccessCheck;
 use Drupal\permissions_by_term\Service\AccessStorage;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Implements hook_help().
@@ -121,7 +124,16 @@ function permissions_by_term_submit($form, FormState $formState) {
  */
 function permissions_by_term_form_taxonomy_term_form_alter(&$form, FormStateInterface $formState, $form_id) {
   if (\Drupal::currentUser()->hasPermission('show term permission form on term page')) {
-    $termId = $formState->getFormObject()->getEntity()->id();
+    $term = $formState->getFormObject()->getEntity();
+    $termId = $term->id();
+
+    $settings = \Drupal::config('permissions_by_term.settings');
+    $target_bundles = $settings->get('target_bundles');
+
+    // Check if permissions can be managed for this taxonomy term bundle.
+    if ($target_bundles && !in_array($term->bundle(), $target_bundles)) {
+      return;
+    }
 
     /* @var \Drupal\permissions_by_term\Service\AccessStorage $access_storage */
     $access_storage = \Drupal::service('permissions_by_term.access_storage');
@@ -201,6 +213,89 @@ function permissions_by_term_form_taxonomy_term_form_alter(&$form, FormStateInte
 
     $form['#validate'][] = 'permissions_by_term_validate';
     $form['actions']['submit']['#submit'][] = 'permissions_by_term_submit';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for 'user_form'.
+ */
+function permissions_by_term_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Nothing to do if the current user does not have requested permission.
+  if (!\Drupal::currentUser()->hasPermission('show term permissions on user edit page')) {
+    return;
+  }
+
+  $form['access'] = [
+    '#type' => 'details',
+    '#title' => t('Permissions'),
+    '#description' => t('Extend content access by giving access to the related taxonomy terms.'),
+    '#open' => TRUE,
+    '#weight' => -10,
+  ];
+
+  $term_storage = \Drupal::entityTypeManager()
+    ->getStorage('taxonomy_term');
+
+  $settings = \Drupal::config('permissions_by_term.settings');
+  $target_bundles = $settings->get('target_bundles');
+  $terms = $target_bundles
+    ? $term_storage->loadByProperties(['vid' => $target_bundles])
+    : $term_storage->loadMultiple();
+
+  $form['access']['terms'] = [
+    '#type' => 'select',
+    '#multiple' => TRUE,
+    '#options' => array_map(function (TermInterface $term) {
+      return $term->label();
+    }, $terms),
+    '#title' => t('Allowed terms'),
+    '#description' => t('Choose a list of taxonomy terms. The access to the content, related to chosen taxonomy terms will be granted to this user.'),
+  ];
+
+  /** @var \Drupal\permissions_by_term\Service\AccessStorage $access_storage */
+  $access_storage = \Drupal::service('permissions_by_term.access_storage');
+
+  /** @var \Drupal\user\UserInterface $user */
+  $user = $form_state->getFormObject()->getEntity();
+
+  if (!$user->isNew() && ($permitted_tids = $access_storage->getPermittedTids($user->id(), $user->getRoles()))) {
+    $form['access']['terms']['#default_value'] = array_values($permitted_tids);
+  }
+
+  $form['actions']['submit']['#submit'][] = 'permissions_by_term_user_form_submit';
+}
+
+/**
+ * Form submission handler for permissions_by_term_form_user_form_alter.
+ *
+ * @param array $form
+ *   The complete form array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ */
+function permissions_by_term_user_form_submit(array &$form, FormStateInterface $form_state) {
+  /** @var \Drupal\permissions_by_term\Service\AccessStorage $access_storage */
+  $access_storage = \Drupal::service('permissions_by_term.access_storage');
+
+  /** @var \Drupal\user\UserInterface $user */
+  $user = $form_state->getFormObject()->getEntity();
+
+  // First, we delete existing values from the db.
+  $access_storage->deleteAllTermPermissionsByUserId($user->id());
+
+  if ($tids = $form_state->getValue('terms')) {
+    // For term permissions use user preferred language.
+    $langcode = $user->getPreferredLangcode();
+
+    // Second, we insert updated values.
+    foreach ($tids as $tid) {
+      $access_storage->addTermPermissionsByUserIds([$user->id()], $tid, $langcode);
+    }
+  }
+
+  // Rebuild permissions for nodes if needed.
+  if (!\Drupal::config('permissions_by_term.settings')->get('disable_node_access_records')) {
+    node_access_rebuild(TRUE);
   }
 }
 

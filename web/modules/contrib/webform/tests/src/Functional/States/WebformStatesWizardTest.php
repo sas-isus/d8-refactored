@@ -30,7 +30,7 @@ class WebformStatesWizardTest extends WebformBrowserTestBase {
     /**************************************************************************/
 
     // Go to default #states for page 02 with trigger-checkbox unchecked.
-    $this->postSubmission($webform, [], 'Next Page >');
+    $this->postSubmission($webform, [], 'Next >');
 
     $this->assertRaw("page_01_trigger_checkbox: 0
 page_01_textfield_required: '{default_value}'
@@ -116,7 +116,7 @@ page_02_checkbox_unchecked: 1");
     /**************************************************************************/
 
     // Go to default #states for page 02 with trigger_checkbox checked.
-    $this->postSubmission($webform, ['page_01_trigger_checkbox' => TRUE], 'Next Page >');
+    $this->postSubmission($webform, ['page_01_trigger_checkbox' => TRUE], 'Next >');
 
     $this->assertRaw("page_01_trigger_checkbox: 1
 page_01_textfield_required: '{default_value}'

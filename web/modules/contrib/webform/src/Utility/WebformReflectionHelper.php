@@ -52,7 +52,7 @@ class WebformReflectionHelper {
     while ($class_name = self::getClassName($class)) {
       $parent_classes[] = $class_name;
       $class = get_parent_class($class);
-      if ($class_name == $base_class_name || !$class) {
+      if ($class_name === $base_class_name || !$class) {
         break;
       }
     }

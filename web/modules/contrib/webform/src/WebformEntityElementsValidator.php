@@ -148,6 +148,7 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
       'submissions' => TRUE,
       'variants' => TRUE,
       'hierarchy' => TRUE,
+      'pages' => TRUE,
       'rendering' => TRUE,
     ];
 
@@ -206,6 +207,11 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
 
     // Validate hierarchy.
     if ($options['hierarchy'] && ($messages = $this->validateHierarchy())) {
+      return $messages;
+    }
+
+    // Validate pages.
+    if ($options['pages'] && ($messages = $this->validatePages())) {
       return $messages;
     }
 
@@ -371,7 +377,7 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
     if ($ignored_properties) {
       $messages = [];
       foreach ($ignored_properties as $ignored_property => $ignored_message) {
-        if ($ignored_property != $ignored_message) {
+        if ($ignored_property !== $ignored_message) {
           $messages[] = $ignored_message;
         }
         else {
@@ -516,6 +522,25 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
       }
     }
     return $messages;
+  }
+
+  /**
+   * Validate wizard/card pages.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup|string|null
+   *   If not valid an error message.
+   *
+   * @see \Drupal\Core\Entity\EntityFormBuilder
+   * @see \Drupal\webform\Entity\Webform::getSubmissionForm()
+   */
+  protected function validatePages() {
+    if (strpos($this->elementsRaw, "'#type': webform_card") !== FALSE
+      && strpos($this->elementsRaw, "'#type': webform_wizard_page") !== FALSE) {
+        return [$this->t('Pages and cards cannot be used in the same webform. Please remove or convert the pages/cards to the same element type.')];
+    }
+    else {
+      return NULL;
+    }
   }
 
   /**

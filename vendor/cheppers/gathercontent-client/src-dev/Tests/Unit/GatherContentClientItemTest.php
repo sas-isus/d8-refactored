@@ -384,24 +384,28 @@ class GatherContentClientItemTest extends GcBaseTestCase
                 $itemEmpty,
                 131313,
                 $itemEmpty->id,
+                [],
             ],
             'custom' => [
                 $itemCustom,
                 $itemCustom,
                 131313,
                 $itemCustom->id,
+                [],
             ],
             'multiple-elements' => [
                 $itemMultipleElements,
                 $itemMultipleElements,
                 131313,
                 $itemMultipleElements->id,
+                [],
             ],
             'with-assets' => [
                 $itemAssets,
                 $sentItem,
                 131313,
                 $itemAssets->id,
+                static::getUniqueResponseMeta(),
             ],
         ];
     }
@@ -409,7 +413,7 @@ class GatherContentClientItemTest extends GcBaseTestCase
     /**
      * @dataProvider casesItemPost
      */
-    public function testItemPost(Item $expected, Item $item, $projectId, $resultItemId)
+    public function testItemPost(Item $expected, Item $item, $projectId, $resultItemId, $meta)
     {
         $tester = $this->getBasicHttpClientTester([
             new Response(
@@ -417,7 +421,7 @@ class GatherContentClientItemTest extends GcBaseTestCase
                 [
                     'Content-Type' => 'application/json',
                 ],
-                \GuzzleHttp\json_encode(['data' => $expected])
+                \GuzzleHttp\json_encode(['data' => $expected, 'meta' => $meta])
             ),
         ]);
         $client = $tester['client'];
@@ -427,15 +431,19 @@ class GatherContentClientItemTest extends GcBaseTestCase
             ->setOptions($this->gcClientOptions)
             ->itemPost($projectId, $item);
 
-        $actual->setSkipEmptyProperties(true);
+        $actual['data']->setSkipEmptyProperties(true);
         $expected->setSkipEmptyProperties(true);
 
-        static::assertEquals($resultItemId, $actual->id);
+        static::assertEquals($resultItemId, $actual['data']->id);
 
-        static::assertTrue($actual instanceof Item, 'Data type of the return is Item');
+        if (!empty($meta)) {
+            static::assertEquals($actual['meta']->assets, $meta['assets']);
+        }
+
+        static::assertTrue($actual['data'] instanceof Item, 'Data type of the return is Item');
         static::assertEquals(
             \GuzzleHttp\json_encode($expected, JSON_PRETTY_PRINT),
-            \GuzzleHttp\json_encode($actual, JSON_PRETTY_PRINT)
+            \GuzzleHttp\json_encode($actual['data'], JSON_PRETTY_PRINT)
         );
 
         /** @var Request $request */
@@ -545,21 +553,25 @@ class GatherContentClientItemTest extends GcBaseTestCase
                 13,
                 $itemEmpty->content,
                 [],
+                [],
             ],
             'custom' => [
                 13,
                 $itemCustom->content,
+                [],
                 [],
             ],
             'multiple-elements' => [
                 13,
                 $itemMultipleElements->content,
                 [],
+                [],
             ],
             'with-assets' => [
                 13,
                 $itemAssets->content,
                 ['field-uuid' => [__DIR__.'/files/test.txt']],
+                static::getUniqueResponseMeta(),
             ],
         ];
     }
@@ -567,26 +579,30 @@ class GatherContentClientItemTest extends GcBaseTestCase
     /**
      * @dataProvider casesItemUpdatePost
      */
-    public function testItemUpdatePost($itemId, array $content, array $assets)
+    public function testItemUpdatePost($itemId, array $content, array $assets, array $meta)
     {
         $tester = $this->getBasicHttpClientTester([
             new Response(
                 202,
                 [
                     'Content-Type' => 'application/json',
-                ]
+                ],
+                \GuzzleHttp\json_encode(['meta' => $meta])
             ),
         ]);
         $client = $tester['client'];
         $container = &$tester['container'];
 
-        (new GatherContentClient($client))
+        $item = (new GatherContentClient($client))
             ->setOptions($this->gcClientOptions)
             ->itemUpdatePost($itemId, $content, $assets);
 
         /** @var Request $request */
         $request = $container[0]['request'];
 
+        if (!empty($meta)) {
+            static::assertEquals($item->assets, $meta['assets']);
+        }
         static::assertEquals(1, count($container));
         static::assertEquals('POST', $request->getMethod());
         static::assertEquals(['application/vnd.gathercontent.v2+json'], $request->getHeader('Accept'));

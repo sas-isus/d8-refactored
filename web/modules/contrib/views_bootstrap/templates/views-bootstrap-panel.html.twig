@@ -1,0 +1,15 @@
+{% if group_title %}<h3>{{ group_title }}</h3>{% endif %}
+<div id="{{ id }}" {{ attributes.addClass(classes) }}>
+  {% for key, row in rows -%}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          {{row.title}}
+        </h4>
+      </div>
+      <div class="panel-body">
+        {{row.content}}
+      </div>
+    </div>
+  {%- endfor %}
+</div>

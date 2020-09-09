@@ -70,7 +70,7 @@ class WebformDevelCommands extends DrushCommands {
         $data = _webform_update_webform_setting($data);
         $tidied_yaml = WebformYaml::encode($data) . PHP_EOL;
 
-        if ($tidied_yaml != $original_yaml) {
+        if ($tidied_yaml !== $original_yaml) {
           $this->output()->writeln(dt('Updating @file…', ['@file' => $file->filename]));
           file_put_contents($file->uri, $tidied_yaml);
           $total++;

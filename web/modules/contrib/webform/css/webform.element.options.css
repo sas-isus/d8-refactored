@@ -103,6 +103,26 @@
 }
 
 /**
+ * Horizontal.
+ */
+.webform-options-display-buttons-horizontal .webform-options-display-buttons-wrapper {
+  flex: none;
+}
+
+/**
+ * Vertical.
+ */
+.webform-options-display-buttons-vertical,
+.form-composite.webform-fieldset--title-inline .fieldset-wrapper > div.webform-options-display-buttons-vertical {
+  flex-direction: column;
+}
+
+.webform-options-display-buttons-vertical .webform-options-display-buttons-wrapper {
+  flex: 1;
+  margin: 0 5px 0 5px;
+}
+
+/**
  * Mobile support to webform options buttons on mobile devices.
  */
 @media (max-width: 600px) {

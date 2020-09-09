@@ -376,6 +376,19 @@ class GcBaseTestCase extends TestCase
         return $item;
     }
 
+    public static function getUniqueResponseMeta()
+    {
+        $amount = rand(1, 5);
+        $meta = [
+            'assets' => [],
+        ];
+        for ($i = 0; $i < $amount; $i++) {
+            $meta['assets'][] = static::getUniqueString('file');
+        }
+
+        return $meta;
+    }
+
     public static function getUniqueResponseTemplate()
     {
         return [

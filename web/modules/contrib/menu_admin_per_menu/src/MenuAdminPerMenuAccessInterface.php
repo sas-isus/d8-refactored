@@ -24,7 +24,7 @@ interface MenuAdminPerMenuAccessInterface {
   public function getPerMenuPermissions(AccountInterface $account);
 
   /**
-   * A custom access check for menu overview page
+   * A custom access check for menu overview page.
    *
    * @param \Drupal\Core\Session\AccountInterface $account
    *   Run access checks for this account.

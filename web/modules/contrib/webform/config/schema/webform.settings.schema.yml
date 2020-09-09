@@ -87,6 +87,12 @@ webform.settings:
         default_wizard_confirmation_label:
           type: label
           label: 'Default wizard confirmation label'
+        default_wizard_toggle_show_label:
+          type: label
+          label: 'Default wizard show all elements label'
+        default_wizard_toggle_hide_label:
+          type: label
+          label: 'Default wizard hide all elements label'
         default_preview_next_button_label:
           type: label
           label: 'Default preview button label'

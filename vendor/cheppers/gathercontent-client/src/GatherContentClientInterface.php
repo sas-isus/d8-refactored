@@ -157,7 +157,7 @@ interface GatherContentClientInterface
     /**
      * @see https://docs.gathercontent.com/reference#createitem
      *
-     * @return \Cheppers\GatherContent\DataTypes\Item|null
+     * @return array|null
      */
     public function itemPost(
         $projectId,
@@ -166,6 +166,8 @@ interface GatherContentClientInterface
 
     /**
      * @see https://docs.gathercontent.com/reference#updateitemcontent
+     *
+     * @return \Cheppers\GatherContent\DataTypes\Meta|null
      */
     public function itemUpdatePost(
         $itemId,

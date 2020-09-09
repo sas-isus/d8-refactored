@@ -367,7 +367,14 @@ class GatherContentClient implements GatherContentClientInterface
         $this->validatePostResponse(201);
         $body = $this->parseResponse();
 
-        return empty($body['data']) ? null : $this->parseResponseDataItem($body['data'], DataTypes\Item::class);
+        $response['data'] = empty($body['data'])
+            ? null
+            : $this->parseResponseDataItem($body['data'], DataTypes\Item::class);
+        $response['meta'] = empty($body['meta'])
+            ? null
+            : $this->parseResponseDataItem($body['meta'], DataTypes\Meta::class);
+
+        return $response;
     }
 
     /**
@@ -390,6 +397,11 @@ class GatherContentClient implements GatherContentClientInterface
         }
 
         $this->sendPost("items/$itemId/content", $request);
+
+        $this->validatePostResponse(202);
+        $body = $this->parseResponse();
+
+        return empty($body['meta']) ? null : $this->parseResponseDataItem($body['meta'], DataTypes\Meta::class);
     }
 
     /**

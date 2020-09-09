@@ -251,7 +251,7 @@ class WebformElementHelperTest extends UnitTestCase {
       [
         [['#required' => 'value'], '#required', 'value'],
         TRUE,
-        '#required == value',
+        '#required === value',
       ],
       [
         [['nested' => ['#required' => TRUE]], '#required', NULL],
@@ -261,7 +261,7 @@ class WebformElementHelperTest extends UnitTestCase {
       [
         [['nested' => ['#required' => 'value']], '#required', 'value'],
         TRUE,
-        'nested #required == value',
+        'nested #required === value',
       ],
 
     ];

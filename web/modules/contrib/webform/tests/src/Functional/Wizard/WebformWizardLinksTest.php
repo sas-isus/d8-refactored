@@ -33,7 +33,7 @@ class WebformWizardLinksTest extends WebformWizardTestBase {
     $this->assertNoFieldByName('webform_wizard_page-page_2', 'Edit');
 
     // Check that second page links to first page.
-    $this->drupalPostForm('/webform/test_form_wizard_links', [], 'Next Page >');
+    $this->drupalPostForm('/webform/test_form_wizard_links', [], 'Next >');
     $this->assertCssSelect('.webform-wizard-pages-links');
     $this->assertFieldByName('webform_wizard_page-page_1', 'Edit');
     $this->assertNoFieldByName('webform_wizard_page-page_2', 'Edit');

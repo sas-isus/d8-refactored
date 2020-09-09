@@ -1,6 +1,6 @@
 /**
  * @file
- * JavaScript behaviors for webform wizard.
+ * JavaScript behaviors for webform wizard pages.
  */
 
 (function ($, Drupal) {
@@ -36,7 +36,8 @@
               .attr({
                 'role': 'link',
                 'title': title,
-                'aria-label': title
+                'aria-label': title,
+                'tabindex': '0'
               })
               .click(function () {
                 $button.click();

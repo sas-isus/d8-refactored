@@ -32,7 +32,7 @@ class WebformWizardAccessTest extends WebformWizardTestBase {
     $this->assertNoRaw('<b>Private</b>');
 
     // Generate an anonymous submission.
-    $this->drupalPostForm('/webform/test_form_wizard_access', [], 'Next Page >');
+    $this->drupalPostForm('/webform/test_form_wizard_access', [], 'Next >');
     $this->drupalPostForm(NULL, [], 'Submit');
     $sid = $this->getLastSubmissionId($webform);
 
@@ -61,8 +61,8 @@ class WebformWizardAccessTest extends WebformWizardTestBase {
     $this->assertRaw('<b>Private</b>');
 
     // Generate an authenticated submission.
-    $this->drupalPostForm('/webform/test_form_wizard_access', [], 'Next Page >');
-    $this->drupalPostForm(NULL, [], 'Next Page >');
+    $this->drupalPostForm('/webform/test_form_wizard_access', [], 'Next >');
+    $this->drupalPostForm(NULL, [], 'Next >');
     $this->drupalPostForm(NULL, [], 'Submit');
     $sid = $this->getLastSubmissionId($webform);
 

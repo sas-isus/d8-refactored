@@ -40,7 +40,7 @@ function webform_form_alter(&$form, FormStateInterface $form_state, $form_id) {
 
     // If current webform is translated, load the base (default) webform and apply
     // the translation to the elements.
-    if ($webform->getLangcode() != $language_manager->getCurrentLanguage()->getId()) {
+    if ($webform->getLangcode() !== $language_manager->getCurrentLanguage()->getId()) {
       $original_language = $language_manager->getLanguage($webform->getLangcode());
       $form['langcode_message'] = [
         '#type' => 'webform_message',

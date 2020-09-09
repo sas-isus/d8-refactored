@@ -140,7 +140,7 @@ function _webform_library_info_alter_recursive(array &$library, array $cdn) {
     }
 
     // Ignore the CDN's associative array.
-    if ($key == 'cdn') {
+    if ($key === 'cdn') {
       continue;
     }
 

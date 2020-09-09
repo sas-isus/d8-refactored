@@ -1,9 +1,11 @@
+{% set title_attributes = create_attribute({'class': ['accordion-toggle', 'collapsed']}) %}
+{% if group_title %}<h3>{{ group_title }}</h3>{% endif %}
 <div id="{{ id }}" {{ attributes.addClass(classes) }}>
   {% for key, row in rows -%}
     <div class="panel panel-default">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a class="accordion-toggle"
+          <a {{ title_attributes }}
              data-toggle="collapse"
              data-parent="#{{ id }}"
              href="#{{ id }}-collapse-{{ key }}">

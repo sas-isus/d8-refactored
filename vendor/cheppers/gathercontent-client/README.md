@@ -192,8 +192,9 @@ catch (\Exception $e) {
     exit(1);
 }
 
-echo "Content's name = {$item->name}".PHP_EOL;
-echo "Item ID = {$item->id}".PHP_EOL;
+echo "Content's name = {$item['data']->name}".PHP_EOL;
+echo "Item ID = {$item['data']->id}".PHP_EOL;
+echo "Created assets array = {$item['meta']->assets}".PHP_EOL;
 ```
 
 To update an item with assets, you can do the following:
@@ -224,4 +225,6 @@ catch (\Exception $e) {
     
     exit(1);
 }
+
+echo "Created assets array = {$item->assets}".PHP_EOL;
 ```

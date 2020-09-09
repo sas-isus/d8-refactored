@@ -12,9 +12,9 @@ class ElementSimpleFile extends ElementBase
     ];
 
     /**
-     * @var int|null
+     * @var string
      */
-    public $fileId = null;
+    public $fileId = '';
 
     /**
      * @var string

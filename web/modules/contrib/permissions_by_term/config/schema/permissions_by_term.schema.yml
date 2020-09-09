@@ -11,3 +11,8 @@ permissions_by_term.settings:
     disable_node_access_records:
       type: boolean
       label: 'Disable node access records'
+    target_bundles:
+      type: sequence
+      label: 'Limit by taxonomy vocabularies'
+      sequence:
+        type: string

@@ -1,21 +1,61 @@
-{% if title is not empty %}
-    <h3>{{ title }}</h3>
+{{ attach_library('views_bootstrap/tabs') }}
+{% set wrapper_classes = [] %}
+{% set option_classes = ['nav'] %}
+{% set option_classes = option_classes|merge(['nav-' ~ tab_type]) %}
+{% if tab_position == 'justified' or tab_position == 'stacked' %}
+  {% set option_classes = option_classes|merge(['nav-' ~ tab_position]) %}
+{% elseif tab_position != 'basic' %}
+  {% set wrapper_classes = ['tabs-' ~ tab_position] %}
 {% endif %}
-<div id="views-bootstrap-tab-{{ id }}" {{ attributes.addClass(classes) }}>
-    <ul class="nav nav-{{ tab_type }} {% if justified %}nav-justified{% endif %}">
-        {% for key, tab in tabs %}
-            {% set tab_classes = [loop.first ? 'active'] %}
-            <li class="{{ tab_classes|join(' ') }}">
-                <a href="{{ "#tab-#{  id }-#{ key }" }}" data-toggle="tab">{{ tab }}</a>
-            </li>
-        {% endfor %}
+{% set tabid = 'views-bootstrap-tab-' ~ id %}
+{% if group_title %}<h3>{{ group_title }}</h3>{% endif %}
+<div{{ create_attribute({'class': wrapper_classes}) }}>
+  {% if tab_position != 'below' %}
+    <ul{{ create_attribute({'class': option_classes, 'role': 'tablist'}) }}>
+      {% set attributes = create_attribute() %}
+      {% for key, tab in tabs %}
+        {% if loop.first %}
+          {% set attributes = attributes.addClass('active') %}
+        {% else %}
+          {% set attributes = attributes.removeClass('active') %}
+        {% endif %}
+        {% set tab_id = "tab-" ~ tabid ~ '-' ~ key %}
+        <li{{ attributes.setAttribute('role', 'presentation') }}><a href="#{{ tab_id }}" aria-controls="{{ tab_id }}" role="tab" data-toggle="tab">{{ tab }}</a></li>
+      {% endfor %}
     </ul>
-    <div class="tab-content">
-        {% for key, row in rows %}
-            {% set row_classes = ['tab-pane', loop.first ? 'active'] %}
-            <div class="{{ row_classes|join(' ') }}" id="tab-{{ id }}-{{ key }}" {{ row.attributes }}>
-            {{ row.content }}
-        </div>
-        {% endfor %}
-    </div>
+  {% endif %}
+  {% set tabs_attributes = create_attribute({'class': 'tab-pane'}) %}
+  {% if tab_fade == 'fade' %}
+    {% set tabs_attributes = tabs_attributes.addClass('fade') %}
+  {% endif %}
+
+  <div{{ create_attribute({'class': 'tab-content'}) }}>
+    {% for key, row in rows %}
+      {% if loop.first %}
+        {% set tabs_attributes = tabs_attributes.addClass('active') %}
+        {% if tab_fade == 'fade' %}
+          {% set tabs_attributes = tabs_attributes.addClass('in') %}
+        {% endif %}
+      {% else %}
+        {% set tabs_attributes = tabs_attributes.removeClass('active') %}
+      {% endif %}
+      <div{{ tabs_attributes.setAttribute('id', "tab-" ~ tabid ~ '-' ~ key).setAttribute('role', 'tabpanel') }}>
+        {{ row.content }}
+      </div>
+    {% endfor %}
+  </div>
+  {% if tab_position == 'below' %}
+    <ul{{ create_attribute({'class': option_classes, 'role': 'tablist'}) }}>
+      {% set attributes = create_attribute() %}
+      {% for key, tab in tabs %}
+        {% if loop.first %}
+          {% set attributes = attributes.addClass('active') %}
+        {% else %}
+          {% set attributes = attributes.removeClass('active') %}
+        {% endif %}
+        {% set tab_id = "tab-" ~ tabid ~ '-' ~ key %}
+        <li{{ attributes.setAttribute('role', 'presentation') }}><a href="#{{ tab_id }}" aria-controls="{{ tab_id }}" role="tab" data-toggle="tab">{{ tab }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 </div>

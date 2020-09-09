@@ -89,7 +89,7 @@ function webform_test_webform_load(array $entities) {
  *   include file.
  */
 function _webform_test_load_include($id) {
-  if (preg_match('/^(test_form_(?:wizard_)?long)_\d+$/', $id, $match)) {
+  if (preg_match('/^(test_form_(?:wizard_)?long|test_cards_long)_\d+$/', $id, $match)) {
     $id = $match[1];
   }
 

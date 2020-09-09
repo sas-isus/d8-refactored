@@ -1302,6 +1302,12 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         'youtube_id' => 'oMgOprfJTWA',
         'presentation_id' => '1ZYPW5BWh9gm7APrYKAuMdQKksFN2yWqaeN0C4iK127M',
       ],
+      'cards' => [
+        'title' => $this->t('Webform Cards'),
+        'content' => $this->t('This screencast walks through how to create faster and better multistep form user experiences using the Webform Cards module.'),
+        'youtube_id' => 'bDugc2gWQnw',
+        'presentation_id' => '1N7gaq8jDyrGQUawBr8hvegQUfqESaBUEI3WYNpVfTKw',
+      ],
       'webform' => [
         'title' => $this->t('Webform: There is this for that'),
         'content' => $this->t('One of the key mantras in the Drupal is “there is a module for that, “ and Webform is the module for building forms for Drupal 8.'),
@@ -1357,6 +1363,12 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         'content' => $this->t('This screencast will explore how governments can leverage the Webform module for Drupal 8 to build accessible forms that securely collective massive amounts of data.'),
         'youtube_id' => 'WQG6163r9Rs',
         'presentation_id' => '1Mn7qlSR_njTZcGAM3PNQZR8Tvg7qtPhZFQja7Mj5uzI',
+      ],
+      'everyone' => [
+        'title' => $this->t('Webforms for Everyone'),
+        'content' => $this->t('This presentation explores how site owners, site builders, and developers can leverage the Webform module for Drupal 8 to build complex and robust forms for their end-users.'),
+        'youtube_id' => 'zvilAbrczGM',
+        'presentation_id' => '1APpt-55Ht_WLZc656KfQUXUoIAb-PTOmbMwSYSAw6G4',
       ],
     ];
 

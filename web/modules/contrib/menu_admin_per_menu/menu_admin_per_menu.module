@@ -8,36 +8,53 @@
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\menu_link_content\Form\MenuLinkContentForm;
-use Drupal\menu_ui\Form\MenuLinkEditForm;
-use Drupal\menu_ui\MenuForm;
 
 /**
- * Implementation of hook_form_alter().
+ * Implements hook_form_ID_alter() for 'menu_link_content_form'.
+ *
+ * Filter menu_parent options with menu items the current user has access to.
  */
-function menu_admin_per_menu_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $form_object = $form_state->getFormObject();
-  if ($form_object instanceof MenuLinkEditForm
-    || $form_object instanceof MenuLinkContentForm) {
-    $account = \Drupal::currentUser();
-    if (!$account->hasPermission('administer menu')) {
-      $options = $form['menu_parent']['#options'];
-      $form['menu_parent']['#options'] = menu_admin_per_menu_filter_parent_options($account, $options);
-    }
-  }
-  if ($form_object instanceof MenuForm) {
-    $account = \Drupal::currentUser();
-    if (!$account->hasPermission('administer menu')) {
-      $form['id']['#access'] = FALSE;
-      $form['label']['#access'] = FALSE;
-      $form['description']['#access'] = FALSE;
-      $form['langcode']['#access'] = FALSE;
-    }
+function menu_admin_per_menu_form_menu_link_content_form_alter(&$form, FormStateInterface $form_state) {
+  $account = \Drupal::currentUser();
+  if (!$account->hasPermission('administer menu')) {
+    $options = $form['menu_parent']['#options'] ?? [];
+    $form['menu_parent']['#options'] = menu_admin_per_menu_filter_parent_options($account, $options);
   }
 }
 
 /**
- * Implements hook_form_BASE_FORM_ID_alter() for node_form.
+ * Implements hook_form_ID_alter() for 'menu_link_edit'.
+ *
+ * Filter menu_parent options with menu items the current user has access to.
+ */
+function menu_admin_per_menu_form_menu_link_edit_alter(&$form, FormStateInterface $form_state) {
+  $account = \Drupal::currentUser();
+  if (!$account->hasPermission('administer menu')) {
+    $options = $form['menu_parent']['#options'] ?? [];
+    $form['menu_parent']['#options'] = menu_admin_per_menu_filter_parent_options($account, $options);
+  }
+}
+
+/**
+ * Implements hook_form_ID_alter() for 'menu_edit_form'.
+ *
+ * Hide menu properties for users that don't have the 'administer menu'
+ * permission.
+ */
+function menu_admin_per_menu_form_menu_edit_form_alter(&$form, FormStateInterface $form_state) {
+  if (!\Drupal::currentUser()->hasPermission('administer menu')) {
+    $form['id']['#access'] = FALSE;
+    $form['label']['#access'] = FALSE;
+    $form['description']['#access'] = FALSE;
+    $form['langcode']['#access'] = FALSE;
+    // Hide third party settings provided by modules extending the menu
+    // entity.
+    $form['third_party_settings']['#access'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_form_ID_alter() for 'node_form'.
  */
 function menu_admin_per_menu_form_node_form_alter(&$form, FormStateInterface $form_state) {
   $account = \Drupal::currentUser();
@@ -47,7 +64,7 @@ function menu_admin_per_menu_form_node_form_alter(&$form, FormStateInterface $fo
     $allowed_menus = $allowedMenusService->getPerMenuPermissions($account);
 
     $default_value = &$form['menu']['link']['menu_parent']['#default_value'];
-    list($current_menu, ) = explode(':', $default_value, 2);
+    [$current_menu,] = explode(':', $default_value, 2);
     // Disallow editing the menu item if there is a pre-existing menu item
     // belonging to a menu the user does not have permission to access.
     if (!empty($current_menu) && !in_array($current_menu, $allowed_menus)) {
@@ -64,7 +81,7 @@ function menu_admin_per_menu_form_node_form_alter(&$form, FormStateInterface $fo
 /**
  * Removes menu items for menus a user does not have permission to access.
  *
- * @param \Drupal\Core\Session\AccountInterface
+ * @param \Drupal\Core\Session\AccountInterface $account
  *   The user to check for access.
  * @param array $options
  *   An array of menu item labels keyed by menu item ID.
@@ -78,7 +95,7 @@ function menu_admin_per_menu_filter_parent_options(AccountInterface $account, ar
   $allowed_menus = $allowedMenusService->getPerMenuPermissions($account);
 
   foreach ($options as $key => $option) {
-    list($menu, ) = explode(':', $key, 2);
+    [$menu,] = explode(':', $key, 2);
     if (!in_array($menu, $allowed_menus)) {
       unset($options[$key]);
     }
@@ -94,4 +111,45 @@ function menu_admin_per_menu_menu_link_content_access(EntityInterface $entity, $
   /** @var \Drupal\menu_admin_per_menu\MenuAdminPerMenuAccessInterface $allowedMenusService */
   $allowedMenusService = \Drupal::service('menu_admin_per_menu.allowed_menus');
   return $allowedMenusService->menuItemAccess($account, $entity);
+}
+
+/**
+ * Implements hook_field_widget_multivalue_form_alter().
+ *
+ * Check for a menu entity reference field. When the default value is a menu
+ * the current user doesn't have access to, hide the field.
+ *
+ * @see \Drupal\menu_admin_per_menu\Plugin\EntityReferenceSelection\MenuSelection
+ */
+function menu_admin_per_menu_field_widget_multivalue_form_alter(&$elements, FormStateInterface $form_state, array $context) {
+  $account = \Drupal::currentUser();
+  if ($account->hasPermission('administer menu')) {
+    return;
+  }
+
+  /** @var \Drupal\field\FieldStorageConfigInterface $field_storage_config */
+  $field_storage_config = $context['items']->getFieldDefinition()->getFieldStorageDefinition();
+  if ($field_storage_config->getType() !== 'entity_reference' || $field_storage_config->getSetting('target_type') !== 'menu') {
+    return;
+  }
+
+  if ($context['items']->isEmpty()) {
+    return;
+  }
+
+  $access = TRUE;
+  /** @var \Drupal\menu_admin_per_menu\MenuAdminPerMenuAccessInterface $allowedMenusService */
+  $allowedMenusService = \Drupal::service('menu_admin_per_menu.allowed_menus');
+  $allowed_menus = $allowedMenusService->getPerMenuPermissions($account);
+  foreach ($context['items'] as $field_value) {
+    if (!in_array($field_value->target_id, $allowed_menus, TRUE)) {
+      $access = FALSE;
+    }
+  }
+
+  // Hide the entity reference field from the frontend. When #access was used,
+  // This also resetted the entity reference field value.
+  if($access === FALSE) {
+    $elements = [];
+  }
 }

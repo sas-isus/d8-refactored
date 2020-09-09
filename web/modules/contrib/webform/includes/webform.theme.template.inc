@@ -351,7 +351,7 @@ function template_preprocess_webform_submission_information(array &$variables) {
     }
     elseif (\Drupal::currentUser()->hasPermission("view webform node submissions own $entity_type")
       && method_exists($source_entity, 'getOwnerId')
-      && $source_entity->getOwnerId() == \Drupal::currentUser()->id()
+      && (int) $source_entity->getOwnerId() === (int) \Drupal::currentUser()->id()
     ) {
       $variables['submissions_view'] = TRUE;
     }
@@ -507,17 +507,21 @@ function template_preprocess_webform_progress(array &$variables) {
 
   /** @var \Drupal\webform\WebformInterface $webform */
   $webform = $variables['webform'];
+  /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
   $webform_submission = $variables['webform_submission'];
   $current_page = $variables['current_page'];
   $operation = $variables['operation'];
 
-  $pages = $webform->getPages($operation, $webform_submission);
+  $pages = $variables['pages'] ?: $webform->getPages($operation, $webform_submission);
 
   $page_keys = array_keys($pages);
   $page_indexes = array_flip($page_keys);
   $current_index = $page_indexes[$current_page];
 
   $total = count($page_keys);
+
+  $variables['index'] = ($current_index + 1);
+  $variables['total'] = $total;
 
   if ($webform->getSetting('wizard_progress_bar')) {
     $variables['bar'] = [
@@ -526,11 +530,12 @@ function template_preprocess_webform_progress(array &$variables) {
       '#webform_submission' => $webform_submission,
       '#current_page' => $current_page,
       '#operation' => $operation,
+      '#pages' => $variables['pages'],
     ];
   }
 
   if ($webform->getSetting('wizard_progress_pages')) {
-    $variables['summary'] = t('Page @start of @end', ['@start' => $current_index + 1, '@end' => $total]);
+    $variables['summary'] = t('@start of @end', ['@start' => $current_index + 1, '@end' => $total]);
   }
 
   if ($webform->getSetting('wizard_progress_percentage')) {
@@ -577,11 +582,12 @@ function template_preprocess_webform_progress_tracker(array &$variables) {
 function _template_preprocess_webform_progress(array &$variables) {
   /** @var \Drupal\webform\WebformInterface $webform */
   $webform = $variables['webform'];
+  /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
   $webform_submission = $variables['webform_submission'];
   $current_page = $variables['current_page'];
   $operation = $variables['operation'];
 
-  $pages = $webform->getPages($operation, $webform_submission);
+  $pages = $variables['pages'] ?: $webform->getPages($operation, $webform_submission);
 
   $page_keys = array_keys($pages);
   $page_indexes = array_flip($page_keys);
@@ -594,6 +600,7 @@ function _template_preprocess_webform_progress(array &$variables) {
     $variables['progress'][] = [
       'name' => $key,
       'title' => (isset($page['#title'])) ? $page['#title'] : '',
+      'type' => (isset($page['#type'])) ? $page['#type'] : 'page',
     ];
   }
 }
@@ -703,7 +710,7 @@ function template_preprocess_webform_section(array &$variables) {
   }
 
   // Add 'visually-hidden' class to title attributes.
-  if ($variables['title_display'] == 'invisible') {
+  if ($variables['title_display'] === 'invisible') {
     $variables['title_attributes']['class'][] = 'visually-hidden';
   }
   $variables['title_attributes'] = new Attribute($variables['title_attributes']);
@@ -1010,7 +1017,7 @@ function template_preprocess_webform_element_image_file(array &$variables) {
     }
 
     // Wrap 'image' in a link/modal.
-    if ($format && $format != 'image') {
+    if ($format && $format !== 'image') {
       $variables['image'] = [
         '#type' => 'link',
         '#title' => $variables['image'],
@@ -1034,7 +1041,7 @@ function template_preprocess_webform_element_image_file(array &$variables) {
 }
 
 /**
- * Prepares variables for webform element video file templates
+ * Prepares variables for webform element video file templates.
  *
  * Default template: webform-element-video-file.html.twig.
  *

@@ -4,7 +4,6 @@ namespace Drupal\views_bootstrap\Plugin\views\style;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\Plugin\views\style\StylePluginBase;
-use Drupal\views_bootstrap\ViewsBootstrap;
 
 /**
  * Style plugin to render each item as a row in a Bootstrap Accordion.
@@ -50,18 +49,15 @@ class ViewsBootstrapAccordion extends StylePluginBase {
    */
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
-    if (isset($form['grouping'])) {
-      unset($form['grouping']);
 
-      $form['panel_title_field'] = [
-        '#type' => 'select',
-        '#title' => $this->t('Panel title field'),
-        '#options' => $this->displayHandler->getFieldLabels(TRUE),
-        '#required' => TRUE,
-        '#default_value' => $this->options['panel_title_field'],
-        '#description' => $this->t('Select the field that will be used as the accordian panel titles.'),
-      ];
-    }
+    $form['panel_title_field'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Panel title field'),
+      '#options' => $this->displayHandler->getFieldLabels(TRUE),
+      '#required' => TRUE,
+      '#default_value' => $this->options['panel_title_field'],
+      '#description' => $this->t('Select the field that will be used as the accordion panel titles.'),
+    ];
   }
 
 }

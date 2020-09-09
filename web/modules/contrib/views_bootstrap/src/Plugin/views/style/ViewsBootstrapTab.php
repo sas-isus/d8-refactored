@@ -4,7 +4,6 @@ namespace Drupal\views_bootstrap\Plugin\views\style;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\Plugin\views\style\StylePluginBase;
-use Drupal\views_bootstrap\ViewsBootstrap;
 
 /**
  * Style plugin to render each item in an ordered or unordered list.
@@ -13,7 +12,7 @@ use Drupal\views_bootstrap\ViewsBootstrap;
  *
  * @ViewsStyle(
  *   id = "views_bootstrap_tab",
- *   title = @Translation("Bootstrap Tab"),
+ *   title = @Translation("Bootstrap Tabs"),
  *   help = @Translation("Displays rows in Bootstrap Tabs."),
  *   theme = "views_bootstrap_tab",
  *   theme_file = "../views_bootstrap.theme.inc",
@@ -33,6 +32,10 @@ class ViewsBootstrapTab extends StylePluginBase {
    * {@inheritdoc}
    */
   protected $usesOptions = TRUE;
+
+  /**
+   * {@inheritdoc}
+   */
   protected $usesRowPlugin = TRUE;
 
   /**
@@ -51,38 +54,48 @@ class ViewsBootstrapTab extends StylePluginBase {
    */
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
-    if (isset($form['grouping'])) {
-      unset($form['grouping']);
+    $form['tab_field'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Tab field'),
+      '#options' => $this->displayHandler->getFieldLabels(TRUE),
+      '#required' => TRUE,
+      '#default_value' => $this->options['tab_field'],
+      '#description' => $this->t('Select the field that will be used as the tab.'),
+    ];
 
-      $form['tab_field'] = [
-        '#type' => 'select',
-        '#title' => $this->t('Tab field'),
-        '#options' => $this->displayHandler->getFieldLabels(TRUE),
-        '#required' => TRUE,
-        '#default_value' => $this->options['tab_field'],
-        '#description' => t('Select the field that will be used as the tab.'),
-      ];
+    $form['tab_type'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Tab Type'),
+      '#options' => [
+        'tabs' => $this->t('Tabs'),
+        'pills' => $this->t('Pills'),
+        'list' => $this->t('List'),
+      ],
+      '#required' => TRUE,
+      '#default_value' => $this->options['tab_type'],
+    ];
 
-      $form['tab_type'] = [
-        '#type' => 'select',
-        '#title' => $this->t('Tab Type'),
-        '#options' => [
-          'tabs' => $this->t('Tabs'),
-          'pills' => $this->t('Pills'),
-          'list' => $this->t('List'),
-        ],
-        '#required' => TRUE,
-        '#default_value' => $this->options['tab_type'],
-      ];
+    $form['tab_position'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Position of tabs'),
+      '#options' => [
+        'basic' => $this->t('Tabs/pills on the top'),
+        'left' => $this->t('Tabs/pills on the left'),
+        'right' => $this->t('Tabs/pills on the right'),
+        'below' => $this->t('Tabs/pills on the bottom'),
+        'justified' => $this->t('Tabs/pills justified on the top'),
+        'stacked' => $this->t('Tabs/pills stacked'),
+      ],
+      '#required' => TRUE,
+      '#default_value' => $this->options['tab_position'] ?? 'basic',
+    ];
 
-      $form['justified'] = [
-        '#type' => 'checkbox',
-        '#title' => $this->t('Justified'),
-        '#default_value' => $this->options['justified'],
-        '#description' => $this->t('Make tabs equal widths of their parent'),
-      ];
-    }
-
+    $form['tab_fade'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Fade Effect'),
+      '#default_value' => $this->options['tab_fade'],
+      '#description' => $this->t('Add a fade in effect when tabs clicked'),
+    ];
   }
 
 }

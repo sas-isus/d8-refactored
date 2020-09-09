@@ -5,3 +5,13 @@ components:
   dependencies:
     - core/drupal
     - core/jquery
+tabs:
+  version: 1.x
+  css:
+    theme:
+      css/tabs.css: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupalSettings

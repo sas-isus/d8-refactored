@@ -255,12 +255,12 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
         ],
       ];
     }
-    $form['page_settings']['page_admin_theme'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Use the administration theme when displaying the webform as a page'),
-      '#description' => $this->t('If checked, when the webform is displayed as a page with a dedicated URL, it will use the administrative theme.'),
-      '#default_value' => $settings['page_admin_theme'],
-      '#return_value' => TRUE,
+    $form['page_settings']['page_theme_name'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Page theme'),
+      '#description' => $this->t('Select the theme that will be used when the webform is displayed as a page with a dedicated URL.'),
+      '#options' => $this->themeManager->getThemeNames(),
+      '#default_value' => $settings['page_theme_name'],
       '#states' => [
         'visible' => [
           ':input[name="page"]' => ['checked' => TRUE],

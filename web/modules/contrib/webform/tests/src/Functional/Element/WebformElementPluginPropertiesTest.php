@@ -24,6 +24,7 @@ class WebformElementPluginPropertiesTest extends WebformElementBrowserTestBase {
     'taxonomy',
     'webform',
     'webform_attachment',
+    'webform_cards',
     // Issue #3110478: [Webform 8.x-6.x] Track the D9 readiness state of the
     // Webform module's (optional) dependencies
     // @see https://www.drupal.org/project/webform/issues/3110478
@@ -58,7 +59,7 @@ class WebformElementPluginPropertiesTest extends WebformElementBrowserTestBase {
     $actual_elements = $this->getActualElementDefaultProperties();
     $this->htmlOutput('<pre>' . htmlentities(Yaml::encode($actual_elements)) . '</pre>');
     foreach ($actual_elements as $element_key => $actual_element) {
-      if ($expected_elements[$element_key] != $actual_element) {
+      if ($expected_elements[$element_key] !== $actual_element) {
         $this->htmlOutput('<pre>' . Yaml::encode([$element_key => $actual_element]) . '</pre>');
       }
       $this->assertEquals($expected_elements[$element_key], $actual_element, "Expected and actual '$element_key' element properties match.");
@@ -143,7 +144,8 @@ address:
   multiple__add_more_items: 1
   multiple__empty_items: 1
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -198,9 +200,9 @@ checkbox:
   more_title: ''
   prepopulate: false
   private: false
-  return_value: ''
   required: false
   required_error: ''
+  return_value: ''
   states: {  }
   states_clear: true
   title: ''
@@ -248,8 +250,14 @@ checkboxes:
   multiple_error: ''
   options: {  }
   options__properties: {  }
+  options_all: false
+  options_all_text: 'All of the above'
+  options_all_value: all
   options_description_display: description
   options_display: one_column
+  options_none: false
+  options_none_text: 'None of the above'
+  options_none_value: none
   options_randomize: false
   prepopulate: false
   private: false
@@ -383,7 +391,8 @@ date:
   multiple__add_more_items: 1
   multiple__empty_items: 1
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -472,7 +481,8 @@ datelist:
   multiple__add_more_items: 1
   multiple__empty_items: 1
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -558,7 +568,8 @@ datetime:
   multiple__add_more_items: 1
   multiple__empty_items: 1
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -651,8 +662,8 @@ email:
   help_title: ''
   input_hide: false
   label_attributes: {  }
-  maxlength: ''
-  minlength: ''
+  maxlength: null
+  minlength: null
   more: ''
   more_title: ''
   multiple: false
@@ -663,7 +674,8 @@ email:
   multiple__add_more_items: 1
   multiple__empty_items: 1
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -675,7 +687,7 @@ email:
   readonly: false
   required: false
   required_error: ''
-  size: ''
+  size: null
   states: {  }
   states_clear: true
   title: ''
@@ -731,7 +743,8 @@ entity_autocomplete:
   multiple__add_more_items: 1
   multiple__empty_items: 1
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -1063,8 +1076,8 @@ number:
   help_display: ''
   help_title: ''
   label_attributes: {  }
-  max: ''
-  min: ''
+  max: null
+  min: null
   more: ''
   more_title: ''
   multiple: false
@@ -1075,7 +1088,8 @@ number:
   multiple__add_more_items: 1
   multiple__empty_items: 1
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -1088,7 +1102,7 @@ number:
   size: ''
   states: {  }
   states_clear: true
-  step: ''
+  step: null
   title: ''
   title_display: ''
   unique: false
@@ -1265,8 +1279,8 @@ search:
   help_display: ''
   help_title: ''
   label_attributes: {  }
-  maxlength: ''
-  minlength: ''
+  maxlength: null
+  minlength: null
   more: ''
   more_title: ''
   pattern: ''
@@ -1277,7 +1291,7 @@ search:
   readonly: false
   required: false
   required_error: ''
-  size: ''
+  size: null
   states: {  }
   states_clear: true
   title: ''
@@ -1462,6 +1476,7 @@ tel:
   multiple__add_more_items: 1
   multiple__empty_items: 1
   multiple__header_label: ''
+  multiple__item_label: item
   multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
@@ -1542,9 +1557,9 @@ textarea:
   admin_title: ''
   attributes: {  }
   autocomplete: 'on'
-  counter_maximum: ''
+  counter_maximum: null
   counter_maximum_message: ''
-  counter_minimum: ''
+  counter_minimum: null
   counter_minimum_message: ''
   counter_type: ''
   default_value: ''
@@ -1565,8 +1580,8 @@ textarea:
   help_display: ''
   help_title: ''
   label_attributes: {  }
-  maxlength: ''
-  minlength: ''
+  maxlength: null
+  minlength: null
   more: ''
   more_title: ''
   multiple: false
@@ -1577,7 +1592,8 @@ textarea:
   multiple__add_more_items: 1
   multiple__empty_items: 1
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -1589,8 +1605,8 @@ textarea:
   readonly: false
   required: false
   required_error: ''
-  rows: ''
-  size: ''
+  rows: null
+  size: null
   states: {  }
   states_clear: true
   title: ''
@@ -1619,9 +1635,9 @@ textfield:
   admin_title: ''
   attributes: {  }
   autocomplete: 'on'
-  counter_maximum: ''
+  counter_maximum: null
   counter_maximum_message: ''
-  counter_minimum: ''
+  counter_minimum: null
   counter_minimum_message: ''
   counter_type: ''
   default_value: ''
@@ -1644,8 +1660,8 @@ textfield:
   input_hide: false
   input_mask: ''
   label_attributes: {  }
-  maxlength: ''
-  minlength: ''
+  maxlength: null
+  minlength: null
   more: ''
   more_title: ''
   multiple: false
@@ -1656,7 +1672,8 @@ textfield:
   multiple__add_more_items: 1
   multiple__empty_items: 1
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -1668,7 +1685,7 @@ textfield:
   readonly: false
   required: false
   required_error: ''
-  size: ''
+  size: null
   states: {  }
   states_clear: true
   title: ''
@@ -1716,8 +1733,8 @@ url:
   help_title: ''
   input_hide: false
   label_attributes: {  }
-  maxlength: ''
-  minlength: ''
+  maxlength: null
+  minlength: null
   more: ''
   more_title: ''
   multiple: false
@@ -1728,7 +1745,8 @@ url:
   multiple__add_more_items: 1
   multiple__empty_items: 1
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -1740,7 +1758,7 @@ url:
   readonly: false
   required: false
   required_error: ''
-  size: ''
+  size: null
   states: {  }
   states_clear: true
   title: ''
@@ -1904,7 +1922,8 @@ webform_address:
   multiple__empty_items: 1
   multiple__header: false
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -2113,9 +2132,9 @@ webform_autocomplete:
   autocomplete_limit: 10
   autocomplete_match: 3
   autocomplete_match_operator: CONTAINS
-  counter_maximum: ''
+  counter_maximum: null
   counter_maximum_message: ''
-  counter_minimum: ''
+  counter_minimum: null
   counter_minimum_message: ''
   counter_type: ''
   default_value: ''
@@ -2138,8 +2157,8 @@ webform_autocomplete:
   input_hide: false
   input_mask: ''
   label_attributes: {  }
-  maxlength: ''
-  minlength: ''
+  maxlength: null
+  minlength: null
   more: ''
   more_title: ''
   multiple: false
@@ -2150,7 +2169,8 @@ webform_autocomplete:
   multiple__add_more_items: 1
   multiple__empty_items: 1
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -2162,7 +2182,7 @@ webform_autocomplete:
   readonly: false
   required: false
   required_error: ''
-  size: ''
+  size: null
   states: {  }
   states_clear: true
   title: ''
@@ -2172,6 +2192,36 @@ webform_autocomplete:
   unique_error: ''
   unique_user: false
   wrapper_attributes: {  }
+webform_card:
+  access_create_permissions: {  }
+  access_create_roles:
+    - anonymous
+    - authenticated
+  access_create_users: {  }
+  access_update_permissions: {  }
+  access_update_roles:
+    - anonymous
+    - authenticated
+  access_update_users: {  }
+  access_view_permissions: {  }
+  access_view_roles:
+    - anonymous
+    - authenticated
+  access_view_users: {  }
+  admin_title: ''
+  format: details
+  format_attributes: {  }
+  format_html: ''
+  format_text: ''
+  next_button_label: ''
+  prev_button_label: ''
+  private: false
+  states: {  }
+  states_clear: true
+  title: ''
+  title_attributes: {  }
+  title_display: ''
+  title_tag: h2
 webform_checkboxes_other:
   access_create_permissions: {  }
   access_create_roles:
@@ -2216,6 +2266,9 @@ webform_checkboxes_other:
   options__properties: {  }
   options_description_display: description
   options_display: one_column
+  options_none: false
+  options_none_text: 'None of the above'
+  options_none_value: none
   options_randomize: false
   other__counter_maximum: ''
   other__counter_maximum_message: ''
@@ -2476,7 +2529,8 @@ webform_contact:
   multiple__empty_items: 1
   multiple__header: false
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -2573,7 +2627,8 @@ webform_custom_composite:
   multiple__empty_items: 1
   multiple__header: true
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -2689,8 +2744,8 @@ webform_email_confirm:
   help_title: ''
   input_hide: false
   label_attributes: {  }
-  maxlength: ''
-  minlength: ''
+  maxlength: null
+  minlength: null
   more: ''
   more_title: ''
   multiple__add_more: true
@@ -2699,7 +2754,8 @@ webform_email_confirm:
   multiple__add_more_input_label: 'more items'
   multiple__add_more_items: 1
   multiple__empty_items: 1
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -2711,7 +2767,7 @@ webform_email_confirm:
   readonly: false
   required: false
   required_error: ''
-  size: ''
+  size: null
   states: {  }
   states_clear: true
   title: ''
@@ -2757,8 +2813,8 @@ webform_email_multiple:
   help_title: ''
   input_hide: false
   label_attributes: {  }
-  maxlength: ''
-  minlength: ''
+  maxlength: null
+  minlength: null
   more: ''
   more_title: ''
   multiple__add_more: true
@@ -2768,7 +2824,8 @@ webform_email_multiple:
   multiple__add_more_items: 1
   multiple__empty_items: 1
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -2780,7 +2837,7 @@ webform_email_multiple:
   readonly: false
   required: false
   required_error: ''
-  size: ''
+  size: null
   states: {  }
   states_clear: true
   title: ''
@@ -2831,6 +2888,9 @@ webform_entity_checkboxes:
   multiple: true
   multiple_error: ''
   options__properties: {  }
+  options_all: false
+  options_all_text: 'All of the above'
+  options_all_value: all
   options_display: one_column
   options_randomize: false
   prepopulate: false
@@ -2850,37 +2910,6 @@ webform_entity_checkboxes:
   unique_user: false
   wrapper_attributes: {  }
   wrapper_type: fieldset
-'webform_entity_print_attachment:pdf':
-  access_create_permissions: {  }
-  access_create_roles:
-    - anonymous
-    - authenticated
-  access_create_users: {  }
-  access_update_permissions: {  }
-  access_update_roles:
-    - anonymous
-    - authenticated
-  access_update_users: {  }
-  access_view_permissions: {  }
-  access_view_roles:
-    - anonymous
-    - authenticated
-  access_view_users: {  }
-  admin_title: ''
-  display_on: none
-  download: false
-  filename: ''
-  flex: 1
-  label_attributes: {  }
-  link_title: ''
-  private: false
-  sanitize: false
-  states: {  }
-  template: ''
-  title: ''
-  title_display: ''
-  view_mode: html
-  wrapper_attributes: {  }
 webform_entity_radios:
   access_create_permissions: {  }
   access_create_roles:
@@ -3246,7 +3275,8 @@ webform_link:
   multiple__empty_items: 1
   multiple__header: false
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -3275,6 +3305,81 @@ webform_link:
   url__type: url
   wrapper_attributes: {  }
   wrapper_type: fieldset
+webform_location_geocomplete:
+  access_create_permissions: {  }
+  access_create_roles:
+    - anonymous
+    - authenticated
+  access_create_users: {  }
+  access_update_permissions: {  }
+  access_update_roles:
+    - anonymous
+    - authenticated
+  access_update_users: {  }
+  access_view_permissions: {  }
+  access_view_roles:
+    - anonymous
+    - authenticated
+  access_view_users: {  }
+  admin_title: ''
+  administrative_area_level_1__access: false
+  administrative_area_level_1__title: State/Province
+  api_key: ''
+  country__access: false
+  country__title: Country
+  country_short__access: false
+  country_short__title: 'Country Code'
+  default_value: {  }
+  description: ''
+  description_display: ''
+  disabled: false
+  flex: 1
+  format: value
+  format_html: ''
+  format_items: ul
+  format_items_html: ''
+  format_items_text: ''
+  format_text: ''
+  formatted_address__access: false
+  formatted_address__title: 'Formatted Address'
+  geolocation: false
+  help: ''
+  help_title: ''
+  hidden: false
+  label_attributes: {  }
+  lat__access: false
+  lat__title: Latitude
+  lng__access: false
+  lng__title: Longitude
+  locality__access: false
+  locality__title: Locality
+  location__access: false
+  location__title: Location
+  map: false
+  more: ''
+  more_title: ''
+  multiple: false
+  postal_code__access: false
+  postal_code__title: 'Postal Code'
+  prepopulate: false
+  private: false
+  required: false
+  required_error: ''
+  states: {  }
+  states_clear: true
+  street_address__access: false
+  street_address__title: 'Street Address'
+  street_number__access: false
+  street_number__title: 'Street Number'
+  sublocality__access: false
+  sublocality__title: City
+  subpremise__access: false
+  subpremise__title: Unit
+  title: ''
+  title_display: ''
+  value__placeholder: ''
+  value__title: Address
+  wrapper_attributes: {  }
 webform_location_places:
   access_create_permissions: {  }
   access_create_roles:
@@ -3551,7 +3656,8 @@ webform_name:
   multiple__empty_items: 1
   multiple__header: false
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -3635,8 +3741,8 @@ webform_name:
   required: false
   required_error: ''
   select2: false
-  sort_options: false
   size: ''
+  sort_options: false
   states: {  }
   states_clear: true
   title: ''
@@ -3883,6 +3989,63 @@ webform_same:
   title: ''
   title_display: after
   wrapper_attributes: {  }
+webform_scale:
+  access_create_permissions: {  }
+  access_create_roles:
+    - anonymous
+    - authenticated
+  access_create_users: {  }
+  access_update_permissions: {  }
+  access_update_roles:
+    - anonymous
+    - authenticated
+  access_update_users: {  }
+  access_view_permissions: {  }
+  access_view_roles:
+    - anonymous
+    - authenticated
+  access_view_users: {  }
+  admin_title: ''
+  attributes: {  }
+  default_value: ''
+  description: ''
+  description_display: ''
+  disabled: false
+  field_prefix: ''
+  field_suffix: ''
+  flex: 1
+  format: value
+  format_attributes: {  }
+  format_html: ''
+  format_text: ''
+  help: ''
+  help_display: ''
+  help_title: ''
+  label_attributes: {  }
+  max: 5
+  max_text: ''
+  min: 1
+  min_text: ''
+  more: ''
+  more_title: ''
+  prepopulate: false
+  private: false
+  readonly: false
+  required: false
+  required_error: ''
+  scale_size: medium
+  scale_text: below
+  scale_type: circle
+  states: {  }
+  states_clear: true
+  title: ''
+  title_display: ''
+  unique: false
+  unique_entity: false
+  unique_error: ''
+  unique_user: false
+  wrapper_attributes: {  }
+  wrapper_type: fieldset
 webform_section:
   access_create_permissions: {  }
   access_create_roles:
@@ -3918,6 +4081,7 @@ webform_section:
   states: {  }
   states_clear: true
   title: ''
+  title_attributes: {  }
   title_display: ''
   title_tag: h2
 webform_select_other:
@@ -4051,6 +4215,75 @@ webform_signature:
   unique_error: ''
   unique_user: false
   wrapper_attributes: {  }
+webform_table:
+  access_create_permissions: {  }
+  access_create_roles:
+    - anonymous
+    - authenticated
+  access_create_users: {  }
+  access_update_permissions: {  }
+  access_update_roles:
+    - anonymous
+    - authenticated
+  access_update_users: {  }
+  access_view_permissions: {  }
+  access_view_roles:
+    - anonymous
+    - authenticated
+  access_view_users: {  }
+  admin_title: ''
+  attributes: {  }
+  caption: ''
+  default_value: ''
+  description: ''
+  description_display: ''
+  field_prefix: ''
+  field_suffix: ''
+  flex: 1
+  format: table
+  format_attributes: {  }
+  format_html: ''
+  format_text: ''
+  header: {  }
+  help: ''
+  help_display: ''
+  help_title: ''
+  label_attributes: {  }
+  more: ''
+  more_title: ''
+  prefix_children: true
+  private: false
+  required: false
+  required_error: ''
+  states: {  }
+  states_clear: true
+  sticky: false
+  title: ''
+  title_display: ''
+  wrapper_attributes: {  }
+webform_table_row:
+  access_create_permissions: {  }
+  access_create_roles:
+    - anonymous
+    - authenticated
+  access_create_users: {  }
+  access_update_permissions: {  }
+  access_update_roles:
+    - anonymous
+    - authenticated
+  access_update_users: {  }
+  access_view_permissions: {  }
+  access_view_roles:
+    - anonymous
+    - authenticated
+  access_view_users: {  }
+  admin_title: ''
+  attributes: {  }
+  flex: 1
+  private: false
+  states: {  }
+  states_clear: true
+  title: ''
 webform_table_sort:
   access_create_permissions: {  }
   access_create_roles:
@@ -4216,7 +4449,8 @@ webform_telephone:
   multiple__empty_items: 1
   multiple__header: false
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -4292,7 +4526,13 @@ webform_term_checkboxes:
   multiple: true
   multiple_error: ''
   options__properties: {  }
+  options_all: false
+  options_all_text: 'All of the above'
+  options_all_value: all
   options_description_display: description
+  options_none: false
+  options_none_text: 'None of the above'
+  options_none_value: none
   prepopulate: false
   private: false
   required: false
@@ -4466,7 +4706,8 @@ webform_time:
   multiple__add_more_items: 1
   multiple__empty_items: 1
   multiple__header_label: ''
-  multiple__min_items: ''
+  multiple__item_label: item
+  multiple__min_items: null
   multiple__no_items_message: 'No items entered. Please add items below.'
   multiple__operations: true
   multiple__sorting: true
@@ -4482,6 +4723,111 @@ webform_time:
   timepicker: false
   title: ''
   title_display: ''
+  unique: false
+  unique_entity: false
+  unique_error: ''
+  unique_user: false
+  wrapper_attributes: {  }
+webform_toggle:
+  access_create_permissions: {  }
+  access_create_roles:
+    - anonymous
+    - authenticated
+  access_create_users: {  }
+  access_update_permissions: {  }
+  access_update_roles:
+    - anonymous
+    - authenticated
+  access_update_users: {  }
+  access_view_permissions: {  }
+  access_view_roles:
+    - anonymous
+    - authenticated
+  access_view_users: {  }
+  admin_title: ''
+  attributes: {  }
+  default_value: false
+  description: ''
+  description_display: ''
+  disabled: false
+  exclude_empty: false
+  field_prefix: ''
+  field_suffix: ''
+  flex: 1
+  format: value
+  format_attributes: {  }
+  format_html: ''
+  format_text: ''
+  help: ''
+  help_display: ''
+  help_title: ''
+  label_attributes: {  }
+  more: ''
+  more_title: ''
+  off_text: ''
+  on_text: ''
+  prepopulate: false
+  private: false
+  required_error: ''
+  return_value: ''
+  states: {  }
+  states_clear: true
+  title: ''
+  title_display: after
+  toggle_size: medium
+  toggle_theme: light
+  wrapper_attributes: {  }
+webform_toggles:
+  access_create_permissions: {  }
+  access_create_roles:
+    - anonymous
+    - authenticated
+  access_create_users: {  }
+  access_update_permissions: {  }
+  access_update_roles:
+    - anonymous
+    - authenticated
+  access_update_users: {  }
+  access_view_permissions: {  }
+  access_view_roles:
+    - anonymous
+    - authenticated
+  access_view_users: {  }
+  admin_title: ''
+  attributes: {  }
+  default_value: ''
+  description: ''
+  description_display: ''
+  disabled: false
+  field_prefix: ''
+  field_suffix: ''
+  flex: 1
+  format: value
+  format_attributes: {  }
+  format_html: ''
+  format_items: comma
+  format_items_html: ''
+  format_items_text: ''
+  format_text: ''
+  help: ''
+  help_display: ''
+  help_title: ''
+  label_attributes: {  }
+  more: ''
+  more_title: ''
+  off_text: ''
+  on_text: ''
+  options: {  }
+  options_randomize: false
+  prepopulate: false
+  private: false
+  required_error: ''
+  states: {  }
+  states_clear: true
+  title: ''
+  title_display: ''
+  toggle_size: medium
+  toggle_theme: light
   unique: false
   unique_entity: false
   unique_error: ''
@@ -4605,6 +4951,7 @@ webform_wizard_page:
     - authenticated
   access_view_users: {  }
   admin_title: ''
+  attributes: {  }
   format: details
   format_attributes: {  }
   format_html: ''
@@ -4616,312 +4963,6 @@ webform_wizard_page:
   states: {  }
   states_clear: true
   title: ''
-webform_location_geocomplete:
-  geolocation: false
-  hidden: false
-  map: false
-  api_key: ''
-  title: ''
-  default_value: {  }
-  multiple: false
-  help: ''
-  help_title: ''
-  description: ''
-  more: ''
-  more_title: ''
-  title_display: ''
-  description_display: ''
-  disabled: false
-  required: false
-  required_error: ''
-  wrapper_attributes: {  }
-  label_attributes: {  }
-  format: value
-  format_html: ''
-  format_text: ''
-  format_items: ul
-  format_items_html: ''
-  format_items_text: ''
-  admin_title: ''
-  prepopulate: false
-  private: false
-  flex: 1
-  states: {  }
-  states_clear: true
-  access_create_roles:
-    - anonymous
-    - authenticated
-  access_create_users: {  }
-  access_create_permissions: {  }
-  access_update_roles:
-    - anonymous
-    - authenticated
-  access_update_users: {  }
-  access_update_permissions: {  }
-  access_view_roles:
-    - anonymous
-    - authenticated
-  access_view_users: {  }
-  access_view_permissions: {  }
-  value__title: Address
-  value__placeholder: ''
-  lat__title: Latitude
-  lat__access: false
-  lng__title: Longitude
-  lng__access: false
-  location__title: Location
-  location__access: false
-  formatted_address__title: 'Formatted Address'
-  formatted_address__access: false
-  street_address__title: 'Street Address'
-  street_address__access: false
-  street_number__title: 'Street Number'
-  street_number__access: false
-  subpremise__title: Unit
-  subpremise__access: false
-  postal_code__title: 'Postal Code'
-  postal_code__access: false
-  locality__title: Locality
-  locality__access: false
-  sublocality__title: City
-  sublocality__access: false
-  administrative_area_level_1__title: State/Province
-  administrative_area_level_1__access: false
-  country__title: Country
-  country__access: false
-  country_short__title: 'Country Code'
-  country_short__access: false
-webform_toggle:
-  toggle_theme: light
-  toggle_size: medium
-  on_text: ''
-  off_text: ''
-  title_display: after
-  exclude_empty: false
-  default_value: false
-  title: ''
-  help: ''
-  help_title: ''
-  description: ''
-  more: ''
-  more_title: ''
-  description_display: ''
-  help_display: ''
-  field_prefix: ''
-  field_suffix: ''
-  disabled: false
-  required_error: ''
-  wrapper_attributes: {  }
-  label_attributes: {  }
-  attributes: {  }
-  format: value
-  format_html: ''
-  format_text: ''
-  format_attributes: {  }
-  admin_title: ''
-  prepopulate: false
-  private: false
-  flex: 1
-  return_value: ''
-  states: {  }
-  states_clear: true
-  access_create_roles:
-    - anonymous
-    - authenticated
-  access_create_users: {  }
-  access_create_permissions: {  }
-  access_update_roles:
-    - anonymous
-    - authenticated
-  access_update_users: {  }
-  access_update_permissions: {  }
-  access_view_roles:
-    - anonymous
-    - authenticated
-  access_view_users: {  }
-  access_view_permissions: {  }
-webform_toggles:
-  toggle_theme: light
-  toggle_size: medium
-  on_text: ''
-  off_text: ''
-  options: {  }
-  options_randomize: false
-  title: ''
-  default_value: ''
-  help: ''
-  help_title: ''
-  description: ''
-  more: ''
-  more_title: ''
-  title_display: ''
-  description_display: ''
-  help_display: ''
-  field_prefix: ''
-  field_suffix: ''
-  disabled: false
-  required_error: ''
-  wrapper_attributes: {  }
-  label_attributes: {  }
-  attributes: {  }
-  format: value
-  format_html: ''
-  format_text: ''
-  format_items: comma
-  format_items_html: ''
-  format_items_text: ''
-  format_attributes: {  }
-  unique: false
-  unique_user: false
-  unique_entity: false
-  unique_error: ''
-  admin_title: ''
-  prepopulate: false
-  private: false
-  flex: 1
-  states: {  }
-  states_clear: true
-  access_create_roles:
-    - anonymous
-    - authenticated
-  access_create_users: {  }
-  access_create_permissions: {  }
-  access_update_roles:
-    - anonymous
-    - authenticated
-  access_update_users: {  }
-  access_update_permissions: {  }
-  access_view_roles:
-    - anonymous
-    - authenticated
-  access_view_users: {  }
-  access_view_permissions: {  }
-webform_table:
-  access_create_permissions: {  }
-  access_create_roles:
-    - anonymous
-    - authenticated
-  access_create_users: {  }
-  access_update_permissions: {  }
-  access_update_roles:
-    - anonymous
-    - authenticated
-  access_update_users: {  }
-  access_view_permissions: {  }
-  access_view_roles:
-    - anonymous
-    - authenticated
-  access_view_users: {  }
-  admin_title: ''
-  attributes: {  }
-  caption: ''
-  default_value: ''
-  description: ''
-  description_display: ''
-  field_prefix: ''
-  field_suffix: ''
-  flex: 1
-  format: table
-  format_attributes: {  }
-  format_html: ''
-  format_text: ''
-  header: {  }
-  help: ''
-  help_display: ''
-  help_title: ''
-  label_attributes: {  }
-  more: ''
-  more_title: ''
-  prefix_children: true
-  private: false
-  required: false
-  required_error: ''
-  states: {  }
-  states_clear: true
-  sticky: false
-  title: ''
-  title_display: ''
-  wrapper_attributes: {  }
-webform_table_row:
-  access_create_permissions: {  }
-  access_create_roles:
-    - anonymous
-    - authenticated
-  access_create_users: {  }
-  access_update_permissions: {  }
-  access_update_roles:
-    - anonymous
-    - authenticated
-  access_update_users: {  }
-  access_view_permissions: {  }
-  access_view_roles:
-    - anonymous
-    - authenticated
-  access_view_users: {  }
-  admin_title: ''
-  attributes: {  }
-  flex: 1
-  private: false
-  states: {  }
-  states_clear: true
-  title: ''
-webform_scale:
-  access_create_permissions: {  }
-  access_create_roles:
-    - anonymous
-    - authenticated
-  access_create_users: {  }
-  access_update_permissions: {  }
-  access_update_roles:
-    - anonymous
-    - authenticated
-  access_update_users: {  }
-  access_view_permissions: {  }
-  access_view_roles:
-    - anonymous
-    - authenticated
-  access_view_users: {  }
-  admin_title: ''
-  attributes: {  }
-  default_value: ''
-  description: ''
-  description_display: ''
-  disabled: false
-  field_prefix: ''
-  field_suffix: ''
-  flex: 1
-  format: value
-  format_attributes: {  }
-  format_html: ''
-  format_text: ''
-  help: ''
-  help_display: ''
-  help_title: ''
-  label_attributes: {  }
-  max: 5
-  max_text: ''
-  min: 1
-  min_text: ''
-  more: ''
-  more_title: ''
-  prepopulate: false
-  private: false
-  readonly: false
-  required: false
-  required_error: ''
-  scale_size: medium
-  scale_text: below
-  scale_type: circle
-  states: {  }
-  states_clear: true
-  title: ''
-  title_display: ''
-  unique: false
-  unique_entity: false
-  unique_error: ''
-  unique_user: false
-  wrapper_attributes: {  }
-  wrapper_type: fieldset
 YAML;
     return Yaml::decode($yaml);
   }

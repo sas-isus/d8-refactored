@@ -160,7 +160,7 @@ class WebformSettingsPathTest extends WebformBrowserTestBase {
     $this->assertResponse(404, 'Submit URL alias does not exist');
 
     /**************************************************************************/
-    // Admin theme.
+    // Page theme.
     /**************************************************************************/
 
     $this->drupalLogin($this->rootUser);
@@ -188,7 +188,7 @@ class WebformSettingsPathTest extends WebformBrowserTestBase {
       'use_admin_theme' => TRUE,
     ];
     $this->drupalPostForm('/admin/appearance', $edit, 'Save configuration');
-    $webform->setSetting('page_admin_theme', TRUE)->save();
+    $webform->setSetting('page_theme_name', 'seven')->save();
 
     // Check that admin theme is applied.
     $this->drupalGet('/webform/test_admin_theme');

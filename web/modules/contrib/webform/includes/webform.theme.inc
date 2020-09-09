@@ -173,6 +173,7 @@ function webform_theme() {
         'webform_submission' => NULL,
         'current_page' => NULL,
         'operation' => NULL,
+        'pages' => [],
       ],
     ],
 
@@ -183,6 +184,7 @@ function webform_theme() {
         'current_page' => NULL,
         'operation' => NULL,
         'max_pages' => 10,
+        'pages' => [],
       ],
     ],
 
@@ -193,6 +195,7 @@ function webform_theme() {
         'current_page' => NULL,
         'operation' => NULL,
         'max_pages' => 10,
+        'pages' => [],
       ],
     ],
   ];
@@ -619,7 +622,7 @@ function webform_preprocess_file_upload_help(&$variables) {
   if (isset($upload_validators['webform_file_validate_extensions'])) {
     foreach ($variables['descriptions'] as $index => $description) {
       if ($description instanceof TranslatableMarkup
-        && $description->getUntranslatedString() == 'Allowed types: @extensions.') {
+        && $description->getUntranslatedString() === 'Allowed types: @extensions.') {
         $arguments = $description->getArguments();
         if (strpos($arguments['@extensions'], ',') === FALSE) {
           $arguments['@extensions'] = preg_replace('/ +/', ', ', $arguments['@extensions']);
@@ -679,6 +682,9 @@ function _webform_preprocess_options(array &$variables) {
   $variables['attributes']['class'][] = Html::getClass('js-webform-' . $element['#type']);
 
   if (!empty($element['#options_display'])) {
+    if (strpos($element['#options_display'], 'buttons_') === 0) {
+      $variables['attributes']['class'][] = 'webform-options-display-buttons';
+    }
     $variables['attributes']['class'][] = Html::getClass('webform-options-display-' . $element['#options_display']);
     $variables['#attached']['library'][] = 'webform/webform.element.options';
   }
@@ -778,7 +784,7 @@ function _webform_preprocess_description_help(array &$variables) {
   // Move #description to #help for webform admin routes.
   if (\Drupal::config('webform.settings')->get('ui.description_help')
     && \Drupal::service('webform.request')->isWebformAdminRoute()
-    && \Drupal::routeMatch()->getRouteName() != 'webform.contribute.settings'
+    && \Drupal::routeMatch()->getRouteName() !== 'webform.contribute.settings'
     && !isset($element['#help'])
     && !empty($element['#title']) && (empty($element['#title_display']) || !in_array($element['#title_display'], ['attribute', 'invisible']))
     && !empty($element['#description']) && (empty($element['#description_display']) || !in_array($element['#description_display'], ['invisible']))
@@ -873,7 +879,7 @@ function _webform_preprocess_help(array &$variables, $title_parents = ['title'])
 
   // Place help before the target.
   if (isset($build[$target])) {
-    if (($target == 'title' && $title_display === 'inline')
+    if (($target === 'title' && $title_display === 'inline')
       || $help_display === 'title_before'
       || $help_display === 'element_before') {
       $build[$target]['#weight'] = 0;
@@ -933,10 +939,10 @@ function _webform_preprocess_form_element_description_more(array &$variables) {
 function _webform_theme_suggestions(array $variables, $hook) {
   $suggestions = [];
 
-  if ($hook == 'webform' && isset($variables['element']) && isset($variables['element']['#webform_id'])) {
+  if ($hook === 'webform' && isset($variables['element']) && isset($variables['element']['#webform_id'])) {
     $suggestions[] = $hook . '__' . $variables['element']['#webform_id'];
   }
-  elseif ($hook == 'webform_submission_form' && isset($variables['form']) && isset($variables['form']['#webform_id'])) {
+  elseif ($hook === 'webform_submission_form' && isset($variables['form']) && isset($variables['form']['#webform_id'])) {
     $suggestions[] = $hook . '__' . $variables['form']['#webform_id'];
   }
   elseif (strpos($hook, 'webform_element_base_') === 0 || strpos($hook, 'webform_container_base_') === 0) {
@@ -996,7 +1002,7 @@ function _webform_devel_hook_theme_suggestions_generate() {
   print '<pre>';
   foreach ($theme as $hook => $info) {
     $suggestion = FALSE;
-    if ($hook == 'webform') {
+    if ($hook === 'webform') {
       $suggestion = TRUE;
     }
     elseif (strpos($hook, 'webform_element_base_') === 0 || strpos($hook, 'webform_container_base_') === 0) {
@@ -1177,7 +1183,7 @@ function _webform_theme_suggestions_options(array $variables, $type) {
 
   $element = $variables['element'];
   $suggestions = [];
-  if (!empty($element['#options_display']) && $element['#options_display'] === 'buttons') {
+  if (!empty($element['#options_display']) && strpos($element['#options_display'], 'buttons') === 0) {
     $suggestions[] = $type . '__webform_' . $element['#options_display'];
   }
   return $suggestions;

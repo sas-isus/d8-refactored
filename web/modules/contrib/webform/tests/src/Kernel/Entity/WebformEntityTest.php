@@ -298,30 +298,30 @@ class WebformEntityTest extends KernelTestBase {
 
     // Check get wizard pages.
     $wizard_pages = [
-      'page_1' => ['#title' => 'Page 1', '#access' => TRUE],
-      'page_2' => ['#title' => 'Page 2', '#access' => TRUE],
-      'page_3' => ['#title' => 'Page 3', '#access' => TRUE],
-      'webform_confirmation' => ['#title' => 'Complete', '#access' => TRUE],
+      'page_1' => ['#title' => 'Page 1', '#type' => 'page', '#access' => TRUE],
+      'page_2' => ['#title' => 'Page 2', '#type' => 'page', '#access' => TRUE],
+      'page_3' => ['#title' => 'Page 3', '#type' => 'page', '#access' => TRUE],
+      'webform_confirmation' => ['#title' => 'Complete', '#type' => 'page', '#access' => TRUE],
     ];
     $this->assertEquals($webform->getPages(), $wizard_pages);
 
     // Check get wizard pages with preview.
     $webform->setSetting('preview', TRUE)->save();
     $wizard_pages = [
-      'page_1' => ['#title' => 'Page 1', '#access' => TRUE],
-      'page_2' => ['#title' => 'Page 2', '#access' => TRUE],
-      'page_3' => ['#title' => 'Page 3', '#access' => TRUE],
-      'webform_preview' => ['#title' => 'Preview', '#access' => TRUE],
-      'webform_confirmation' => ['#title' => 'Complete', '#access' => TRUE],
+      'page_1' => ['#title' => 'Page 1', '#type' => 'page', '#access' => TRUE],
+      'page_2' => ['#title' => 'Page 2', '#type' => 'page', '#access' => TRUE],
+      'page_3' => ['#title' => 'Page 3', '#type' => 'page', '#access' => TRUE],
+      'webform_preview' => ['#title' => 'Preview', '#type' => 'page', '#access' => TRUE],
+      'webform_confirmation' => ['#title' => 'Complete', '#type' => 'page', '#access' => TRUE],
     ];
     $this->assertEquals($webform->getPages(), $wizard_pages);
 
     // Check get wizard pages with preview with disable pages.
     $webform->setSetting('preview', TRUE)->save();
     $wizard_pages = [
-      'webform_start' => ['#title' => 'Start', '#access' => TRUE],
-      'webform_preview' => ['#title' => 'Preview', '#access' => TRUE],
-      'webform_confirmation' => ['#title' => 'Complete', '#access' => TRUE],
+      'webform_start' => ['#title' => 'Start', '#type' => 'page', '#access' => TRUE],
+      'webform_preview' => ['#title' => 'Preview', '#type' => 'page', '#access' => TRUE],
+      'webform_confirmation' => ['#title' => 'Complete', '#type' => 'page', '#access' => TRUE],
     ];
     $this->assertEquals($webform->getPages(TRUE), $wizard_pages);
 

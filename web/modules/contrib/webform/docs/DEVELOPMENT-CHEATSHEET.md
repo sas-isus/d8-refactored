@@ -77,6 +77,10 @@ echo 'true' > webform.features.yml
 echo 'true' > modules/webform_attachment/webform_attachment.features.yml
 echo 'true' > modules/webform_attachment/tests/modules/webform_attachment_test/webform_attachment_test.features.yml
 
+echo 'true' > modules/webform_cards/tests/modules/webform_cards_test/webform_cards_test.features.yml
+
+echo 'true' > modules/webform_clientside_validationtests/modules/webform_clientside_validation_test/webform_clientside_validation_test.features.yml
+
 echo 'true' > modules/webform_entity_print/webform_entity_print.features.yml
 echo 'true' > modules/webform_entity_print/tests/modules/webform_entity_print_test/webform_entity_print_test.features.yml
 echo 'true' > modules/webform_entity_print_attachment/webform_entity_print_attachment.features.yml
@@ -182,6 +186,7 @@ drush en -y webform\
   webform_test_translation\
   webform_test_views\
   webform_attachment_test\
+  webform_clientside_validation_test\
   webform_entity_print_test\
   webform_entity_print_attachment_test\
   webform_icheck_test\
@@ -237,6 +242,7 @@ drush features-export -y webform_test_translation
 drush features-export -y webform_test_views
 drush features-export -y webform_test_paragraphs
 drush features-export -y webform_attachment_test
+drush features-export -y webform_clientside_validation_test
 drush features-export -y webform_entity_print_test
 drush features-export -y webform_entity_print_attachment_test
 drush features-export -y webform_icheck_test
@@ -291,6 +297,8 @@ drush webform:tidy -y --dependencies webform_test_submissions
 drush webform:tidy -y --dependencies webform_test_translation
 drush webform:tidy -y --dependencies webform_test_views
 drush webform:tidy -y --dependencies webform_attachment_test
+drush webform:tidy -y --dependencies webform_cards_test
+drush webform:tidy -y --dependencies webform_clientside_validation_test
 drush webform:tidy -y --dependencies webform_entity_print_test
 drush webform:tidy -y --dependencies webform_entity_print_attachment_test
 drush webform:tidy -y --dependencies webform_image_select_test
@@ -342,6 +350,8 @@ drush features-import -y webform_test_submissions
 drush features-import -y webform_test_translation
 drush features-import -y webform_test_views
 drush features-import -y webform_attachment_test
+drush features-import -y webform_cards_test
+drush features-import -y webform_clientside_validation_test
 drush features-import -y webform_entity_print_test
 drush features-import -y webform_entity_print_attachment_test
 drush features-import -y webform_image_select_test

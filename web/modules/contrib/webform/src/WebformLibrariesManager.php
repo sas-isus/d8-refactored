@@ -175,7 +175,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
     $description = [
       'info' => $info,
     ];
-    if (!$cli && $severity == REQUIREMENT_WARNING) {
+    if (!$cli && $severity === REQUIREMENT_WARNING) {
       $description['cdn'] = ['#markup' => $this->t('<a href=":href">Disable CDN warning</a>', [':href' => Url::fromRoute('webform.config.advanced')->toString()])];
     }
 

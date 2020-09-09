@@ -142,7 +142,7 @@ abstract class RendererBase extends EntityTranslationRendererBase {
             }
           }
 
-          if (!isset($grouping[$group_value])) {
+          if (!isset($grouping[$group_value]) && !empty($group_value)) {
             $group_value_content = [
               '#markup' => '<h2 class="grouping-title">' . $group_value . '</h2>',
               '#weight' => -5,

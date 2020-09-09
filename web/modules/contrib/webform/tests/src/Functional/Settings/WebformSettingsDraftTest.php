@@ -57,7 +57,7 @@ class WebformSettingsDraftTest extends WebformBrowserTestBase {
       'test_form_draft_anonymous' => 'Test: Webform: Draft anonymous',
     ];
     foreach ($webform_ids as $webform_id => $webform_title) {
-      $is_authenticated = ($webform_id == 'test_form_draft_authenticated') ? TRUE : FALSE;
+      $is_authenticated = ($webform_id === 'test_form_draft_authenticated') ? TRUE : FALSE;
 
       // Login draft account.
       ($is_authenticated) ? $this->drupalLogin($normal_user) : $this->drupalLogout();

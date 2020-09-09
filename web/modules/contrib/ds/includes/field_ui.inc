@@ -330,7 +330,7 @@ function ds_field_ui_layouts_save($form, FormStateInterface $form_state) {
   /* @var \Drupal\Core\Entity\Display\EntityDisplayInterface $display */
   $display = $entity_form->getEntity();
 
-  if (\Drupal::moduleHandler()->moduleExists('layout_builder') && $display->isLayoutBuilderEnabled()) {
+  if ($display instanceof LayoutBuilderEnabledInterface && $display->isLayoutBuilderEnabled()) {
     $display->unsetThirdPartySetting('ds', 'layout');
     $display->unsetThirdPartySetting('ds', 'regions');
     $display->unsetThirdPartySetting('ds', 'fields');

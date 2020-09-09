@@ -206,11 +206,13 @@ function webform_share_theme_suggestions_page(array $variables) {
 
 /**
  * Prepares variables for the webform share page HTML templates.
- *
- * @see template_preprocess_html()
  */
 function template_preprocess_html__webform_share(&$variables) {
-  template_preprocess_html($variables);
+  // Make sure the variables are preprocessed.
+  // @see template_preprocess_page()
+  if (!isset($variables['page'])) {
+    template_preprocess_html($variables);
+  }
 
   /** @var \Drupal\webform\WebformInterface $webform */
   $webform = \Drupal::routeMatch()->getParameter('webform');
@@ -261,11 +263,13 @@ function template_preprocess_html__webform_share(&$variables) {
 
 /**
  * Prepares variables for the webform share page templates.
- *
- * @see template_preprocess_page()
  */
 function template_preprocess_page__webform_share(&$variables) {
-  template_preprocess_page($variables);
+  // Make sure the variables are preprocessed.
+  // @see template_preprocess_page()
+  if (!isset($variables['base_path'])) {
+    template_preprocess_page($variables);
+  }
 }
 
 /**

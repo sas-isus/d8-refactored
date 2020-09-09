@@ -30,7 +30,7 @@ abstract class WebformEntitySettingsBaseForm extends EntityForm {
   protected function actions(array $form, FormStateInterface $form_state) {
     $actions = parent::actions($form, $form_state);
     // Only display delete button on Settings > General tab/form.
-    if ($this->operation != 'settings') {
+    if ($this->operation !== 'settings') {
       unset($actions['delete']);
     }
 

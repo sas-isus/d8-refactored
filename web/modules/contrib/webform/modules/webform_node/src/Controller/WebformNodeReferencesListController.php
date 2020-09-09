@@ -296,16 +296,16 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
       return NULL;
     }
 
-    if ($entity->$webform_field_name->target_id != $this->webform->id()) {
+    if ($entity->$webform_field_name->target_id !== $this->webform->id()) {
       return NULL;
     }
 
     $webform_field = $entity->$webform_field_name;
-    if ($webform_field->status == WebformInterface::STATUS_OPEN) {
+    if ($webform_field->status === WebformInterface::STATUS_OPEN) {
       return $this->t('Open');
     }
 
-    if ($webform_field->status == WebformInterface::STATUS_SCHEDULED) {
+    if ($webform_field->status === WebformInterface::STATUS_SCHEDULED) {
       $is_opened = TRUE;
       if ($webform_field->open && strtotime($webform_field->open) > time()) {
         $is_opened = FALSE;

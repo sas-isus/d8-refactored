@@ -19,7 +19,7 @@ class RouteSubscriber extends RouteSubscriberBase {
     foreach ($routes as $route_name => $route) {
       switch ($route_name) {
         case 'entity.menu.collection':
-          $route->setDefaults(['_controller' => '\Drupal\menu_admin_per_menu\Controller\MenuAdminPerMenuController::menuOverviewPage']);
+          $route->setDefaults(['_title' => $route->getDefault('_title'), '_controller' => '\Drupal\menu_admin_per_menu\Controller\MenuAdminPerMenuController::menuOverviewPage']);
           $route->setRequirements(['_custom_access' => '\Drupal\menu_admin_per_menu\Access\MenuAdminPerMenuAccess::menusOverviewAccess']);
           break;
 

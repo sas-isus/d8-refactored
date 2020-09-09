@@ -4,9 +4,17 @@ namespace Drupal\permissions_by_term\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
 class SettingsForm extends ConfigFormBase {
+
+  /**
+   * The entity type bundle info.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
+   */
+  protected $entityTypeBundleInfo;
 
   /**
    * {@inheritdoc}
@@ -22,6 +30,16 @@ class SettingsForm extends ConfigFormBase {
     return [
       'permissions_by_term.settings'
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    $instance = parent::create($container);
+    $instance->entityTypeBundleInfo = $container->get('entity_type.bundle.info');
+
+    return $instance;
   }
 
   /**
@@ -64,7 +82,27 @@ overall website and you are using a warmed page cache, then it is recommended to
       '#default_value' => \Drupal::config('permissions_by_term.settings')->get('disable_node_access_records'),
     ];
 
+    $form['target_bundles'] = [
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Limit by taxonomy vocabularies'),
+      '#description' => $this->t('Whether to limit permissions management and search by selected taxonomy vocabularies. If left empty, all taxonomy vocabularies are allowed.'),
+      '#options' => $this->getTaxonomyVocabularyOptions(),
+      '#default_value' => $this->config('permissions_by_term.settings')->get('target_bundles') ?? [],
+    ];
+
     return parent::buildForm($form, $form_state);
+  }
+
+  /**
+   * Get list of vocabularies options.
+   *
+   * @return array
+   *   List of options.
+   */
+  protected function getTaxonomyVocabularyOptions() {
+    return array_map(function ($bundle_info) {
+      return $bundle_info['label'];
+    }, $this->entityTypeBundleInfo->getBundleInfo('taxonomy_term'));
   }
 
   /**
@@ -96,6 +134,12 @@ overall website and you are using a warmed page cache, then it is recommended to
     \Drupal::configFactory()
       ->getEditable('permissions_by_term.settings')
       ->set('disable_node_access_records', $form_state->getValue('disable_node_access_records'))
+      ->save();
+
+    $bundles = array_filter($form_state->getValue('target_bundles'));
+    $this->configFactory
+      ->getEditable('permissions_by_term.settings')
+      ->set('target_bundles', array_values($bundles))
       ->save();
 
     parent::submitForm($form, $form_state);

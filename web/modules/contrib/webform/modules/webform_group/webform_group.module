@@ -132,7 +132,7 @@ function _webform_group_form_webform_handler_form_alter_email_element_recursive(
       continue;
     }
     if (isset($element['#type']) && $element['#type'] === 'webform_select_other'
-      && isset($element['#other__type']) && $element['#other__type'] == 'webform_email_multiple') {
+      && isset($element['#other__type']) && $element['#other__type'] === 'webform_email_multiple') {
       $group_optgroup = (string) t('Group roles');
       $other_optgroup = (string) t('Other');
       $other_options = $element['#options'][$other_optgroup];
@@ -363,7 +363,7 @@ function webform_group_webform_submission_access(WebformSubmissionInterface $web
     // Is operation any.
     (array_intersect($access_rules[$operation . '_any']['group_roles'], $user_group_roles)) ||
     // Is operation own.
-    (array_intersect($access_rules[$operation . '_own']['group_roles'], $user_group_roles)  && $webform_submission->getOwnerId() == $account->id())
+    (array_intersect($access_rules[$operation . '_own']['group_roles'], $user_group_roles)  && (int) $webform_submission->getOwnerId() === (int) $account->id())
   ) {
     return AccessResult::allowed()
       ->cachePerUser()

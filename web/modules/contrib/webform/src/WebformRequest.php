@@ -333,7 +333,7 @@ class WebformRequest implements WebformRequestInterface {
 
     // Validate that source entity's field target id is the correct webform.
     $webform_target = $this->webformEntityReferenceManager->getWebform($source_entity);
-    if ($webform_target && $webform_target->id() == $webform->id()) {
+    if ($webform_target && $webform_target->id() === $webform->id()) {
       return TRUE;
     }
     else {

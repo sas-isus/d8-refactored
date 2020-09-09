@@ -227,7 +227,7 @@ function webform_access_webform_submission_access(WebformSubmissionInterface $we
       // Is operation any.
       (in_array($operation . '_any', $permissions)) ||
       // Is operation own.
-      (in_array($operation . '_own', $permissions) && $webform_submission->getOwnerId() == $account->id())
+      (in_array($operation . '_own', $permissions) && $webform_submission->getOwnerId() === $account->id())
     ) {
       return AccessResult::allowed()
         ->cachePerUser()

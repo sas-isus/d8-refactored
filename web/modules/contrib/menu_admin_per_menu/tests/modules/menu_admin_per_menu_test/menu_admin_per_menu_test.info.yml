@@ -1,0 +1,14 @@
+name: Menu Admin per Menu Test
+type: module
+description: 'Module used for Menu Admin per Menu testing'
+package: Testing
+hidden: true
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - menu_admin_per_menu:menu_admin_per_menu
+
+# Information added by Drupal.org packaging script on 2020-06-29
+version: '8.x-1.3'
+project: 'menu_admin_per_menu'
+datestamp: 1593436061
