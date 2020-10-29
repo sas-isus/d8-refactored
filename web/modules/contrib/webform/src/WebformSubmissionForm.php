@@ -13,6 +13,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\ContentEntityForm;
+use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
@@ -62,6 +63,13 @@ class WebformSubmissionForm extends ContentEntityForm {
    * @var \Drupal\Core\Render\RendererInterface
    */
   protected $renderer;
+
+  /**
+   * The form builder.
+   *
+   * @var \Drupal\Core\Form\FormBuilderInterface
+   */
+  protected $formBuilder;
 
   /**
    * The path alias manager.
@@ -219,6 +227,8 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   The selection plugin manager.
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
    *   The entity field manager.
+   * @param \Drupal\Core\Form\FormBuilderInterface
+   *   The form builder.
    */
   public function __construct(
     EntityRepositoryInterface $entity_repository,
@@ -236,7 +246,8 @@ class WebformSubmissionForm extends ContentEntityForm {
     WebformSubmissionGenerateInterface $submission_generate,
     KillSwitch $killSwitch,
     SelectionPluginManagerInterface $selection_manager,
-    EntityFieldManagerInterface $entity_field_manager
+    EntityFieldManagerInterface $entity_field_manager,
+    FormBuilderInterface $form_builder
   ) {
     parent::__construct($entity_repository);
     $this->configFactory = $config_factory;
@@ -254,6 +265,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     $this->killSwitch = $killSwitch;
     $this->selectionManager = $selection_manager;
     $this->entityFieldManager = $entity_field_manager;
+    $this->formBuilder = $form_builder;
   }
 
   /**
@@ -276,7 +288,8 @@ class WebformSubmissionForm extends ContentEntityForm {
       $container->get('webform_submission.generate'),
       $container->get('page_cache_kill_switch'),
       $container->get('plugin.manager.entity_reference_selection'),
-      $container->get('entity_field.manager')
+      $container->get('entity_field.manager'),
+      $container->get('form_builder')
     );
   }
 
@@ -820,11 +833,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     }
 
     // Append elements to the webform.
-    $form['elements'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'div',
-      '#attributes' => ['class' => ['webform-elements']],
-    ] + $elements;
+    $form['elements'] = $elements;
 
     // Pages: Set current wizard or preview page.
     $this->displayCurrentPage($form, $form_state);
@@ -1705,7 +1714,7 @@ class WebformSubmissionForm extends ContentEntityForm {
           // Prevent the previously-cached form object, which is stored in
           // $form['build_info']['callback_object'] from being used because it
           // refers to the original new (unsaved) entity.
-          \Drupal::formBuilder()->deleteCache($form['#build_id']);
+          $this->formBuilder->deleteCache($form['#build_id']);
         }
       }
     }

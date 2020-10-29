@@ -1,3 +1,4 @@
+uuid: null
 langcode: en
 status: open
 dependencies:
@@ -48,7 +49,7 @@ elements: |
     '#select2': true
     '#options':
       c: 'C -- This is the letter C. [element#options]'
-  
+
 css: ''
 javascript: ''
 settings:
@@ -230,6 +231,7 @@ handlers:
   debug:
     id: debug
     label: Debug
+    notes: ''
     handler_id: debug
     status: true
     conditions: {  }

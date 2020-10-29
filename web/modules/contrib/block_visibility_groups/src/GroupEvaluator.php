@@ -32,8 +32,11 @@ class GroupEvaluator implements GroupEvaluatorInterface {
    * @var \Drupal\Core\Plugin\Context\ContextRepositoryInterface
    */
   protected $contextRepository;
+
   /**
-   * @var array $group_evaluations ;
+   * A list of group evaluations.
+   *
+   * @var array
    */
   protected $group_evaluations = [];
 
@@ -41,20 +44,17 @@ class GroupEvaluator implements GroupEvaluatorInterface {
    * Constructor.
    */
   public function __construct(ContextHandlerInterface $context_handler, ContextRepositoryInterface $context_repository) {
-
     $this->contextRepository = $context_repository;
     $this->contextHandler = $context_handler;
   }
 
   /**
-   * @param \Drupal\block_visibility_groups\Entity\BlockVisibilityGroup $block_visibility_group
-   *
-   * @return boolean
+   * {@inheritdoc}
    */
   public function evaluateGroup(BlockVisibilityGroup $block_visibility_group) {
     $group_id = $block_visibility_group->id();
     if (!isset($this->group_evaluations[$group_id])) {
-      /** @var ConditionPluginCollection $conditions */
+      /** @var \Drupal\Core\Condition\ConditionPluginCollection $conditions */
       $conditions = $block_visibility_group->getConditions();
       if (empty($conditions)) {
         // If no conditions then always true.
@@ -72,10 +72,15 @@ class GroupEvaluator implements GroupEvaluatorInterface {
   }
 
   /**
+   * Apply contexts.
+   *
    * @param \Drupal\Core\Condition\ConditionPluginCollection $conditions
+   *   A collection of condition plugins.
    * @param string $logic
+   *   The logical operator.
    *
    * @return bool
+   *   Whether the conditions have been applied or not.
    */
   protected function applyContexts(ConditionPluginCollection &$conditions, $logic) {
     $have_1_testable_condition = FALSE;

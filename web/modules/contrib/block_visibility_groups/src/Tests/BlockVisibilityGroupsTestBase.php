@@ -7,12 +7,12 @@
 
 namespace Drupal\block_visibility_groups\Tests;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  *
  */
-abstract class BlockVisibilityGroupsTestBase extends WebTestBase {
+abstract class BlockVisibilityGroupsTestBase extends BrowserTestBase {
 
   /**
    * Modules to enable.
@@ -101,7 +101,7 @@ abstract class BlockVisibilityGroupsTestBase extends WebTestBase {
     $this->drupalPostForm('admin/structure/block/manage/' . $block_id, $settings, 'Save block', [
       'query' => [
         'block_visibility_group' => $group_id,
-      ]
+      ],
     ]);
   }
 

@@ -8,6 +8,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\permissions_by_term\Event\PermissionsByTermDeniedEvent;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\user\Entity\User;
+use Drupal\node\Entity\Node;
 
 /**
  * AccessCheckService class.
@@ -37,14 +38,28 @@ class AccessCheck {
     $this->eventDispatcher = $eventDispatcher;
   }
 
-  public function canUserAccessByNodeId($nid, $uid = FALSE, $langcode = ''): bool {
-		$langcode = ($langcode === '') ? \Drupal::languageManager()->getCurrentLanguage()->getId() : $langcode;
+  public function canUserAccessByNode(Node $node, $uid = FALSE, $langcode = ''): bool {
+    $langcode = ($langcode === '') ? \Drupal::languageManager()->getCurrentLanguage()->getId() : $langcode;
 
     if (empty($uid)) {
       $uid = \Drupal::currentUser()->id();
     }
 
     $user = User::load($uid);
+
+    if ($user instanceof User && $user->hasPermission('view own unpublished content') &&
+      (int) $node->getOwnerId() === (int) $uid &&
+      !$node->isPublished()
+    ) {
+      return TRUE;
+    }
+
+    if ($user instanceof User && $user->hasPermission('view any unpublished content') &&
+      !$node->isPublished()
+    ) {
+      return TRUE;
+    }
+
     if ($user instanceof User && $user->hasPermission('bypass node access')) {
       return TRUE;
     }
@@ -60,7 +75,7 @@ class AccessCheck {
 
     $terms = $this->database
       ->query("SELECT tid FROM {taxonomy_index} WHERE nid = :nid",
-      [':nid' => $nid])->fetchAll();
+      [':nid' => $node->id()])->fetchAll();
 
     if (empty($terms) && !$configPermissionMode) {
       return TRUE;
@@ -188,11 +203,11 @@ class AccessCheck {
 
   }
 
-  public function handleNode($nodeId, string $langcode): AccessResult {
+  public function handleNode(Node $node, string $langcode): AccessResult {
     $result = AccessResult::neutral();
 
-    if (!$this->canUserAccessByNodeId($nodeId, false, $langcode)) {
-      $this->dispatchDeniedEvent($nodeId);
+    if (!$this->canUserAccessByNode($node, false, $langcode)) {
+      $this->dispatchDeniedEvent($node->id());
 
       $result = AccessResult::forbidden();
     }
@@ -200,9 +215,9 @@ class AccessCheck {
     return $result;
   }
 
-  public function dispatchDeniedEventOnRestricedAccess($nodeId, string $langcode): void {
-    if (!$this->canUserAccessByNodeId($nodeId, false, $langcode)) {
-      $this->dispatchDeniedEvent($nodeId);
+  public function dispatchDeniedEventOnRestricedAccess(Node $node, string $langcode): void {
+    if (!$this->canUserAccessByNode($node, false, $langcode)) {
+      $this->dispatchDeniedEvent($node->id());
     }
   }
 

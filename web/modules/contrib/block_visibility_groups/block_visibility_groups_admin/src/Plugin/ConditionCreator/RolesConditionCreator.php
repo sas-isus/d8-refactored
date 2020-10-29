@@ -16,14 +16,14 @@ use Drupal\block_visibility_groups_admin\Plugin\ConditionCreatorBase;
 class RolesConditionCreator extends ConditionCreatorBase {
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function getNewConditionLabel() {
     return $this->t('Roles');
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function createConditionElements() {
     $elements['condition_config'] = [
@@ -34,13 +34,13 @@ class RolesConditionCreator extends ConditionCreatorBase {
       '#type' => 'checkboxes',
       '#title' => $this->t('When the user has the following roles'),
       '#options' => array_map('\Drupal\Component\Utility\Html::escape', user_role_names()),
-      // '#description' => $this->t('If you select no roles, the condition will evaluate to TRUE for all users.'),.
+      // '#description' => $this->t('If you select no roles, the condition will evaluate to TRUE for all users.'),
     ];
     return $elements;
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function itemSelected($condition_info) {
     $roles = $condition_info['condition_config']['roles'];
@@ -48,7 +48,7 @@ class RolesConditionCreator extends ConditionCreatorBase {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function createConditionConfig($plugin_info) {
     $config = parent::createConditionConfig($plugin_info);

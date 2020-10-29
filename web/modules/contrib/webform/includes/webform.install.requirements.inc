@@ -48,7 +48,7 @@ function webform_requirements($phase) {
   // Check HTML email handling.
   /****************************************************************************/
 
-  /** @var \Drupal\webform\WebformEProviderInterface $email_provider */
+  /** @var \Drupal\webform\WebformEmailProviderInterface $email_provider */
   $email_provider = \Drupal::service('webform.email_provider');
   $mail_module_name = $email_provider->getModuleName();
   $mail_plugin_id = $email_provider->getMailPluginId();
@@ -57,13 +57,17 @@ function webform_requirements($phase) {
     $t_args = [
       '@module' => $mail_module_name,
       '@plugin_id' => $mail_plugin_id,
-      '@plugin_label' => $mail_plugin_definition['label'],
-      '@plugin_description' => $mail_plugin_definition['description'],
     ];
+    if ($mail_plugin_definition) {
+      $t_args += [
+        '@plugin_label' => $mail_plugin_definition['label'],
+        '@plugin_description' => $mail_plugin_definition['description'],
+      ];
+    }
     $requirements['webform_email'] = [
       'title' => t('Webform: HTML email support'),
-      'value' => ($mail_module_name) ? t('Provided by the @module module.', $t_args) : t('Provided by @plugin_id mail plugin.', $t_args),
-      'description' => new FormattableMarkup('@plugin_label: @plugin_description', $t_args),
+      'value' => ($mail_module_name) ? t('Provided by the @module module.', $t_args) : t('Provided by the @plugin_id mail plugin.', $t_args),
+      'description' => $mail_plugin_definition ? new FormattableMarkup('@plugin_label: @plugin_description', $t_args) : '',
       'severity' => REQUIREMENT_OK,
     ];
   }

@@ -319,12 +319,11 @@ function permissions_by_term_form_alter(&$form, FormStateInterface $formState, $
 
     $nid = null;
     if (!empty($node = \Drupal::routeMatch()->getParameter('node'))) {
-      $nid = $node->id();
       /**
        * @var AccessCheck $accessCheck
        */
       $accessCheck = \Drupal::service('permissions_by_term.access_check');
-      $accessResult = $accessCheck->handleNode($nid, $langcode);
+      $accessResult = $accessCheck->handleNode($node, $langcode);
       if ($accessResult instanceof AccessResultForbidden) {
         return $accessResult;
       }
@@ -385,7 +384,7 @@ function permissions_by_term_node_access(NodeInterface $node, $op, AccountInterf
   /* @var \Drupal\permissions_by_term\Service\AccessCheck $accessCheck */
   $accessCheck = \Drupal::service('permissions_by_term.access_check');
 
-  $accessCheck->dispatchDeniedEventOnRestricedAccess($node->id(), $node->language()->getId());
+  $accessCheck->dispatchDeniedEventOnRestricedAccess($node, $node->language()->getId());
 }
 
 /**
@@ -395,10 +394,9 @@ function permissions_by_term_node_access(NodeInterface $node, $op, AccountInterf
  */
 function permissions_by_term_node_access_records(\Drupal\node\NodeInterface $node) {
   // Do not return any grants for nodes that this module doesn't manage.
-  if (!$node->isPublished() || \Drupal::configFactory()->getEditable('permissions_by_term.settings')->get('disable_node_access_records')) {
+  if (\Drupal::configFactory()->getEditable('permissions_by_term.settings')->get('disable_node_access_records')) {
     return;
   }
-  $has_term_access_restrictions = FALSE;
   /* @var \Drupal\permissions_by_term\Service\AccessStorage $access_storage */
   $access_storage = \Drupal::service('permissions_by_term.access_storage');
 
@@ -415,13 +413,8 @@ function permissions_by_term_node_access_records(\Drupal\node\NodeInterface $nod
       $language = $node->language()->getId();
     }
     if ($access_check_service->isAnyPermissionSetForTerm($tid, $language)) {
-      $has_term_access_restrictions = TRUE;
       break;
     }
-  }
-
-  if (!$has_term_access_restrictions && !\Drupal::configFactory()->getEditable('permissions_by_term.settings')->get('permission_mode')) {
-    return;
   }
 
   /**

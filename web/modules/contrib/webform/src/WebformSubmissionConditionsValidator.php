@@ -306,10 +306,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
         || !Element::isVisibleElement($element)) {
         continue;
       }
-
-
       $this->validateFormElement($element, $form_state);
-
       $this->validateFormRecursive($element, $form_state);
     }
   }

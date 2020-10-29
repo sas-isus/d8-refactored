@@ -1,3 +1,4 @@
+uuid: null
 langcode: en
 status: open
 dependencies:
@@ -23,7 +24,7 @@ elements: |
   textfield:
     '#type': textfield
     '#title': textfield
-  
+
 css: ''
 javascript: ''
 settings:
@@ -205,6 +206,7 @@ handlers:
   debug:
     id: debug
     label: Debug
+    notes: ''
     handler_id: debug
     status: false
     conditions: {  }
@@ -238,7 +240,7 @@ variants:
       elements: |
         textfield:
           '#placeholder': 'This is a placeholder'
-        
+
       handlers: {  }
       debug: true
   handlers:
@@ -284,6 +286,6 @@ variants:
       elements: |
         '#method': get
         '#action': 'https://drupal.org'
-        
+
       handlers: {  }
       debug: true

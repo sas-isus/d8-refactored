@@ -26,7 +26,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     }
  *   },
  *   config_prefix = "block_visibility_group",
- *   admin_permission = "administer site configuration",
+ *   admin_permission = "administer block visibility groups",
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "label",
@@ -61,7 +61,7 @@ class BlockVisibilityGroup extends ConfigEntityBase implements BlockVisibilityGr
   /**
    * Whether other conditions are allowed in the group.
    *
-   * @var boolean
+   * @var bool
    */
   protected $allow_other_conditions;
 

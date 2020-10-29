@@ -1,0 +1,112 @@
+<?php
+
+/**
+ * @file
+ * Contains update functions for Views Bootstrap.
+ */
+
+/**
+ * Update Views Bootstrap style configuration.
+ */
+function views_bootstrap_update_8001(&$sandbox) {
+  $config_factory = \Drupal::configFactory();
+
+  foreach ($config_factory->listAll('views.view.') as $view_config_name) {
+    $view = $config_factory->getEditable($view_config_name);
+    $save = FALSE;
+    $displays = $view->get('display');
+    foreach ($displays as $display_name => &$display) {
+      if (!empty($display['display_options']['style']) && !empty($display['display_options']['style']['options'])) {
+        $style = (string) $display['display_options']['style']['type'];
+        $options = $display['display_options']['style']['options'];
+
+        // Check accordion for 'behavior' option, default 'closed'.
+        if ($style == 'views_bootstrap_accordion' && !array_key_exists('behavior', $options)) {
+          $display['display_options']['style']['options']['behavior'] = 'closed';
+          \Drupal::logger('views_bootstrap')->notice("Updating accordion behavior to default in $display_name for $view_config_name");
+          $save = TRUE;
+        }
+
+        // Check dropdown for correct button class when changed to select.
+        $button_options = [
+          'btn btn-default',
+          'btn btn-primary',
+          'btn btn-success',
+          'btn btn-info',
+          'btn btn-warning',
+          'btn btn-danger',
+        ];
+        if ($style == 'views_bootstrap_dropdown' && !empty($options['button_class']) && !in_array($options['button_class'], $button_options)) {
+          $display['display_options']['style']['options']['button_class'] = 'btn btn-default';
+          $save = TRUE;
+          \Drupal::logger('views_bootstrap')->notice("Updating views_bootstrap_dropdown button class to default $display_name for $view_config_name");
+        }
+
+        // Check tabs justified setting and convert if set to tab_position.
+        if ($style == 'views_bootstrap_tab' && isset($options['justified']) && $options['justified'] == 1) {
+          unset($display['display_options']['style']['options']['justified']);
+          $display['display_options']['style']['options']['tab_position'] = 'justified';
+          $save = TRUE;
+          \Drupal::logger('views_bootstrap')->notice("Updating views_bootstrap_tab position to justified in $display_name for $view_config_name");
+        }
+        elseif ($style == 'views_bootstrap_tab' && !isset($options['tab_position'])) {
+          $display['display_options']['style']['options']['tab_position'] = 'basic';
+          $save = TRUE;
+          \Drupal::logger('views_bootstrap')->notice("Updating views_bootstrap_tab position to default top in $display_name for $view_config_name");
+        }
+
+        // Check panels for contextual_class.
+        if ($style == 'views_bootstrap_panel' && !isset($options['contextual_class'])) {
+          $display['display_options']['style']['options']['contextual_class'] = 'panel-default';
+          \Drupal::logger('views_bootstrap')->notice("Updating views_bootstrap_panel contextual class to default in $display_name for $view_config_name");
+          $save = TRUE;
+        }
+
+        // Check grid for options settings.
+        if ($style == 'views_bootstrap_grid') {
+          if (!isset($options['columns'])) {
+            $display['display_options']['style']['options']['columns'] = '12';
+            $save = TRUE;
+            \Drupal::logger('views_bootstrap')->notice("Updating views_bootstrap_grid columns to default 12 in $display_name for $view_config_name");
+          }
+          if (!isset($options['col_class_default'])) {
+            $display['display_options']['style']['options']['col_class_default'] = 1;
+            $save = TRUE;
+            \Drupal::logger('views_bootstrap')->notice("Updating views_bootstrap_grid to use col class default in $display_name for $view_config_name");
+          }
+          if (!isset($options['row_class_default'])) {
+            $display['display_options']['style']['options']['row_class_default'] = 1;
+            $save = TRUE;
+            \Drupal::logger('views_bootstrap')->notice("Updating views_bootstrap_grid to use row class default in $display_name for $view_config_name");
+          }
+        }
+
+        // Check list group for panels option.
+        if ($style == 'views_bootstrap_list_group' && !isset($options['panels'])) {
+          $display['display_options']['style']['options']['panels'] = 0;
+          $save = TRUE;
+          \Drupal::logger('views_bootstrap')->notice("Updating views_bootstrap_list_group panels setting to default in $display_name for $view_config_name");
+        }
+
+        // Set media object to exclude fields not set for image and heading.
+        if ($style == 'views_bootstrap_media_object') {
+          $heading = $display['display_options']['style']['options']['heading_field'];
+          $image = $display['display_options']['style']['options']['image_field'];
+          unset($display['display_options']['style']['options']['body_field']);
+          if ($heading && $image && !empty($display['display_options']['fields'])) {
+            foreach ($display['display_options']['fields'] as $field_name => $field) {
+              if (in_array($field_name, [$heading, $image])) {
+                $display['display_options']['fields'][$field_name]['exclude'] = TRUE;
+                \Drupal::logger('views_bootstrap')->notice("Updating views_bootstrap_media_object $field_name to exclude in $display_name for $view_config_name");
+              }
+            }
+          }
+        }
+      }
+    }
+    if ($save) {
+      $view->set('display', $displays);
+      $view->save(TRUE);
+    }
+  }
+}

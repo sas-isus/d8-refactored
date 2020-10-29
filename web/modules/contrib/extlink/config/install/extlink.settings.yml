@@ -1,4 +1,5 @@
 extlink_use_external_js_file: false
+extlink_exclude_admin_routes: false
 extlink_target: false
 extlink_target_no_override: false
 extlink_nofollow: false

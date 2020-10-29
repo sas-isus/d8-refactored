@@ -59,7 +59,7 @@ class BlockVisibilityGroupDeleteForm extends EntityConfirmFormBase {
     }
     $this->entity->delete();
 
-    $this->messenger->addMessage(
+    $this->messenger()->addMessage(
       $this->t('Deleted @type:  @label.',
         [
           '@type' => $this->entity->getEntityType()->getLabel(),
@@ -115,7 +115,7 @@ class BlockVisibilityGroupDeleteForm extends EntityConfirmFormBase {
    *   Gets the block storage.
    */
   protected function blockStorage() {
-    return $this->entityManager->getStorage('block');
+    return $this->entityTypeManager->getStorage('block');
   }
 
   /**
@@ -128,7 +128,7 @@ class BlockVisibilityGroupDeleteForm extends EntityConfirmFormBase {
       // If there are blocks in this group then
       // create a dropdown to let the user choose what to do with blocks.
       $options[static::UNSET_BLOCKS] = $this->t('Unset visibility group');
-      $labels = $this->getBlockVisibilityLabels($this->entityManager->getStorage('block_visibility_group'));
+      $labels = $this->getBlockVisibilityLabels($this->entityTypeManager->getStorage('block_visibility_group'));
       unset($labels[$this->entity->id()]);
       foreach ($labels as $type => $label) {
         $options[$type] = $this->t('Move blocks to group: <em>@label</em>', ['@label' => $label]);

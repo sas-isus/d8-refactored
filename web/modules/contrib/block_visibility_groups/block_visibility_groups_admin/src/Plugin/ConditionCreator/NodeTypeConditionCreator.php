@@ -20,7 +20,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class NodeTypeConditionCreator extends ConditionCreatorBase implements ContainerFactoryPluginInterface {
 
   /**
-   * @var \Drupal\Core\Entity\EntityStorageInterface */
+   * The entity storage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
   protected $entityStorage;
 
   /**
@@ -60,14 +63,14 @@ class NodeTypeConditionCreator extends ConditionCreatorBase implements Container
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function getNewConditionLabel() {
     return $this->t('Content Types');
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function createConditionElements() {
     $elements['condition_config'] = [
@@ -76,7 +79,7 @@ class NodeTypeConditionCreator extends ConditionCreatorBase implements Container
     if (empty($this->configuration['parameters']['node'])) {
       return [];
     }
-    /** @var Node $node */
+    /** @var \Drupal\node\Entity\Node $node */
     $node = Node::load($this->configuration['parameters']['node']);
     $current_type = $node->getType();
     $node_types = $this->entityStorage->loadMultiple();
@@ -95,7 +98,7 @@ class NodeTypeConditionCreator extends ConditionCreatorBase implements Container
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function itemSelected($condition_info) {
     $bundles = $condition_info['condition_config']['bundles'];
@@ -103,7 +106,7 @@ class NodeTypeConditionCreator extends ConditionCreatorBase implements Container
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function createConditionConfig($plugin_info) {
     $config = parent::createConditionConfig($plugin_info);

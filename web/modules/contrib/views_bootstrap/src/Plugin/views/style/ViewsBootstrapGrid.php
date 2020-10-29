@@ -142,6 +142,11 @@ class ViewsBootstrapGrid extends StylePluginBase {
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
 
+    $form['help'] = [
+      '#markup' => $this->t('The Bootstrap grid displays content in a responsive, mobile first fluid grid (<a href=":docs">see documentation</a>).', [':docs' => 'https://www.drupal.org/docs/contributed-modules/views-bootstrap-for-bootstrap-3/grid']),
+      '#weight' => -99,
+    ];
+
     $form['alignment'] = [
       '#type' => 'radios',
       '#title' => $this->t('Alignment'),
@@ -183,6 +188,22 @@ class ViewsBootstrapGrid extends StylePluginBase {
     if ($this->usesFields()) {
       $form['row_class_custom']['#description'] .= ' ' . $this->t('You may use field tokens from as per the "Replacement patterns" used in "Rewrite the output of this field" for all fields.');
     }
+    $form['columns'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Base number of columns'),
+      '#default_value' => $this->options['columns'],
+      '#required' => TRUE,
+      '#options' => [
+        1 => 1,
+        2 => 2,
+        3 => 3,
+        4 => 4,
+        6 => 6,
+        12 => 12,
+        999 => $this->t('all'),
+      ],
+      '#description' => $this->t('Choose the number of columns that views will wrap in a single row. This will be reflected in the HTML structure rendered regardless of the device size. If selecting "all" then use the alternative template.'),
+    ];
 
     foreach (['xs', 'sm', 'md', 'lg'] as $size) {
       $form["col_${size}"] = [

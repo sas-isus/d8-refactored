@@ -1,3 +1,4 @@
+uuid: null
 langcode: en
 status: open
 dependencies:
@@ -22,7 +23,7 @@ elements: |
     '#title': Value
     '#required': true
     '#description': 'Enter a value to displayed in a custom message.'
-  
+
 css: ''
 javascript: ''
 settings:
@@ -204,6 +205,7 @@ handlers:
   example:
     id: example
     label: Example
+    notes: ''
     handler_id: example
     status: true
     conditions: {  }

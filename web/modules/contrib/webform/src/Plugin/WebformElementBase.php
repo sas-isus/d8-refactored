@@ -30,6 +30,7 @@ use Drupal\webform\Plugin\WebformElement\Details;
 use Drupal\webform\Plugin\WebformElement\WebformCompositeBase;
 use Drupal\webform\Twig\WebformTwigExtension;
 use Drupal\webform\Utility\WebformArrayHelper;
+use Drupal\webform\Utility\WebformDialogHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformFormHelper;
 use Drupal\webform\Utility\WebformHtmlHelper;
@@ -2319,6 +2320,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface, 
   /****************************************************************************/
   // Element configuration methods.
   /****************************************************************************/
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getOffCanvasWidth() {
+    return WebformDialogHelper::DIALOG_NARROW;
+  }
 
   /**
    * {@inheritdoc}

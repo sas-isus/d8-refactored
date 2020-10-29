@@ -7,11 +7,9 @@
     {{ button.text }}
     <span class="caret"></span>
   </button>
-  <ul {{ list.attributes }} role="menu" aria-labelledby="{{ id }}-dropdown">
-  {% for key, row in rows -%}
-    <li {{ row.attributes }}>
-        {{row.content}}
-    </li>
-  {%- endfor %}
+  <ul{{ list.attributes }} role="menu" aria-labelledby="{{ id }}-dropdown">
+  {% for key, row in rows %}
+    <li{{ row.attributes }}>{{- row.content|render|striptags('<a><img>')|trim|raw -}}</li>
+  {% endfor %}
   </ul>
 </div>

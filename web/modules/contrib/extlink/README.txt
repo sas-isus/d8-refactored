@@ -7,6 +7,7 @@ CONTENTS OF THIS FILE
  * Configuration
  * Maintainers
 
+
 INTRODUCTION
 ------------
 The External Links module is a very simple approach to adding icons to links
@@ -17,17 +18,23 @@ enabled.
 External Links was written by Nathan Haug.
 Built by Robots: http://www.lullabot.com
 
+Module Maintained by Neslee Canil Pinto.
+
+
 REQUIREMENTS
 ------------
-No special requirements.
+This module requires no modules outside of Drupal core.
+
 
 INSTALLATION
 ------------
-Simply install External Links like you would install any other module.
+Install the External Links as you would normally install a contributed
+Drupal module. Visit https://www.drupal.org/node/1897420 for further information.
 
-1) Copy the extlink folder in the modules folder in your Drupal docroot.
+1) Copy the extlink folder in the modules folder in your Drupal directory.
 
 2) Enable the module using Manage -> Extend (/admin/modules).
+
 
 CONFIGURATION
 -------------
@@ -54,9 +61,12 @@ separately. To do this:
 Note that you DO NOT need to make an extlink.css file. Specifying the file
 in the .info.yml file is enough to tell Drupal not to load the original file.
 
+
 MAINTAINERS
 -----------
-Current maintainers:
+Current maintainer:
+ * Neslee Canil Pinto - https://www.drupal.org/u/neslee-canil-pinto
 
-- Lachlan Ennis (elachlan) - https://www.drupal.org/u/elachlan
-- Nate Haug (quicksketch) - https://www.drupal.org/u/quicksketch
+Past maintainers:
+ * Lachlan Ennis (elachlan) - https://www.drupal.org/u/elachlan
+ * Nate Haug (quicksketch) - https://www.drupal.org/u/quicksketch

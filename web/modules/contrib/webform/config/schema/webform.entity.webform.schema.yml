@@ -162,6 +162,9 @@
         form_file_limit:
           type: string
           label: 'Form file upload limit'
+        form_elements_attributes:
+          type: ignore
+          label: 'Form elements attributes'
         share:
           type: boolean
           label: 'Enable form sharing'
@@ -525,6 +528,9 @@
           label:
             type: label
             label: Label
+          notes:
+            type: text
+            label: Notes
           status:
             type: boolean
             label: Status

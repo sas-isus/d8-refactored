@@ -1,5 +1,6 @@
 /**
  * @file
+ * External links js file.
  */
 
 (function ($, Drupal, drupalSettings) {
@@ -244,10 +245,10 @@
       var $link = $($links_to_process[i]);
       if (drupalSettings.data.extlink.extUseFontAwesome) {
         if (class_name === drupalSettings.data.extlink.mailtoClass) {
-          $link[icon_placement]('<span class="fa-' + class_name + ' extlink"><span class="' + drupalSettings.data.extlink.extFaMailtoClasses + '" title="' + drupalSettings.data.extlink.mailtoLabel + '"></span><span class="visually-hidden">' + drupalSettings.data.extlink.mailtoLabel + '</span></span>');
+          $link[icon_placement]('<span class="fa-' + class_name + ' extlink"><span class="' + drupalSettings.data.extlink.extFaMailtoClasses + '" aria-label="' + drupalSettings.data.extlink.mailtoLabel + '"></span></span>');
         }
         else {
-          $link[icon_placement]('<span class="fa-' + class_name + ' extlink"><span class="' + drupalSettings.data.extlink.extFaLinkClasses + '" title="' + drupalSettings.data.extlink.extLabel + '"></span><span class="visually-hidden">' + drupalSettings.data.extlink.extLabel + '</span></span>');
+          $link[icon_placement]('<span class="fa-' + class_name + ' extlink"><span class="' + drupalSettings.data.extlink.extFaLinkClasses + '" aria-label="' + drupalSettings.data.extlink.extLabel + '"></span></span>');
         }
       }
       else {

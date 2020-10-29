@@ -42,8 +42,8 @@ class BlockVisibilityGroupController extends ControllerBase {
   /**
    * Index.
    *
-   * @return string
-   *   Return Hello string.
+   * @return array
+   *   A renderable array.
    */
   public function index($param_1, $param_2) {
     return [
@@ -57,6 +57,8 @@ class BlockVisibilityGroupController extends ControllerBase {
    *
    * @param \Drupal\block_visibility_groups\Entity\BlockVisibilityGroup $block_visibility_group
    *   The block_visibility_group entity.
+   * @param string $redirect
+   *   The redirect option.
    *
    * @return array
    *   The condition selection page.

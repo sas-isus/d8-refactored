@@ -1,3 +1,4 @@
+uuid: null
 langcode: en
 status: open
 dependencies:
@@ -25,7 +26,7 @@ elements: |
     '#attributes':
       style: 'display: inline-block; margin: 0; padding: 0 20px; font-size: 100px;'
     '#markup': '{X}'
-  
+
 css: ''
 javascript: ''
 settings:
@@ -207,6 +208,7 @@ handlers:
   debug:
     id: debug
     label: Debug
+    notes: ''
     handler_id: debug
     status: false
     conditions: {  }
@@ -226,7 +228,7 @@ variants:
       elements: |
         letter_markup:
           '#markup': '[A]'
-        
+
       handlers: {  }
       debug: false
   b:
@@ -242,6 +244,6 @@ variants:
       elements: |
         letter_markup:
           '#markup': '[B]'
-        
+
       handlers: {  }
       debug: false

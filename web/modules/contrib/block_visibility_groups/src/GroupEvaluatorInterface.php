@@ -15,8 +15,10 @@ interface GroupEvaluatorInterface {
    * Evaluate Block Visibility Group.
    *
    * @param \Drupal\block_visibility_groups\Entity\BlockVisibilityGroup $block_visibility_group
+   *   The block visibility group entity.
    *
-   * @return boolean
+   * @return bool
+   *   TRUE if the group intends to be visible.
    */
   public function evaluateGroup(BlockVisibilityGroup $block_visibility_group);
 

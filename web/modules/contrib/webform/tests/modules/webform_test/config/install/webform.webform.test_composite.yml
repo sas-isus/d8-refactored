@@ -1,3 +1,4 @@
+uuid: null
 langcode: en
 status: open
 dependencies:
@@ -103,7 +104,7 @@ elements: |
         one: One
         two: Two
         three: Three
-  
+
 css: ''
 javascript: ''
 settings:
@@ -285,6 +286,7 @@ handlers:
   debug:
     id: debug
     label: Debug
+    notes: ''
     handler_id: debug
     status: true
     conditions: {  }

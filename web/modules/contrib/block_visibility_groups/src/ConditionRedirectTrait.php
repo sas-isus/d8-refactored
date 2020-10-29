@@ -14,12 +14,13 @@ trait ConditionRedirectTrait {
   /**
    * Ensure form redirects to the correct route.
    *
-   * @param \Drupal\block_visibility_groups\FormStateInterface $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
    */
   protected function setConditionRedirect(FormStateInterface $form_state) {
     $redirect = $form_state->getValue('bvg_redirect');
     if ($redirect == 'edit') {
-      $form_state->setRedirectUrl($this->block_visibility_group->urlInfo('edit-form'));
+      $form_state->setRedirectUrl($this->block_visibility_group->toUrl('edit-form'));
     }
     elseif ($redirect == 'layout') {
       $query = [
@@ -31,7 +32,6 @@ trait ConditionRedirectTrait {
         'block.admin_display',
         [],
         ['query' => $query]
-
       );
     }
   }
@@ -39,10 +39,12 @@ trait ConditionRedirectTrait {
   /**
    * Set value for redirect.
    *
-   * @param $form
-   * @param $redirect
+   * @param array $form
+   *   The form array.
+   * @param string $redirect
+   *   The redirect option: layout, edit, or null.
    */
-  protected function setRedirectValue(&$form, $redirect) {
+  protected function setRedirectValue(array &$form, $redirect) {
     $form['bvg_redirect'] = [
       '#type' => 'value',
       '#value' => $redirect,

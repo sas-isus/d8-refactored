@@ -3180,6 +3180,78 @@ webform_flexbox:
   randomize: false
   states: {  }
   states_clear: true
+webform_height:
+  access: true
+  access_create_permissions: {  }
+  access_create_roles:
+    - anonymous
+    - authenticated
+  access_create_users: {  }
+  access_update_permissions: {  }
+  access_update_roles:
+    - anonymous
+    - authenticated
+  access_update_users: {  }
+  access_view_permissions: {  }
+  access_view_roles:
+    - anonymous
+    - authenticated
+  access_view_users: {  }
+  admin_notes: ''
+  admin_title: ''
+  attributes: {  }
+  default_value: ''
+  description: ''
+  description_display: ''
+  disabled: false
+  feet__max: 8
+  feet__min: 0
+  field_prefix: ''
+  field_suffix: ''
+  flex: 1
+  format: value
+  format_attributes: {  }
+  format_html: ''
+  format_items: ul
+  format_items_html: ''
+  format_items_text: ''
+  format_text: ''
+  height_format: ''
+  height_type: number
+  help: ''
+  help_display: ''
+  help_title: ''
+  label_attributes: {  }
+  more: ''
+  more_title: ''
+  multiple: false
+  multiple__add: true
+  multiple__add_more: true
+  multiple__add_more_button_label: Add
+  multiple__add_more_input: true
+  multiple__add_more_input_label: 'more items'
+  multiple__add_more_items: 1
+  multiple__empty_items: 1
+  multiple__header_label: ''
+  multiple__item_label: item
+  multiple__min_items: null
+  multiple__no_items_message: 'No items entered. Please add items below.'
+  multiple__operations: true
+  multiple__remove: true
+  multiple__sorting: true
+  prepopulate: false
+  private: false
+  required: false
+  required_error: ''
+  states: {  }
+  states_clear: true
+  title: ''
+  title_display: ''
+  unique: false
+  unique_entity: false
+  unique_error: ''
+  unique_user: false
+  wrapper_attributes: {  }
 webform_horizontal_rule:
   attributes: {  }
   display_on: form

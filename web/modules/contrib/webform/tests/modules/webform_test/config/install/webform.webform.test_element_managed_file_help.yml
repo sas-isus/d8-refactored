@@ -1,3 +1,4 @@
+uuid: null
 langcode: en
 status: open
 dependencies:
@@ -64,7 +65,7 @@ elements: |
       '#type': managed_file
       '#title': managed_file_help_none
       '#file_help': none
-  
+
 css: ''
 javascript: ''
 settings:
@@ -246,6 +247,7 @@ handlers:
   debug:
     id: debug
     label: Debug
+    notes: ''
     handler_id: debug
     status: true
     conditions: {  }

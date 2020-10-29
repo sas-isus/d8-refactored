@@ -35,12 +35,12 @@ class VisibilityTest extends BlockVisibilityGroupsTestBase {
   /**
    * Modules to enable.
    *
-   * Var array.
+   * @var array
    */
   public static $modules = ['block', 'block_visibility_groups', 'node'];
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function testSingleConditions() {
     // @todo Condition with node doesn't work for some reason.
@@ -94,11 +94,14 @@ class VisibilityTest extends BlockVisibilityGroupsTestBase {
   }
 
   /**
-   * @param $config
+   * Helper to create a block visibility group.
+   *
+   * @param array $configs
+   *   An array of condition config.
    *
    * @return static
    */
-  private function createGroup($configs) {
+  private function createGroup(array $configs) {
     $group = BlockVisibilityGroup::create(
       [
         'id' => $this->randomMachineName(),
@@ -111,6 +114,7 @@ class VisibilityTest extends BlockVisibilityGroupsTestBase {
       $group->addCondition($config);
     }
     $group->save();
+
     return $group;
   }
 

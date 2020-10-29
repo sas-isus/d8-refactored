@@ -5,6 +5,7 @@ namespace Drupal\block_visibility_groups\Form;
 use Drupal\block_visibility_groups\ConditionsSetFormTrait;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Entity form for Block Visibility Group entity.
@@ -82,7 +83,7 @@ class BlockVisibilityGroupForm extends EntityForm {
         ])
       );
     }
-    $form_state->setRedirectUrl($block_visibility_group->urlInfo('collection'));
+    $form_state->setRedirectUrl($block_visibility_group->toUrl('collection'));
   }
 
 }

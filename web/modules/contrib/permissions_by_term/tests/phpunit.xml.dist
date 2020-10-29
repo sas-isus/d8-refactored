@@ -29,15 +29,11 @@
     <testsuite name="unit">
       <directory>./src/Unit</directory>
     </testsuite>
-  </testsuites>
 
-  <testsuites>
     <testsuite name="kernel">
       <directory>./src/Kernel</directory>
     </testsuite>
-  </testsuites>
 
-  <testsuites>
     <testsuite name="Permissions by Entity - kernel">
       <directory>./../modules/permissions_by_entity/tests/src/Kernel</directory>
     </testsuite>

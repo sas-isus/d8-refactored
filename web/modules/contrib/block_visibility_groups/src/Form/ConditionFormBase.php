@@ -45,17 +45,17 @@ abstract class ConditionFormBase extends FormBase {
   /**
    * ConditionFormBase constructor.
    *
-   * @param ContextRepositoryInterface $contextRepository
+   * @param \Drupal\Core\Plugin\Context\ContextRepositoryInterface $contextRepository
    */
   public function __construct(ContextRepositoryInterface $context_repository) {
     $this->contextRepository = $context_repository;
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static (
+    return new static(
       $container->get('context.repository')
     );
   }

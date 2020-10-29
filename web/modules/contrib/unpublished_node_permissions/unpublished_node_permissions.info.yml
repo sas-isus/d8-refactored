@@ -1,13 +1,12 @@
 name: 'Unpublished Node Permissions'
 type: module
 description: 'Creates permisisons per node content type to control access to unpublished nodes per content type.'
-package: 'Webform'
-# core: 8.x
+core: 8.x
+core_version_requirement: ^8 || ^9
 dependencies:
   - 'drupal:node'
 
-# Information added by Drupal.org packaging script on 2017-10-06
-version: '8.x-1.0'
-core: '8.x'
+# Information added by Drupal.org packaging script on 2020-10-19
+version: '8.x-1.1'
 project: 'unpublished_node_permissions'
-datestamp: 1507275008
+datestamp: 1603099260

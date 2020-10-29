@@ -461,7 +461,6 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
     $row = [];
 
     $element_state_options = OptGroup::flattenOptions(WebformElementStates::getStateOptions());
-    $element_dialog_attributes = WebformDialogHelper::getOffCanvasDialogAttributes();
     $key = $element['#webform_key'];
     $title = $element['#admin_title'] ?: $element['#title'];
     $title = (is_array($title)) ? $this->renderer->render($title) : $title;
@@ -470,6 +469,8 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
 
     /** @var \Drupal\webform\Plugin\WebformElementInterface $webform_element */
     $webform_element = $this->elementManager->createInstance($plugin_id);
+
+    $offcanvas_dialog_attributes = WebformDialogHelper::getOffCanvasDialogAttributes($webform_element->getOffCanvasWidth());
 
     $is_container = $webform_element->isContainer($element);
     $is_root = $webform_element->isRoot();
@@ -525,7 +526,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
           'webform' => $webform->id(),
           'key' => $key,
         ]),
-        '#attributes' => $element_dialog_attributes,
+        '#attributes' => $offcanvas_dialog_attributes,
         '#prefix' => !empty($indentation) ? $this->renderer->renderPlain($indentation) : '',
       ],
     ];
@@ -601,7 +602,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
           'entity.webform_ui.element.edit_form',
           ['webform' => $webform->id(), 'key' => $key]
         ),
-        '#attributes' => $element_dialog_attributes + [
+        '#attributes' => $offcanvas_dialog_attributes + [
           // Add custom hash to current page's location.
           // @see Drupal.behaviors.webformAjaxLink
           'data-hash' => 'webform-tab--conditions',
@@ -689,7 +690,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
           'key' => $key,
         ]
       ),
-      'attributes' => $element_dialog_attributes,
+      'attributes' => $offcanvas_dialog_attributes,
     ];
     // Issue #2741877 Nested modals don't work: when using CKEditor in a
     // modal, then clicking the image button opens another modal,
@@ -708,7 +709,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
             'key' => $key,
           ]
         ),
-        'attributes' => $element_dialog_attributes,
+        'attributes' => $offcanvas_dialog_attributes,
       ];
     }
     $row['operations']['#links']['delete'] = [

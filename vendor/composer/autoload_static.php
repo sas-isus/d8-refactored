@@ -569,7 +569,7 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         ),
         'D' => 
         array (
-            'Drush' => 
+            'Drush\\' => 
             array (
                 0 => __DIR__ . '/..' . '/drush/drush/lib',
             ),
@@ -612,7 +612,7 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         ),
         'C' => 
         array (
-            'Consolidation' => 
+            'Consolidation\\' => 
             array (
                 0 => __DIR__ . '/..' . '/drush/drush/lib',
             ),
@@ -3980,8 +3980,8 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         'Drush\\Cache\\CacheInterface' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Cache/CacheInterface.php',
         'Drush\\Cache\\FileCache' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Cache/FileCache.php',
         'Drush\\Cache\\JSONCache' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Cache/JSONCache.php',
-        'Drush\\CommandFiles\\Core\\BrowseCommands' => __DIR__ . '/..' . '/drush/drush/lib/Drush/CommandFiles/core/browseCommands.php',
         'Drush\\CommandFiles\\ExampleCommandFile' => __DIR__ . '/..' . '/drush/drush/lib/Drush/CommandFiles/ExampleCommandFile.php',
+        'Drush\\CommandFiles\\core\\BrowseCommands' => __DIR__ . '/..' . '/drush/drush/lib/Drush/CommandFiles/core/BrowseCommands.php',
         'Drush\\CommandFiles\\core\\DrupliconCommands' => __DIR__ . '/..' . '/drush/drush/lib/Drush/CommandFiles/core/DrupliconCommands.php',
         'Drush\\Command\\Commandfiles' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Command/Commandfiles.php',
         'Drush\\Command\\CommandfilesInterface' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Command/CommandfilesInterface.php',
@@ -4928,13 +4928,16 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         'PhpParser\\JsonDecoder' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/JsonDecoder.php',
         'PhpParser\\Lexer' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer.php',
         'PhpParser\\Lexer\\Emulative' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/Emulative.php',
+        'PhpParser\\Lexer\\TokenEmulator\\AttributeEmulator' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/AttributeEmulator.php',
         'PhpParser\\Lexer\\TokenEmulator\\CoaleseEqualTokenEmulator' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/CoaleseEqualTokenEmulator.php',
+        'PhpParser\\Lexer\\TokenEmulator\\FlexibleDocStringEmulator' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/FlexibleDocStringEmulator.php',
         'PhpParser\\Lexer\\TokenEmulator\\FnTokenEmulator' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/FnTokenEmulator.php',
         'PhpParser\\Lexer\\TokenEmulator\\KeywordEmulator' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/KeywordEmulator.php',
         'PhpParser\\Lexer\\TokenEmulator\\MatchTokenEmulator' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/MatchTokenEmulator.php',
         'PhpParser\\Lexer\\TokenEmulator\\NullsafeTokenEmulator' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/NullsafeTokenEmulator.php',
         'PhpParser\\Lexer\\TokenEmulator\\NumericLiteralSeparatorEmulator' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/NumericLiteralSeparatorEmulator.php',
-        'PhpParser\\Lexer\\TokenEmulator\\TokenEmulatorInterface' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/TokenEmulatorInterface.php',
+        'PhpParser\\Lexer\\TokenEmulator\\ReverseEmulator' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/ReverseEmulator.php',
+        'PhpParser\\Lexer\\TokenEmulator\\TokenEmulator' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/TokenEmulator.php',
         'PhpParser\\NameContext' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/NameContext.php',
         'PhpParser\\Node' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node.php',
         'PhpParser\\NodeAbstract' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/NodeAbstract.php',
@@ -4951,6 +4954,8 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         'PhpParser\\NodeVisitor\\NodeConnectingVisitor' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/NodeVisitor/NodeConnectingVisitor.php',
         'PhpParser\\NodeVisitor\\ParentConnectingVisitor' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/NodeVisitor/ParentConnectingVisitor.php',
         'PhpParser\\Node\\Arg' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node/Arg.php',
+        'PhpParser\\Node\\Attribute' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node/Attribute.php',
+        'PhpParser\\Node\\AttributeGroup' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node/AttributeGroup.php',
         'PhpParser\\Node\\Const_' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node/Const_.php',
         'PhpParser\\Node\\Expr' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node/Expr.php',
         'PhpParser\\Node\\Expr\\ArrayDimFetch' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node/Expr/ArrayDimFetch.php',

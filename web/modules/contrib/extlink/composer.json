@@ -2,7 +2,7 @@
   "name": "drupal/extlink",
   "description": "Modify behavior and appearance of external links.",
   "type": "drupal-module",
-  "license": "GPL-2.0+",
+  "license": "GPL-2.0-or-later",
   "keywords": ["Drupal", "External Links"],
   "homepage": "https://www.drupal.org/project/extlink",
   "authors": [

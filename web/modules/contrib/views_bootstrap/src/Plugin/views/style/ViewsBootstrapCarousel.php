@@ -59,6 +59,11 @@ class ViewsBootstrapCarousel extends StylePluginBase {
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
 
+    $form['help'] = [
+      '#markup' => $this->t('The Bootstrap carousel displays content as a slideshow (<a href=":docs">see documentation</a>).', [':docs' => 'https://www.drupal.org/docs/contributed-modules/views-bootstrap-for-bootstrap-3/carousel']),
+      '#weight' => -99,
+    ];
+
     $fields = ['' => $this->t('<None>')];
     $fields += $this->displayHandler->getFieldLabels(TRUE);
 

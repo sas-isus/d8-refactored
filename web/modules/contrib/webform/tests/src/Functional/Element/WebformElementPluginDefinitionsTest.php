@@ -1204,6 +1204,25 @@ webform_flexbox:
   container: true
   root: false
   multiple: false
+webform_height:
+  dependencies: {  }
+  default_key: ''
+  category: 'Advanced elements'
+  description: 'Provides a form element to collect height in feet and inches.'
+  hidden: false
+  multiline: false
+  composite: false
+  states_wrapper: false
+  deprecated: false
+  deprecated_message: ''
+  id: webform_height
+  label: 'Height (feet/inches)'
+  class: Drupal\webform\Plugin\WebformElement\WebformHeight
+  provider: webform
+  input: true
+  container: false
+  root: false
+  multiple: true
 webform_horizontal_rule:
   dependencies: {  }
   default_key: horizontal_rule
@@ -1877,6 +1896,7 @@ webform_wizard_page:
   root: true
   multiple: false
 YAML;
+
     return Yaml::decode($yaml);
   }
 

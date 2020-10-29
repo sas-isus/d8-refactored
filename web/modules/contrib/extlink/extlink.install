@@ -23,3 +23,13 @@ function extlink_update_8101() {
   $config->set('extlink_mailto_label', '(link sends email)');
   $config->save(TRUE);
 }
+
+/**
+ * Add extlink_exclude_admin_routes to the default configuration.
+ */
+function extlink_update_8102() {
+  \Drupal::configFactory()
+    ->getEditable('extlink.settings')
+    ->set('extlink_exclude_admin_routes', FALSE)
+    ->save();
+}

@@ -1,3 +1,4 @@
+uuid: null
 langcode: en
 status: open
 dependencies:
@@ -20,7 +21,7 @@ elements: |
   value:
     '#type': textfield
     '#title': value
-  
+
 css: ''
 javascript: ''
 settings:
@@ -202,6 +203,7 @@ handlers:
   yesterday:
     id: scheduled_email
     label: Yesterday
+    notes: ''
     handler_id: yesterday
     status: true
     conditions: {  }

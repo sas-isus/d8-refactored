@@ -60,7 +60,7 @@ class GroupLister extends ControllerBase {
         'edit' => [
           '#type' => 'link',
           '#title' => $group->label(),
-          '#url' => $group->urlInfo('edit-form'),
+          '#url' => $group->toUrl('edit-form'),
           '#suffix' => ' - ',
         ],
         'manage' => [

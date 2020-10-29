@@ -51,6 +51,13 @@ class ExtlinkAdminSettingsForm extends ConfigFormBase {
     $config = $this->config('extlink.settings');
     $renderer = $this->renderer;
 
+    $form['extlink_exclude_admin_routes'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Disable on admin routes.'),
+      '#default_value' => $config->get('extlink_exclude_admin_routes'),
+      '#description' => $this->t('Whether the extlink module should be disabled on admin routes.'),
+    ];
+
     $form['extlink_use_external_js_file'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Load exclusions and inclusions externally.'),
@@ -297,6 +304,7 @@ class ExtlinkAdminSettingsForm extends ConfigFormBase {
 
     $this->config('extlink.settings')
       ->set('extlink_use_external_js_file', $values['extlink_use_external_js_file'])
+      ->set('extlink_exclude_admin_routes', $values['extlink_exclude_admin_routes'])
       ->set('extlink_include', $values['extlink_include'])
       ->set('extlink_exclude', $values['extlink_exclude'])
       ->set('extlink_alert_text', $values['extlink_alert_text'])

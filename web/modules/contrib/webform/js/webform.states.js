@@ -300,7 +300,7 @@
         .each(function () {
           var $element = $(this);
           $element.find('input[type="checkbox"]').on('click', statesCheckboxesRequiredEventHandler);
-          checkboxesRequired($element);
+          setTimeout(function () {checkboxesRequired($element);});
         });
     }
   };
@@ -317,7 +317,8 @@
       $('.js-form-type-radios, .js-form-type-webform-radios-other, .js-webform-type-radios, .js-webform-type-webform-radios-other', context)
         .once('webform-radios-required')
         .each(function () {
-          radiosRequired($(this));
+          var $element = $(this);
+          setTimeout(function () {radiosRequired($(this))});
         });
     }
   };
@@ -362,7 +363,7 @@
    * @see https://stackoverflow.com/a/37825072/145846
    */
   function statesCheckboxesRequiredEventHandler() {
-    var $element = $(this).closest('.js-webform-type-checkboxes, .js-form-type-webform-checkboxes-other');
+    var $element = $(this).closest('.js-webform-type-checkboxes, .js-webform-type-webform-checkboxes-other');
     checkboxesRequired($element);
   }
 

@@ -1,0 +1,93 @@
+{#
+/**
+ * @file views-bootstrap-grid-alternate.html.twig
+ * Default simple view template to display Bootstrap Grids.
+ *
+ *
+ * - columns: Contains rows grouped by columns.
+ * - rows: Contains a nested array of rows. Each row contains an array of
+ *   columns.
+ * - column_type: Contains a number (default Bootstrap grid system column type).
+ *
+ * @ingroup views_templates
+ *
+ * To use this alternate template for use of "all" items in a single row, copy this
+ * file to your theme/templates directory and rename the file to views-bootstrap-grid.html.twig
+ */
+#}
+{%
+  set classes = [
+  'views-view-grid',
+  options.alignment,
+]
+%}
+{%
+  set row_classes = [
+  'row',
+]
+%}
+{%
+  set col_classes = [
+  'col',
+  col_xs,
+  col_sm,
+  col_md,
+  col_lg,
+]
+%}
+{% if title %}
+  <h3>{{ title }}</h3>
+{% endif %}
+<div id="{{ id }}" {{ attributes.addClass(classes) }}>
+  {% if options.alignment  == 'horizontal' %}
+    {% for row in items %}
+      <div{{ row.attributes.addClass(row_classes, options.row_class_default ? 'row-' ~ loop.index) }}>
+        {% for column in row.content %}
+          <div{{ column.attributes.addClass(col_classes, options.col_class_default ? 'col-' ~ loop.index) }}>
+            {{ column.content }}
+          </div>
+          {% if loop.index is divisible by (sizes.xs) %}
+            <div class="clearfix visible-xs-block"></div>
+          {% endif %}
+
+          {% if loop.index is divisible by (sizes.sm) %}
+            <div class="clearfix visible-sm-block"></div>
+          {% endif %}
+
+          {% if loop.index is divisible by (sizes.md) %}
+            <div class="clearfix visible-md-block"></div>
+          {% endif %}
+
+          {% if loop.index is divisible by (sizes.lg) %}
+            <div class="clearfix visible-lg-block"></div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <div{{ row.attributes.addClass(row_classes, options.row_class_default ? 'row-' ~ loop.index) }}>
+      {% for column in items %}
+        <div{{ column.attributes.addClass(col_classes, options.col_class_default ? 'col-' ~ loop.index) }}>
+          {% for row in column.content %}
+            {{ row.content }}
+          {% endfor %}
+        </div>
+        {% if loop.index is divisible by (sizes.xs) %}
+          <div class="clearfix visible-xs-block"></div>
+        {% endif %}
+
+        {% if loop.index is divisible by (sizes.sm) %}
+          <div class="clearfix visible-sm-block"></div>
+        {% endif %}
+
+        {% if loop.index is divisible by (sizes.md) %}
+          <div class="clearfix visible-md-block"></div>
+        {% endif %}
+
+        {% if loop.index is divisible by (sizes.lg) %}
+          <div class="clearfix visible-lg-block"></div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>

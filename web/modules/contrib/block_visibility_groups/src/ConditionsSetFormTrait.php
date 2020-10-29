@@ -13,10 +13,15 @@ use Drupal\Core\Url;
 trait ConditionsSetFormTrait {
 
   /**
+   * Create a conditions set form.
+   *
    * @param array $form
-   * @param $block_visibility_group
+   *   The form array.
+   * @param \Drupal\block_visibility_groups\Entity\BlockVisibilityGroup $block_visibility_group
+   *   The BlockVisibilityGroup instance.
    *
    * @return array
+   *   The conditions section form renderable array.
    */
   protected function createConditionsSet(array $form, BlockVisibilityGroup $block_visibility_group, $redirect = 'edit') {
     $attributes = [
@@ -95,6 +100,7 @@ trait ConditionsSetFormTrait {
         $form['conditions_section']['conditions'][$condition_id] = $row;
       }
     }
+
     return $form['conditions_section'];
   }
 

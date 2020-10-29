@@ -1,3 +1,4 @@
+uuid: null
 langcode: en
 status: open
 dependencies:
@@ -24,7 +25,7 @@ elements: |
     '#type': 'webform_options_custom:test_ballroom'
     '#title': webform_options_custom_url_ballroom
     '#required': true
-  
+
 css: ''
 javascript: ''
 settings:
@@ -206,6 +207,7 @@ handlers:
   debug:
     id: debug
     label: Debug
+    notes: ''
     handler_id: debug
     status: true
     conditions: {  }

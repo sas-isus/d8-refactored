@@ -1,3 +1,4 @@
+uuid: null
 langcode: en
 status: open
 dependencies:
@@ -28,7 +29,7 @@ elements: |
       A: A
       B: B
       C: C
-  
+
 css: ''
 javascript: ''
 settings:
@@ -210,6 +211,7 @@ handlers:
   options_limit_user:
     id: options_limit
     label: options_limit_user
+    notes: ''
     handler_id: options_limit_user
     status: true
     conditions: {  }

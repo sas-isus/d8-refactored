@@ -1576,7 +1576,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
    */
   protected function setAnonymousSubmission(WebformSubmissionInterface $webform_submission) {
     // Make sure the account and current user are identical.
-    if ((int)$webform_submission->getOwnerId() !== (int) $this->currentUser->id()) {
+    if ((int) $webform_submission->getOwnerId() !== (int) $this->currentUser->id()) {
       return;
     }
 

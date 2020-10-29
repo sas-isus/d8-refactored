@@ -1,3 +1,4 @@
+uuid: null
 langcode: en
 status: closed
 dependencies:
@@ -205,7 +206,7 @@ elements: |
     '#type': webform_actions
     '#title': 'Submit button(s)'
     '#submit__label': 'Send Request'
-  
+
 css: ''
 javascript: ''
 settings:
@@ -387,6 +388,7 @@ handlers:
   email_notification:
     id: email
     label: 'Email notification'
+    notes: ''
     handler_id: email_notification
     status: true
     conditions: {  }

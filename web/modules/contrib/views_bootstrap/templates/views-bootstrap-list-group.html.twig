@@ -13,12 +13,21 @@
  * @ingroup views_templates
  */
 #}
+{% set div_classes = [] %}
+{% set heading_classes = [] %}
+{% if panels %}
+  {% set div_classes = div_classes|merge(['panel', 'panel-default']) %}
+  {% set heading_classes = heading_classes|merge(['panel-heading']) %}
+{% endif %}
 {%
   set classes = [
     'views-view-list-group',
+    'list-group',
   ]
 %}
-
+{% set title_attributes = create_attribute({'class': ['accordion-toggle', 'collapsed']}) %}
+{% if group_title %}<div{{ create_attribute({'class': div_classes}) }}>{% endif %}
+{% if group_title %}<div{{ create_attribute({'class': heading_classes}) }}><h4>{{ group_title }}</h4></div>{% endif %}
 <ul id="{{ id }}" {{ attributes.addClass(classes) }}>
     {% for key, row in rows %}
       <li class="list-group-item">
@@ -29,3 +38,4 @@
       </li>
     {% endfor %}
 </ul>
+{% if group_title %}</div>{% endif %}

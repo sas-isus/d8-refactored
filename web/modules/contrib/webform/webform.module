@@ -481,6 +481,7 @@ function webform_toolbar_alter(&$items) {
   }
 }
 
+
 /**
  * Implements hook_menu_links_discovered_alter().
  */
@@ -498,6 +499,10 @@ function webform_menu_links_discovered_alter(&$links) {
 
     $local_tasks = $local_task_manager->getLocalTasks('entity.webform.collection', 0);
     foreach ($local_tasks['tabs'] as $local_task) {
+      if (!$local_task['#link']['url'] instanceof Url) {
+        continue;
+      }
+
       $menu_item_title = $local_task['#link']['title'];
       $menu_item_route_name = $local_task['#link']['url']->getRouteName();
       $menu_item_name = $menu_item_route_name . '.item';
@@ -513,6 +518,10 @@ function webform_menu_links_discovered_alter(&$links) {
       if (\Drupal::config('webform.settings')->get('ui.toolbar_item')) {
         $local_sub_tasks = $local_task_manager->getLocalTasks($menu_item_route_name, 1);
         foreach ($local_sub_tasks['tabs'] as $local_sub_task) {
+          if (!$local_task['#link']['url'] instanceof Url) {
+            continue;
+          }
+
           $menu_sub_item_title = $local_sub_task['#link']['title'];
           $menu_sub_item_route_name = $local_sub_task['#link']['url']->getRouteName();
           $menu_sub_item_name = $menu_sub_item_route_name . '.sub_item';

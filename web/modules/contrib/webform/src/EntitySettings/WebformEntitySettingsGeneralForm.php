@@ -556,8 +556,13 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
     if (isset($values['third_party_settings'])) {
       $third_party_settings = $values['third_party_settings'];
       foreach ($third_party_settings as $module => $third_party_setting) {
-        foreach ($third_party_setting as $key => $value) {
-          $webform->setThirdPartySetting($module, $key, $value);
+        if (empty($third_party_setting)) {
+          $webform->unsetThirdPartySettings($module);
+        }
+        else {
+          foreach ($third_party_setting as $key => $value) {
+            $webform->setThirdPartySetting($module, $key, $value);
+          }
         }
       }
       // Remove third party settings.

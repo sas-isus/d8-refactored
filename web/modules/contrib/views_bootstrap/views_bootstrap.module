@@ -23,15 +23,15 @@ function views_bootstrap_help($route_name, RouteMatchInterface $route_match) {
       $output .= '<h3>' . t('Uses') . '</h3>';
       $output .= '<p>' . t('<a href=":views">Create a view</a> using one of the following styles:', [':views' => '/admin/structure/views/add']) . '</p>';
       $output .= '<ul>';
-      $output .= '<li>' . t('<a href=":docs">Accordion</a>', [':docs' => 'https://getbootstrap.com/docs/3.4/javascript/#collapse']) . '</li>';
-      $output .= '<li>' . t('<a href=":docs">Carousel</a>', [':docs' => 'https://getbootstrap.com/docs/3.4/javascript/#carousel']) . '</li>';
-      $output .= '<li>' . t('<a href=":docs">Dropdown</a>', [':docs' => 'https://getbootstrap.com/docs/3.4/javascript/#dropdowns']) . '</li>';
-      $output .= '<li>' . t('<a href=":docs">Grid</a>', [':docs' => 'https://getbootstrap.com/docs/3.4/css/#grid']) . '</li>';
-      $output .= '<li>' . t('<a href=":docs">Thumbnails</a>', [':docs' => 'https://getbootstrap.com/docs/3.4/components/#thumbnails']) . '</li>';
-      $output .= '<li>' . t('<a href=":docs">Tables</a>', [':docs' => 'https://getbootstrap.com/docs/3.4/css/#tables']) . '</li>';
-      $output .= '<li>' . t('<a href=":docs">Tabs</a>', [':docs' => 'https://getbootstrap.com/docs/3.4/javascript/#tabs']) . '</li>';
-      $output .= '<li>' . t('<a href=":docs">Media object</a>', [':docs' => 'https://getbootstrap.com/docs/3.4/components/#media']) . '</li>';
-      $output .= '<li>' . t('<a href=":docs">List group</a>', [':docs' => 'https://getbootstrap.com/docs/3.4/components/#list-group']) . '</li>';
+      $output .= '<li>' . t('<a href=":docs">Accordion</a>', [':docs' => 'https://www.drupal.org/docs/contributed-modules/views-bootstrap-for-bootstrap-3/accordion']) . '</li>';
+      $output .= '<li>' . t('<a href=":docs">Carousel</a>', [':docs' => 'https://www.drupal.org/docs/contributed-modules/views-bootstrap-for-bootstrap-3/carousel']) . '</li>';
+      $output .= '<li>' . t('<a href=":docs">Dropdown</a>', [':docs' => 'https://www.drupal.org/docs/contributed-modules/views-bootstrap-for-bootstrap-3/dropdown']) . '</li>';
+      $output .= '<li>' . t('<a href=":docs">Grid</a>', [':docs' => 'https://www.drupal.org/docs/contributed-modules/views-bootstrap-for-bootstrap-3/grid']) . '</li>';
+      $output .= '<li>' . t('<a href=":docs">Thumbnails</a>', [':docs' => 'https://www.drupal.org/docs/contributed-modules/views-bootstrap-for-bootstrap-3/thumbnail']) . '</li>';
+      $output .= '<li>' . t('<a href=":docs">Tables</a>', [':docs' => 'https://www.drupal.org/docs/contributed-modules/views-bootstrap-for-bootstrap-3/table']) . '</li>';
+      $output .= '<li>' . t('<a href=":docs">Tabs</a>', [':docs' => 'https://www.drupal.org/docs/contributed-modules/views-bootstrap-for-bootstrap-3/tabs']) . '</li>';
+      $output .= '<li>' . t('<a href=":docs">Media object</a>', [':docs' => 'https://www.drupal.org/docs/contributed-modules/views-bootstrap-for-bootstrap-3/media-object']) . '</li>';
+      $output .= '<li>' . t('<a href=":docs">List group</a>', [':docs' => 'https://www.drupal.org/docs/contributed-modules/views-bootstrap-for-bootstrap-3/list-group']) . '</li>';
       $output .= '<ul>';
 
       return $output;

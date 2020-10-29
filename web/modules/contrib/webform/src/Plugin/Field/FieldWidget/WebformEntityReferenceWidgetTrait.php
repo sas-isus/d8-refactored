@@ -26,7 +26,6 @@ trait WebformEntityReferenceWidgetTrait {
   protected $elementManager;
 
   /**
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {

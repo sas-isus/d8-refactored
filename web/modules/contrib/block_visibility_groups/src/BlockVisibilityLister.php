@@ -6,29 +6,33 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Entity\EntityStorageInterface;
 
 /**
- *
+ * Provides functionality to get block visibility conditions and labels.
  */
 trait BlockVisibilityLister {
 
   /**
-   * Get Labels for groups.
+   * Get labels for groups.
    *
    * @return array
+   *   The list of labels.
    */
   protected function getBlockVisibilityLabels(EntityStorageInterface $storage) {
     $block_visibility_groups = $storage->loadMultiple();
     $labels = [];
     foreach ($block_visibility_groups as $type) {
-
       $labels[$type->id()] = $type->label();
     }
     return $labels;
   }
 
   /**
+   * Get the visibility group for a block.
+   *
    * @param \Drupal\block\Entity\Block $block
+   *   The block instance.
    *
    * @return string
+   *   The config group name.
    */
   protected function getGroupForBlock(Block $block) {
     /** @var ConditionPluginCollection $conditions */

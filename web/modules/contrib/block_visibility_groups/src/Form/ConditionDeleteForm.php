@@ -46,7 +46,7 @@ class ConditionDeleteForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getCancelUrl() {
-    return $this->block_visibility_group->urlInfo('edit-form');
+    return $this->block_visibility_group->toUrl('edit-form');
   }
 
   /**

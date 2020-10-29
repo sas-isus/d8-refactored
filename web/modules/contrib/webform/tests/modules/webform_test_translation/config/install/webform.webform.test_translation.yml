@@ -1,3 +1,4 @@
+uuid: null
 langcode: en
 status: open
 dependencies:
@@ -62,7 +63,7 @@ elements: |
     '#type': webform_actions
     '#title': 'Submit button(s)'
     '#submit__label': 'Send message'
-  
+
 css: ''
 javascript: ''
 settings:
@@ -244,6 +245,7 @@ handlers:
   email_confirmation:
     id: email
     label: 'Email confirmation'
+    notes: ''
     handler_id: email_confirmation
     status: true
     conditions: {  }

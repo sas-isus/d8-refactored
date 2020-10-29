@@ -7,6 +7,9 @@ extlink.settings:
     extlink_use_external_js_file:
       type: boolean
       label: 'Load exclusions and inclusions externally'
+    extlink_exclude_admin_routes:
+      type: boolean
+      label: 'Disable module on admin routes.'
     extlink_target:
       type: boolean
       label: 'Open external links in a new tab'

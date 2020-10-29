@@ -11,12 +11,15 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 abstract class ConditionCreatorBase extends PluginBase implements ConditionCreatorInterface {
 
   use StringTranslationTrait;
+
   /**
-   * @var \Drupal\Component\Plugin\PluginManagerInterface */
+   * @var \Drupal\Component\Plugin\PluginManagerInterface
+   */
   protected $pluginManager;
 
   /**
-   * @var \Drupal\Core\Routing\CurrentRouteMatch */
+   * @var \Drupal\Core\Routing\CurrentRouteMatch
+   */
   protected $route;
 
   /**
@@ -32,7 +35,7 @@ abstract class ConditionCreatorBase extends PluginBase implements ConditionCreat
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function createConditionConfig($plugin_info) {
     $config = $plugin_info['condition_config'];
@@ -42,7 +45,7 @@ abstract class ConditionCreatorBase extends PluginBase implements ConditionCreat
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function createConditionElements() {
     $elements = [
@@ -58,7 +61,7 @@ abstract class ConditionCreatorBase extends PluginBase implements ConditionCreat
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function itemSelected($condition_info) {
     return !empty($condition_info['selected']);

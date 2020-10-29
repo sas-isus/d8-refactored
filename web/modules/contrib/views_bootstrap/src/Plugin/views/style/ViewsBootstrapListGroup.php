@@ -41,6 +41,7 @@ class ViewsBootstrapListGroup extends StylePluginBase {
   protected function defineOptions() {
     $options = parent::defineOptions();
     $options['link_field'] = ['default' => []];
+    $options['panels'] = ['default' => FALSE];
     return $options;
   }
 
@@ -50,8 +51,25 @@ class ViewsBootstrapListGroup extends StylePluginBase {
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
 
+    $form['help'] = [
+      '#markup' => $this->t('The Bootstrap list group displays content in an unordered list with list group classes (<a href=":docs">see documentation</a>).', [':docs' => 'https://www.drupal.org/docs/contributed-modules/views-bootstrap-for-bootstrap-3/list-group']),
+      '#weight' => -99,
+    ];
+
     $fields = ['' => $this->t('<None>')];
     $fields += $this->displayHandler->getFieldLabels(TRUE);
+
+    $form['panels'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Set group field in panel heading'),
+      '#default_value' => $this->options['panels'],
+      '#states' => [
+        'invisible' => [
+          ':input[name="style_options[grouping][0][field]"]' => ['value' => ''],
+        ],
+      ],
+      '#weight' => 0,
+    ];
 
     $form['title_field'] = [
       '#type' => 'select',

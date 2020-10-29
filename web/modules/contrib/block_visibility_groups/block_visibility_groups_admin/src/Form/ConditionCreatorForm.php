@@ -10,12 +10,15 @@ use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- *
+ * Provides a form to create conditions.
  */
 class ConditionCreatorForm extends FormBase {
 
   /**
-   * @var  \Drupal\Component\Plugin\PluginManagerInterface $manager ; */
+   * The condition plugin manager.
+   *
+   * @var \Drupal\Component\Plugin\PluginManagerInterface
+   */
   protected $manager;
 
   /**
@@ -90,7 +93,7 @@ class ConditionCreatorForm extends FormBase {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   protected function conditionOptions($route_name, $parameters) {
     $elements = [
@@ -164,18 +167,19 @@ class ConditionCreatorForm extends FormBase {
       [
         'block_visibility_group' => $group->id(),
       ]
-
     );
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   protected function getConditionValues(FormStateInterface $form_state) {
     return $form_state->cleanValues()->getValue('conditions');
   }
 
   /**
+   * Create group.
+   *
    * @param $id
    * @param $label
    * @param $configs
@@ -183,7 +187,7 @@ class ConditionCreatorForm extends FormBase {
    * @return \Drupal\block_visibility_groups\Entity\BlockVisibilityGroup
    */
   protected function createGroup($id, $label, $configs) {
-    /** @var BlockVisibilityGroup $group */
+    /** @var \Drupal\block_visibility_groups\Entity\BlockVisibilityGroup $group */
     $group = BlockVisibilityGroup::create(
       [
         'id' => $id,

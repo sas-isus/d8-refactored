@@ -46,21 +46,6 @@
             </div>
           </div>
         {% endfor %}
-        {% if loop.index is divisible by (sizes.xs) %}
-          <div class="clearfix visible-xs-block"></div>
-        {% endif %}
-
-        {% if loop.index is divisible by (sizes.sm) %}
-          <div class="clearfix visible-sm-block"></div>
-        {% endif %}
-
-        {% if loop.index is divisible by (sizes.md) %}
-          <div class="clearfix visible-md-block"></div>
-        {% endif %}
-
-        {% if loop.index is divisible by (sizes.lg) %}
-          <div class="clearfix visible-lg-block"></div>
-        {% endif %}
       </div>
     {% endfor %}
   {% else %}

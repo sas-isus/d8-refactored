@@ -13,6 +13,10 @@ use Drupal\node\Plugin\views\filter\Status;
  * @ViewsFilter("node_unpublished_status")
  */
 class UnpublishedStatus extends Status {
+
+  /**
+   * {@inheritdoc}
+   */
   public function query() {
     $table = $this->ensureMyTable();
 

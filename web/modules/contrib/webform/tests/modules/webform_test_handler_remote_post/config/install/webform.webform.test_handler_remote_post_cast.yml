@@ -1,3 +1,4 @@
+uuid: null
 langcode: en
 status: open
 dependencies:
@@ -38,7 +39,7 @@ elements: |
       number:
         '#type': number
         '#title': number
-  
+
 css: ''
 javascript: ''
 settings:
@@ -144,7 +145,7 @@ settings:
   confirmation_title: ''
   confirmation_message: |
     <p>Your confirmation number is [webform_submission:values:confirmation_number].</p>
-    
+
   confirmation_url: ''
   confirmation_attributes: {  }
   confirmation_back: true
@@ -224,6 +225,7 @@ handlers:
   remote_post:
     id: remote_post
     label: 'Remote post'
+    notes: ''
     handler_id: remote_post
     status: true
     conditions: {  }
@@ -255,7 +257,7 @@ handlers:
         boolean_true: '(boolean) true'
         integer: '(integer) 100'
         float: '(float) 100.01'
-        
+
       custom_options: ''
       debug: true
       completed_url: 'http://webform-test-handler-remote-post/completed'

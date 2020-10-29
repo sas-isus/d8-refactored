@@ -26,10 +26,12 @@ class BlockVisibilityGroupedListBuilder extends BlockListBuilder {
    * Used in query string to denote blocks that don't have a group set.
    */
   const UNSET_GROUP = 'UNSET-GROUP';
+
   /**
    * Used in Query string to denote showing all blocks.
    */
   const ALL_GROUP = 'ALL-GROUP';
+
   /**
    * The entity storage class for Block Visibility Groups.
    *
@@ -38,6 +40,8 @@ class BlockVisibilityGroupedListBuilder extends BlockListBuilder {
   protected $group_storage;
 
   /**
+   * The state service.
+   *
    * @var \Drupal\Core\State\StateInterface
    */
   protected $state;
@@ -73,10 +77,10 @@ class BlockVisibilityGroupedListBuilder extends BlockListBuilder {
   public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
     return new static(
       $entity_type,
-      $container->get('entity.manager')->getStorage($entity_type->id()),
+      $container->get('entity_type.manager')->getStorage($entity_type->id()),
       $container->get('theme.manager'),
       $container->get('form_builder'),
-      $container->get('entity.manager')->getStorage('block_visibility_group'),
+      $container->get('entity_type.manager')->getStorage('block_visibility_group'),
       $container->get('state'),
       $container->get('messenger')
     );
@@ -190,13 +194,12 @@ class BlockVisibilityGroupedListBuilder extends BlockListBuilder {
    * Get Group options info to group select dropdown.
    *
    * @return array
-   *    Keys = Group keys
-   *    Values array with keys
-   *       label
-   *       path - URL to redirect to Group page.
+   *   Keys = Group keys
+   *   Values array with keys:
+   *     label
+   *     path - URL to redirect to Group page.
    */
   protected function getBlockVisibilityGroupOptions() {
-
     $route_options = [
       BlockVisibilityGroupedListBuilder::UNSET_GROUP => ['label' => $this->t('- Global blocks -')],
       BlockVisibilityGroupedListBuilder::ALL_GROUP => ['label' => $this->t('- All Blocks -')],
@@ -321,6 +324,7 @@ class BlockVisibilityGroupedListBuilder extends BlockListBuilder {
    * Determine if any groups exist.
    *
    * @return bool
+   *   TRUE if any groups exist.
    */
   protected function groupsExist() {
     return !empty($this->group_storage->loadMultiple());
@@ -329,9 +333,10 @@ class BlockVisibilityGroupedListBuilder extends BlockListBuilder {
   /**
    * Add Column to show Visibility Group.
    *
-   * @param $form
+   * @param array $form
+   *   The form array.
    */
-  protected function addGroupColumn(&$form) {
+  protected function addGroupColumn(array &$form) {
     $entity_ids = [];
     foreach (array_keys($form) as $row_key) {
       if (strpos($row_key, 'region-') !== 0) {
@@ -391,10 +396,15 @@ class BlockVisibilityGroupedListBuilder extends BlockListBuilder {
   }
 
   /**
+   * Create a help description.
+   *
    * @param array $form
+   *   The form array.
    * @param $group
+   *   The block visibility group instance.
    *
    * @return array
+   *   A renderable array.
    */
   protected function createHelp(BlockVisibilityGroup $group) {
     $help = '<strong>' . $this->t('Currently viewing') . ': <em>' . $group->label() . '</em></strong>';
@@ -423,9 +433,10 @@ class BlockVisibilityGroupedListBuilder extends BlockListBuilder {
       'edit' => [
         '#type' => 'link',
         '#title' => t('Edit Group Settings'),
-        '#url' => $group->urlInfo('edit-form'),
+        '#url' => $group->toUrl('edit-form'),
       ],
     ];
+
     return $help_group;
   }
 

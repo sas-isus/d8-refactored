@@ -3051,6 +3051,17 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   }
 
   /****************************************************************************/
+  // Third party settings.
+  /****************************************************************************/
+
+  /**
+   * {@inheritdoc}
+   */
+  public function unsetThirdPartySettings($module) {
+    unset($this->third_party_settings[$module]);
+  }
+
+  /****************************************************************************/
   // Dependency.
   /****************************************************************************/
 

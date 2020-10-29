@@ -1,3 +1,4 @@
+uuid: null
 langcode: en
 status: open
 dependencies:
@@ -25,7 +26,7 @@ elements: |
     '#include_internal': false
     '#include_user_roles': true
     '#include_anonymous': true
-  
+
 css: ''
 javascript: ''
 settings:
@@ -207,6 +208,7 @@ handlers:
   debug:
     id: debug
     label: Debug
+    notes: ''
     handler_id: debug
     status: true
     conditions: {  }

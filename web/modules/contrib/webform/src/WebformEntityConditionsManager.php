@@ -133,7 +133,7 @@ class WebformEntityConditionsManager implements WebformEntityConditionsManagerIn
         continue;
       }
 
-      if (is_int($index) && is_array($value) && WebformArrayHelper::isSequential($value)) {
+      if (is_int($index) && is_array($value) && (WebformArrayHelper::isSequential($value) || count($value) > 1)) {
         $condition_items[] = $this->buildConditions($webform, $value, $options + ['nested' => TRUE]);
       }
       else {

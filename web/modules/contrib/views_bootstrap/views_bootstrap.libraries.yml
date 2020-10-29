@@ -7,6 +7,8 @@ components:
     - core/jquery
 tabs:
   version: 1.x
+  js:
+    js/tabs.js: {}
   css:
     theme:
       css/tabs.css: {}

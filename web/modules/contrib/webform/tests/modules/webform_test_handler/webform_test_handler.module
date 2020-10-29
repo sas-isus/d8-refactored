@@ -13,5 +13,8 @@ function webform_test_handler_theme() {
     'webform_handler_test_summary' => [
       'variables' => ['settings' => NULL, 'handler' => []],
     ],
+    'webform_handler_test_offcanvas_width' => [
+      'variables' => ['settings' => NULL, 'handler' => []],
+    ],
   ];
 }

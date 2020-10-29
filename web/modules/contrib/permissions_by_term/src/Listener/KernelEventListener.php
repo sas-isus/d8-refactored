@@ -167,9 +167,9 @@ class KernelEventListener implements EventSubscriberInterface
   private function handleAccessToNodePages(GetResponseEvent $event) {
     // Restricts access to nodes (views/edit).
     if ($this->canRequestGetNode($event->getRequest())) {
-      $nid = $event->getRequest()->attributes->get('node')->get('nid')->getValue()['0']['value'];
-      if (!$this->accessCheckService->canUserAccessByNodeId($nid, false, $this->accessStorageService->getLangCode($nid))) {
-        $accessDeniedEvent = new PermissionsByTermDeniedEvent($nid);
+      $node = $event->getRequest()->attributes->get('node');
+      if (!$this->accessCheckService->canUserAccessByNode($node, false, $this->accessStorageService->getLangCode($node->id()))) {
+        $accessDeniedEvent = new PermissionsByTermDeniedEvent($node->id());
         $this->eventDispatcher->dispatch(PermissionsByTermDeniedEvent::NAME, $accessDeniedEvent);
 
         if ($this->disabledNodeAccessRecords) {

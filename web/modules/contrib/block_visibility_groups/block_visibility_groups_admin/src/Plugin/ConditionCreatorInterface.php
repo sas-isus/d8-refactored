@@ -18,8 +18,10 @@ interface ConditionCreatorInterface {
    * Create condition configuration from form submission.
    *
    * @param array $plugin_info
+   *   The plugin implementation definition.
    *
    * @return array
+   *   The condition config.
    */
   public function createConditionConfig($plugin_info);
 
@@ -27,6 +29,7 @@ interface ConditionCreatorInterface {
    * Get the label when creating a new condition.
    *
    * @return string
+   *   A new condition label.
    */
   public function getNewConditionLabel();
 
@@ -35,7 +38,8 @@ interface ConditionCreatorInterface {
    *
    * @param $condition_info
    *
-   * @return boolean
+   * @return bool
+   *   TRUE if the condition was selected in a form.
    */
   public function itemSelected($condition_info);
 

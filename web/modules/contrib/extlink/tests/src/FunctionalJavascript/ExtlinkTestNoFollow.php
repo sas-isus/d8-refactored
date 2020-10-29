@@ -44,7 +44,7 @@ class ExtlinkTestNoFollow extends ExtlinkTestBase {
     // Does the anchor tag have no follow?
     $link = $page->findLink('Google!');
     $this->assertTrue($link->hasAttribute('rel'), 'ExtLink does not have rel attribute.');
-    $this->assertTrue($link->getAttribute('rel') === 'nofollow', 'ExtLink rel attribute is not "nofollow".');
+    $this->assertStringContainsString('nofollow', $link->getAttribute('rel'), 'ExtLink rel attribute does not contain "nofollow".');
   }
 
   /**
@@ -84,7 +84,7 @@ class ExtlinkTestNoFollow extends ExtlinkTestBase {
     // Does the anchor tag have no follow?
     $link = $page->findLink('Google!');
     $this->assertTrue($link->hasAttribute('rel'), 'ExtLink does not have rel attribute.');
-    $this->assertTrue($link->getAttribute('rel') === 'nofollow', 'ExtLink rel attribute is not "nofollow".');
+    $this->assertStringContainsString('nofollow', $link->getAttribute('rel'), 'ExtLink rel attribute does not contain "nofollow".');
   }
 
   /**
@@ -124,7 +124,7 @@ class ExtlinkTestNoFollow extends ExtlinkTestBase {
 
     // Check for no 'nofollow'.
     $link = $page->findLink('Google!');
-    $this->assertFalse($link->hasAttribute('rel'), 'ExtLink has rel attribute.');
+    $this->assertStringNotContainsString('nofollow', $link->getAttribute('rel'), 'ExtLink rel attribute does not contain "nofollow".');
   }
 
   /**
@@ -163,7 +163,7 @@ class ExtlinkTestNoFollow extends ExtlinkTestBase {
     // Does the anchor tag have no follow?
     $link = $page->findLink('Google!');
     $this->assertTrue($link->hasAttribute('rel'), 'ExtLink does not have rel attribute.');
-    $this->assertTrue($link->getAttribute('rel') === 'follow', 'rel attribute is not "follow".');
+    $this->assertStringContainsString('follow', $link->getAttribute('rel'), 'ExtLink rel attribute does not contain "follow".');
   }
 
 }

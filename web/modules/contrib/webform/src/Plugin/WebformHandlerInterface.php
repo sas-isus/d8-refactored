@@ -137,6 +137,24 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   public function setLabel($label);
 
   /**
+   * Returns notes of the webform variant.
+   *
+   * @return string
+   *   Notes for the webform variant, or an empty string.
+   */
+  public function getNotes();
+
+  /**
+   * Set notes for this webform variant.
+   *
+   * @param string $notes
+   *   Notes for this webform variant.
+   *
+   * @return $this
+   */
+  public function setNotes($notes);
+
+  /**
    * Returns the weight of the webform handler.
    *
    * @return int|string
@@ -384,6 +402,19 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   /****************************************************************************/
   // Submission form methods.
   /****************************************************************************/
+
+  /**
+   * Get configuration form's off-canvas width.
+   *
+   * @return string
+   *   The off-canvas width.
+   *
+   * @see WebformDialogHelper::DIALOG_NARROW
+   * @see WebformDialogHelper::DIALOG_NORMAL
+   * @see WebformDialogHelper::DIALOG_WIDE
+   * @see WebformDialogHelper::DIALOG_NONE
+   */
+  public function getOffCanvasWidth();
 
   /**
    * Alter webform submission webform .

@@ -9,6 +9,7 @@ use Drupal\node\NodePermissions;
  * Provides dynamic permissions for nodes of different types.
  */
 class UnpublishedNodePermissions extends NodePermissions {
+
   /**
    * Returns a list of node permissions for a given node type.
    *
@@ -28,4 +29,5 @@ class UnpublishedNodePermissions extends NodePermissions {
       ],
     ];
   }
+
 }

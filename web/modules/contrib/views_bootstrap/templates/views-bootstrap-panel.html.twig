@@ -1,15 +1,25 @@
 {% if group_title %}<h3>{{ group_title }}</h3>{% endif %}
 <div id="{{ id }}" {{ attributes.addClass(classes) }}>
   {% for key, row in rows -%}
-    <div class="panel panel-default">
+    <div class="panel {{ panel_class }}">
+      {% if row.title %}
       <div class="panel-heading">
         <h4 class="panel-title">
           {{row.title}}
+          {% if row.label %}
+            <span class="badge pull-right">{{ row.label }}</span>
+          {% endif %}
         </h4>
       </div>
+      {% endif %}
       <div class="panel-body">
         {{row.content}}
       </div>
+      {% if row.footer %}
+        <div class="panel-footer">
+            {{row.footer}}
+        </div>
+      {% endif %}
     </div>
   {%- endfor %}
 </div>

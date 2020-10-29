@@ -1,3 +1,4 @@
+uuid: null
 langcode: en
 status: open
 dependencies:
@@ -95,7 +96,7 @@ elements: |
         '#title': datelist
     '#default_value':
       - datelist: '2009-08-18T01:00:00-05:00'
-  
+
 css: ''
 javascript: ''
 settings:
@@ -277,6 +278,7 @@ handlers:
   debug:
     id: debug
     label: Debug
+    notes: ''
     handler_id: debug
     status: true
     conditions: {  }

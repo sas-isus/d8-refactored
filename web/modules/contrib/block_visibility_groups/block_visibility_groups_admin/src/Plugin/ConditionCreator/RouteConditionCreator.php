@@ -16,7 +16,7 @@ use Drupal\block_visibility_groups_admin\Plugin\ConditionCreatorBase;
 class RouteConditionCreator extends ConditionCreatorBase {
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function getNewConditionLabel() {
     $current_path = $this->getPathPattern();
@@ -37,7 +37,7 @@ class RouteConditionCreator extends ConditionCreatorBase {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function createConditionElements() {
     $elements = parent::createConditionElements();

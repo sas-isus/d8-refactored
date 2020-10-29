@@ -1,14 +1,14 @@
 {
   "name": "drupal/block_visibility_groups",
   "type": "drupal-module",
-  "description": "My Awesome Module",
+  "description": "Block Visibility Groups",
   "keywords": ["Drupal"],
   "license": "GPL-2.0+",
-  "homepage": "http://drupal.org/project/block_visibility_groups",
+  "homepage": "https://www.drupal.org/project/block_visibility_groups",
   "minimum-stability": "dev",
   "support": {
-    "issues": "http://drupal.org/project/issues/block_visibility_groups",
-    "source": "http://cgit.drupalcode.org/block_visibility_groups"
+    "issues": "https://www.drupal.org/project/issues/block_visibility_groups",
+    "source": "https://git.drupalcode.org/project/block_visibility_groups"
   },
   "require": { }
 }
