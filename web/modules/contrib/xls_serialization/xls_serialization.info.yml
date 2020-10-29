@@ -1,0 +1,13 @@
+name: 'Serialization (Excel)'
+type: module
+description: 'Provides Excel (xls) as a serialization format.'
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: Web services
+dependencies:
+  - drupal:serialization
+
+# Information added by Drupal.org packaging script on 2020-06-05
+version: '8.x-1.2'
+project: 'xls_serialization'
+datestamp: 1591391012
