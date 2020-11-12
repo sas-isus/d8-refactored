@@ -5853,18 +5853,18 @@
     },
     {
         "name": "drupal/permissions_by_term",
-        "version": "2.26.0",
-        "version_normalized": "2.26.0.0",
+        "version": "2.25.0",
+        "version_normalized": "2.25.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/permissions_by_term.git",
-            "reference": "8.x-2.26"
+            "reference": "8.x-2.25"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/permissions_by_term-8.x-2.26.zip",
-            "reference": "8.x-2.26",
-            "shasum": "cdaf510a674e5408acf9e2a5a9687508999d773c"
+            "url": "https://ftp.drupal.org/files/projects/permissions_by_term-8.x-2.25.zip",
+            "reference": "8.x-2.25",
+            "shasum": "96e9e9f93f8283b4526e7fd0748989fc7ca22e58"
         },
         "require": {
             "drupal/core": "^8.0",
@@ -5873,8 +5873,8 @@
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-2.26",
-                "datestamp": "1603992690",
+                "version": "8.x-2.25",
+                "datestamp": "1593178207",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"

@@ -4066,7 +4066,7 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         'Drush\\Cache\\FileCache' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Cache/FileCache.php',
         'Drush\\Cache\\JSONCache' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Cache/JSONCache.php',
         'Drush\\CommandFiles\\ExampleCommandFile' => __DIR__ . '/..' . '/drush/drush/lib/Drush/CommandFiles/ExampleCommandFile.php',
-        'Drush\\CommandFiles\\core\\BrowseCommands' => __DIR__ . '/..' . '/drush/drush/lib/Drush/CommandFiles/core/BrowseCommands.php',
+        'Drush\\CommandFiles\\core\\BrowseCommands' => __DIR__ . '/..' . '/drush/drush/lib/Drush/CommandFiles/core/browseCommands.php',
         'Drush\\CommandFiles\\core\\DrupliconCommands' => __DIR__ . '/..' . '/drush/drush/lib/Drush/CommandFiles/core/DrupliconCommands.php',
         'Drush\\Command\\Commandfiles' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Command/Commandfiles.php',
         'Drush\\Command\\CommandfilesInterface' => __DIR__ . '/..' . '/drush/drush/lib/Drush/Command/CommandfilesInterface.php',

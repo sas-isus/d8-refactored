@@ -25,14 +25,14 @@ class PermissionModeTest extends PBTKernelTestBase {
   public function testCanUserAccessByNodeId(): void {
     $this->createRelationWithoutRestriction();
     self::assertInternalType('string', $this->getNidNoRestriction());
-    self::assertTrue($this->accessCheck->canUserAccessByNode(Node::load($this->getNidNoRestriction())));
+    self::assertTrue($this->accessCheck->canUserAccessByNodeId($this->getNidNoRestriction()));
     \Drupal::configFactory()
       ->getEditable('permissions_by_term.settings')
       ->set('permission_mode', TRUE)
       ->save();
-    self::assertFalse($this->accessCheck->canUserAccessByNode(Node::load($this->getNidNoRestriction())));
+    self::assertFalse($this->accessCheck->canUserAccessByNodeId($this->getNidNoRestriction()));
 
-    self::assertTrue($this->accessCheck->canUserAccessByNode(Node::load($this->getNidNoRestriction()), 1), 'Admin user is not allowed. But this user must be allowed.');
+    self::assertTrue($this->accessCheck->canUserAccessByNodeId($this->getNidNoRestriction(), 1), 'Admin user is not allowed. But this user must be allowed.');
   }
 
   public function testCanAdminUserAccessByNodeId(): void {
@@ -41,7 +41,7 @@ class PermissionModeTest extends PBTKernelTestBase {
       ->getEditable('permissions_by_term.settings')
       ->set('permission_mode', TRUE)
       ->save();
-    self::assertTrue($this->accessCheck->canUserAccessByNode(Node::load($this->getNidNoRestriction()), 1), 'Admin user is not allowed. But this user must be allowed.');
+    self::assertTrue($this->accessCheck->canUserAccessByNodeId($this->getNidNoRestriction(), 1), 'Admin user is not allowed. But this user must be allowed.');
   }
 
   public function testHandleNode(): void {
@@ -49,12 +49,12 @@ class PermissionModeTest extends PBTKernelTestBase {
     self::assertInternalType('string', $this->getNidNoRestriction());
     $node = Node::load($this->getNidNoRestriction());
 
-    self::assertInstanceOf(AccessResultNeutral::class, $this->accessCheck->handleNode($node, $node->language()->getId()));
+    self::assertInstanceOf(AccessResultNeutral::class, $this->accessCheck->handleNode($node->id(), $node->language()->getId()));
     \Drupal::configFactory()
       ->getEditable('permissions_by_term.settings')
       ->set('permission_mode', TRUE)
       ->save();
-    self::assertInstanceOf(AccessResultForbidden::class, $this->accessCheck->handleNode($node, $node->language()->getId()));
+    self::assertInstanceOf(AccessResultForbidden::class, $this->accessCheck->handleNode($node->id(), $node->language()->getId()));
   }
 
   public function testHandleNodeAsAdmin(): void {
@@ -66,7 +66,7 @@ class PermissionModeTest extends PBTKernelTestBase {
       ->save();
 
     \Drupal::service('current_user')->setAccount(User::load(1));
-    self::assertInstanceOf(AccessResultNeutral::class, $this->accessCheck->handleNode($node, $node->language()->getId()), 'Admin user is not allowed. But this user must be allowed.');
+    self::assertInstanceOf(AccessResultNeutral::class, $this->accessCheck->handleNode($node->id(), $node->language()->getId()), 'Admin user is not allowed. But this user must be allowed.');
   }
 
   public function testNodeAccessRecordCreation(): void {
@@ -75,7 +75,7 @@ class PermissionModeTest extends PBTKernelTestBase {
 
     $node = Node::load($this->getNidNoRestriction());
     $nodeAccessRecord = permissions_by_term_node_access_records($node);
-    self::assertIsArray($nodeAccessRecord);
+    self::assertInternalType('null', $nodeAccessRecord);
 
     $node = Node::load($this->getNidNoRestriction());
     \Drupal::configFactory()
@@ -83,7 +83,7 @@ class PermissionModeTest extends PBTKernelTestBase {
       ->set('permission_mode', TRUE)
       ->save();
     $nodeAccessRecord = permissions_by_term_node_access_records($node);
-    self::assertIsArray($nodeAccessRecord);
+    self::assertInternalType('array', $nodeAccessRecord);
   }
 
 }

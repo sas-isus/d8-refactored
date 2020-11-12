@@ -10,7 +10,6 @@ use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
 use Drupal\user\Entity\User;
 
-
 /**
  * @group permissions_by_term
  */
@@ -57,7 +56,7 @@ class MultilingualTest extends PBTKernelTestBase {
     $node->save();
 
     $this->accessStorage->addTermPermissionsByUserIds([\Drupal::service('current_user')->id()], $term->id(), 'de');
-    $this->assertTrue($this->accessCheck->canUserAccessByNode(Node::load($node->id())));
+    $this->assertTrue($this->accessCheck->canUserAccessByNodeId($node->id()));
   }
 
   public function testCanNotAccess() {
@@ -71,9 +70,9 @@ class MultilingualTest extends PBTKernelTestBase {
      */
     $user = user_load_by_name('some_username123');
 
-    $this->assertTrue($this->accessCheck->canUserAccessByNode($node, \Drupal::service('current_user')->id()));
-    $this->assertFalse($this->accessCheck->canUserAccessByNode($nodeDe, \Drupal::service('current_user')->id(), 'de'));
-    $this->assertTrue($this->accessCheck->canUserAccessByNode($nodeDe, $user->id(), 'de'));
+    $this->assertTrue($this->accessCheck->canUserAccessByNodeId($node->id(), \Drupal::service('current_user')->id()));
+    $this->assertFalse($this->accessCheck->canUserAccessByNodeId($nodeDe->id(), \Drupal::service('current_user')->id(), 'de'));
+    $this->assertTrue($this->accessCheck->canUserAccessByNodeId($nodeDe->id(), $user->id(), 'de'));
   }
 
   private function setupEntities() {

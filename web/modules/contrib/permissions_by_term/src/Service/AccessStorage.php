@@ -8,7 +8,6 @@ use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\node\Entity\Node;
 use Drupal\permissions_by_term\Cache\KeyValueCache;
 use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
@@ -646,7 +645,7 @@ class AccessStorage {
     if (\Drupal::config('permissions_by_term.settings')->get('require_all_terms_granted')) {
       $permittedNids = [];
       foreach ($nidsByTids as $nid) {
-        if($this->accessCheck->canUserAccessByNode(Node::load($nid), $user->id(), $this->getLangCode($nid))) {
+        if($this->accessCheck->canUserAccessByNodeId($nid, $user->id(), $this->getLangCode($nid))) {
           $permittedNids[] = $nid;
         }
       }

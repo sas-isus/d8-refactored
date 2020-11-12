@@ -3343,7 +3343,7 @@ return array(
     'Drush\\Cache\\FileCache' => $vendorDir . '/drush/drush/lib/Drush/Cache/FileCache.php',
     'Drush\\Cache\\JSONCache' => $vendorDir . '/drush/drush/lib/Drush/Cache/JSONCache.php',
     'Drush\\CommandFiles\\ExampleCommandFile' => $vendorDir . '/drush/drush/lib/Drush/CommandFiles/ExampleCommandFile.php',
-    'Drush\\CommandFiles\\core\\BrowseCommands' => $vendorDir . '/drush/drush/lib/Drush/CommandFiles/core/BrowseCommands.php',
+    'Drush\\CommandFiles\\core\\BrowseCommands' => $vendorDir . '/drush/drush/lib/Drush/CommandFiles/core/browseCommands.php',
     'Drush\\CommandFiles\\core\\DrupliconCommands' => $vendorDir . '/drush/drush/lib/Drush/CommandFiles/core/DrupliconCommands.php',
     'Drush\\Command\\Commandfiles' => $vendorDir . '/drush/drush/lib/Drush/Command/Commandfiles.php',
     'Drush\\Command\\CommandfilesInterface' => $vendorDir . '/drush/drush/lib/Drush/Command/CommandfilesInterface.php',

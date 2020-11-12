@@ -31,7 +31,7 @@ class AccessCheckTest extends PBTKernelTestBase {
     $this->createRelationAllGrantedTerms();
 
     \Drupal::configFactory()->getEditable('permissions_by_term.settings')->set('require_all_terms_granted', FALSE)->save();
-    $this->assertTrue($this->accessCheck->canUserAccessByNode(Node::load($this->getNidOneGrantedTerm())));
+    $this->assertTrue($this->accessCheck->canUserAccessByNodeId($this->getNidOneGrantedTerm()));
 
     node_access_rebuild();
 
@@ -54,7 +54,7 @@ class AccessCheckTest extends PBTKernelTestBase {
     $this->createRelationNoGrantedTerm();
 
     \Drupal::configFactory()->getEditable('permissions_by_term.settings')->set('require_all_terms_granted', FALSE)->save();
-    $this->assertFalse($this->accessCheck->canUserAccessByNode(Node::load($this->getNidNoGrantedTerm())));
+    $this->assertFalse($this->accessCheck->canUserAccessByNodeId($this->getNidNoGrantedTerm()));
 
     node_access_rebuild();
 
@@ -77,7 +77,7 @@ class AccessCheckTest extends PBTKernelTestBase {
     $this->createRelationWithoutRestriction();
 
     \Drupal::configFactory()->getEditable('permissions_by_term.settings')->set('require_all_terms_granted', FALSE)->save();
-    $this->assertTrue($this->accessCheck->canUserAccessByNode(Node::load($this->getNidNoRestriction())));
+    $this->assertTrue($this->accessCheck->canUserAccessByNodeId($this->getNidNoRestriction()));
 
     node_access_rebuild();
 
@@ -91,7 +91,7 @@ class AccessCheckTest extends PBTKernelTestBase {
       ->execute()
       ->fetchCol();
 
-    $this->assertCount(1, $permittedNids);
+    $this->assertCount(0, $permittedNids);
   }
 
   public function testRequireAllTermsGrantedWithRestrictedTerms(): void {
@@ -101,7 +101,7 @@ class AccessCheckTest extends PBTKernelTestBase {
     $this->createRelationAllGrantedTerms();
 
     \Drupal::configFactory()->getEditable('permissions_by_term.settings')->set('require_all_terms_granted', TRUE)->save();
-    $this->assertFalse($this->accessCheck->canUserAccessByNode(Node::load($this->getNidOneGrantedTerm())));
+    $this->assertFalse($this->accessCheck->canUserAccessByNodeId($this->getNidOneGrantedTerm()));
 
     node_access_rebuild();
 
@@ -124,7 +124,7 @@ class AccessCheckTest extends PBTKernelTestBase {
     $this->createRelationWithoutRestriction();
 
     \Drupal::configFactory()->getEditable('permissions_by_term.settings')->set('require_all_terms_granted', TRUE)->save();
-    $this->assertFalse($this->accessCheck->canUserAccessByNode(Node::load($this->getNidNoRestriction())));
+    $this->assertTrue($this->accessCheck->canUserAccessByNodeId($this->getNidOneGrantedTerm()));
 
     node_access_rebuild();
 
@@ -138,7 +138,7 @@ class AccessCheckTest extends PBTKernelTestBase {
       ->execute()
       ->fetchCol();
 
-    $this->assertCount(1, $permittedNids);
+    $this->assertCount(0, $permittedNids);
   }
 
   public function testCheckAccessAsGuestWithNoTermRestriction(): void {
@@ -182,7 +182,7 @@ class AccessCheckTest extends PBTKernelTestBase {
     ]);
     $node->save();
 
-    self::assertFalse($this->accessCheck->canUserAccessByNode($node, 0));
+    self::assertFalse($this->accessCheck->canUserAccessByNodeId($node->id(), 0));
   }
 
   public function testBypassNodeAccess(): void {
@@ -211,7 +211,7 @@ class AccessCheckTest extends PBTKernelTestBase {
     $node->save();
 
     $this->accessStorage->addTermPermissionsByUserIds([99], $term->id(), 'de');
-    $this->assertFalse($this->accessCheck->canUserAccessByNode($node, \Drupal::currentUser()->id(), 'de'));
+    $this->assertFalse($this->accessCheck->canUserAccessByNodeId($node->id(), \Drupal::currentUser()->id(), 'de'));
 
     $editorRole = Role::create(['id' => 'editor']);
     $editorRole->grantPermission('bypass node access');
@@ -225,7 +225,7 @@ class AccessCheckTest extends PBTKernelTestBase {
     $accountSwitcher = \Drupal::service('account_switcher');
     $accountSwitcher->switchTo($user);
 
-    $this->assertTrue($this->accessCheck->canUserAccessByNode($node, \Drupal::currentUser()->id(), 'de'));
+    $this->assertTrue($this->accessCheck->canUserAccessByNodeId($node->id(), \Drupal::currentUser()->id(), 'de'));
   }
 
 }
