@@ -207,7 +207,9 @@ function template_preprocess_views_bootstrap_media_object(array &$vars) {
     $vars['rows'][$id] = [];
     $vars['rows'][$id]['image'] = $vars['view']->style_plugin->getField($id, $image_field);
     $vars['rows'][$id]['heading'] = $vars['view']->style_plugin->getField($id, $heading_field);
-    $vars['rows'][$id]['body'] = $row;
+    if (count($row["#view"]->field) > 2) {
+      $vars['rows'][$id]['body'] = $row;
+    }
   }
 }
 

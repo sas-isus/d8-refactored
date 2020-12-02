@@ -83,7 +83,7 @@ class ViewsBootstrapPanel extends StylePluginBase {
 
     $form['panel_label_field'] = [
       '#type' => 'select',
-      '#title' => t('Label field'),
+      '#title' => $this->t('Label field'),
       '#options' => ['' => $this->t('- None -')] + $this->displayHandler->getFieldLabels(TRUE),
       '#required' => FALSE,
       '#default_value' => $this->options['label_field'],
