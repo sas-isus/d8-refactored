@@ -28,6 +28,11 @@ elements: |
         '#type': webform_term_checkboxes
         '#title': webform_term_checkboxes_tree_default
         '#vocabulary': tags
+      webform_term_checkboxes_tree_depth:
+        '#type': webform_term_checkboxes
+        '#title': webform_term_checkboxes_tree_depth
+        '#vocabulary': tags
+        '#depth': 1
       webform_term_checkboxes_tree_advanced:
         '#type': webform_term_checkboxes
         '#title': webform_term_checkboxes_tree_advanced
@@ -47,6 +52,13 @@ elements: |
         '#vocabulary': tags
         '#breadcrumb': true
         '#format': breadcrumb
+      webform_term_checkboxes_breadcrumb_depth:
+        '#type': webform_term_checkboxes
+        '#title': webform_term_checkboxes_breadcrumb_depth
+        '#vocabulary': tags
+        '#breadcrumb': true
+        '#format': breadcrumb
+        '#depth': 1
       webform_term_checkboxes_breadcrumb_advanced:
         '#type': webform_term_checkboxes
         '#title': webform_term_checkboxes_breadcrumb_advanced
@@ -69,6 +81,11 @@ elements: |
         '#type': webform_term_select
         '#title': webform_term_select_tree_default
         '#vocabulary': tags
+      webform_term_select_tree_depth:
+        '#type': webform_term_select
+        '#title': webform_term_select_tree_depth
+        '#vocabulary': tags
+        '#depth': 1
       webform_term_select_tree_advanced:
         '#type': webform_term_select
         '#title': webform_term_select_tree_advanced
@@ -87,6 +104,13 @@ elements: |
         '#vocabulary': tags
         '#breadcrumb': true
         '#format': breadcrumb
+      webform_term_select_breadcrumb_depth:
+        '#type': webform_term_select
+        '#title': webform_term_select_breadcrumb_depth
+        '#vocabulary': tags
+        '#breadcrumb': true
+        '#format': breadcrumb
+        '#depth': 1
       webform_term_select_breadcrumb_advanced:
         '#type': webform_term_select
         '#title': webform_term_select_breadcrumb_advanced
@@ -97,7 +121,7 @@ elements: |
         '#breadcrumb_delimiter': ' » '
         '#format': breadcrumb
         '#format_items': ul
-  
+
 css: ''
 javascript: ''
 settings:
@@ -227,6 +251,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:

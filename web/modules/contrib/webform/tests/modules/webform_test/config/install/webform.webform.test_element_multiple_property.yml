@@ -51,7 +51,7 @@ elements: |
     '#title': webform_element_multiple_custom_access
     '#default_value': 5
     '#access': false
-
+  
 css: ''
 javascript: ''
 settings:
@@ -181,6 +181,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:

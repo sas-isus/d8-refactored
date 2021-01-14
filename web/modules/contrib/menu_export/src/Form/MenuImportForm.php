@@ -89,9 +89,9 @@ public function submitForm(array &$form, FormStateInterface $form_state)
 
     }
     if(count($invalidMenus)){
-      drupal_set_message($this->t('Menu(s) @menus not found',['@menus'=>implode(',',$invalidMenus)]),'error');
+      $this->messenger()->addError($this->t('Menu(s) @menus not found',['@menus'=>implode(',',$invalidMenus)]));
     }else{
-      drupal_set_message($this->t('Menu(s) imported successfully'),'success');
+      $this->messenger()->addStatus($this->t('Menu(s) imported successfully'));
     }
   }
 

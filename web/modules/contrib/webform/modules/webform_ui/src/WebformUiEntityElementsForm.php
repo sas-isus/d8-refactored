@@ -18,6 +18,7 @@ use Drupal\webform\Plugin\WebformElement\WebformElement;
 use Drupal\webform\Plugin\WebformElement\WebformTable;
 use Drupal\webform\Utility\WebformDialogHelper;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
+use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\WebformEntityElementsValidatorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -241,7 +242,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
     // Preserve the original elements root properties.
     $elements_original = Yaml::decode($webform->get('elements')) ?: [];
     foreach ($elements_original as $key => $value) {
-      if (Element::property($key)) {
+      if (WebformElementHelper::property($key)) {
         $elements_updated[$key] = $value;
       }
     }

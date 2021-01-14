@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\webform\Utility\WebformYaml;
 use Drupal\webform\WebformInterface;
@@ -48,6 +49,13 @@ class WebformBlock extends BlockBase implements ContainerFactoryPluginInterface 
   protected $tokenManager;
 
   /**
+   * The route match.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
+
+  /**
    * Creates a WebformBlock instance.
    *
    * @param array $configuration
@@ -62,12 +70,15 @@ class WebformBlock extends BlockBase implements ContainerFactoryPluginInterface 
    *   The entity type manager.
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The webform token manager.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The current route match.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager, WebformTokenManagerInterface $token_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager, WebformTokenManagerInterface $token_manager, RouteMatchInterface $route_match = NULL) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->requestStack = $request_stack;
     $this->entityTypeManager = $entity_type_manager;
     $this->tokenManager = $token_manager;
+    $this->routeMatch = $route_match ?: \Drupal::routeMatch();
   }
 
   /**
@@ -80,7 +91,8 @@ class WebformBlock extends BlockBase implements ContainerFactoryPluginInterface 
       $plugin_definition,
       $container->get('request_stack'),
       $container->get('entity_type.manager'),
-      $container->get('webform.token_manager')
+      $container->get('webform.token_manager'),
+      $container->get('current_route_match')
     );
   }
 
@@ -192,9 +204,19 @@ class WebformBlock extends BlockBase implements ContainerFactoryPluginInterface 
    * {@inheritdoc}
    */
   public function build() {
+    $webform = $this->getWebform();
+    if (!$webform) {
+      if (strpos($this->routeMatch->getRouteName(), 'layout_builder.') === 0) {
+        return ['#markup' => $this->t('The webform (@webform) is broken or missing.', ['@webform' => $this->configuration['webform_id']])];
+      }
+      else {
+        return NULL;
+      }
+    }
+
     $build = [
       '#type' => 'webform',
-      '#webform' => $this->getWebform(),
+      '#webform' => $webform,
       '#default_data' => WebformYaml::decode($this->configuration['default_data']),
     ];
 

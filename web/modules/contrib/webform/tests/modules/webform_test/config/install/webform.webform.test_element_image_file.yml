@@ -23,7 +23,7 @@ elements: |
     '#type': webform_image_file
     '#title': 'webform_image_file_advanced (max: 20x20)'
     '#max_resolution': 20x20
-
+  
 css: ''
 javascript: ''
 settings:
@@ -153,6 +153,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:

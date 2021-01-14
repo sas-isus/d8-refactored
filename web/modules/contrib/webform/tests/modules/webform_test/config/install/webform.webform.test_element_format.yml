@@ -1305,7 +1305,7 @@ elements: |
         '#title': 'Machine name (Raw value)'
         '#default_value': loremipsum
         '#format': raw
-
+  
 css: ''
 javascript: ''
 settings:
@@ -1435,6 +1435,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:

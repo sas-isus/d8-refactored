@@ -2,10 +2,11 @@ name: Menu Export
 type: module
 description: 'This module exports and imports menus and menu links.'
 package: Development
-# core: 8.x
+core: 8.x
+core_version_requirement: ^8 || ^9
 #configure: maintenance_notifications.form
-# Information added by Drupal.org packaging script on 2018-04-18
-version: '8.x-1.2'
-core: '8.x'
+
+# Information added by Drupal.org packaging script on 2021-01-13
+version: '8.x-1.3'
 project: 'menu_export'
-datestamp: 1524036486
+datestamp: 1610559072

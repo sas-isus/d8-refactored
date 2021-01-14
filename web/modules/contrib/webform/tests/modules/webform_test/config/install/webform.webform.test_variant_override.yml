@@ -24,7 +24,7 @@ elements: |
   textfield:
     '#type': textfield
     '#title': textfield
-
+  
 css: ''
 javascript: ''
 settings:
@@ -154,6 +154,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:
@@ -240,7 +241,7 @@ variants:
       elements: |
         textfield:
           '#placeholder': 'This is a placeholder'
-
+        
       handlers: {  }
       debug: true
   handlers:
@@ -286,6 +287,6 @@ variants:
       elements: |
         '#method': get
         '#action': 'https://drupal.org'
-
+        
       handlers: {  }
       debug: true

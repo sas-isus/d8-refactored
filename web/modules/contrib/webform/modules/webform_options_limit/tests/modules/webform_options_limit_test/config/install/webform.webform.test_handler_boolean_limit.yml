@@ -30,7 +30,7 @@ elements: |
     '#type': checkbox
     '#title': boolean_limit_remove
     '#default_value': true
-
+  
 css: ''
 javascript: ''
 settings:
@@ -160,6 +160,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:

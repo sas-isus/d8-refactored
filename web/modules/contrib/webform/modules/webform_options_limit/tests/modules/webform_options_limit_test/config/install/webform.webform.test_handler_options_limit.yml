@@ -26,6 +26,7 @@ elements: |
       - B
       - C
     '#options':
+      none: None
       A: A
       B: B
       C: C
@@ -33,6 +34,7 @@ elements: |
     '#type': checkboxes
     '#title': options_limit_messages
     '#options':
+      none: None
       D: D
       E: E
       F: F
@@ -242,6 +244,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:
@@ -302,6 +305,7 @@ handlers:
     settings:
       element_key: options_limit_default
       limits:
+        none: 0
         A: 1
         B: 2
         _default_: 3
@@ -327,6 +331,7 @@ handlers:
     settings:
       element_key: options_limit_messages
       limits:
+        none: 0
         D: 1
         E: 2
       limit_reached_message: '@name is not available.'

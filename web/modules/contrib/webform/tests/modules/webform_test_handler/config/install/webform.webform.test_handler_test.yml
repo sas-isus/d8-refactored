@@ -22,7 +22,7 @@ elements: |
     '#type': textfield
     '#title': 'Empty element'
     '#description': 'Entering any value will throw an error'
-
+  
 css: ''
 javascript: ''
 settings:
@@ -152,6 +152,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:

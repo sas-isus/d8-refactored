@@ -212,7 +212,7 @@
 
   $document.on('state:checked', function (e) {
     if (e.trigger) {
-      $(e.target).change();
+      $(e.target).trigger('change');
     }
   });
 
@@ -318,7 +318,7 @@
         .once('webform-radios-required')
         .each(function () {
           var $element = $(this);
-          setTimeout(function () {radiosRequired($(this))});
+          setTimeout(function () {radiosRequired($element);});
         });
     }
   };
@@ -530,6 +530,7 @@
    * @param {element} $input
    *   An input.
    * @param {boolean} required
+   *   Is input required.
    */
   function toggleRequired($input, required) {
     if (required) {

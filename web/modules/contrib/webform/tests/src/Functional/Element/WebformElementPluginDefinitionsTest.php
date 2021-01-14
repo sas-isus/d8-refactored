@@ -764,6 +764,25 @@ value:
   container: false
   root: false
   multiple: false
+vertical_tabs:
+  dependencies: {  }
+  default_key: ''
+  category: 'Markup elements'
+  description: 'Provides a vertical tabs element.'
+  hidden: true
+  multiline: false
+  composite: false
+  states_wrapper: false
+  deprecated: false
+  deprecated_message: ''
+  id: vertical_tabs
+  label: 'Vertical tabs'
+  class: Drupal\webform\Plugin\WebformElement\VerticalTabs
+  provider: webform
+  input: false
+  container: false
+  root: false
+  multiple: false
 view:
   dependencies: {  }
   default_key: ''
@@ -1075,7 +1094,7 @@ webform_element:
   default_key: ''
   category: ''
   description: 'Provides a generic form element.'
-  hidden: false
+  hidden: true
   multiline: false
   composite: false
   states_wrapper: false
@@ -1849,7 +1868,7 @@ webform_variant:
   deprecated: false
   deprecated_message: ''
   id: webform_variant
-  label: 'Variant [EXPERIMENTAL]'
+  label: 'Variant'
   class: Drupal\webform\Plugin\WebformElement\WebformVariant
   provider: webform
   input: true
@@ -1896,7 +1915,6 @@ webform_wizard_page:
   root: true
   multiple: false
 YAML;
-
     return Yaml::decode($yaml);
   }
 

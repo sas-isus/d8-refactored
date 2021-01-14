@@ -11,15 +11,15 @@ weight: 0
 uid: null
 template: false
 archive: false
-id: test_token_view_update
-title: 'Test: Token: View & Update'
-description: 'Test viewing and updating submission using secure token.'
+id: test_token_operations
+title: 'Test: Token: Operations (View, Update, & Delete)'
+description: 'Test viewing, updating, and deleting a submission using secure token.'
 category: 'Test: Token'
 elements: |
   textfield:
     '#type': textfield
     '#title': textfield
-
+  
 css: ''
 javascript: ''
 settings:
@@ -124,7 +124,8 @@ settings:
   confirmation_message: |
     <p>You can view your submission via <a href="[webform_submission:view-url]">[webform_submission:view-url:relative]</a></p>
     <p>You can update your submission via <a href="[webform_submission:update-url]">[webform_submission:update-url:relative]</a></p>
-
+    <p>You can delete your submission via <a href="[webform_submission:delete-url]">[webform_submission:delete-url:relative]</a></p>
+    
   confirmation_url: ''
   confirmation_attributes: {  }
   confirmation_back: true
@@ -152,6 +153,7 @@ settings:
   results_customize: false
   token_view: true
   token_update: true
+  token_delete: true
   serial_disabled: false
 access:
   create:
@@ -224,8 +226,9 @@ handlers:
       subject: _default
       body: |
         <a href="[webform_submission:view-url]">[webform_submission:view-url]</a><br/>
-        <a href="[webform_submission:update-url]">[webform_submission:update-url]</a>
-
+        <a href="[webform_submission:update-url]">[webform_submission:update-url]</a><br/>
+        <a href="[webform_submission:delete-url]">[webform_submission:delete-url]</a>
+        
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true

@@ -19,7 +19,7 @@ elements: |
   webform_options_custom_image_map:
     '#type': 'webform_options_custom:test_image_map'
     '#title': webform_options_custom_image_map
-
+  
 css: ''
 javascript: ''
 settings:
@@ -149,6 +149,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:

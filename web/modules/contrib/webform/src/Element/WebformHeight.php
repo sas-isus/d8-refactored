@@ -158,13 +158,13 @@ class WebformHeight extends FormElement {
     switch ($element['#height_type']) {
       case 'select':
         $element['container']['feet'] += $select_element_defaults + [
-          '#field_suffix' => $feet_plural,
-          '#options' => $feet_options,
-        ];
+            '#field_suffix' => $feet_plural,
+            '#options' => $feet_options,
+          ];
         $element['container']['inches'] += $select_element_defaults + [
-          '#field_suffix' => $inches_plural,
-          '#options' => $inches_options,
-        ];
+            '#field_suffix' => $inches_plural,
+            '#options' => $inches_options,
+          ];
         break;
 
       case 'select_suffix':
@@ -175,11 +175,11 @@ class WebformHeight extends FormElement {
           $inches_options[$option_value] .= ' ' . ($option_value === 1 ? $inches_singular : $inches_plural);
         }
         $element['container']['feet'] += $select_element_defaults + [
-          '#options' => $feet_options,
-        ];
+            '#options' => $feet_options,
+          ];
         $element['container']['inches'] += $select_element_defaults + [
-          '#options' => $inches_options,
-        ];
+            '#options' => $inches_options,
+          ];
         break;
 
       default:
@@ -219,7 +219,10 @@ class WebformHeight extends FormElement {
 
     // Add validate callback.
     $element += ['#element_validate' => []];
-    array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformHeight']);
+    array_unshift($element['#element_validate'], [
+      get_called_class(),
+      'validateWebformHeight',
+    ]);
 
     return $element;
   }
@@ -230,7 +233,7 @@ class WebformHeight extends FormElement {
   public static function validateWebformHeight(&$element, FormStateInterface $form_state, &$complete_form) {
     $height_element =& $element['container'];
 
-   if ($height_element['feet']['#value'] === '' && $height_element['inches']['#value'] === '') {
+    if ($height_element['feet']['#value'] === '' && $height_element['inches']['#value'] === '') {
       $value = '';
     }
     else {

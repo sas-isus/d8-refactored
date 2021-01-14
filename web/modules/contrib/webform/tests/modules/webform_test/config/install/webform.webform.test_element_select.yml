@@ -70,7 +70,7 @@ elements: |
         five: Five
       '#attributes':
         'data-webform-select-options-disabled': 'one,two,four,five'
-
+  
   select_select2_examples:
     '#type': details
     '#title': 'Select select2'
@@ -373,7 +373,7 @@ elements: |
         three: Three
         four: Four
         five: Five
-
+  
 css: ''
 javascript: ''
 settings:
@@ -503,6 +503,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:

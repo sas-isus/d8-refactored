@@ -65,7 +65,7 @@ elements: |
         kitten_4:
           text: 'Cute Kitten 4'
           src: 'http://placekitten.com/270/200'
-
+  
 css: ''
 javascript: ''
 settings:
@@ -195,6 +195,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:

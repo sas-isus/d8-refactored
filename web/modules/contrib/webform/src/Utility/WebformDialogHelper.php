@@ -37,7 +37,7 @@ class WebformDialogHelper {
   const DIALOG_NARROW = 'narrow';
 
   /**
-   * Prevent dialog from being displayed
+   * Prevent dialog from being displayed.
    *
    * @var string
    */

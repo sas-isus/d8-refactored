@@ -24,13 +24,6 @@
 /* Fields */
 /*****************************************************************************   */
 
-/**
- * Capitalize fieldset to match details.
- */
-.fieldset__label {
-  text-transform: capitalize;
-}
-
 /*****************************************************************************   */
 /* Messages */
 /*****************************************************************************   */
@@ -233,6 +226,13 @@ div.webform-form-filter input.webform-form-filter-text {
 
 .webform-details-toggle-state {
   color: #003cc5;
+}
+
+/**
+ * Remove right margin so three inline elements are supported.
+ */
+.form--inline.webform-ui-element-form-inline--input .form-item {
+  margin-right: 0;
 }
 
 /**

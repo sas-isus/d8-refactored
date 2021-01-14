@@ -618,6 +618,16 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   /**
    * {@inheritdoc}
    */
+  public function prePurge(array $webform_submissions) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public function postPurge(array $webform_submissions) {}
+
+  /**
+   * {@inheritdoc}
+   */
   public function preDelete(WebformSubmissionInterface $webform_submission) {}
 
   /**

@@ -79,7 +79,7 @@ elements: |
       '#title': webform_element_multiple_managed_file_two
       '#select2': true
       '#multiple': 2
-
+  
 css: ''
 javascript: ''
 settings:
@@ -209,6 +209,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:

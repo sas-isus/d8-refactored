@@ -5,8 +5,6 @@ dependencies:
   enforced:
     module:
       - webform_cards_test
-_core:
-  default_config_hash: ahRBaC5cLszQYVnyTm6-FNHsoxJRBnXqznJTPThCO7k
 open: null
 close: null
 weight: 0
@@ -34,18 +32,19 @@ elements: |
       '#title': 'Element 2'
       '#default_value': '{element_2}'
       '#required': true
+  
 css: ''
 javascript: |
   (function ($, Drupal) {
-
+  
     'use strict';
-
+  
     Drupal.behaviors.webformCardsTestJavaScript = {
       attach: function (context) {
         var $forms = $(context).is('form.webform-submission-form')
           ? $(context)
           : $('form.webform-submission-form', context);
-
+  
         $forms.once('webform-cards-test-javascript')
           .on('webform_cards:change', function (event, $activeCard) {
             console.log('webform_cards:change');
@@ -54,9 +53,9 @@ javascript: |
           });
       }
     };
-
+  
   })(jQuery, Drupal);
-
+  
 settings:
   ajax: false
   ajax_scroll_top: form
@@ -128,6 +127,7 @@ settings:
   wizard_progress_states: true
   wizard_auto_forward: true
   wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
   wizard_start_label: ''
   wizard_preview_link: false
   wizard_confirmation: true
@@ -183,6 +183,8 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
+  serial_disabled: false
 access:
   create:
     roles:
@@ -232,3 +234,5 @@ access:
     permissions: {  }
 handlers: {  }
 variants: {  }
+_core:
+  default_config_hash: ahRBaC5cLszQYVnyTm6-FNHsoxJRBnXqznJTPThCO7k

@@ -3910,3 +3910,9 @@ function webform_update_8209() {
   }
 }
 
+/**
+ * Issue #3158114: Delete own submission with secure token not working.
+ */
+function webform_update_8210() {
+  _webform_update_webform_settings();
+}

@@ -124,7 +124,7 @@ elements: |
         custom_selector:
           value:
             pattern: '[a-z0-9]+'
-
+  
 css: ''
 javascript: ''
 settings:
@@ -254,6 +254,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:

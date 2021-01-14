@@ -4,138 +4,95 @@ status: open
 dependencies:
   enforced:
     module:
-      - webform_test_entity_reference_views
+      - webform_test
 open: null
 close: null
 weight: 0
 uid: null
 template: false
 archive: false
-id: test_element_entity_reference_vs
-title: 'Test: Element: Entity reference views'
-description: 'Test entity reference views elements.'
+id: test_element_vertical_tabs
+title: 'Test: Element: Vertical tabs'
+description: 'Test Vertical tabs support'
 category: 'Test: Element'
 elements: |
-  entity_autocomplete:
-    '#type': entity_autocomplete
-    '#title': entity_autocomplete
-    '#multiple': true
-    '#target_type': node
-    '#selection_handler': views
-    '#selection_settings':
-      view:
-        view_name: webform_test_entity_reference_vs
-        display_name: entity_reference_1
-        arguments: {  }
-  entity_select:
-    '#type': webform_entity_select
-    '#title': webform_entity_select
-    '#multiple': true
-    '#target_type': node
-    '#selection_handler': views
-    '#selection_settings':
-      view:
-        view_name: webform_test_entity_reference_vs
-        display_name: entity_reference_1
-        arguments: {  }
-  entity_radios:
-    '#type': webform_entity_radios
-    '#title': webform_entity_radios
-    '#multiple': true
-    '#target_type': node
-    '#selection_handler': views
-    '#selection_settings':
-      view:
-        view_name: webform_test_entity_reference_vs
-        display_name: entity_reference_1
-        arguments: {  }
+  vertical_tabs:
+    '#type': vertical_tabs
+  vertical_tabs_details_01:
+    '#type': details
+    '#title': vertical_tabs_details_01
+    '#group': vertical_tabs
+    vertical_tabs_textfield_01:
+      '#type': textfield
+      '#title': vertical_tabs_textfield_01
+  vertical_tabs_details_02:
+    '#type': details
+    '#title': vertical_tabs_details_02
+    '#group': vertical_tabs
+    vertical_tabs_textfield_02:
+      '#type': textfield
+      '#title': vertical_tabs_textfield_02
+  vertical_tabs_details_03:
+    '#type': details
+    '#title': vertical_tabs_details_03
+    '#group': vertical_tabs
+    vertical_tabs_textfield_03:
+      '#type': textfield
+      '#title': vertical_tabs_textfield_03
+  vertical_tabs_advanced:
+    '#type': vertical_tabs
+    '#title': 'My Vertical Tabs'
+    '#title_display': before
+    '#require': TRUE
+    '#description': 'This is a description'
+    '#help': 'This is a help'
+    '#more': 'This is a more'
+    '#default_tab': edit-vertical-tabs-advanced-details-03
     '#wrapper_attributes':
-      class:
-        - webform-entity-reference-options
-  entity_checkboxes:
-    '#type': webform_entity_checkboxes
-    '#title': entity_checkboxes
-    '#multiple': true
-    '#target_type': node
-    '#selection_handler': views
-    '#selection_settings':
-      view:
-        view_name: webform_test_entity_reference_vs
-        display_name: entity_reference_1
-        arguments: {  }
-    '#wrapper_attributes':
-      class:
-        - webform-entity-reference-options
+      style: 'border: 1px solid red; padding: 10px'
+    '#label_attributes':
+      style: 'color: green'
+  vertical_tabs_advanced_details_01:
+    '#type': details
+    '#title': vertical_tabs_advanced_details_01
+    '#group': vertical_tabs_advanced
+    vertical_tabs_advanced_textfield_01:
+      '#type': textfield
+      '#title': vertical_tabs_advanced_textfield_01
+  vertical_tabs_advanced_details_02:
+    '#type': details
+    '#title': vertical_tabs_advanced_details_02
+    '#group': vertical_tabs_advanced
+    vertical_tabs_advanced_textfield_02:
+      '#type': textfield
+      '#title': vertical_tabs_advanced_textfield_02
+  vertical_tabs_advanced_details_03:
+    '#type': details
+    '#title': vertical_tabs_advanced_details_03
+    '#group': vertical_tabs_advanced
+    vertical_tabs_advanced_textfield_03:
+      '#type': textfield
+      '#title': vertical_tabs_advanced_textfield_03
+  details_01:
+    '#type': details
+    '#title': details_01
+    textfield_01:
+      '#type': textfield
+      '#title': textfield_01
+  details_02:
+    '#type': details
+    '#title': details_02
+    textfield_02:
+      '#type': textfield
+      '#title': textfield_02
+  details_03:
+    '#type': details
+    '#title': details_03
+    textfield_03:
+      '#type': textfield
+      '#title': textfield_03
 
-css: |
-  /* Autocomplete */
-
-  .ui-autocomplete {
-    display: flex;
-    flex-wrap: wrap !important;
-    align-self: flex-start !important;
-    max-width: 540px !important;
-  }
-
-  .ui-autocomplete .ui-menu-item-wrapper {
-    display: block !important;
-    border: 1px solid #ccc !important;
-    background-color: #eee !important;
-    width: 100px !important;
-    margin: 10px 0 0 10px !important;
-    padding: 10px !important;
-  }
-
-  .ui-autocomplete .ui-menu-item-wrapper.ui-state-active {
-    background-color: blue !important;
-  }
-
-  .ui-autocomplete .views-field views-field-field-image {
-    display: block;
-    margin: 0 0 5px 0;
-  }
-
-  /* Checkboex and radios */
-
-  .webform-entity-reference-options .fieldset-wrapper > div {
-    display: flex;
-    flex-wrap: wrap;
-    align-self: flex-start;
-  }
-
-  .webform-entity-reference-options .form-item {
-    position: relative;
-  }
-
-  .webform-entity-reference-options .form-item input {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-  }
-
-  .webform-entity-reference-options .form-item label {
-    display: block;
-    border: 1px solid #ccc;
-    background-color: #eee;
-    width: 100px;
-    margin: 0 10px 10px 0;
-    padding: 10px;
-  }
-
-  .webform-entity-reference-options .form-item input:checked + label {
-    display: block;
-    border: 1px solid #ccc;
-    background-color: #ffc;
-    width: 100px;
-    margin: 0 10px 10px 0;
-    padding: 10px;
-  }
-
-  .webform-entity-reference-options label.option img {
-    display: block;
-    margin: 0 0 5px 0;
-  }
-
+css: ''
 javascript: ''
 settings:
   ajax: false
@@ -219,7 +176,7 @@ settings:
   wizard_toggle: false
   wizard_toggle_show_label: ''
   wizard_toggle_hide_label: ''
-  preview: 1
+  preview: 0
   preview_label: ''
   preview_title: ''
   preview_message: ''
@@ -264,6 +221,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:
@@ -312,14 +270,5 @@ access:
     roles: {  }
     users: {  }
     permissions: {  }
-handlers:
-  debug:
-    id: debug
-    label: Debug
-    notes: ''
-    handler_id: debug
-    status: true
-    conditions: {  }
-    weight: 0
-    settings: {  }
+handlers: {  }
 variants: {  }

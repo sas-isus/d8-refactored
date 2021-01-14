@@ -158,17 +158,26 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
         '#suffix' => '</dt>',
       ];
       $info[$library_name]['description'] = [
-        'content' => [
-          '#markup' => $description,
-        ],
-        'status' => (!empty($library['deprecated'])) ? [
-          '#markup' => $library['deprecated'],
-          '#prefix' => '<div class="color-warning"><strong>',
-          '#suffix' => '</strong></div>',
-        ] : [],
         '#prefix' => '<dd>',
         '#suffix' => '</dd>',
       ];
+      $info[$library_name]['description']['content'] = [
+        '#markup' => $description,
+      ];
+      if (!empty($library['notes'])) {
+        $info[$library_name]['description']['notes'] = [
+          '#markup' => $library['notes'],
+          '#prefix' => '<div><em>(',
+          '#suffix' => '}</em></div>',
+        ];
+      }
+      if (!empty($library['deprecated'])) {
+        $info[$library_name]['description']['status'] = [
+          '#markup' => $library['deprecated'],
+          '#prefix' => '<div class="color-warning"><strong>',
+          '#suffix' => '</strong></div>',
+        ];
+      }
     }
 
     // Description.
@@ -329,9 +338,10 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('Code Mirror is a versatile text editor implemented in JavaScript for the browser.'),
       'notes' => $this->t('Code Mirror is used to provide a text editor for YAML, HTML, CSS, and JavaScript configuration settings and messages.'),
       'homepage_url' => Url::fromUri('http://codemirror.net/'),
-      'download_url' => Url::fromUri('https://github.com/components/codemirror/archive/5.57.0.zip'),
+      // Issue #3177233: CodeMirror 5.70.0 is displaying vertical scrollbar.
+      'download_url' => Url::fromUri('https://github.com/components/codemirror/archive/5.53.2.zip'),
       'issues_url' => Url::fromUri('https://github.com/codemirror/codemirror/issues'),
-      'version' => '5.57.0',
+      'version' => '5.53.2',
     ];
     $libraries['algolia.places'] = [
       'title' => $this->t('Algolia Places'),

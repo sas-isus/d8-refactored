@@ -513,6 +513,26 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE);
 
   /**
+   * Acts on webform submissions before they are purged.
+   *
+   * Used before the entities are purged and before they are deleted.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface[] $webform_submissions
+   *   The webform submissions to be purged.
+   */
+  public function prePurge(array $webform_submissions);
+
+  /**
+   * Acts on webform submissions after they are purged.
+   *
+   * Used after the entities are purged and after they are deleted..
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface[] $webform_submissions
+   *   The webform submissions that were purged.
+   */
+  public function postPurge(array $webform_submissions);
+
+  /**
    * Acts on a webform submission before they are deleted and before hooks are invoked.
    *
    * Used before the entities are deleted and before invoking the delete hook.

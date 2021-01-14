@@ -485,6 +485,9 @@
         token_update:
           type: boolean
           label: 'Allow updating a submission using token'
+        token_delete:
+          type: boolean
+          label: 'Allow deleting a submission using token'
         serial_disabled:
           type: boolean
           label: 'Next submission number disabled'

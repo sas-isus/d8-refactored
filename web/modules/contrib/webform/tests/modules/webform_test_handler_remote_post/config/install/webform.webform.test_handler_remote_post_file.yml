@@ -27,7 +27,7 @@ elements: |
     '#required': true
     '#multiple': true
     '#file_extensions': txt
-
+  
 css: ''
 javascript: ''
 settings:
@@ -131,7 +131,7 @@ settings:
   confirmation_title: ''
   confirmation_message: |
     <p>Your confirmation number is [webform_submission:values:confirmation_number].</p>
-
+    
   confirmation_url: ''
   confirmation_attributes: {  }
   confirmation_back: true
@@ -159,6 +159,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:

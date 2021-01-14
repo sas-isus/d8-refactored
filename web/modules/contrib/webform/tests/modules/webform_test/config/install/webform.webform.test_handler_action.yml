@@ -48,7 +48,7 @@ elements: |
       '#attributes':
         readonly: readonly
         style: 'background-color: #eee'
-
+  
 css: ''
 javascript: ''
 settings:
@@ -178,6 +178,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:
@@ -250,7 +251,7 @@ handlers:
       data: |
         notes_add: ''
         notes_last: '[webform_submission:values:notes_add]'
-
+        
       message: 'Submission notes have been updated.'
       message_type: status
       debug: true

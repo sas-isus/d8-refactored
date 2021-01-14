@@ -30,7 +30,7 @@ elements: |
     '#default_value': |
       <p>This is a <strong>text format</strong> string.</p>
       <p>It contains &quot;double&quot; and 'single' quotes with special characters like &lt;, &gt;, &lt;&gt;, and &gt;&lt;.</p>
-
+  
   xss:
     '#type': textfield
     '#title': xss
@@ -43,7 +43,7 @@ elements: |
       <b class="webform_computed_token_auto">complex string :</b> [webform_submission:values:complex_string]<br />
       <b class="webform_computed_token_auto">text_format:</b> [webform_submission:values:text_format]<br />
       <b class="webform_computed_token_auto">xss:</b> [webform_submission:values:xss]<br />
-
+  
   webform_computed_token_html:
     '#type': webform_computed_token
     '#title': webform_computed_token_html
@@ -53,7 +53,7 @@ elements: |
       <b class="webform_computed_token_html">complex string :</b> [webform_submission:values:complex_string]<br />
       <b class="webform_computed_token_html">text_format:</b> [webform_submission:values:text_format]<br />
       <b class="webform_computed_token_html">xss:</b> [webform_submission:values:xss]<br />
-
+  
   webform_computed_token_text:
     '#type': webform_computed_token
     '#title': webform_computed_token_text
@@ -63,7 +63,7 @@ elements: |
       complex string : [webform_submission:values:complex_string]
       text_format: [webform_submission:values:text_format]
       xss: [webform_submission:values:xss]
-
+  
   webform_computed_token_store:
     '#type': webform_computed_token
     '#title': webform_computed_token_store
@@ -71,7 +71,7 @@ elements: |
     '#display_on': none
     '#store': true
     '#template': 'sid: [webform_submission:sid]'
-
+  
 css: ''
 javascript: ''
 settings:
@@ -201,6 +201,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:

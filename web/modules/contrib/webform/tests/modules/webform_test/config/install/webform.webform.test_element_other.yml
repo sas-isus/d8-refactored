@@ -149,7 +149,7 @@ elements: |
         Two: Two
         Three: Three
       '#wrapper_type': container
-
+  
 css: ''
 javascript: ''
 settings:
@@ -279,6 +279,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:

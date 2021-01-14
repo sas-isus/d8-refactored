@@ -2,6 +2,7 @@
 
 namespace Drupal\menu_export\Form;
 
+use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use \Drupal\system\Entity\Menu;
@@ -63,7 +64,7 @@ class MenuExportForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
 		$this->exportMenus();
-		drupal_set_message('Menu Items exported successfully','status');
+		$this->messenger()->addStatus('Menu Items exported successfully');
     parent::submitForm($form, $form_state);
   }
 
@@ -80,7 +81,7 @@ class MenuExportForm extends ConfigFormBase {
 			$menuLinkIds = \Drupal::entityQuery('menu_link_content')
 				->condition('menu_name',$menu)
 				->execute();
-			$menuLinks = \Drupal\menu_link_content\Entity\MenuLinkContent::loadMultiple($menuLinkIds);
+			$menuLinks = MenuLinkContent::loadMultiple($menuLinkIds);
 			foreach($menuLinks as $link){
 				if(!empty($link)){
 					$linkArray = $link->toArray();

@@ -50,10 +50,5 @@ Results for URL: http://localhost/wf/webform/example_accessibility_wizard
    ├── #webform-submission-example-accessibility-wizard-add-form > div:nth-child(7) > ul > li:nth-child(5) > span:nth-child(2) > span
    └── <span class="progress-title" data-webform-progress-link=""> <span class="visua...</span>
 
- • Error: Duplicate id attribute value "edit-actions" found on the web page.
-   ├── WCAG2AA.Principle4.Guideline4_1.4_1_1.F77
-   ├── #edit-actions
-   └── <div data-drupal-selector="edit-actions" class="form-actions js-form-wrapper form-wrapper" id="edit-actions"><input class="search-form__subm...</div>
-
-10 Errors
+9 Errors
 

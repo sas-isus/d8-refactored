@@ -294,18 +294,6 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
         ],
       ],
     ];
-    $form['ajax_settings']['ajax_container']['ajax_scroll_top'] = [
-      '#type' => 'select',
-      '#title' => $this->t('On Ajax load, scroll to the top of the…'),
-      '#description' => $this->t("Select where the page should be scrolled to when paging, saving of drafts, previews, submissions, and confirmations. Select 'None' to disable scrolling."),
-      '#options' => [
-        '' => $this->t('None'),
-        'form' => $this->t('Form'),
-        'page' => $this->t('Page'),
-      ],
-      '#default_value' => $settings['ajax_scroll_top'],
-      '#attributes' => ['data-webform-states-no-clear' => TRUE],
-    ];
     $form['ajax_settings']['ajax_container']['ajax_progress_type'] = [
       '#type' => 'select',
       '#title' => $this->t('Ajax progress type'),
@@ -317,6 +305,18 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
 
       ],
       '#default_value' => $settings['ajax_progress_type'],
+    ];
+    $form['ajax_settings']['ajax_container']['ajax_scroll_top'] = [
+      '#type' => 'select',
+      '#title' => $this->t('On Ajax load, scroll to the top of the…'),
+      '#description' => $this->t("Select where the page should be scrolled to when paging, saving of drafts, previews, submissions, and confirmations. Select 'None' to disable scrolling."),
+      '#options' => [
+        '' => $this->t('None'),
+        'form' => $this->t('Form'),
+        'page' => $this->t('Page'),
+      ],
+      '#default_value' => $settings['ajax_scroll_top'],
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
     ];
     $form['ajax_settings']['ajax_container']['ajax_effect'] = [
       '#type' => 'select',

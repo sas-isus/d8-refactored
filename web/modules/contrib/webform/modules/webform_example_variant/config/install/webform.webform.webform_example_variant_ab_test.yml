@@ -176,6 +176,7 @@ settings:
   results_customize: false
   token_view: false
   token_update: false
+  token_delete: false
   serial_disabled: false
 access:
   create:
@@ -318,9 +319,6 @@ variants:
     weight: 1
     settings:
       settings: {  }
-      override_settings:
-        definitions:
-          table: ''
       elements: |
         type:
           '#title_display': 'inline'
@@ -352,9 +350,6 @@ variants:
     settings:
       settings:
         preview: 1
-      override_settings:
-        definitions:
-          table: ''
       elements: ''
       handlers:
         email_confirmation:

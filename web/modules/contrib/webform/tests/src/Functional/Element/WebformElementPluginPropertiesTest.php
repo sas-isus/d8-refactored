@@ -26,7 +26,7 @@ class WebformElementPluginPropertiesTest extends WebformElementBrowserTestBase {
     'webform_attachment',
     'webform_cards',
     // Issue #3110478: [Webform 8.x-6.x] Track the D9 readiness state of the
-    // Webform module's (optional) dependencies
+    // Webform module's (optional) dependencies.
     // @see https://www.drupal.org/project/webform/issues/3110478
     // 'webform_entity_print_attachment',
     'webform_image_select',
@@ -52,7 +52,7 @@ class WebformElementPluginPropertiesTest extends WebformElementBrowserTestBase {
     $expected_elements = $this->getExpectedElementDefaultProperties();
 
     // Issue #3110478: [Webform 8.x-6.x] Track the D9 readiness state of the
-    // Webform module's (optional) dependencies
+    // Webform module's (optional) dependencies.
     // @see https://www.drupal.org/project/webform/issues/3110478
     unset($expected_elements['webform_entity_print_attachment:pdf']);
 
@@ -1849,6 +1849,41 @@ url:
 value:
   title: ''
   value: ''
+vertical_tabs:
+  access: true
+  access_create_permissions: {  }
+  access_create_roles:
+    - anonymous
+    - authenticated
+  access_create_users: {  }
+  access_update_permissions: {  }
+  access_update_roles:
+    - anonymous
+    - authenticated
+  access_update_users: {  }
+  access_view_permissions: {  }
+  access_view_roles:
+    - anonymous
+    - authenticated
+  access_view_users: {  }
+  admin_notes: ''
+  admin_title: ''
+  default_tab: ''
+  description: ''
+  description_display: ''
+  flex: 1
+  help: ''
+  help_display: ''
+  help_title: ''
+  label_attributes: {  }
+  more: ''
+  more_title: ''
+  private: false
+  required: false
+  states: {  }
+  title: 'Vertical Tabs'
+  title_display: invisible
+  wrapper_attributes: {  }
 view:
   access: true
   access_create_permissions: {  }
@@ -4773,6 +4808,7 @@ webform_term_checkboxes:
   breadcrumb: false
   breadcrumb_delimiter: ' › '
   default_value: ''
+  depth: null
   description: ''
   description_display: ''
   disabled: false
@@ -4844,6 +4880,7 @@ webform_term_select:
   choices: false
   chosen: false
   default_value: ''
+  depth: null
   description: ''
   description_display: ''
   disabled: false
