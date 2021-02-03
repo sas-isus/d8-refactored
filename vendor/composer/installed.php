@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'ca0e7edec58f8fa85dd529689d4e25bc949657f3',
+    'reference' => '4419720557b1722dd78087dbe85d096702715e03',
     'name' => 'pantheon-systems/example-drops-8-composer',
   ),
   'versions' => 
@@ -40,12 +40,12 @@
     ),
     'behat/gherkin' => 
     array (
-      'pretty_version' => 'v4.6.2',
-      'version' => '4.6.2.0',
+      'pretty_version' => 'v4.7.2',
+      'version' => '4.7.2.0',
       'aliases' => 
       array (
       ),
-      'reference' => '51ac4500c4dc30cbaaabcd2f25694299df666a31',
+      'reference' => 'd1ff9aa23bb280e8aee9118d42eec386d6f851f7',
     ),
     'behat/mink' => 
     array (
@@ -1454,12 +1454,12 @@
     ),
     'drupal/search_api' => 
     array (
-      'pretty_version' => '1.18.0',
-      'version' => '1.18.0.0',
+      'pretty_version' => '1.19.0',
+      'version' => '1.19.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-1.18',
+      'reference' => '8.x-1.19',
     ),
     'drupal/serialization' => 
     array (
@@ -1779,12 +1779,12 @@
     ),
     'drush/drush' => 
     array (
-      'pretty_version' => '8.4.5',
-      'version' => '8.4.5.0',
+      'pretty_version' => '8.4.6',
+      'version' => '8.4.6.0',
       'aliases' => 
       array (
       ),
-      'reference' => '29ab4fc41e6b516abc34b8dc477b3039fb5c0e96',
+      'reference' => '4e48e11d7fe858eebe6c2fad71650c977d3f8900',
     ),
     'easyrdf/easyrdf' => 
     array (
@@ -1932,12 +1932,12 @@
     ),
     'markbaker/matrix' => 
     array (
-      'pretty_version' => '1.2.1',
-      'version' => '1.2.1.0',
+      'pretty_version' => '1.2.3',
+      'version' => '1.2.3.0',
       'aliases' => 
       array (
       ),
-      'reference' => '182d44c3b2e3b063468f7481ae3ef71c69dc1409',
+      'reference' => '44bb1ab01811116f01fe216ab37d921dccc6c10d',
     ),
     'masterminds/html5' => 
     array (
@@ -1973,7 +1973,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'ca0e7edec58f8fa85dd529689d4e25bc949657f3',
+      'reference' => '4419720557b1722dd78087dbe85d096702715e03',
     ),
     'pantheon-systems/quicksilver-pushback' => 
     array (
