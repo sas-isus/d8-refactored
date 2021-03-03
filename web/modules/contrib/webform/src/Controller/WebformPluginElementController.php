@@ -282,6 +282,7 @@ class WebformPluginElementController extends ControllerBase implements Container
 
     $build = [];
 
+    // Filter.
     $build['filter'] = [
       '#type' => 'search',
       '#title' => $this->t('Filter'),
@@ -381,7 +382,6 @@ class WebformPluginElementController extends ControllerBase implements Container
     ];
 
     $build['#attached']['library'][] = 'webform/webform.admin';
-    $build['#attached']['library'][] = 'webform/webform.form';
 
     return $build;
   }

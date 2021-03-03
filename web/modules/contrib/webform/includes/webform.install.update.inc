@@ -3916,3 +3916,29 @@ function webform_update_8209() {
 function webform_update_8210() {
   _webform_update_webform_settings();
 }
+
+/**
+ * Issue #174151 Webform Contact Form - open mail relay.
+ */
+function webform_update_8211() {
+  $config_factory = \Drupal::configFactory();
+
+  $config = $config_factory->getEditable('webform.webform.contact');
+  if (!$config) {
+    return;
+  }
+
+  $to_mail = $config->get('handlers.email_confirmation.settings.to_mail');
+  if ($to_mail === '[webform_submission:values:email:raw]') {
+    $config->set('handlers.email_confirmation.settings.to_mail', '[current-user:mail]');
+    $config->save();
+
+    /** @var \Drupal\webform\WebformHelpManagerInterface $help_manager */
+    $help_manager = \Drupal::service('webform.help_manager');
+    $help_manager->addNotification('webform_update_8211',
+      t("<strong>ATTENTION!!!</strong> The default Contact webform, included with the Webform module, has been updated to send the confirmation email to an authenticated user's email address.") .
+      ' ' . t('<a href=":href">Learn more</a>', [':href' => 'https://www.drupal.org/project/webform/releases/8.x-5.25']),
+      'warning'
+    );
+  }
+}

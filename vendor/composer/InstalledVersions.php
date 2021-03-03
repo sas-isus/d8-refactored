@@ -29,7 +29,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '4419720557b1722dd78087dbe85d096702715e03',
+    'reference' => 'b5c9b560ece4fa05b76c75a6594936c5c1232cdd',
     'name' => 'pantheon-systems/example-drops-8-composer',
   ),
   'versions' => 
@@ -1743,12 +1743,12 @@ private static $installed = array (
     ),
     'drupal/webform' => 
     array (
-      'pretty_version' => '5.23.0',
-      'version' => '5.23.0.0',
+      'pretty_version' => '5.25.0',
+      'version' => '5.25.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-5.23',
+      'reference' => '8.x-5.25',
     ),
     'drupal/workbench' => 
     array (
@@ -1996,7 +1996,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '4419720557b1722dd78087dbe85d096702715e03',
+      'reference' => 'b5c9b560ece4fa05b76c75a6594936c5c1232cdd',
     ),
     'pantheon-systems/quicksilver-pushback' => 
     array (

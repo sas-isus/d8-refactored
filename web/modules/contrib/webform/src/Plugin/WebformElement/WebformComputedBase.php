@@ -286,7 +286,8 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
    *   The type of markup, HTML or plain-text.
    */
   protected function getMode(array $element) {
-    return WebformComputedBaseElement::getMode($element);
+    $class = $this->getFormElementClassDefinition();
+    return $class::getMode($element);
   }
 
   /**
