@@ -1,0 +1,58 @@
+{#
+/**
+ * @file twitter_widget.html.twig
+ * Default theme implementation to present Twitter widget data.
+ *
+ * This template is used when viewing Twitter widget entities.
+ *
+ * Available variables:
+ * - headline: A plaintext string to appear above the tweets
+ * - attributes: HTML attributes for the container element.
+ * - tweets: an array of prepared tweet data, consisting of:
+ * - - retweet_user: the handle of the retweeter
+ * - - retweet_link: a retweet link
+ * - - author: the display name
+ * - - username: the Twitter handle
+ * - - timestamp: the post timestamp
+ * - - time_ago: the post date, in "time ago" format
+ * - - text: the tweet itself
+ * - - tweet_reply2: a reply2 link
+ * - - tweet_retweet: a retweet link
+ * - - tweet_star: a "favorite" link
+ * - view_all: A link back to Twitter with user-supplied text
+ *
+ * @see template_preprocess_twitter_widget()
+ *
+ * @ingroup themeable
+ */
+#}
+{{ attach_library('twitter_profile_widget/twitter-profile-widget') }}
+<div{{ attributes.addClass('twitter_widget') }}>
+  {% if headline %}
+    <h3 class="headline"> {{ headline }} </h3>
+  {% endif %}
+
+  {% if tweets %}
+    {% for key,tweet in tweets %}
+      <div class="tweet" id="tweet-{{ key }}'">
+        {% if tweet.retweet_user %}
+          <div class="retweet-eyebrow"><a href="{{ tweet.retweet_link }}">&#x21c4; {{ tweet.retweet_user }}</div>
+        {% endif %}
+        <div class="tweet-image"><img src="{{ tweet.image }}" alt="{{ tweet.image_user }}" /></div>
+        <div class="tweet-author">{{ tweet.author }}</div>
+        <div class="tweet-username">{{ tweet.username }}</div>
+        <div class="tweet-text">{{ tweet.text|raw }}</div>
+        <div class="tweet-time">{{ tweet.time_ago }}</div>
+        <ul class="tweet-actions">
+          <li class="tweet-action"><a class="action-link icon-reply2" href="{{ tweet.tweet_reply2 }}" title="Reply">&#x21ba;</a></li>
+          <li class="tweet-action"><a class="action-link icon-retweet" href="{{ tweet.tweet_retweet }}" title="Retweet">&#x21c4;</a></li>
+          <li class="tweet-action"><a class="action-link icon-star" href="{{ tweet.tweet_star }}" title="Favorite">&#x2606;</a></li>
+        </ul>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  {% if view_all %}
+    <div class="view-all">{{ view_all }}</div>
+  {% endif %}
+</div>

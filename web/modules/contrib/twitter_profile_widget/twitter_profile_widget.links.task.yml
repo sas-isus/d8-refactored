@@ -1,0 +1,5 @@
+# Twitter widget routing definition
+twitter_widget.settings_tab:
+  route_name: twitter_widget.settings
+  title: 'Settings'
+  base_route: twitter_widget.settings

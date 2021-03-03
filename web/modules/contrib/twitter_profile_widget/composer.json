@@ -1,0 +1,19 @@
+{
+  "name": "drupal/twitter_profile_widget",
+  "type": "drupal-module",
+  "description": "Add multiple Twitter feeds via entity reference.",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/twitter_profile_widget",
+  "authors": [
+    {
+      "name": "Mark Fullmer",
+      "homepage": "https://www.drupal.org/u/mark_fullmer"
+    }
+  ],
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "http://drupal.org/project/issues/twitter_profile_widget",
+    "source": "http://cgit.drupalcode.org/twitter_profile_widget"
+  }
+}

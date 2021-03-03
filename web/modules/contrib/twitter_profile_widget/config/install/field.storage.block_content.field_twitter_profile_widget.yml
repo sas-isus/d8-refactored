@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_content
+    - twitter_profile_widget
+id: block_content.field_twitter_profile_widget
+field_name: field_twitter_profile_widget
+entity_type: block_content
+type: twitter_widget
+settings: {  }
+module: twitter_profile_widget
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,15 @@
+twitter_profile_widget.settings:
+  type: config_object
+  mapping:
+    expire_internal_cache:
+      type: integer
+      label: "Should the page cache be expired"
+    twitter_widget_cache_time:
+      type: string
+      label: "How long to cache tweets"
+    twitter_widget_key:
+      type: string
+      label: "Consumer Key"
+    twitter_widget_secret:
+      type: string
+      label: "Consumer Secret"

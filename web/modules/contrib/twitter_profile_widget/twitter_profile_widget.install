@@ -1,0 +1,48 @@
+<?php
+
+use Drupal\twitter_profile_widget\Authorization;
+use Drupal\Core\Url;
+
+/**
+ * @file
+ * Install file for twitter_profile_widget.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function twitter_profile_widget_install() {
+  $messenger = \Drupal::messenger();
+  // @var \Drupal\Core\Routing\RouteBuilderInterface $routeBuilder $route_builder.
+  $route_builder = \Drupal::service('router.builder');
+
+  // Makes the 'twitter_profile_widget.admin_settings' route available.
+  $route_builder->rebuild();
+
+  $messenger->addMessage(t('Thanks for installing the Twitter profile widget!'));
+  $messenger->addMessage(t('1. If you have not done so, create a Twitter app at <a href="https://developer.twitter.com/en/apps">https://developer.twitter.com/en/apps</a>.'));
+  $messenger->addMessage(t('2. Set Drupal permission for "Administer Twitter widget settings" to regulate who can connect an app.'));
+  $messenger->addMessage(t('3. Connnect your app at <a href="@url_settings">/admin/config/media/twitter_profile_widget</a>', [
+    '@url_settings' => Url::fromRoute('twitter_profile_widget.admin_settings')->toString()
+  ]));
+  $messenger->addMessage(t('4. Create a Twitter widget at /block/add.'));
+  $messenger->addMessage(t('5. IMPORTANT: if using version control and configuration management, use a tool such as config_ignore or config_exclude to prevent exposing your
+  Twitter app credentials.'));
+}
+
+/**
+ * Save access token via new methodology.
+ */
+function twitter_profile_widget_update_8101() {
+  $config = \Drupal::config('twitter_profile_widget.settings');
+  Authorization::getToken($config->get('twitter_widget_key'), $config->get('twitter_widget_secret'));
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * @ingroup twitter_profile_widget
+ */
+function twitter_profile_widget_uninstall() {
+  \Drupal::configFactory()->getEditable('twitter_profile_widget.settings')->delete();
+}

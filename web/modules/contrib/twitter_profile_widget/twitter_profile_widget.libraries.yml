@@ -1,0 +1,5 @@
+twitter-profile-widget:
+  version: 1.x
+  css:
+    theme:
+      css/twitter_profile_widget.css: {}

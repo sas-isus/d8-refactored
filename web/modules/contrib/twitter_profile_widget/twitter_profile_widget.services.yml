@@ -1,0 +1,13 @@
+services:
+  twitter_profile_widget.twitterprofile:
+    class: Drupal\twitter_profile_widget\TwitterProfile
+    arguments: []
+  twitter_profile_widget.twitterwidget:
+    class: Drupal\twitter_profile_widget\Plugin\Field\FieldWidget\TwitterWidgetWidget
+    arguments:
+      - '@config.factory'
+  twitter_profile_widget.cacheexpire:
+    class: Drupal\twitter_profile_widget\EventSubscriber\TwitterWidgetSubscriber
+    arguments: ['@language_manager', '@config.factory', '@page_cache_request_policy', '@page_cache_response_policy', '@cache_contexts_manager', '%http.response.debug_cacheability_headers%']
+    tags:
+      - { name: event_subscriber }

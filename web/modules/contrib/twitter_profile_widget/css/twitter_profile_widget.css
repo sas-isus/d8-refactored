@@ -1,0 +1,64 @@
+.twitter_widget {
+  border-top: 1px solid #f0ede6;
+  border-bottom: 1px solid #f0ede6;
+  border-left: 1px solid #f0ede6;
+  border-right: 1px solid #f0ede6;
+  padding-bottom: 1px;
+}
+.tweet .tweet-actions {
+  float: right;
+  margin: 0;
+}
+.tweet .tweet-time {
+  float: left;
+  font-style: italic;
+}
+.tweet .tweet-actions .tweet-action {
+  display: inline-block;
+  font-size:2em;
+}
+.tweet .tweet-author {
+  font-weight: bold;
+}
+.tweet .tweet-image {
+  float:left;
+  width: 50px;
+  margin: 0 10px 10px 0;
+}
+.tweet .tweet-text {
+  clear: left;
+}
+.tweet + .tweet {
+  border-top: 1px solid #a1a1a1;
+}
+.tweet {
+  padding: 15px 15px;
+  position: relative;
+  padding: 10px;
+  color: #2d2a28;
+  overflow: hidden;
+}
+.tweet-actions .action-link {
+  text-decoration: none;
+  color: #555;
+}
+.tweet-actions .action-link {
+  color: #2d2a28;
+}
+.view-all {
+  color: #BF5700;
+  display: inline-block;
+  overflow: hidden;
+  text-align: center;
+  border: 1px solid #BF5700;
+  font-weight:bold;
+  padding: 0.625rem 1.25rem;
+  margin: 10px 10px 0 10px;
+  border-radius: 4px;
+}
+h3.headline {
+  display: block;
+  padding-left:10px;
+  font-weight: 700;
+  width:100%;
+}

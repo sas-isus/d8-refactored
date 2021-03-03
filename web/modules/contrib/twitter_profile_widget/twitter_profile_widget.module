@@ -1,0 +1,68 @@
+<?php
+
+/**
+ * @file
+ * Contains twitter_profile_widget.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\block_content\BlockContentInterface;
+
+/**
+ * Implements hook_help().
+ */
+function twitter_profile_widget_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the twitter_profile_widget module.
+    case 'help.page.twitter_profile_widget':
+      $output = '';
+      $output .= '<h3>' . t('Installation') . '</h3>';
+      $output .= '<p>' . t('<ol><li>Install as you would normally install a contributed drupal module. See the <a href=":docs">documentation</a> for further information.</li><li>Go to Manage > Extend, and enable the Twitter Profile Widget module (drush en twitter_profile_widget).</li></ol>', [':docs' => 'https://www.drupal.org/documentation/install/modules-themes/modules-8']) . '</p>';
+      $output .= '<h3>' . t('Configuration') . '</h3>';
+      $output .= '<p>' . t('<ol><li>You first need a Twitter App. This is different from the Twitter widget ID, and allows you to connect to the Twitter API. To get a Twitter App, sign in to Twitter and go to <a href=":twitter">https://apps.twitter.com/</a>. Copy the "key" and "secret" associated with your new app.</li><li>After installing the module in Drupal, go to Configuration > Media > Twitter Widgets (<a href=":config">/admin/config/media/twitter_profile_widget</a>). Enter the Twitter App key and secret you created in step 1.</li><li>Go to Strucure > Block Layout > Custom Block Library (<a href=":widgets">/admin/structure/block/block-content</a>) and create one or more widgets. The "description" is internal, to identify different widgets.</li></ol>', [
+        ':config' => '/admin/config/media/twitter_profile_widget',
+        ':blocks' => '/admin/structure/block/block-content',
+        ':twitter' => 'https://apps.twitter.com/',
+      ]) . '</p>';
+      $output .= '<h3>' . t('Theming') . '</h3>';
+      $output .= '<p>' . t("By design, the display of tweets  provided by this module is minimal. Developers can copy the twitter_widget.html.twig file from the /templates directory and add it to their theme and customize as necessary. To remove the CSS provided by this module, remove the <code>{{ attach_library('twitter_profile_widget/twitter-profile-widget') }}</code> from the twig file, or point it to your own defined library.") . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function twitter_profile_widget_theme() {
+  // Define a template path for individual feed items.
+  return [
+    'twitter_profile_widget' => [
+      'template' => 'twitter-profile-widget',
+      'variables' => [
+        'headline' => NULL,
+        'tweets' => NULL,
+        'view_all' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function twitter_profile_widget_block_content_view_alter(array &$build, BlockContentInterface $entity, EntityViewDisplayInterface $display) {
+  // Add the 'max age' cache for render cache of twitter widget blocks.
+  if ($entity->bundle() == 'twitter_widget') {
+    $max_age = \Drupal::config('twitter_profile_widget.settings')
+      ->get('twitter_widget_cache_time');
+    $cache_permanent = empty($build['#cache']['max-age']) || $build['#cache']['max-age'] === Cache::PERMANENT;
+    if ($cache_permanent || $max_age < $build['#cache']['max-age']) {
+      $build['#cache']['max-age'] = $max_age;
+      $build['#cache']['tags'][] = 'twitter_profile_widget';
+    }
+  }
+}

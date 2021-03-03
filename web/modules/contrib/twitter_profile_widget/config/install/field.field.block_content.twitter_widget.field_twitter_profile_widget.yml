@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.twitter_widget
+    - field.storage.block_content.field_twitter_profile_widget
+  module:
+    - twitter_profile_widget
+id: block_content.twitter_widget.field_twitter_profile_widget
+field_name: field_twitter_profile_widget
+entity_type: block_content
+bundle: twitter_widget
+label: 'Twitter Profile Widget'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: twitter_widget

@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: twitter_widget
+label: 'Twitter Widget'
+revision: 1
+description: 'Configure individual Twitter feeds by account handle & timeline list.'

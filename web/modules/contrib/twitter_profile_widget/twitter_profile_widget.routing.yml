@@ -1,0 +1,6 @@
+twitter_profile_widget.admin_settings:
+  path: '/admin/config/media/twitter_profile_widget'
+  defaults:
+    _form: '\Drupal\twitter_profile_widget\Form\SettingsForm'
+  requirements:
+    _permission: 'administer twitter widget entities'

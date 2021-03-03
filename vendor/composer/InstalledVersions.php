@@ -29,7 +29,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'ae4e03053be8b38e64b623ee4bdcd542cef42c87',
+    'reference' => 'c5f9cbb14b59985b8a16fc45432dfc37972ab008',
     'name' => 'pantheon-systems/example-drops-8-composer',
   ),
   'versions' => 
@@ -378,6 +378,15 @@ private static $installed = array (
       array (
         0 => '8.9.13',
       ),
+    ),
+    'drupal/block_class' => 
+    array (
+      'pretty_version' => '1.3.0',
+      'version' => '1.3.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '8.x-1.3',
     ),
     'drupal/block_content' => 
     array (
@@ -1632,6 +1641,15 @@ private static $installed = array (
       ),
       'reference' => '8.x-2.9',
     ),
+    'drupal/twitter_profile_widget' => 
+    array (
+      'pretty_version' => '3.0.1',
+      'version' => '3.0.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '3.0.1',
+    ),
     'drupal/unpublished_node_permissions' => 
     array (
       'pretty_version' => '1.1.0',
@@ -1679,6 +1697,15 @@ private static $installed = array (
       array (
       ),
       'reference' => '8.x-3.6',
+    ),
+    'drupal/views_bulk_operations' => 
+    array (
+      'pretty_version' => '3.10.0',
+      'version' => '3.10.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '8.x-3.10',
     ),
     'drupal/views_conditional' => 
     array (
@@ -1996,7 +2023,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'ae4e03053be8b38e64b623ee4bdcd542cef42c87',
+      'reference' => 'c5f9cbb14b59985b8a16fc45432dfc37972ab008',
     ),
     'pantheon-systems/quicksilver-pushback' => 
     array (

@@ -1,0 +1,17 @@
+name: Twitter Profile Widget
+type: module
+description: Provides Twitter feeds to a site via configuration entities.
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: Twitter
+configure: twitter_profile_widget.settings
+dependencies:
+  - drupal:system (>=8.1)
+  - drupal:block_content (>=8.1)
+
+
+
+# Information added by Drupal.org packaging script on 2021-01-19
+version: '3.0.1'
+project: 'twitter_profile_widget'
+datestamp: 1611089106
