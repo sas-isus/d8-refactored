@@ -1,18 +1,16 @@
 <?php
 
-namespace Drupal\features_ui\Tests;
+namespace Drupal\Tests\features_ui\Functional;
 
 use Drupal\features\FeaturesBundleInterface;
 use Drupal\Tests\BrowserTestBase;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Tests configuring bundles.
  *
  * @group features_ui
  */
-class FeaturesBundleUITest extends BrowserTestBase {
-  use StringTranslationTrait;
+class FeaturesBundleUiTest extends BrowserTestBase {
 
   /**
    * The variable.
@@ -25,7 +23,12 @@ class FeaturesBundleUITest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['block', 'features', 'features_ui'];
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected static $modules = ['block', 'features', 'features_ui'];
 
   /**
    * The features bundle storage.
@@ -37,11 +40,15 @@ class FeaturesBundleUITest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $this->bundleStorage = \Drupal::entityTypeManager()->getStorage('features_bundle');
 
-    $admin_user = $this->createUser(['administer site configuration', 'export configuration', 'administer modules']);
+    $admin_user = $this->createUser([
+      'administer site configuration',
+      'export configuration',
+      'administer modules',
+    ]);
     $this->drupalLogin($admin_user);
     $this->drupalPlaceBlock('local_actions_block');
   }
@@ -96,7 +103,7 @@ class FeaturesBundleUITest extends BrowserTestBase {
       'types[config][user_role]' => FALSE,
       'curated' => TRUE,
       'module[namespace]' => FALSE,
-    ], $this->t('Save settings'));
+    ], 'Save settings');
 
     // Check form results.
     $this->drupalGet('admin/config/development/features/bundle/_exclude/default');
@@ -147,7 +154,7 @@ class FeaturesBundleUITest extends BrowserTestBase {
     $this->assertNoFieldChecked('edit-enabled-exclude', 'Exclude disabled');
     $this->drupalPostForm(NULL, [
       'enabled[exclude]' => TRUE,
-    ], $this->t('Save settings'));
+    ], 'Save settings');
     $this->assertFieldChecked('edit-enabled-exclude', 'Exclude enabled');
 
     // Check new settings.
@@ -168,7 +175,7 @@ class FeaturesBundleUITest extends BrowserTestBase {
       'types[config][user_role]' => FALSE,
       'curated' => TRUE,
       'module[namespace]' => FALSE,
-    ], $this->t('Save settings'));
+    ], 'Save settings');
 
     // Check form results.
     $this->drupalGet('admin/config/development/features/bundle/_exclude/default');

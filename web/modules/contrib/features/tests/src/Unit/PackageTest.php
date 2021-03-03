@@ -12,6 +12,53 @@ use PHPUnit\Framework\TestCase;
 class PackageTest extends TestCase {
 
   /**
+   * @covers ::setDependencies
+   */
+  public function testSetDependencies() {
+    $package = new Package('test_feature', []);
+
+    $this->assertEquals([], $package->getDependencies());
+    $package->setDependencies([
+      'some_module',
+      'my_module',
+      'my_module',
+      'test_feature',
+    ]);
+    // Test that duplicates are removed, results sorted, and the package cannot
+    /// require itself.
+    $expected = [
+      'my_module',
+      'some_module',
+    ];
+    $this->assertEquals($expected, $package->getDependencies());
+  }
+
+  /**
+   * @covers ::appendDependency
+   */
+  public function testAppendDependency() {
+    $package = new Package('test_feature', []);
+
+    $this->assertEquals([], $package->getDependencies());
+    $dependencies = [
+      'some_module',
+      'my_module',
+      'my_module',
+      'test_feature',
+    ];
+    foreach ($dependencies as $dependency) {
+      $package->appendDependency($dependency);
+    }
+    // Test that duplicates are removed, results sorted, and the package cannot
+    /// require itself.
+    $expected = [
+      'my_module',
+      'some_module',
+    ];
+    $this->assertEquals($expected, $package->getDependencies());
+  }
+
+  /**
    * @covers ::setFeaturesInfo
    */
   public function testSetFeaturesInfo() {

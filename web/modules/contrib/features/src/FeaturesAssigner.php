@@ -72,6 +72,13 @@ class FeaturesAssigner implements FeaturesAssignerInterface {
   protected $currentBundle;
 
   /**
+   * The name of the currently active installation profile.
+   *
+   * @var string
+   */
+  protected $installProfile;
+
+  /**
    * Constructs a new FeaturesAssigner object.
    *
    * @param \Drupal\features\FeaturesManagerInterface $features_manager
@@ -84,13 +91,16 @@ class FeaturesAssigner implements FeaturesAssignerInterface {
    *   The configuration factory.
    * @param \Drupal\Core\Config\StorageInterface $config_storage
    *   The configuration factory.
+   * @param string $install_profile
+   *   The name of the currently active installation profile.
    */
-  public function __construct(FeaturesManagerInterface $features_manager, PluginManagerInterface $assigner_manager, EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, StorageInterface $config_storage) {
+  public function __construct(FeaturesManagerInterface $features_manager, PluginManagerInterface $assigner_manager, EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, StorageInterface $config_storage, $install_profile) {
     $this->featuresManager = $features_manager;
     $this->assignerManager = $assigner_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->configFactory = $config_factory;
     $this->configStorage = $config_storage;
+    $this->installProfile = $install_profile;
     $this->bundles = $this->getBundleList();
     $this->currentBundle = $this->getBundle(FeaturesBundleInterface::DEFAULT_BUNDLE);
     // Ensure bundle information is fresh.
@@ -177,6 +187,7 @@ class FeaturesAssigner implements FeaturesAssignerInterface {
    *   configuration.
    *
    * @return \Drupal\features\FeaturesAssignmentMethodInterface
+   *   The package assignment method instance.
    */
   protected function getAssignmentMethodInstance($method_id) {
     if (!isset($this->methods[$method_id])) {
@@ -294,7 +305,7 @@ class FeaturesAssigner implements FeaturesAssignerInterface {
     if (!$default) {
       // If we don't have the default installed, generate it from the install
       // config file.
-      $ext_storage = new ExtensionInstallStorage($this->configStorage);
+      $ext_storage = new ExtensionInstallStorage($this->configStorage, ExtensionInstallStorage::CONFIG_INSTALL_DIRECTORY, ExtensionInstallStorage::DEFAULT_COLLECTION, TRUE, $this->installProfile);
       $record = $ext_storage->read('features.bundle.default');
       $bundle_storage = $this->entityTypeManager->getStorage('features_bundle');
       $default = $bundle_storage->createFromStorageRecord($record);

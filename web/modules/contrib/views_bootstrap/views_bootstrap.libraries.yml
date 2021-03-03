@@ -17,3 +17,7 @@ tabs:
     - core/jquery.once
     - core/drupal
     - core/drupalSettings
+cards:
+  css:
+    theme:
+      css/cards.css: {}

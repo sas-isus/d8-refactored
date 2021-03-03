@@ -57,7 +57,7 @@ class FeaturesAssignerTest extends KernelTestBase {
       ->getStorage('features_bundle');
     $bundle = $bundle_storage->load('test');
     $this->assertNotNull($bundle, "Features bundle doesn't exist");
-    $this->assertContains(
+    $this->assertStringContainsString(
       'Auto-generated bundle',
       $bundle->getDescription(),
       "Features bundle not auto-created");

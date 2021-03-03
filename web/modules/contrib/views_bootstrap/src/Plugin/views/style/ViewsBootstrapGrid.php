@@ -44,7 +44,6 @@ class ViewsBootstrapGrid extends StylePluginBase {
       $class = $this->options[$type . '_class_custom'];
       if ($this->usesFields() && $this->view->field) {
         $class = strip_tags($this->tokenizeValue($class, $result_index));
-        $class = Html::cleanCssIdentifier($class);
       }
 
       $classes = explode(' ', $class);

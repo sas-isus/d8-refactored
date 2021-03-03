@@ -24,6 +24,7 @@ function views_bootstrap_help($route_name, RouteMatchInterface $route_match) {
       $output .= '<p>' . t('<a href=":views">Create a view</a> using one of the following styles:', [':views' => '/admin/structure/views/add']) . '</p>';
       $output .= '<ul>';
       $output .= '<li>' . t('<a href=":docs">Accordion</a>', [':docs' => 'https://www.drupal.org/docs/contributed-modules/views-bootstrap-for-bootstrap-3/accordion']) . '</li>';
+      $output .= '<li>' . t('<a href=":docs">Cards</a>', [':docs' => 'https://www.drupal.org/docs/contributed-modules/views-bootstrap-for-bootstrap-3/cards']) . '</li>';
       $output .= '<li>' . t('<a href=":docs">Carousel</a>', [':docs' => 'https://www.drupal.org/docs/contributed-modules/views-bootstrap-for-bootstrap-3/carousel']) . '</li>';
       $output .= '<li>' . t('<a href=":docs">Dropdown</a>', [':docs' => 'https://www.drupal.org/docs/contributed-modules/views-bootstrap-for-bootstrap-3/dropdown']) . '</li>';
       $output .= '<li>' . t('<a href=":docs">Grid</a>', [':docs' => 'https://www.drupal.org/docs/contributed-modules/views-bootstrap-for-bootstrap-3/grid']) . '</li>';

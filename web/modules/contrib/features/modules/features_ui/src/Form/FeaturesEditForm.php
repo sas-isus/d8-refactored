@@ -210,7 +210,7 @@ class FeaturesEditForm extends FormBase {
 
     $form = [
       '#show_operations' => FALSE,
-      '#prefix' => '<div id="features-edit-wrapper">',
+      '#prefix' => '<div id="features-edit-wrapper" class="features-edit-wrapper clearfix">',
       '#suffix' => '</div>',
     ];
 
@@ -219,7 +219,7 @@ class FeaturesEditForm extends FormBase {
       '#title' => $this->t('General Information'),
       '#tree' => FALSE,
       '#weight' => 2,
-      '#prefix' => "<div id='features-export-info'>",
+      '#prefix' => '<div id="features-export-info" class="features-export-info">',
       '#suffix' => '</div>',
     ];
 
@@ -271,7 +271,7 @@ class FeaturesEditForm extends FormBase {
 
     $form['info']['version'] = [
       '#title' => $this->t('Version'),
-      '#description' => $this->t('Examples: 8.x-1.0, 8.x-1.0-beta1'),
+      '#description' => $this->t('Examples: 8.x-1.0, 3.1.4'),
       '#type' => 'textfield',
       '#required' => FALSE,
       '#default_value' => $this->package->getVersion(),
@@ -305,6 +305,9 @@ class FeaturesEditForm extends FormBase {
       '#ajax' => [
         'callback' => '::updateForm',
         'wrapper' => 'features-edit-wrapper',
+      ],
+      '#wrapper_attributes' => [
+        'class' => ['features-ui-conflicts'],
       ],
     ];
 
@@ -427,26 +430,31 @@ class FeaturesEditForm extends FormBase {
       '#title' => $this->t('Components'),
       '#description' => $this->t('Expand each component section and select which items should be included in this feature export.'),
       '#tree' => FALSE,
-      '#prefix' => "<div id='features-export-wrapper'>",
+      '#prefix' => '<div id="features-export-wrapper" class="features-export-wrapper js-features-export-wrapper">',
       '#suffix' => '</div>',
       '#weight' => 1,
     ];
 
     // Filter field used in javascript, so javascript will unhide it.
     $element['features_filter_wrapper'] = [
-      '#type' => 'fieldset',
+      '#type' => 'fieldgroup',
       '#title' => $this->t('Filters'),
+      '#title_display' => 'invisible',
       '#tree' => FALSE,
-      '#prefix' => "<div id='features-filter' class='element-invisible'>",
+      '#prefix' => '<div id="features-filter" class="features-filter js-features-filter visually-hidden">',
       '#suffix' => '</div>',
       '#weight' => -10,
+      '#attributes' => [
+        'class' => ['features-filter__fieldset', 'container-inline'],
+      ],
     ];
     $element['features_filter_wrapper']['features_filter'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Search'),
       '#hidden' => TRUE,
       '#default_value' => '',
-      '#suffix' => "<span class='features-filter-clear'>" . $this->t('Clear') . "</span>",
+      '#attributes' => ['class' => ['js-features-filter-input']],
+      '#suffix' => "<span class='features-filter-clear js-features-filter-clear'>" . $this->t('Clear') . "</span>",
     ];
     $element['features_filter_wrapper']['checkall'] = [
       '#type' => 'checkbox',
@@ -454,7 +462,7 @@ class FeaturesEditForm extends FormBase {
       '#hidden' => TRUE,
       '#title' => $this->t('Select all'),
       '#attributes' => [
-        'class' => ['features-checkall'],
+        'class' => ['features-checkall', 'js-features-checkall'],
       ],
     ];
 
@@ -467,7 +475,7 @@ class FeaturesEditForm extends FormBase {
     foreach ($export['components'] as $component => $component_info) {
 
       $component_items_count = count($component_info['_features_options']['sources']);
-      $label = new FormattableMarkup('@component (<span class="component-count">@count</span>)',
+      $label = new FormattableMarkup('@component (<span class="component-count js-component-count">@count</span>)',
         [
           '@component' => $config_types[$component],
           '@count' => $component_items_count,
@@ -492,8 +500,13 @@ class FeaturesEditForm extends FormBase {
           '#title' => $label,
           '#tree' => TRUE,
           '#open' => FALSE,
-          '#attributes' => ['class' => ['features-export-component']],
-          '#prefix' => "<div class='features-export-parent component-$component'>",
+          '#attributes' => [
+            'class' => [
+              'features-export-component',
+              'js-features-export-component',
+            ],
+          ],
+          '#prefix' => "<div class='features-export-parent js-features-export-parent js-component--name-$component'>",
         ];
         $element[$component]['sources']['selected'] = [
           '#type' => 'checkboxes',
@@ -501,12 +514,12 @@ class FeaturesEditForm extends FormBase {
           '#options' => $this->domDecodeOptions($component_info['_features_options']['sources']),
           '#default_value' => $this->domDecodeOptions($component_info['_features_selected']['sources'], FALSE),
           '#attributes' => ['class' => ['component-select']],
-          '#prefix' => "<span class='component-select'>",
+          '#prefix' => "<span class='components-select js-components-select'>",
           '#suffix' => '</span>',
         ];
 
         $element[$component]['before-list'] = [
-          '#markup' => "<div class='component-list features-export-list $extra_class'>",
+          '#markup' => "<div class='component-list js-component-list features-export-list js-features-export-list $extra_class'>",
         ];
 
         foreach ($sections as $section) {
@@ -514,8 +527,10 @@ class FeaturesEditForm extends FormBase {
             '#type' => 'checkboxes',
             '#options' => !empty($component_info['_features_options'][$section]) ?  $this->domDecodeOptions($component_info['_features_options'][$section]) : [],
             '#default_value' => !empty($component_info['_features_selected'][$section]) ? $this->domDecodeOptions($component_info['_features_selected'][$section], FALSE) : [],
-            '#attributes' => ['class' => ['component-' . $section]],
-            '#prefix' => "<span class='component-$section'>",
+            '#attributes' => [
+              'class' => ['component-' . $section, 'js-component-' . $section],
+            ],
+            '#prefix' => "<span class='components-$section js-components-$section'>",
             '#suffix' => '</span>',
           ];
         }
@@ -538,15 +553,15 @@ class FeaturesEditForm extends FormBase {
       '#type' => 'fieldset',
       '#title' => $this->t('Legend'),
       '#tree' => FALSE,
-      '#prefix' => "<div id='features-legend'>",
+      '#prefix' => '<div id="features-legend">',
       '#suffix' => '</div>',
     ];
     $element['features_legend']['legend'] = [
       '#markup' =>
-        "<span class='component-included'>" . $this->t('Normal') . "</span> " .
-        "<span class='component-added'>" . $this->t('Added') . "</span> " .
-        "<span class='component-detected'>" . $this->t('Auto detected') . "</span> " .
-        "<span class='component-conflict'>" . $this->t('Conflict') . "</span> ",
+        "<span class='features-legend-component features-legend-component--included'>" . $this->t('Normal') . "</span> " .
+        "<span class='features-legend-component features-legend-component--added'>" . $this->t('Added') . "</span> " .
+        "<span class='features-legend-component features-legend-component--detected'>" . $this->t('Auto detected') . "</span> " .
+        "<span class='features-legend-component features-legend-component--conflict'>" . $this->t('Conflict') . "</span> ",
     ];
 
     return $element;

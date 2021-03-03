@@ -61,6 +61,13 @@ abstract class FeaturesGenerationMethodBase implements FeaturesGenerationMethodI
     // here such as adding a core_incompatible key. Instead parse the file
     // directly.
     $existing_info = Yaml::decode(file_get_contents($info_file_uri));
+
+    // Remove the 'core' property if present since it has been replaced with
+    // 'core_version_requirement'.
+    if (isset($existing_info['core'])) {
+      unset($existing_info['core']);
+    }
+
     return Yaml::encode($this->featuresManager->mergeInfoArray($existing_info, $package_info));
   }
 

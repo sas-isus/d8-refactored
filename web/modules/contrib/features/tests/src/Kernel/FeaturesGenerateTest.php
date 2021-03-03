@@ -19,7 +19,12 @@ class FeaturesGenerateTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['features', 'system'];
+  public static $modules = [
+    'features',
+    'node',
+    'system',
+    'user',
+  ];
 
   /**
    * @var \Drupal\features\FeaturesManagerInterface
@@ -87,7 +92,7 @@ class FeaturesGenerateTest extends KernelTestBase {
     $expected_info = [
       "name" => "My test package",
       "type" => "module",
-      "core" => "8.x",
+      "core_version_requirement" => "^8.9 || ^9",
     ];
     $info = Yaml::decode($archive->extractInString(self::PACKAGE_NAME . '/' . self::PACKAGE_NAME . '.info.yml'));
     $this->assertEquals($expected_info, $info, 'Incorrect info file generated');
@@ -147,7 +152,7 @@ class FeaturesGenerateTest extends KernelTestBase {
     $expected_info = [
       "name" => "My test package",
       "type" => "module",
-      "core" => "8.x",
+      "core_version_requirement" => "^8.9 || ^9",
     ];
     $info = Yaml::decode(file_get_contents($info_file_uri));
     $this->assertEquals($expected_info, $info, 'Incorrect info file generated');
@@ -177,8 +182,8 @@ class FeaturesGenerateTest extends KernelTestBase {
     $expected_info = [
       "name" => "My test package",
       "type" => "module",
-      "core" => "8.x",
-      "dependencies" => ["node", "user"],
+      "core_version_requirement" => "^8.9 || ^9",
+      "dependencies" => ["drupal:node", "drupal:user"],
       "mykey" => "test value",
     ];
     $info = Yaml::decode(file_get_contents($info_file_uri));
@@ -208,8 +213,8 @@ class FeaturesGenerateTest extends KernelTestBase {
     $expected_info = [
       "name" => "My test package",
       "type" => "module",
-      "core" => "8.x",
-      "dependencies" => ["node", "user"],
+      "core_version_requirement" => "^8.9 || ^9",
+      "dependencies" => ["drupal:node", "drupal:user"],
       "mykey" => "test value",
     ];
     $info = Yaml::decode($archive->extractInString(self::PACKAGE_NAME . '/' . self::PACKAGE_NAME . '.info.yml'));

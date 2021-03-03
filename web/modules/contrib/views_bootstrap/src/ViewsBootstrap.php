@@ -30,6 +30,12 @@ class ViewsBootstrap {
       ],
       'file' => 'views_bootstrap.theme.inc',
     ];
+    $hooks['views_bootstrap_cards'] = [
+      'preprocess functions' => [
+        'template_preprocess_views_bootstrap_cards',
+        'template_preprocess_views_view_cards',
+      ],
+    ];
     $hooks['views_bootstrap_grid'] = [
       'preprocess functions' => [
         'template_preprocess_views_bootstrap_grid',

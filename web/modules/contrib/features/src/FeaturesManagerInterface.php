@@ -106,7 +106,7 @@ interface FeaturesManagerInterface {
    *   - 'name': human readable name of the package such as 'Example Article'.
    *   - 'description': description of the package.
    *   - 'type': type of Drupal project ('module').
-   *   - 'core': Drupal core compatibility ('8.x').
+   *   - 'coreVersionRequirement': Drupal core compatibility ('^8.9 | ^9').
    *   - 'dependencies': array of module dependencies.
    *   - 'themes': array of names of themes to install.
    *   - 'config': array of names of configuration items.
@@ -127,7 +127,7 @@ interface FeaturesManagerInterface {
    *   - 'bundle': name of the features bundle this package belongs to.
    *   - 'extension': \Drupal\Core\Extension\Extension object.
    *   - 'info': the original info array from an existing package.
-   *   - 'config_info': the original config of the module.
+   *   - 'configInfo': the original config of the module.
    *
    * @see \Drupal\features\FeaturesManagerInterface::setPackages()
    */

@@ -6,7 +6,7 @@ package: Test
 dependencies:
   - features:features
 
-# Information added by Drupal.org packaging script on 2020-06-01
-version: '8.x-3.11'
+# Information added by Drupal.org packaging script on 2021-02-09
+version: '8.x-3.12'
 project: 'features'
-datestamp: 1591023156
+datestamp: 1612830533

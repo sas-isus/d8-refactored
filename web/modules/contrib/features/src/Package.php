@@ -12,28 +12,28 @@ use Drupal\Core\Extension\Extension;
 class Package {
 
   /**
-   * The variable.
+   * The package machine name.
    *
    * @var string
    */
   protected $machineName = '';
 
   /**
-   * The variable.
+   * The package name.
    *
    * @var string
    */
   protected $name = '';
 
   /**
-   * The variable.
+   * The package description.
    *
    * @var string
    */
   protected $description = '';
 
   /**
-   * The variable.
+   * The package version.
    *
    * @var string
    * @todo This could be fetched from the extension object.
@@ -41,14 +41,16 @@ class Package {
   protected $version = '';
 
   /**
-   * The variable.
+   * The package core version requirement..
    *
    * @var string
+   * @todo: Make coreVersionRequirement a property of the
+   *   FeaturesBundleInterface object. For now, hard-code it.
    */
-  protected $core = '8.x';
+  protected $coreVersionRequirement = '^8.9 || ^9';
 
   /**
-   * The variable.
+   * The package type.
    *
    * @var string
    * @todo This could be fetched from the extension object.
@@ -63,42 +65,42 @@ class Package {
   protected $themes = [];
 
   /**
-   * The variable.
+   * The package bundle.
    *
    * @var string
    */
   protected $bundle;
 
   /**
-   * The variable.
+   * A list of configuration items excluded from the package.
    *
    * @var string[]
    */
   protected $excluded = [];
 
   /**
-   * The variable.
+   * A list of configuration items required to be included in the package.
    *
    * @var string[]|bool
    */
   protected $required = FALSE;
 
   /**
-   * The variable.
+   * The package info array.
    *
    * @var array
    */
   protected $info = [];
 
   /**
-   * The variable.
+   * The package depenndencies.
    *
    * @var string[]
    */
   protected $dependencies = [];
 
   /**
-   * The variable.
+   * The package status.
    *
    * @var int
    * @todo This could be fetched from the extension object.
@@ -106,14 +108,14 @@ class Package {
   protected $status;
 
   /**
-   * The variable.
+   * The package state.
    *
    * @var int
    */
   protected $state;
 
   /**
-   * The variable.
+   * The package directory.
    *
    * @var string
    * @todo This could be fetched from the extension object.
@@ -121,7 +123,7 @@ class Package {
   protected $directory;
 
   /**
-   * The variable.
+   * Files included in the package.
    *
    * @var string[]
    */
@@ -135,14 +137,14 @@ class Package {
   protected $extension;
 
   /**
-   * The variable.
+   * Configuration items included in the package.
    *
    * @var string[]
    */
   protected $config = [];
 
   /**
-   * The variable.
+   * Original configuration items included in the package.
    *
    * @var string[]
    */
@@ -311,8 +313,8 @@ class Package {
   /**
    * @return string
    */
-  public function getCore() {
-    return $this->core;
+  public function getCoreVersionRequirement() {
+    return $this->coreVersionRequirement;
   }
 
   /**
@@ -484,11 +486,22 @@ class Package {
   }
 
   /**
+   * Sets the dependencies of a package.
+   *
+   * Ensures that dependencies are unique and do not include the package itself.
+   *
    * @param \string[] $dependencies
    *
    * @return $this
    */
   public function setDependencies(array $dependencies) {
+    $dependencies = array_unique($dependencies);
+    // Package shouldn't be dependent on itself.
+    $full_name = $this->getFullName();
+    if (in_array($full_name, $dependencies)) {
+      unset($dependencies[array_search($full_name, $dependencies)]);
+    }
+    sort($dependencies);
     $this->dependencies = $dependencies;
     return $this;
   }
@@ -499,8 +512,9 @@ class Package {
    * @return $this
    */
   public function appendDependency($dependency) {
-    $this->dependencies[] = $dependency;
-    return $this;
+    $dependencies = $this->getDependencies();
+    array_push($dependencies, $dependency);
+    return $this->setDependencies($dependencies);
   }
 
   /**
@@ -538,10 +552,10 @@ class Package {
   }
 
   /**
-   * @param string $core
+   * @param string $coreVersionRequirement
    */
-  public function setCore($core) {
-    $this->core = $core;
+  public function setCoreVersionRequirement($coreVersionRequirement) {
+    $this->coreVersionRequirement = $coreVersionRequirement;
   }
 
   /**

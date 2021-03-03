@@ -67,6 +67,49 @@ function template_preprocess_views_bootstrap_accordion(array &$vars) {
 }
 
 /**
+ * Prepares variables for views cards templates.
+ *
+ * Default template: views-bootstrap-cards.html.twig.
+ *
+ * @param array $vars
+ *   An associative array containing:
+ *   - view: A ViewExecutable object.
+ *   - rows: The raw row data.
+ */
+function template_preprocess_views_bootstrap_cards(array &$vars) {
+  $view = $vars['view'];
+  $vars['id'] = ViewsBootstrap::getUniqueId($view);
+  $wrapper_attributes = ['class' => ['card-group']];
+  $classes = array_filter(explode(' ', $view->style_plugin->options['card_group_class_custom']));
+  foreach ($classes as &$class) {
+    $class = Html::cleanCssIdentifier($class);
+  }
+  if (!empty($classes)) {
+    $wrapper_attributes['class'] = array_merge($wrapper_attributes['class'], $classes);
+  }
+  $vars['attributes'] = new Attribute($wrapper_attributes);
+
+  // Card rows.
+  $image = $view->style_plugin->options['card_image_field'];
+  $title = $view->style_plugin->options['card_title_field'];
+  $content = $view->style_plugin->options['card_content_field'];
+
+  foreach ($vars['rows'] as $id => $row) {
+    $vars['rows'][$id] = [];
+    $vars['rows'][$id]['image'] = $view->style_plugin->getField($id, $image);
+    $vars['rows'][$id]['title'] = $view->style_plugin->getField($id, $title);
+    $vars['rows'][$id]['content'] = $view->style_plugin->getField($id, $content);
+    $row_attributes = ['class' => ['card']];
+    // Add custom card classes.
+    $row_class = array_filter(explode(' ', $view->style_plugin->getCustomClass($id, 'card')));
+    if (!empty($row_class)) {
+      $row_attributes['class'] = array_merge($row_attributes['class'], $row_class);
+    }
+    $vars['rows'][$id]['attributes'] = new Attribute($row_attributes);
+  }
+}
+
+/**
  * Prepares variables for views carousel template.
  *
  * Default template: views-bootstrap-carousel.html.twig.

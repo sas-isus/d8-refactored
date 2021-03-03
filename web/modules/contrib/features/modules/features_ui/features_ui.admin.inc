@@ -6,79 +6,6 @@
  */
 
 use Drupal\Core\Render\Element;
-use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Component\Utility\Html;
-
-/**
- * Returns HTML for the features listing form.
- *
- * @param array $variables
- *   An associative array containing:
- *   - form: A render element representing the form.
- *
- * @ingroup themeable
- */
-function theme_features_listing(array $variables) {
-  $form = $variables['form'];
-  $renderer = \Drupal::service('renderer');
-
-  // Individual table headers.
-  $rows = [];
-  // Iterate through all the features, which are children of this element.
-  foreach (Element::children($form) as $key) {
-    // Stick the key into $module for easier access.
-    $element = $form[$key];
-    // Create the row for the table.
-    $row = [];
-    // Add the checkbox into the first cell.
-    unset($element['enable']['#title']);
-
-    $row[] = ['class' => ['checkbox'], 'data' => $renderer->render($element['enable'])];
-
-    // Add the module label and expand/collapse functionalty.
-    $id = Html::getUniqueId('feature-' . $key);
-    $col2 = new FormattableMarkup('<label id="@id" for="@for" class="module-name table-filter-text-source">@name</label>',
-      [
-        '@id' => $id,
-        '@for' => $element['enable']['#id'],
-        '@name' => $renderer->render($element['name']),
-      ]
-    );
-    $row[] = ['class' => ['module'], 'data' => $col2];
-
-    $row[] = ['class' => ['machine_name'], 'data' => $renderer->render($element['machine_name'])];
-
-    $description = t('@details', ['@details' => $renderer->render($element['details'])]);
-    $details = [
-      '#type' => 'details',
-      '#title' => new FormattableMarkup('<span class="text">@desc</span>', ['@desc' => $renderer->render($element['description'])]),
-      '#attributes' => ['id' => $element['enable']['#id'] . '-description'],
-      '#description' => $description,
-    ];
-    $row[] = [
-      'class' => ['description', 'expand'],
-      'data' => $renderer->render($details),
-    ];
-    $row[] = [
-      'class' => ['feature-version'],
-      'data' => $renderer->render($element['version']),
-    ];
-    $row[] = [
-      'class' => ['feature-state'],
-      'data' => $renderer->render($element['state']),
-    ];
-
-    $rows[] = ['data' => $row];
-  }
-
-  $table = [
-    '#type' => 'tableselect',
-    '#header' => $form['#header'],
-    '#options' => $rows,
-    '#empty' => t('No Features packages available.'),
-  ];
-  return $renderer->render($table);
-}
 
 /**
  * Prepares variables for package assignment configuration form.
@@ -149,27 +76,4 @@ function template_preprocess_features_assignment_configure_form(array &$variable
   unset($form['actions']);
   $form['table'] = $table;
   $form['actions'] = $actions;
-}
-
-/**
- * Themes individual items in an item list.
- */
-function theme_features_items(array $variables) {
-  $items = $variables['items'];
-
-  $list = [];
-  foreach ($items as $item) {
-    $class = !empty($item['class']) ? $item['class'] : '';
-    $list[] = '<span class="features-item ' . $class . '" title="' . $item['name'] . '">' . $item['label'] . '</span>';
-  }
-
-  return '<span class="features-item-list">' . implode(' ', $list) . '</span>';
-}
-
-/**
- * Themes the assignment form.
- */
-function theme_assignment_form(array $variables) {
-  $renderer = \Drupal::service('renderer');
-  return $renderer->render($variables['form']);
 }

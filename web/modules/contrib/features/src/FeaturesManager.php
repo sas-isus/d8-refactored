@@ -11,8 +11,10 @@ use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Extension\Dependency;
 use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ExtensionDiscovery;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\config_update\ConfigRevertInterface;
@@ -71,6 +73,13 @@ class FeaturesManager implements FeaturesManagerInterface {
    * @var \Drupal\config_update\ConfigRevertInterface
    */
   protected $configReverter;
+
+  /**
+   * The module extension list service.
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
+   */
+  protected $moduleExtensionList;
 
   /**
    * The Features settings.
@@ -138,8 +147,10 @@ class FeaturesManager implements FeaturesManagerInterface {
    *   The module handler.
    * @param \Drupal\config_update\ConfigRevertInterface $config_reverter
    *   The config revert interface.
+   * @param \Drupal\Core\Extension\ModuleExtensionList $module_extension_list
+   *   The module extension list service.
    */
-  public function __construct($root, EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, StorageInterface $config_storage, ConfigManagerInterface $config_manager, ModuleHandlerInterface $module_handler, ConfigRevertInterface $config_reverter) {
+  public function __construct($root, EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, StorageInterface $config_storage, ConfigManagerInterface $config_manager, ModuleHandlerInterface $module_handler, ConfigRevertInterface $config_reverter, ModuleExtensionList $module_extension_list) {
     $this->root = $root;
     $this->entityTypeManager = $entity_type_manager;
     $this->configStorage = $config_storage;
@@ -147,6 +158,7 @@ class FeaturesManager implements FeaturesManagerInterface {
     $this->moduleHandler = $module_handler;
     $this->configFactory = $config_factory;
     $this->configReverter = $config_reverter;
+    $this->moduleExtensionList = $module_extension_list;
     $this->settings = $config_factory->getEditable('features.settings');
     $this->extensionStorages = new FeaturesExtensionStoragesByDirectory($this->configStorage);
     $this->extensionStorages->addStorage(InstallStorage::CONFIG_INSTALL_DIRECTORY);
@@ -791,9 +803,8 @@ class FeaturesManager implements FeaturesManagerInterface {
               $dependency_set = FALSE;
               if ($dependency_package = $config_collection[$dependency_name]->getPackage()) {
                 $package_name = $bundle->getFullName($dependency_package);
-                // Package shouldn't be dependent on itself.
-                if ($package_name && array_key_exists($package_name, $packages) && $package_name != $package->getMachineName() && isset($module_list[$package_name])) {
-                  $package->setDependencies($this->mergeUniqueItems($package->getDependencies(), [$package_name]));
+                if ($package_name && array_key_exists($package_name, $packages) && isset($module_list[$package_name])) {
+                  $package->appendDependency($package_name);
                   $dependency_set = TRUE;
                 }
               }
@@ -803,7 +814,7 @@ class FeaturesManager implements FeaturesManagerInterface {
                 // No extension should depend on the install profile.
                 $package_name = $bundle->getFullName($package->getMachineName());
                 if ($extension_name != $package_name && $extension_name != $this->drupalGetProfile() && isset($module_list[$extension_name])) {
-                  $package->setDependencies($this->mergeUniqueItems($package->getDependencies(), [$extension_name]));
+                  $package->appendDependency($extension_name);
                 }
               }
             }
@@ -828,7 +839,7 @@ class FeaturesManager implements FeaturesManagerInterface {
   }
 
   /**
-   * Merges a set of new item into an array and sorts the result.
+   * Merges a set of new item into an array.
    *
    * Only unique values are retained.
    *
@@ -838,11 +849,10 @@ class FeaturesManager implements FeaturesManagerInterface {
    *   An array of new items to be merged in.
    *
    * @return array
-   *   The merged, sorted and unique items.
+   *   The merged and unique items.
    */
   protected function mergeUniqueItems(array $items, array $new_items) {
     $items = array_unique(array_merge($items, $new_items));
-    sort($items);
     return $items;
   }
 
@@ -870,22 +880,14 @@ class FeaturesManager implements FeaturesManagerInterface {
     if (!isset($bundle)) {
       $bundle = $this->getAssigner()->getBundle();
     }
+
     $package = new Package($machine_name, [
       'name' => isset($name) ? $name : ucwords(str_replace(['_', '-'], ' ', $machine_name)),
       'description' => $description,
       'type' => $type,
-      'core' => Drupal::CORE_COMPATIBILITY,
-      'dependencies' => [],
-      'themes' => [],
-      'config' => [],
       'status' => FeaturesManagerInterface::STATUS_DEFAULT,
-      'version' => '',
       'state' => FeaturesManagerInterface::STATE_DEFAULT,
-      'files' => [],
       'bundle' => $bundle->isDefault() ? '' : $bundle->getMachineName(),
-      'extension' => NULL,
-      'info' => [],
-      'configOrig' => [],
     ]);
 
     // If no extension was passed in, look for a match.
@@ -915,6 +917,32 @@ class FeaturesManager implements FeaturesManagerInterface {
   }
 
   /**
+   * Convert a Dependency object back to a string value.
+   *
+   * @param \Drupal\Core\Extension\Dependency $dependency
+   *   The dependency to convert.
+   * @return string
+   *   The normalized "project:name (constraint)" string.
+   */
+  protected function getDependencyString(Dependency $dependency) {
+    $dependency_name = $dependency->getName();
+    $project = $dependency->getProject();
+    if (empty($project)) {
+      $path = $this->moduleExtensionList->getPath($dependency_name);
+      // Handle project for core modules.
+      $project = (strpos($path, 'core/modules') === 0) ? 'drupal' : $dependency_name;
+      // Override with project key for contrib or custom modules.
+      $info = $this->moduleExtensionList->getExtensionInfo($dependency_name);
+      $project = isset($info['project']) ? $info['project'] : $project;
+    }
+    $new_dependency = $project . ':' . $dependency_name;
+    if ($constraint_string = $dependency->getConstraintString()) {
+      $new_dependency = $new_dependency . ' (' . $constraint_string . ')';
+    }
+    return $new_dependency;
+  }
+
+  /**
    * Generates and adds .info.yml files to a package.
    *
    * @param \Drupal\features\Package $package
@@ -925,7 +953,7 @@ class FeaturesManager implements FeaturesManagerInterface {
       'name' => $package->getName(),
       'description' => $package->getDescription(),
       'type' => $package->getType(),
-      'core' => $package->getCore(),
+      'core_version_requirement' => $package->getCoreVersionRequirement(),
       'dependencies' => $package->getDependencies(),
       'themes' => $package->getThemes(),
       'version' => $package->getVersion(),
@@ -1024,8 +1052,40 @@ class FeaturesManager implements FeaturesManagerInterface {
 
     $info = NestedArray::mergeDeep($info1, $info2);
 
-    // Process the dependencies and themes keys.
-    $keys = ['dependencies', 'themes'];
+    // Merge dependencies. Preserve constraints.
+    // Handle cases of mixed "project:module" and "module" dependencies.
+    $dependencies = [];
+    // First collect dependency list from info1.
+    if (!empty($info1['dependencies'])) {
+      foreach ($info1['dependencies'] as $dependency_string) {
+        $dependency = Dependency::createFromString($dependency_string);
+        $dependencies[$dependency->getName()] = $this->getDependencyString($dependency);
+      }
+    }
+    // Now merge dependencies from info2.
+    if (!empty($info2['dependencies'])) {
+      foreach ($info2['dependencies'] as $dependency_string) {
+        $dependency = Dependency::createFromString($dependency_string);
+        $dependency_name = $dependency->getName();
+        if (isset($dependencies[$dependency_name])) {
+          // Dependency already in list, so only overwrite if there is a constraint.
+          if ($dependency->getConstraintString()) {
+            $dependencies[$dependency_name] = $this->getDependencyString($dependency);
+          }
+        }
+        else {
+          // Wasn't in info1, so merge it into list.
+          $dependencies[$dependency_name] = $this->getDependencyString($dependency);
+        }
+      }
+    }
+    if (!empty($dependencies)) {
+      $info['dependencies'] = array_values($dependencies);
+      sort($info['dependencies']);
+    }
+
+    // Process themes keys.
+    $keys = ['themes'];
     foreach ($keys as $key) {
       if (isset($info[$key]) && is_array($info[$key])) {
         // NestedArray::mergeDeep() may produce duplicate values.

@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'b5c9b560ece4fa05b76c75a6594936c5c1232cdd',
+    'reference' => 'ae4e03053be8b38e64b623ee4bdcd542cef42c87',
     'name' => 'pantheon-systems/example-drops-8-composer',
   ),
   'versions' => 
@@ -40,12 +40,12 @@
     ),
     'behat/gherkin' => 
     array (
-      'pretty_version' => 'v4.7.2',
-      'version' => '4.7.2.0',
+      'pretty_version' => 'v4.7.3',
+      'version' => '4.7.3.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'd1ff9aa23bb280e8aee9118d42eec386d6f851f7',
+      'reference' => 'd5ae4616aeaa91daadbfb8446d9d17aae8d43cf7',
     ),
     'behat/mink' => 
     array (
@@ -109,7 +109,7 @@
       array (
         0 => '9999999-dev',
       ),
-      'reference' => '321c94325bde1813107f6cdf5737d07211d3ab15',
+      'reference' => 'be58c2a3ff5e73fb14dd496752d067812ea2ff0a',
     ),
     'commerceguys/addressing' => 
     array (
@@ -766,12 +766,12 @@
     ),
     'drupal/csv_serialization' => 
     array (
-      'pretty_version' => '1.4.0',
-      'version' => '1.4.0.0',
+      'pretty_version' => '2.0.0',
+      'version' => '2.0.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-1.4',
+      'reference' => '8.x-2.0',
     ),
     'drupal/ctools' => 
     array (
@@ -841,12 +841,12 @@
     ),
     'drupal/ds' => 
     array (
-      'pretty_version' => '3.9.0',
-      'version' => '3.9.0.0',
+      'pretty_version' => '3.10.0',
+      'version' => '3.10.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-3.9',
+      'reference' => '8.x-3.10',
     ),
     'drupal/dynamic_page_cache' => 
     array (
@@ -934,12 +934,12 @@
     ),
     'drupal/features' => 
     array (
-      'pretty_version' => '3.11.0',
-      'version' => '3.11.0.0',
+      'pretty_version' => '3.12.0',
+      'version' => '3.12.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-3.11',
+      'reference' => '8.x-3.12',
     ),
     'drupal/field' => 
     array (
@@ -1650,12 +1650,12 @@
     ),
     'drupal/views_bootstrap' => 
     array (
-      'pretty_version' => '3.5.0',
-      'version' => '3.5.0.0',
+      'pretty_version' => '3.6.0',
+      'version' => '3.6.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-3.5',
+      'reference' => '8.x-3.6',
     ),
     'drupal/views_conditional' => 
     array (
@@ -1914,12 +1914,12 @@
     ),
     'league/csv' => 
     array (
-      'pretty_version' => '8.2.3',
-      'version' => '8.2.3.0',
+      'pretty_version' => '9.5.0',
+      'version' => '9.5.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'd2aab1e7bde802582c3879acf03d92716577c76d',
+      'reference' => 'b348d09d0d258a4f068efb50a2510dc63101c213',
     ),
     'markbaker/complex' => 
     array (
@@ -1973,7 +1973,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'b5c9b560ece4fa05b76c75a6594936c5c1232cdd',
+      'reference' => 'ae4e03053be8b38e64b623ee4bdcd542cef42c87',
     ),
     'pantheon-systems/quicksilver-pushback' => 
     array (

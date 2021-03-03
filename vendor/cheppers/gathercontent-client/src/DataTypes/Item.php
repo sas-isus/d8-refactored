@@ -159,9 +159,16 @@ class Item extends Base
         $elements = [];
 
         foreach ($elementData as $element) {
+            if (empty($element)) {
+                continue;
+            }
             $class = ElementSimpleChoice::class;
             if (isset($element['file_id'])) {
                 $class = ElementSimpleFile::class;
+            }
+            if (!is_array($element)) {
+                $class = ElementSimpleText::class;
+                $element = ['value' => $element];
             }
             /** @var \Cheppers\GatherContent\DataTypes\ElementBase[] $elements */
             $elements[] = new $class($element);

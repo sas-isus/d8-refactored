@@ -15,6 +15,11 @@ class ElementTextMeta extends Base
     public $validation = [];
 
     /**
+     * @var array
+     */
+    public $repeatable = [];
+
+    /**
      * {@inheritdoc}
      */
     protected $unusedProperties = ['id'];
@@ -30,6 +35,7 @@ class ElementTextMeta extends Base
             [
                 'is_plain' => 'isPlain',
                 'validation' => 'validation',
+                'repeatable' => 'repeatable',
             ]
         );
 
