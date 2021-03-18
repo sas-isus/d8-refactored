@@ -64,6 +64,15 @@ class InfiniteScrollTest extends WebDriverTestBase {
     $this->assertSession()->waitForElement('css', '.node--type-page:nth-child(4)');
     $this->assertTotalNodes(6);
 
+    // Test loading a page past the first.
+    $this->createView('initially-load-all', [
+      'button_text' => 'Load More',
+      'automatically_load_content' => FALSE,
+      'initially_load_all_pages' => TRUE,
+    ]);
+    $this->drupalGet('initially-load-all', ['query' => ['page' => 1]]);
+    $this->assertTotalNodes(6);
+
     // Test the view automatically loading.
     $this->createView('automatic-load', [
       'button_text' => 'Load More',
@@ -96,6 +105,16 @@ class InfiniteScrollTest extends WebDriverTestBase {
     $this->getSession()->getPage()->clickLink('Load 5 more of 11');
     $this->assertSession()->waitForElement('css', '.node--type-page:nth-child(7)');
     $this->assertTotalNodes(11);
+
+    // Test @remaining_items_count token.
+    $this->createView('remaining-items-count', [
+      'button_text' => 'Load @next_page_count more of @remaining_items_count remaining',
+      'automatically_load_content' => FALSE,
+    ]);
+    $this->drupalGet('remaining-items-count');
+    $this->getSession()->getPage()->clickLink('Load 3 more of 8 remaining');
+    $this->assertSession()->waitForElement('css', '.node--type-page:nth-child(7)');
+    $this->assertTotalNodes(6);
   }
 
   /**
@@ -128,7 +147,7 @@ class InfiniteScrollTest extends WebDriverTestBase {
    * @param int $items_per_page
    *   The number of items per page to display.
    */
-  protected function createView($path, $settings, $items_per_page = 3) {
+  protected function createView($path, array $settings, $items_per_page = 3) {
     View::create([
       'label' => 'VIS Test',
       'id' => $this->randomMachineName(),

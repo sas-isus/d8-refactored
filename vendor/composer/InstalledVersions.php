@@ -29,7 +29,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'c5f9cbb14b59985b8a16fc45432dfc37972ab008',
+    'reference' => 'a73bea1349f8679a4e6e47edf5e05479de78f2d1',
     'name' => 'pantheon-systems/example-drops-8-composer',
   ),
   'versions' => 
@@ -126,13 +126,12 @@ private static $installed = array (
     ),
     'cheppers/gathercontent-client' => 
     array (
-      'pretty_version' => 'dev-master',
-      'version' => 'dev-master',
+      'pretty_version' => 'v1.0.0',
+      'version' => '1.0.0.0',
       'aliases' => 
       array (
-        0 => '9999999-dev',
       ),
-      'reference' => 'be58c2a3ff5e73fb14dd496752d067812ea2ff0a',
+      'reference' => '93c69b33bb8302efc7996995555d7a80618a88ce',
     ),
     'commerceguys/addressing' => 
     array (
@@ -473,12 +472,12 @@ private static $installed = array (
     ),
     'drupal/colorbox' => 
     array (
-      'pretty_version' => '1.6.0',
-      'version' => '1.6.0.0',
+      'pretty_version' => '1.7.0',
+      'version' => '1.7.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-1.6',
+      'reference' => '8.x-1.7',
     ),
     'drupal/comment' => 
     array (
@@ -873,12 +872,12 @@ private static $installed = array (
     ),
     'drupal/ds' => 
     array (
-      'pretty_version' => '3.10.0',
-      'version' => '3.10.0.0',
+      'pretty_version' => '3.12.0',
+      'version' => '3.12.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-3.10',
+      'reference' => '8.x-3.12',
     ),
     'drupal/dynamic_page_cache' => 
     array (
@@ -930,12 +929,12 @@ private static $installed = array (
     ),
     'drupal/entity_reference_revisions' => 
     array (
-      'pretty_version' => '1.8.0',
-      'version' => '1.8.0.0',
+      'pretty_version' => '1.9.0',
+      'version' => '1.9.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-1.8',
+      'reference' => '8.x-1.9',
     ),
     'drupal/eva' => 
     array (
@@ -957,12 +956,12 @@ private static $installed = array (
     ),
     'drupal/extlink' => 
     array (
-      'pretty_version' => '1.5.0',
-      'version' => '1.5.0.0',
+      'pretty_version' => '1.6.0',
+      'version' => '1.6.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-1.5',
+      'reference' => '8.x-1.6',
     ),
     'drupal/features' => 
     array (
@@ -1035,12 +1034,13 @@ private static $installed = array (
     ),
     'drupal/gathercontent' => 
     array (
-      'pretty_version' => '4.2.0',
-      'version' => '4.2.0.0',
+      'pretty_version' => 'dev-4.x',
+      'version' => 'dev-4.x',
       'aliases' => 
       array (
+        0 => '4.x-dev',
       ),
-      'reference' => '8.x-4.2',
+      'reference' => 'f7f8c1537b8d368c0418772c1ff1d38e03c7713c',
     ),
     'drupal/google_tag' => 
     array (
@@ -1273,12 +1273,12 @@ private static $installed = array (
     ),
     'drupal/metatag' => 
     array (
-      'pretty_version' => '1.15.0',
-      'version' => '1.15.0.0',
+      'pretty_version' => '1.16.0',
+      'version' => '1.16.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-1.15',
+      'reference' => '8.x-1.16',
     ),
     'drupal/migrate' => 
     array (
@@ -1523,12 +1523,12 @@ private static $installed = array (
     ),
     'drupal/simple_sitemap' => 
     array (
-      'pretty_version' => '3.8.0',
-      'version' => '3.8.0.0',
+      'pretty_version' => '3.9.0',
+      'version' => '3.9.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-3.8',
+      'reference' => '8.x-3.9',
     ),
     'drupal/simpletest' => 
     array (
@@ -1700,12 +1700,12 @@ private static $installed = array (
     ),
     'drupal/views_bulk_operations' => 
     array (
-      'pretty_version' => '3.10.0',
-      'version' => '3.10.0.0',
+      'pretty_version' => '3.11.0',
+      'version' => '3.11.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-3.10',
+      'reference' => '8.x-3.11',
     ),
     'drupal/views_conditional' => 
     array (
@@ -1745,12 +1745,12 @@ private static $installed = array (
     ),
     'drupal/views_infinite_scroll' => 
     array (
-      'pretty_version' => '1.7.0',
-      'version' => '1.7.0.0',
+      'pretty_version' => '1.8.0',
+      'version' => '1.8.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-1.7',
+      'reference' => '8.x-1.8',
     ),
     'drupal/views_ui' => 
     array (
@@ -2023,7 +2023,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'c5f9cbb14b59985b8a16fc45432dfc37972ab008',
+      'reference' => 'a73bea1349f8679a4e6e47edf5e05479de78f2d1',
     ),
     'pantheon-systems/quicksilver-pushback' => 
     array (
@@ -2255,12 +2255,12 @@ private static $installed = array (
     ),
     'psy/psysh' => 
     array (
-      'pretty_version' => 'v0.10.6',
-      'version' => '0.10.6.0',
+      'pretty_version' => 'v0.10.7',
+      'version' => '0.10.7.0',
       'aliases' => 
       array (
       ),
-      'reference' => '6f990c19f91729de8b31e639d6e204ea59f19cf3',
+      'reference' => 'a395af46999a12006213c0c8346c9445eb31640c',
     ),
     'ralouphie/getallheaders' => 
     array (

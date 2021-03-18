@@ -89,6 +89,14 @@ function _extlink_get_settings_from_config(Config $config) {
   $fa_mailto_classes = $config->get('extlink_font_awesome_classes.mailto') ?: 'fa fa-envelope-o';
   $fa_mailto_classes = array_map($callback, explode(' ', $fa_mailto_classes));
 
+  $extAlertText =  "";
+
+  if( !is_array($settings['extlink_alert_text']) ){
+    $extAlertText = ((isset($settings['extlink_alert_text'])) ? Xss::filterAdmin($settings['extlink_alert_text']) : t('This link will take you to an external web site. We are not responsible for their content.'));
+  } else {
+    $extAlertText = ((isset($settings['extlink_alert_text']['value'])) ? Html::escape($settings['extlink_alert_text']['value']) : t('This link will take you to an external web site. We are not responsible for their content.'));
+  }
+
   return [
     'extTarget'           => ((isset($settings['extlink_target'])) ? $settings['extlink_target'] : FALSE),
     'extTargetNoOverride' => ((isset($settings['extlink_target_no_override'])) ? $settings['extlink_target_no_override'] : FALSE),
@@ -104,7 +112,7 @@ function _extlink_get_settings_from_config(Config $config) {
     'extCssExclude'       => ((isset($settings['extlink_css_exclude'])) ? $settings['extlink_css_exclude'] : ''),
     'extCssExplicit'      => ((isset($settings['extlink_css_explicit'])) ? $settings['extlink_css_explicit'] : ''),
     'extAlert'            => ((isset($settings['extlink_alert'])) ? $settings['extlink_alert'] : FALSE),
-    'extAlertText'        => ((isset($settings['extlink_alert_text'])) ? Xss::filterAdmin($settings['extlink_alert_text']) : t('This link will take you to an external web site. We are not responsible for their content.')),
+    'extAlertText'        => $extAlertText,
     'mailtoClass'         => ((isset($settings['extlink_mailto_class'])) ? $settings['extlink_mailto_class'] : 'mailto'),
     'mailtoLabel'         => ((isset($settings['extlink_mailto_label'])) ? Html::escape($settings['extlink_mailto_label']) : t('(link sends email)')),
     'extUseFontAwesome'   => ((isset($settings['extlink_use_font_awesome'])) ? $settings['extlink_use_font_awesome'] : FALSE),

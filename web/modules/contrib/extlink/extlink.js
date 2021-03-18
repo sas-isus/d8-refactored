@@ -10,7 +10,7 @@
   Drupal.extlink = Drupal.extlink || {};
 
   Drupal.extlink.attach = function (context, drupalSettings) {
-    if (!drupalSettings.data.hasOwnProperty('extlink')) {
+    if (typeof drupalSettings.data === 'undefined' || !drupalSettings.data.hasOwnProperty('extlink')) {
       return;
     }
 

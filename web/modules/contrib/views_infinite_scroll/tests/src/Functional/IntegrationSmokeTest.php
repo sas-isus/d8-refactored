@@ -36,7 +36,8 @@ class IntegrationSmokeTest extends BrowserTestBase {
    */
   public function testPlugin() {
     // Create a view with the pager plugin enabled.
-    $this->drupalPostForm('admin/structure/views/add', [
+    $this->drupalGet('admin/structure/views/add');
+    $this->submitForm([
       'label' => 'Test Plugin',
       'id' => 'test_plugin',
       'page[create]' => '1',
@@ -44,23 +45,23 @@ class IntegrationSmokeTest extends BrowserTestBase {
       'page[path]' => 'test-plugin',
     ], 'Save and edit');
     $this->clickLink('Mini');
-    $this->drupalPostForm(NULL, [
+    $this->submitForm([
       'pager[type]' => 'infinite_scroll',
     ], 'Apply');
-    $this->drupalPostForm(NULL, [
+    $this->submitForm([
       'pager_options[views_infinite_scroll][button_text]' => 'More Please',
       'pager_options[views_infinite_scroll][automatically_load_content]' => '',
     ], 'Apply');
     $this->assertSession()->linkExists('Infinite Scroll');
     $this->assertSession()->pageTextContains('Click to load, 10 items');
-    $this->drupalPostForm(NULL, [], 'Save');
+    $this->submitForm([], 'Save');
 
     // Open the permissions to view the page.
     $this->clickLink('Permission');
-    $this->drupalPostForm(NULL, [
+    $this->submitForm([
       'access[type]' => 'none',
     ], 'Apply');
-    $this->drupalPostForm(NULL, [], 'Save');
+    $this->submitForm([], 'Save');
 
     // Ensure the wrapper div appears on the page.
     $this->drupalGet('test-plugin');

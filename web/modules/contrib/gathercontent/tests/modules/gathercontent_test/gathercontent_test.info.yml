@@ -2,14 +2,8 @@ name: 'GC Test'
 description: 'Tests of import functionality.'
 package: 'Testing'
 type: module
-# core: 8.x
+core: 8.x
 dependencies:
   - gathercontent:gathercontent
   - paragraph:paragraph
   - metatag:metatag
-
-# Information added by Drupal.org packaging script on 2019-07-10
-version: '8.x-4.2'
-core: '8.x'
-project: 'gathercontent'
-datestamp: 1562748488

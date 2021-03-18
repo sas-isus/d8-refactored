@@ -630,17 +630,17 @@
         },
         {
             "name": "cheppers/gathercontent-client",
-            "version": "dev-master",
-            "version_normalized": "dev-master",
+            "version": "v1.0.0",
+            "version_normalized": "1.0.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Cheppers/gathercontent-client.git",
-                "reference": "be58c2a3ff5e73fb14dd496752d067812ea2ff0a"
+                "reference": "93c69b33bb8302efc7996995555d7a80618a88ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Cheppers/gathercontent-client/zipball/be58c2a3ff5e73fb14dd496752d067812ea2ff0a",
-                "reference": "be58c2a3ff5e73fb14dd496752d067812ea2ff0a",
+                "url": "https://api.github.com/repos/Cheppers/gathercontent-client/zipball/93c69b33bb8302efc7996995555d7a80618a88ce",
+                "reference": "93c69b33bb8302efc7996995555d7a80618a88ce",
                 "shasum": ""
             },
             "require": {
@@ -655,10 +655,9 @@
                 "phpunit/phpunit": "^6.2",
                 "webmozart/path-util": "^2.3"
             },
-            "time": "2021-02-17T13:01:54+00:00",
-            "default-branch": true,
+            "time": "2020-05-07T16:51:38+00:00",
             "type": "library",
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-4": {
                     "Cheppers\\GatherContent\\": "src/"
@@ -666,12 +665,12 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL-2.0-or-later"
+                "GPL-2.0+"
             ],
             "description": "GatherContent client",
             "support": {
                 "issues": "https://github.com/Cheppers/gathercontent-client/issues",
-                "source": "https://github.com/Cheppers/gathercontent-client/tree/v2.0.6"
+                "source": "https://github.com/Cheppers/gathercontent-client/tree/v1.0.0"
             },
             "install-path": "../cheppers/gathercontent-client"
         },
@@ -2476,18 +2475,18 @@
         },
         {
             "name": "drupal/colorbox",
-            "version": "1.6.0",
-            "version_normalized": "1.6.0.0",
+            "version": "1.7.0",
+            "version_normalized": "1.7.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/colorbox.git",
-                "reference": "8.x-1.6"
+                "reference": "8.x-1.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/colorbox-8.x-1.6.zip",
-                "reference": "8.x-1.6",
-                "shasum": "73bfc74e9afd294e3d3aded3622ad9cb9de6b75c"
+                "url": "https://ftp.drupal.org/files/projects/colorbox-8.x-1.7.zip",
+                "reference": "8.x-1.7",
+                "shasum": "64c7290be86fe1d3bf80dcf4003a37b3698bba50"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9"
@@ -2498,8 +2497,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.6",
-                    "datestamp": "1587016344",
+                    "version": "8.x-1.7",
+                    "datestamp": "1614960641",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2514,7 +2513,7 @@
             "installation-source": "dist",
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -2528,8 +2527,16 @@
                     "role": "Maintainer"
                 },
                 {
+                    "name": "Sam152",
+                    "homepage": "https://www.drupal.org/user/1485048"
+                },
+                {
                     "name": "jdwfly",
                     "homepage": "https://www.drupal.org/user/298179"
+                },
+                {
+                    "name": "rsmylski",
+                    "homepage": "https://www.drupal.org/user/1324348"
                 }
             ],
             "description": "A light-weight, customizable lightbox plugin for jQuery.",
@@ -3840,18 +3847,18 @@
         },
         {
             "name": "drupal/ds",
-            "version": "3.10.0",
-            "version_normalized": "3.10.0.0",
+            "version": "3.12.0",
+            "version_normalized": "3.12.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ds.git",
-                "reference": "8.x-3.10"
+                "reference": "8.x-3.12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ds-8.x-3.10.zip",
-                "reference": "8.x-3.10",
-                "shasum": "c35b87ad8e96a3a893af197678ce34dfeea82f99"
+                "url": "https://ftp.drupal.org/files/projects/ds-8.x-3.12.zip",
+                "reference": "8.x-3.12",
+                "shasum": "0df49ccc28af94186a6c08aa4233f435c539b273"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9"
@@ -3863,8 +3870,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.10",
-                    "datestamp": "1614505794",
+                    "version": "8.x-3.12",
+                    "datestamp": "1615995335",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4119,18 +4126,18 @@
         },
         {
             "name": "drupal/entity_reference_revisions",
-            "version": "1.8.0",
-            "version_normalized": "1.8.0.0",
+            "version": "1.9.0",
+            "version_normalized": "1.9.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/entity_reference_revisions.git",
-                "reference": "8.x-1.8"
+                "reference": "8.x-1.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/entity_reference_revisions-8.x-1.8.zip",
-                "reference": "8.x-1.8",
-                "shasum": "c1279e6c683edc2dbccedba8de1505340c8a62b6"
+                "url": "https://ftp.drupal.org/files/projects/entity_reference_revisions-8.x-1.9.zip",
+                "reference": "8.x-1.9",
+                "shasum": "e1c51bdea495eb3b458130d6f0a00c347f5637df"
             },
             "require": {
                 "drupal/core": "^8.7.7 || ^9"
@@ -4140,12 +4147,9 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-1.8",
-                    "datestamp": "1583961846",
+                    "version": "8.x-1.9",
+                    "datestamp": "1614805871",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4155,7 +4159,7 @@
             "installation-source": "dist",
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -4305,18 +4309,18 @@
         },
         {
             "name": "drupal/extlink",
-            "version": "1.5.0",
-            "version_normalized": "1.5.0.0",
+            "version": "1.6.0",
+            "version_normalized": "1.6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/extlink.git",
-                "reference": "8.x-1.5"
+                "reference": "8.x-1.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/extlink-8.x-1.5.zip",
-                "reference": "8.x-1.5",
-                "shasum": "5a2b74d12ff9e9257a0566cca8dac3872da64970"
+                "url": "https://ftp.drupal.org/files/projects/extlink-8.x-1.6.zip",
+                "reference": "8.x-1.6",
+                "shasum": "92c2794b1d5ece7978f5f6fa37f719c0b37d470e"
             },
             "require": {
                 "drupal/core": "^8 || ^9"
@@ -4324,8 +4328,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.5",
-                    "datestamp": "1601382250",
+                    "version": "8.x-1.6",
+                    "datestamp": "1614961993",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4591,22 +4595,16 @@
         },
         {
             "name": "drupal/gathercontent",
-            "version": "4.2.0",
-            "version_normalized": "4.2.0.0",
+            "version": "dev-4.x",
+            "version_normalized": "dev-4.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/gathercontent.git",
-                "reference": "8.x-4.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/gathercontent-8.x-4.2.zip",
-                "reference": "8.x-4.2",
-                "shasum": "f8e4180b483768f9e56cf5cfd58f33d158b01bca"
+                "reference": "f7f8c1537b8d368c0418772c1ff1d38e03c7713c"
             },
             "require": {
-                "cheppers/gathercontent-client": "*",
-                "drupal/core": "*"
+                "cheppers/gathercontent-client": "^1.0",
+                "drupal/core": "^8"
             },
             "type": "drupal-module",
             "extra": {
@@ -4614,15 +4612,15 @@
                     "dev-4.x": "4.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-4.2",
-                    "datestamp": "1562748486",
+                    "version": "8.x-4.2+1-dev",
+                    "datestamp": "1589277108",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0+"
@@ -4631,10 +4629,6 @@
                 {
                     "name": "Csongi95",
                     "homepage": "https://www.drupal.org/user/3605788"
-                },
-                {
-                    "name": "Kova101",
-                    "homepage": "https://www.drupal.org/user/3528385"
                 },
                 {
                     "name": "Mathew Chapman",
@@ -4651,6 +4645,10 @@
                 {
                     "name": "daniel.czegledi",
                     "homepage": "https://www.drupal.org/user/3416468"
+                },
+                {
+                    "name": "gdeni",
+                    "homepage": "https://www.drupal.org/user/3528390"
                 },
                 {
                     "name": "kayleighbates",
@@ -5491,24 +5489,25 @@
         },
         {
             "name": "drupal/metatag",
-            "version": "1.15.0",
-            "version_normalized": "1.15.0.0",
+            "version": "1.16.0",
+            "version_normalized": "1.16.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/metatag.git",
-                "reference": "8.x-1.15"
+                "reference": "8.x-1.16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/metatag-8.x-1.15.zip",
-                "reference": "8.x-1.15",
-                "shasum": "7658d7286fdc075ea72a6ec36aea737b1182b5d8"
+                "url": "https://ftp.drupal.org/files/projects/metatag-8.x-1.16.zip",
+                "reference": "8.x-1.16",
+                "shasum": "1c0028f4ff4583dc6601035657dd631c351b290c"
             },
             "require": {
                 "drupal/core": "^8 || ^9",
                 "drupal/token": "^1.0"
             },
             "require-dev": {
+                "drupal/devel": "^4.0",
                 "drupal/metatag_dc": "*",
                 "drupal/metatag_open_graph": "*",
                 "drupal/page_manager": "4.x-dev",
@@ -5518,8 +5517,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.15",
-                    "datestamp": "1607188979",
+                    "version": "8.x-1.16",
+                    "datestamp": "1615820867",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6413,18 +6412,18 @@
         },
         {
             "name": "drupal/simple_sitemap",
-            "version": "3.8.0",
-            "version_normalized": "3.8.0.0",
+            "version": "3.9.0",
+            "version_normalized": "3.9.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/simple_sitemap.git",
-                "reference": "8.x-3.8"
+                "reference": "8.x-3.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/simple_sitemap-8.x-3.8.zip",
-                "reference": "8.x-3.8",
-                "shasum": "55252af261fbd7b18c230ab429eb7d8b92f4c66a"
+                "url": "https://ftp.drupal.org/files/projects/simple_sitemap-8.x-3.9.zip",
+                "reference": "8.x-3.9",
+                "shasum": "4892f2196e35e6fc67f3da8748825815efe6462d"
             },
             "require": {
                 "drupal/core": "^8 || ^9",
@@ -6433,8 +6432,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.8",
-                    "datestamp": "1605141357",
+                    "version": "8.x-3.9",
+                    "datestamp": "1614984547",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6914,18 +6913,18 @@
         },
         {
             "name": "drupal/views_bulk_operations",
-            "version": "3.10.0",
-            "version_normalized": "3.10.0.0",
+            "version": "3.11.0",
+            "version_normalized": "3.11.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views_bulk_operations.git",
-                "reference": "8.x-3.10"
+                "reference": "8.x-3.11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views_bulk_operations-8.x-3.10.zip",
-                "reference": "8.x-3.10",
-                "shasum": "e346c2a72fc9a1ae8af418e6a02076f52c0fcc7b"
+                "url": "https://ftp.drupal.org/files/projects/views_bulk_operations-8.x-3.11.zip",
+                "reference": "8.x-3.11",
+                "shasum": "14519811dac1661957066a0de6c455228e634ce7"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9"
@@ -6939,8 +6938,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.10",
-                    "datestamp": "1608795018",
+                    "version": "8.x-3.11",
+                    "datestamp": "1615996407",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7238,30 +7237,27 @@
         },
         {
             "name": "drupal/views_infinite_scroll",
-            "version": "1.7.0",
-            "version_normalized": "1.7.0.0",
+            "version": "1.8.0",
+            "version_normalized": "1.8.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views_infinite_scroll.git",
-                "reference": "8.x-1.7"
+                "reference": "8.x-1.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views_infinite_scroll-8.x-1.7.zip",
-                "reference": "8.x-1.7",
-                "shasum": "42ff1b7c835a2cb0755425999bb8251f19c62fac"
+                "url": "https://ftp.drupal.org/files/projects/views_infinite_scroll-8.x-1.8.zip",
+                "reference": "8.x-1.8",
+                "shasum": "b9fceb24184792fb81c4e2ff1bf7f18fd8e50674"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9"
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-1.7",
-                    "datestamp": "1584489857",
+                    "version": "8.x-1.8",
+                    "datestamp": "1614959012",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7277,6 +7273,10 @@
                 {
                     "name": "Bobík",
                     "homepage": "https://www.drupal.org/user/123612"
+                },
+                {
+                    "name": "Neslee Canil Pinto",
+                    "homepage": "https://www.drupal.org/user/3580850"
                 },
                 {
                     "name": "Remon",
@@ -10504,17 +10504,17 @@
         },
         {
             "name": "psy/psysh",
-            "version": "v0.10.6",
-            "version_normalized": "0.10.6.0",
+            "version": "v0.10.7",
+            "version_normalized": "0.10.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "6f990c19f91729de8b31e639d6e204ea59f19cf3"
+                "reference": "a395af46999a12006213c0c8346c9445eb31640c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/6f990c19f91729de8b31e639d6e204ea59f19cf3",
-                "reference": "6f990c19f91729de8b31e639d6e204ea59f19cf3",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/a395af46999a12006213c0c8346c9445eb31640c",
+                "reference": "a395af46999a12006213c0c8346c9445eb31640c",
                 "shasum": ""
             },
             "require": {
@@ -10537,7 +10537,7 @@
                 "ext-readline": "Enables support for arrow-key history navigation, and showing and manipulating command history.",
                 "hoa/console": "A pure PHP readline implementation. You'll want this if your PHP install doesn't already support readline or libedit."
             },
-            "time": "2021-01-18T15:53:43+00:00",
+            "time": "2021-03-14T02:14:56+00:00",
             "bin": [
                 "bin/psysh"
             ],
@@ -10577,7 +10577,7 @@
             ],
             "support": {
                 "issues": "https://github.com/bobthecow/psysh/issues",
-                "source": "https://github.com/bobthecow/psysh/tree/v0.10.6"
+                "source": "https://github.com/bobthecow/psysh/tree/v0.10.7"
             },
             "install-path": "../psy/psysh"
         },

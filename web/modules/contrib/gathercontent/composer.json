@@ -4,6 +4,6 @@
   "description": "GatherContent for Drupal",
   "license": "GPL-2.0+",
   "require": {
-    "cheppers/gathercontent-client": "*"
+    "cheppers/gathercontent-client": "^1.0"
   }
 }
