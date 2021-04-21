@@ -50,6 +50,30 @@ class SimplesitemapQueue extends DatabaseQueue {
     return FALSE;
   }
 
+  /**
+   * Gets a simple_sitemap queue item in a very efficient way.
+   *
+   * @return \Generator
+   *   A queue item object with at least the following properties:
+   *   - data: the same as what what passed into createItem().
+   *   - item_id: the unique ID returned from createItem().
+   *   - created: timestamp when the item was put into the queue.
+   *
+   * @see \Drupal\Core\Queue\QueueInterface::claimItem
+   */
+  public function yieldItem() {
+    try {
+      $query = $this->connection->query('SELECT data, item_id FROM {queue} q WHERE name = :name ORDER BY item_id ASC', [':name' => $this->name]);
+      while ($item = $query->fetchObject()) {
+        $item->data = unserialize($item->data);
+        yield $item;
+      }
+    }
+    catch (\Exception $e) {
+      $this->catchException($e);
+    }
+  }
+
   public function createItems($data_sets) {
     $try_again = FALSE;
     try {

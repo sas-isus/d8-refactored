@@ -63,18 +63,20 @@ class ViewsConditionalField extends FieldPluginBase implements ContainerFactoryP
    * @var array
    */
   public $conditions = [
-    1 => 'Equal to',
-    2 => 'NOT equal to',
-    3 => 'Greater than',
-    4 => 'Less than',
-    5 => 'Empty',
-    6 => 'NOT empty',
-    7 => 'Contains',
-    8 => 'Does NOT contain',
-    9 => 'Length Equal to',
-    10 => 'Length NOT equal to',
-    11 => 'Length Greater than',
-    12 => 'Length Less than',
+    'eq' => 'Equal to',
+    'neq' => 'NOT equal to',
+    'gt' => 'Greater than',
+    'gte' => 'Greater than or equals',
+    'lt' => 'Less than',
+    'lte' => 'Less than or equals',
+    'em' => 'Empty',
+    'nem' => 'NOT empty',
+    'cn' => 'Contains',
+    'ncn' => 'Does NOT contain',
+    'leq' => 'Length Equal to',
+    'lneq' => 'Length NOT equal to',
+    'lgt' => 'Length Greater than',
+    'llt' => 'Length Less than',
   ];
 
   /**
@@ -97,7 +99,7 @@ class ViewsConditionalField extends FieldPluginBase implements ContainerFactoryP
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   protected function getEditableConfigNames() {
     return ['views_conditional.settings'];
@@ -130,13 +132,13 @@ class ViewsConditionalField extends FieldPluginBase implements ContainerFactoryP
     $form['equalto'] = [
       '#type' => 'textfield',
       '#title' => $this->t('This value'),
-      '#description' => $this->t('Input a value to compare the field against.  Replacement variables may be used'),
+      '#description' => $this->t('Input a value to compare the field against. Replacement variables may be used'),
       '#default_value' => $this->options['equalto'],
     ];
     $form['then'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Then output this...'),
-      '#description' => $this->t('Input what should be output.  Replacement variables may be used.'),
+      '#description' => $this->t('Input what should be output. Replacement variables may be used.'),
       '#default_value' => $this->options['then'],
     ];
     $form['or'] = [
@@ -157,7 +159,7 @@ class ViewsConditionalField extends FieldPluginBase implements ContainerFactoryP
       '#title' => $this->t('Replacement Variables'),
     ];
     $form['replacements']['notice'] = [
-      '#markup' => 'You may use any of these replacement variables in the "equals" or the "output" text fields.  If you wish to use brackets ([ or ]), replace them with %5D or %5E.',
+      '#markup' => 'You may use any of these replacement variables in the "equals" or the "output" text fields. If you wish to use brackets ([ or ]), replace them with %5D or %5E.',
       '#prefix' => '<p>',
       '#suffix' => '</p>',
     ];
@@ -194,8 +196,8 @@ class ViewsConditionalField extends FieldPluginBase implements ContainerFactoryP
       }
       // We using there is_numeric because values '0', '0.0' counts as empty.
       if (empty($values['options']['equalto']) && !in_array($values['options']['condition'], [
-        5,
-        6,
+        'em',
+        'nem',
       ]) && !is_numeric($values['options']['equalto'])
       ) {
         $form_state->setErrorByName('condition', $this->t("Please specify something to compare with."));
@@ -209,6 +211,22 @@ class ViewsConditionalField extends FieldPluginBase implements ContainerFactoryP
   public function cleanVar($var) {
     $unparsed = isset($var->last_render) ? $var->last_render : '';
     return $this->options['strip_tags'] ? trim(strip_tags($unparsed)) : trim($unparsed);
+  }
+
+  /**
+   * Create renderable markup for field values.
+   *
+   * @param $value
+   *   The value to be displayed.
+   *
+   * @return
+   *   The rendered value.
+   */
+  private function markup($value) {
+    $value = [
+      '#markup' => $value,
+    ];
+    return \Drupal::service('renderer')->render($value);
   }
 
   /**
@@ -229,15 +247,15 @@ class ViewsConditionalField extends FieldPluginBase implements ContainerFactoryP
       // If we find a replacement variable, replace it.
       if (strpos($equalto, "{{ $key }}") !== FALSE) {
         $field = $this->cleanVar($fields[$key]);
-        $equalto = $this->t(str_replace("{{ $key }}", $field, $equalto));
+        $equalto = str_replace("{{ $key }}", $field, $equalto);
       }
       if (strpos($then, "{{ $key }}") !== FALSE) {
         $field = $this->cleanVar($fields[$key]);
-        $then = $this->t(str_replace("{{ $key }}", $field, $then));
+        $then = str_replace("{{ $key }}", $field, $then);
       }
       if (strpos($or, "{{ $key }}") !== FALSE) {
         $field = $this->cleanVar($fields[$key]);
-        $or = $this->t(str_replace("{{ $key }}", $field, $or));
+        $or = str_replace("{{ $key }}", $field, $or);
       }
     }
 
@@ -271,125 +289,152 @@ class ViewsConditionalField extends FieldPluginBase implements ContainerFactoryP
     // Run conditions.
     switch ($condition) {
       // Equal to.
-      case 1:
+      case 'eq':
         if ($r == $equalto) {
-          return $then;
+          return $this->markup($then);
         }
         else {
-          return $or;
+          return $this->markup($or);
         }
         break;
 
       // Not equal to.
-      case 2:
+      case 'neq':
         if ($r !== $equalto) {
-          return $then;
+          return $this->markup($then);
         }
         else {
-          return $or;
+          return $this->markup($or);
         }
         break;
 
       // Greater than.
-      case 3:
+      case 'gt':
         if ($r > $equalto) {
+          return $this->markup($then);
+        }
+        else {
+          return $this->markup($or);
+        }
+        break;
+
+      // Greater than or equals.
+      case 'gte':
+        if ($r >= $equalto) {
           return $then;
         }
         else {
-          return $or;
+          return $this->markup($or);
         }
         break;
 
       // Less than.
-      case 4:
+      case 'lt':
         if ($r < $equalto) {
+          return $this->markup($then);
+        }
+        else {
+          return $this->markup($or);
+        }
+        break;
+
+      // Less than or equals.
+      case 'lte':
+        if ($r <= $equalto) {
           return $then;
         }
         else {
-          return $or;
+          return $this->markup($or);
         }
         break;
 
       // Empty.
-      case 5:
+      case 'em':
         if (empty($r)) {
-          return $then;
+          return $this->markup($then);
         }
         else {
-          return $or;
+          return $this->markup($or);
         }
         break;
 
       // Not empty.
-      case 6:
+      case 'nem':
         if (!empty($r)) {
-          return $then;
+          return $this->markup($then);
         }
         else {
-          return $or;
+          return $this->markup($or);
         }
         break;
 
       // Contains.
-      case 7:
+      case 'cn':
         if (mb_stripos($r, $equalto) !== FALSE) {
-          return $then;
+          return $this->markup($then);
         }
         else {
-          return $or;
+          return $this->markup($or);
         }
         break;
 
       // Does NOT contain.
-      case 8:
+      case 'ncn':
         if (mb_stripos($r, $equalto) === FALSE) {
-          return $then;
+          return $this->markup($then);
         }
         else {
-          return $or;
+          return $this->markup($or);
         }
         break;
 
       // Length Equal to.
-      case 9:
+      case 'leq':
         if (mb_strlen($r) == $equalto) {
-          return $then;
+          return $this->markup($then);
         }
         else {
-          return $or;
+          return $this->markup($or);
         }
         break;
 
       // Length Not equal to.
-      case 10:
+      case 'lneq':
         if (mb_strlen($r) !== $equalto) {
-          return $then;
+          return $this->markup($then);
         }
         else {
-          return $or;
+          return $this->markup($or);
         }
         break;
 
       // Length Greater than.
-      case 11:
+      case 'lgt':
         if (mb_strlen($r) > $equalto) {
-          return $then;
+          return $this->markup($then);
         }
         else {
-          return $or;
+          return $this->markup($or);
         }
         break;
 
       // Length Less than.
-      case 12:
+      case 'llt':
         if (mb_strlen($r) < $equalto) {
-          return $then;
+          return $this->markup($then);
         }
         else {
-          return $or;
+          return $this->markup($or);
         }
         break;
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function clickSortable() {
+    return FALSE;
   }
 
 }
