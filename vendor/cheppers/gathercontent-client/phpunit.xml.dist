@@ -1,0 +1,40 @@
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.2/phpunit.xsd"
+    bootstrap="vendor/autoload.php"
+    colors="true">
+
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>src-dev/Tests/Unit</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory>src/</directory>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log
+            type="coverage-text"
+            target="php://stdout"/>
+
+        <log
+            type="coverage-html"
+            target="reports/human/coverage/html"/>
+
+        <log
+            type="coverage-clover"
+            target="reports/machine/coverage/coverage.xml"/>
+
+        <log
+            type="testdox-html"
+            target="reports/human/unit/junit.html"/>
+
+        <log
+            type="junit"
+            target="reports/machine/unit/junit.xml"/>
+    </logging>
+</phpunit>

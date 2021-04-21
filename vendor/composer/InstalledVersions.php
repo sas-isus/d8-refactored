@@ -29,7 +29,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'a73bea1349f8679a4e6e47edf5e05479de78f2d1',
+    'reference' => 'dd2837822a977128f5decf596bb59e7a55c4203c',
     'name' => 'pantheon-systems/example-drops-8-composer',
   ),
   'versions' => 
@@ -1034,13 +1034,12 @@ private static $installed = array (
     ),
     'drupal/gathercontent' => 
     array (
-      'pretty_version' => 'dev-4.x',
-      'version' => 'dev-4.x',
+      'pretty_version' => '4.3.0',
+      'version' => '4.3.0.0',
       'aliases' => 
       array (
-        0 => '4.x-dev',
       ),
-      'reference' => 'f7f8c1537b8d368c0418772c1ff1d38e03c7713c',
+      'reference' => '8.x-4.3',
     ),
     'drupal/google_tag' => 
     array (
@@ -1700,12 +1699,12 @@ private static $installed = array (
     ),
     'drupal/views_bulk_operations' => 
     array (
-      'pretty_version' => '3.11.0',
-      'version' => '3.11.0.0',
+      'pretty_version' => '3.12.0',
+      'version' => '3.12.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-3.11',
+      'reference' => '8.x-3.12',
     ),
     'drupal/views_conditional' => 
     array (
@@ -2023,7 +2022,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'a73bea1349f8679a4e6e47edf5e05479de78f2d1',
+      'reference' => 'dd2837822a977128f5decf596bb59e7a55c4203c',
     ),
     'pantheon-systems/quicksilver-pushback' => 
     array (

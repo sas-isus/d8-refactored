@@ -4595,12 +4595,18 @@
         },
         {
             "name": "drupal/gathercontent",
-            "version": "dev-4.x",
-            "version_normalized": "dev-4.x",
+            "version": "4.3.0",
+            "version_normalized": "4.3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/gathercontent.git",
-                "reference": "f7f8c1537b8d368c0418772c1ff1d38e03c7713c"
+                "reference": "8.x-4.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/gathercontent-8.x-4.3.zip",
+                "reference": "8.x-4.3",
+                "shasum": "ebd867249437c2ee5d62173c05c5dc54ef86c4aa"
             },
             "require": {
                 "cheppers/gathercontent-client": "^1.0",
@@ -4608,15 +4614,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-4.x": "4.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-4.2+1-dev",
-                    "datestamp": "1589277108",
+                    "version": "8.x-4.3",
+                    "datestamp": "1589278476",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -6913,18 +6916,18 @@
         },
         {
             "name": "drupal/views_bulk_operations",
-            "version": "3.11.0",
-            "version_normalized": "3.11.0.0",
+            "version": "3.12.0",
+            "version_normalized": "3.12.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views_bulk_operations.git",
-                "reference": "8.x-3.11"
+                "reference": "8.x-3.12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views_bulk_operations-8.x-3.11.zip",
-                "reference": "8.x-3.11",
-                "shasum": "14519811dac1661957066a0de6c455228e634ce7"
+                "url": "https://ftp.drupal.org/files/projects/views_bulk_operations-8.x-3.12.zip",
+                "reference": "8.x-3.12",
+                "shasum": "88a545c54680362162bfbfdb0639ce923a1a60a9"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9"
@@ -6938,8 +6941,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.11",
-                    "datestamp": "1615996407",
+                    "version": "8.x-3.12",
+                    "datestamp": "1616148482",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"

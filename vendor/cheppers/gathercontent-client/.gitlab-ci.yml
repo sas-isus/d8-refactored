@@ -1,0 +1,39 @@
+image: 'leoontheearth/docker-gitlab-ci-runner-php:7.1'
+
+stages:
+    - 'Build'
+    - 'QA'
+
+variables:
+    COMPOSER_NO_INTERACTION: '1'
+    COMPOSER_DISABLE_XDEBUG_WARN: '1'
+    COMPOSER_ALLOW_SUPERUSER: '1'
+    COMPOSER_CACHE_DIR: '${CI_PROJECT_DIR}/cache/composer'
+
+cache:
+    paths:
+        - 'cache/'
+
+.workbench:
+    tags: &tags
+        - 'dockerized'
+
+build:
+    stage: 'Build'
+    tags: *tags
+    script:
+        - 'composer install'
+
+lint:
+    stage: 'QA'
+    tags: *tags
+    script:
+        - 'composer install'
+        - 'bin/robo lint'
+
+phpunit:
+    stage: 'QA'
+    tags: *tags
+    script:
+        - 'composer install'
+        - 'bin/phpunit --colors=never --coverage-text'

@@ -322,7 +322,7 @@ class ViewsBulkOperationsBulkForm extends FieldPluginBase implements CacheableDe
     // input.
     ksort($exposed_input);
     foreach ($exposed_input as $name => $value) {
-      if (is_array($value)) {
+      if (is_array($value) && !empty($value)) {
         $exposed_input[$name] = $this->getExposedInput($value);
       }
     }
