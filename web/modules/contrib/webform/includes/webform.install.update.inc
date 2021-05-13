@@ -3942,3 +3942,10 @@ function webform_update_8211() {
     );
   }
 }
+
+/**
+ * Issue #000000: Add support options to help and add-ons.
+ */
+function webform_update_8212() {
+  _webform_update_admin_settings();
+}

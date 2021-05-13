@@ -105,3 +105,23 @@ function menu_block_theme_suggestions_menu(array $variables) {
 
   return $suggestions;
 }
+
+/**
+ * Implements hook_preprocess_hook() for "block".
+ *
+ * Set the block label with the #menu_block_configuration label if it exists.
+ *
+ * @see template_preprocess_block()
+ */
+function menu_block_preprocess_block(&$variables) {
+  if (isset($variables['content']['#menu_block_configuration']['label'])) {
+    $config_label = $variables['content']['#menu_block_configuration']['label'];
+    // Set the 'label' template variable to an empty string if the block is
+    // configured not to display a label.
+    $variables['label'] = empty($variables['configuration']['label_display']) ? '' : $config_label;
+    // However, we always set the configuration label (regardless of the
+    // 'label_display' setting) so the label can be included in the markup as
+    // hidden text for assistive technologies (for templates that handle this).
+    $variables['configuration']['label'] = $config_label;
+  }
+}

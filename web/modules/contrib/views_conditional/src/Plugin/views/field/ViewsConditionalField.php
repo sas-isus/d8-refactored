@@ -93,7 +93,9 @@ class ViewsConditionalField extends FieldPluginBase implements ContainerFactoryP
     $options['condition'] = ['default' => ''];
     $options['equalto'] = ['default' => ''];
     $options['then'] = ['default' => ''];
+    $options['then_translate'] = ['default' => TRUE];
     $options['or'] = ['default' => ''];
+    $options['or_translate'] = ['default' => TRUE];
     $options['strip_tags'] = ['default' => FALSE];
     return $options;
   }
@@ -141,11 +143,23 @@ class ViewsConditionalField extends FieldPluginBase implements ContainerFactoryP
       '#description' => $this->t('Input what should be output. Replacement variables may be used.'),
       '#default_value' => $this->options['then'],
     ];
+    $form['then_translate'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Translate "Then" output'),
+      '#description' => $this->t('Translate custom text before any replacement values are substituted.'),
+      '#default_value' => $this->options['then_translate'],
+    ];
     $form['or'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Otherwise, output this...'),
       '#description' => $this->t('Input what should be output if the above conditions do NOT evaluate to true.'),
       '#default_value' => $this->options['or'],
+    ];
+    $form['or_translate'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Translate "Or" output'),
+      '#description' => $this->t('Translate custom text before any replacement values are substituted.'),
+      '#default_value' => $this->options['or_translate'],
     ];
     $form['strip_tags'] = [
       '#type' => 'checkbox',
@@ -237,7 +251,20 @@ class ViewsConditionalField extends FieldPluginBase implements ContainerFactoryP
     $condition = $this->options['condition'];
     $equalto = $this->options['equalto'];
     $then = $this->options['then'];
-    $or = ($this->options['or'] ? $this->options['or'] : '');
+    $or = ($this->options['or'] ?: '');
+
+    // Translate text to be displayed with a context specific to this module,
+    // view and display.
+    $translation_context = "views_conditional:view:{$this->view->id()}";
+
+    // Translate prior to replacements, otherwise the dynamic replacement
+    // content results in endless translations:
+    if ($this->options['then_translate']) {
+      $then = $this->t($then, ['context' => $translation_context]);
+    }
+    if ($this->options['or_translate']) {
+      $or = $this->t($or, ['context' => $translation_context]);
+    }
 
     // Gather field information.
     $fields = $this->view->display_handler->getHandlers('field');
@@ -281,8 +308,8 @@ class ViewsConditionalField extends FieldPluginBase implements ContainerFactoryP
       $or = str_replace('DATE_UNIX', $this->dateTime->getRequestTime(), $or);
     }
 
-    // Strip tags on the "if" field.  Otherwise it appears to
-    // output as <div class="xxx">Field data</div>...
+    // Strip tags on the "if" field. Otherwise it appears to output as
+    // <div class="xxx">Field data</div>...
     // ...which of course makes it difficult to compare.
     $r = isset($fields["$if"]->last_render) ? trim(strip_tags($fields["$if"]->last_render, '<img><video><iframe><audio>')) : NULL;
 

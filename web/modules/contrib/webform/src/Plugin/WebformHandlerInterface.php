@@ -417,7 +417,19 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   public function getOffCanvasWidth();
 
   /**
-   * Alter webform submission webform .
+   * Acts on an webform submission about to be shown on a webform submission form.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   * @param string $operation
+   *   The current operation.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  public function prepareForm(WebformSubmissionInterface $webform_submission, $operation, FormStateInterface $form_state);
+
+  /**
+   * Alter webform submission form.
    *
    * @param array $form
    *   An associative array containing the structure of the form.
@@ -429,7 +441,7 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   public function alterForm(array &$form, FormStateInterface $form_state, WebformSubmissionInterface $webform_submission);
 
   /**
-   * Validate webform submission webform .
+   * Validate webform submission form.
    *
    * @param array $form
    *   An associative array containing the structure of the form.
@@ -441,7 +453,7 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   public function validateForm(array &$form, FormStateInterface $form_state, WebformSubmissionInterface $webform_submission);
 
   /**
-   * Submit webform submission webform.
+   * Submit webform submission form.
    *
    * @param array $form
    *   An associative array containing the structure of the form.
@@ -453,7 +465,7 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   public function submitForm(array &$form, FormStateInterface $form_state, WebformSubmissionInterface $webform_submission);
 
   /**
-   * Confirm webform submission webform.
+   * Confirm webform submission form.
    *
    * @param array $form
    *   An associative array containing the structure of the form.

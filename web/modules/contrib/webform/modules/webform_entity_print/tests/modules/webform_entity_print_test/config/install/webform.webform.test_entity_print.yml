@@ -19,7 +19,7 @@ elements: |
   textfield:
     '#type': textfield
     '#title': textfield
-  
+
 css: '/** custom webform css **/'
 javascript: ''
 settings:
@@ -121,7 +121,8 @@ settings:
   draft_pending_multiple_message: ''
   confirmation_type: page
   confirmation_title: ''
-  confirmation_message: ''
+  confirmation_message: |
+    <p>You can view your submission via <a href="[webform_submission:view-url]">[webform_submission:view-url:relative]</a></p>
   confirmation_url: ''
   confirmation_attributes: {  }
   confirmation_back: true
@@ -147,7 +148,7 @@ settings:
   results_disabled: false
   results_disabled_ignore: false
   results_customize: false
-  token_view: false
+  token_view: true
   token_update: false
   token_delete: false
   serial_disabled: false

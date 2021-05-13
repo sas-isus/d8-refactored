@@ -399,7 +399,7 @@
           type: string
           label: 'Confirmation type'
         confirmation_url:
-          type: string
+          type: label
           label: 'Confirmation URL'
         confirmation_title:
           type: label

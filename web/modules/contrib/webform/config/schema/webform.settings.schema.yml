@@ -565,6 +565,9 @@ webform.settings:
         promotions_disabled:
           type: boolean
           label: 'Disable promotions'
+        support_disabled:
+          type: boolean
+          label: 'Disable support options'
         details_save:
           type: boolean
           label: 'Save details open/close state'

@@ -2,9 +2,9 @@ name: 'Menu block test module'
 type: module
 description: 'Support module for menu_block testing.'
 package: Testing
-core: 8.x
+core_version_requirement: ^8 || ^9
 
-# Information added by Drupal.org packaging script on 2020-04-24
-version: '8.x-1.6'
+# Information added by Drupal.org packaging script on 2021-04-28
+version: '8.x-1.7'
 project: 'menu_block'
-datestamp: 1587721602
+datestamp: 1619638240

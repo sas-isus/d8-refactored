@@ -54,6 +54,9 @@ Advanced options:
     Alter the options in “Menu levels” to be relative to the fixed parent item.
     The block will only contain children of the selected menu link.
 
+  Use as title
+    Replace the block title with an item from the menu.
+
 HTML and style options:
 
   Theme hook suggestion

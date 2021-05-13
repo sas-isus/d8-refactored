@@ -17,9 +17,17 @@ Views Conditional is a simple module that allows you to define conditionals
  * Equal To
  * Not Equal To
  * Greater Than
+ * Greater Than or Equals
  * Less Than
+ * Less Than or Equals
  * Empty
  * Not Empty
+ * Contains
+ * Does Not Contain
+ * Length Equal To
+ * Length Not Equal To
+ * Length Greater Than
+ * Length Less Than
 
 Views conditional allows you to output text based on the result of the
 condition.
@@ -58,9 +66,6 @@ CONFIGURATION
     5. Choose a field to run a condition against, and provide values
        accordingly.
     6. Save, views conditional handles the logic and returns as specified.
-
-NOTE: In D8 alpha release we've updated token format from [token_name] to
-{{ token_name }}, please update your views accordingly.
 
 
 MAINTAINERS

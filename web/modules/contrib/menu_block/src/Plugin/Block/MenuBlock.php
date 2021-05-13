@@ -4,7 +4,9 @@ namespace Drupal\menu_block\Plugin\Block;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Menu\MenuParentFormSelectorInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Menu\MenuTreeParameters;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\system\Entity\Menu;
 use Drupal\system\Plugin\Block\SystemMenuBlock;
@@ -26,6 +28,23 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class MenuBlock extends SystemMenuBlock {
 
   /**
+   * Constant definition options for block label type.
+   */
+  const LABEL_BLOCK = 'block';
+  const LABEL_MENU = 'menu';
+  const LABEL_ACTIVE_ITEM = 'active_item';
+  const LABEL_PARENT = 'parent';
+  const LABEL_ROOT = 'root';
+  const LABEL_FIXED = 'fixed';
+
+  /**
+   * Entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * The menu parent form selector service.
    *
    * @var \Drupal\Core\Menu\MenuParentFormSelectorInterface
@@ -37,22 +56,9 @@ class MenuBlock extends SystemMenuBlock {
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
-    $instance->setMenuParentFormSelector($container->get('menu.parent_form_selector'));
-
+    $instance->menuParentFormSelector = $container->get('menu.parent_form_selector');
+    $instance->entityTypeManager = $container->get('entity_type.manager');
     return $instance;
-  }
-
-  /**
-   * Set menu parent form selector service.
-   *
-   * @param \Drupal\Core\Menu\MenuParentFormSelectorInterface $menu_parent_form_selector
-   *   The menu parent form selector service.
-   *
-   * @return $this
-   */
-  public function setMenuParentFormSelector(MenuParentFormSelectorInterface $menu_parent_form_selector) {
-    $this->menuParentFormSelector = $menu_parent_form_selector;
-    return $this;
   }
 
   /**
@@ -64,18 +70,18 @@ class MenuBlock extends SystemMenuBlock {
 
     $form = parent::blockForm($form, $form_state);
 
+    // If there exists a config value for Expand all menu links (expand), that
+    // value should populate core's Expand all menu items checkbox
+    // (expand_all_items).
+    if (isset($config['expand'])) {
+      $form['menu_levels']['expand_all_items']['#default_value'] = $config['expand'];
+    }
+
     $form['advanced'] = [
       '#type' => 'details',
       '#title' => $this->t('Advanced options'),
       '#open' => FALSE,
       '#process' => [[get_class(), 'processMenuBlockFieldSets']],
-    ];
-
-    $form['advanced']['expand'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('<strong>Expand all menu links</strong>'),
-      '#default_value' => $config['expand'],
-      '#description' => $this->t('All menu links that have children will "Show as expanded".'),
     ];
 
     $menu_name = $this->getDerivativeId();
@@ -87,6 +93,43 @@ class MenuBlock extends SystemMenuBlock {
     $form['advanced']['parent'] += [
       '#title' => $this->t('Fixed parent item'),
       '#description' => $this->t('Alter the options in “Menu levels” to be relative to the fixed parent item. The block will only contain children of the selected menu link.'),
+    ];
+
+    $form['advanced']['label_type'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Use as title'),
+      '#description' => $this->t('Replace the block title with an item from the menu.'),
+      '#options' => [
+        self::LABEL_BLOCK => $this->t('Block title'),
+        self::LABEL_MENU => $this->t('Menu title'),
+        self::LABEL_FIXED => $this->t("Fixed parent item's title"),
+        self::LABEL_ACTIVE_ITEM => $this->t("Active item's title"),
+        self::LABEL_PARENT => $this->t("Active trail's parent title"),
+        self::LABEL_ROOT => $this->t("Active trail's root title"),
+      ],
+      '#default_value' => $config['label_type'],
+      '#states' => [
+        'visible' => [
+          ':input[name="settings[label_display]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
+    $form['advanced']['label_link'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Link the title?'),
+      '#default_value' => $config['label_link'],
+      '#states' => [
+        'visible' => [
+          ':input[name="settings[label_display]"]' => ['checked' => TRUE],
+          ':input[name="settings[label_type]"]' => [
+            ['value' => self::LABEL_ACTIVE_ITEM],
+            ['value' => self::LABEL_PARENT],
+            ['value' => self::LABEL_ROOT],
+            ['value' => self::LABEL_FIXED],
+          ],
+        ],
+      ],
     ];
 
     $form['style'] = [
@@ -161,9 +204,16 @@ class MenuBlock extends SystemMenuBlock {
     $this->configuration['follow_parent'] = $form_state->getValue('follow_parent');
     $this->configuration['level'] = $form_state->getValue('level');
     $this->configuration['depth'] = $form_state->getValue('depth');
-    $this->configuration['expand'] = $form_state->getValue('expand');
+    $this->configuration['expand_all_items'] = (bool) $form_state->getValue('expand_all_items');
+    // On save, the core config property (expand_all_items) gets updated, and
+    // the contrib config property value (expand) is deleted/removed altogether.
+    if (isset($this->configuration['expand'])) {
+      unset($this->configuration['expand']);
+    }
     $this->configuration['parent'] = $form_state->getValue('parent');
     $this->configuration['suggestion'] = $form_state->getValue('suggestion');
+    $this->configuration['label_type'] = $form_state->getValue('label_type');
+    $this->configuration['label_link'] = $form_state->getValue('label_link');
   }
 
   /**
@@ -176,7 +226,10 @@ class MenuBlock extends SystemMenuBlock {
     // Adjust the menu tree parameters based on the block's configuration.
     $level = $this->configuration['level'];
     $depth = $this->configuration['depth'];
-    $expand = $this->configuration['expand'];
+    // For blocks placed in Layout Builder or similar, check for the deprecated
+    // 'expand' config property in case the menu block's configuration has not
+    // yet been updated.
+    $expand_all_items = $this->configuration['expand'] ?? $this->configuration['expand_all_items'];
     $parent = $this->configuration['parent'];
     $follow = $this->configuration['follow'];
     $follow_parent = $this->configuration['follow_parent'];
@@ -224,7 +277,7 @@ class MenuBlock extends SystemMenuBlock {
     }
 
     // If expandedParents is empty, the whole menu tree is built.
-    if ($expand) {
+    if ($expand_all_items) {
       $parameters->expandedParents = [];
     }
 
@@ -273,9 +326,17 @@ class MenuBlock extends SystemMenuBlock {
     $tree = $this->menuTree->transform($tree, $manipulators);
     $build = $this->menuTree->build($tree);
 
+    $label = $this->getBlockLabel() ?: $this->label();
+    // Set the block's #title (label) to the dynamic value.
+    $build['#title'] = [
+      '#markup' => $label,
+    ];
     if (!empty($build['#theme'])) {
       // Add the configuration for use in menu_block_theme_suggestions_menu().
       $build['#menu_block_configuration'] = $this->configuration;
+      // Set the generated label into the configuration array so it is
+      // propagated to the theme preprocessor and template(s) as needed.
+      $build['#menu_block_configuration']['label'] = $label;
       // Remove the menu name-based suggestion so we can control its precedence
       // better in menu_block_theme_suggestions_menu().
       $build['#theme'] = 'menu';
@@ -308,9 +369,11 @@ class MenuBlock extends SystemMenuBlock {
       'follow_parent' => 'child',
       'level' => 1,
       'depth' => 0,
-      'expand' => 0,
+      'expand_all_items' => FALSE,
       'parent' => $this->getDerivativeId() . ':',
       'suggestion' => strtr($this->getDerivativeId(), '-', '_'),
+      'label_type' => self::LABEL_BLOCK,
+      'label_link' => FALSE,
     ];
   }
 
@@ -322,6 +385,171 @@ class MenuBlock extends SystemMenuBlock {
    */
   public function suggestionExists() {
     return FALSE;
+  }
+
+  /**
+   * Gets the configured block label.
+   *
+   * @return string
+   *   The configured label.
+   */
+  public function getBlockLabel() {
+    switch ($this->configuration['label_type']) {
+      case self::LABEL_MENU:
+        return $this->getMenuTitle();
+
+      case self::LABEL_ACTIVE_ITEM:
+        return $this->getActiveItemTitle();
+
+      case self::LABEL_PARENT:
+        return $this->getActiveTrailParentTitle();
+
+      case self::LABEL_ROOT:
+        return $this->getActiveTrailRootTitle();
+
+      case self::LABEL_FIXED:
+        return $this->getFixedMenuItemTitle();
+
+      default:
+        return $this->label();
+    }
+  }
+
+  /**
+   * Gets the label of the configured menu.
+   *
+   * @return string|null
+   *   Menu label or NULL if no menu exists.
+   */
+  protected function getMenuTitle() {
+    try {
+      $menu = $this->entityTypeManager->getStorage('menu')
+        ->load($this->getDerivativeId());
+    }
+    catch (\Exception $e) {
+      return NULL;
+    }
+
+    return $menu ? $menu->label() : NULL;
+  }
+
+  /**
+   * Gets the title of a fixed parent item.
+   *
+   * @return string|null
+   *   Title of the configured (fixed) parent item, or NULL if there is none.
+   */
+  protected function getFixedMenuItemTitle() {
+    $parent = $this->configuration['parent'];
+
+    if ($parent) {
+      $fixed_menu_link_id = str_replace($this->getDerivativeId() . ':', '', $parent);
+      return $this->getLinkTitleFromLink($fixed_menu_link_id);
+    }
+  }
+
+  /**
+   * Gets the active menu item's title.
+   *
+   * @return string|null
+   *   Currently active menu item title or NULL if there's nothing active.
+   */
+  protected function getActiveItemTitle() {
+    /** @var array $active_trail_ids */
+    $active_trail_ids = $this->getDerivativeActiveTrailIds();
+    if ($active_trail_ids) {
+      return $this->getLinkTitleFromLink(reset($active_trail_ids));
+    }
+  }
+
+  /**
+   * Gets the title of the parent of the active menu item.
+   *
+   * @return string|null
+   *   The title of the parent of the active menu item, the title of the active
+   *   item if it has no parent, or NULL if there's no active menu item.
+   */
+  protected function getActiveTrailParentTitle() {
+    /** @var array $active_trail_ids */
+    $active_trail_ids = $this->getDerivativeActiveTrailIds();
+    if ($active_trail_ids) {
+      if (count($active_trail_ids) === 1) {
+        return $this->getActiveItemTitle();
+      }
+      return $this->getLinkTitleFromLink(next($active_trail_ids));
+    }
+  }
+
+  /**
+   * Gets the current menu item's root menu item title.
+   *
+   * @return string|null
+   *   The root menu item title or NULL if there's no active item.
+   */
+  protected function getActiveTrailRootTitle() {
+    /** @var array $active_trail_ids */
+    $active_trail_ids = $this->getDerivativeActiveTrailIds();
+
+    if ($active_trail_ids) {
+      return $this->getLinkTitleFromLink(end($active_trail_ids));
+    }
+  }
+
+  /**
+   * Gets an array of the active trail menu link items.
+   *
+   * @return array
+   *   The active trail menu item IDs.
+   */
+  protected function getDerivativeActiveTrailIds() {
+    $menu_id = $this->getDerivativeId();
+    return array_filter($this->menuActiveTrail->getActiveTrailIds($menu_id));
+  }
+
+  /**
+   * Gets the title of a given menu item ID.
+   *
+   * @param string $link_id
+   *   The menu item ID.
+   *
+   * @return string|null
+   *   The menu item title or NULL if the given menu item can't be found.
+   */
+  protected function getLinkTitleFromLink($link_id) {
+    $parameters = new MenuTreeParameters();
+    $menu = $this->menuTree->load($this->getDerivativeId(), $parameters);
+    $link = $this->findLinkInTree($menu, $link_id);
+    if ($link) {
+      if ($this->configuration['label_link']) {
+        $block_link = Link::fromTextAndUrl($link->link->getTitle(), $link->link->getUrlObject())->toString();
+        return Markup::create($block_link);
+      }
+      return $link->link->getTitle();
+    }
+  }
+
+  /**
+   * Gets the menu link item from the menu tree.
+   *
+   * @param array $menu_tree
+   *   Associative array containing the menu link tree data.
+   * @param string $link_id
+   *   Menu link id to find.
+   *
+   * @return \Drupal\Core\Menu\MenuLinkTreeElement|null
+   *   The link element from the given menu tree or NULL if it can't be found.
+   */
+  protected function findLinkInTree(array $menu_tree, $link_id) {
+    if (isset($menu_tree[$link_id])) {
+      return $menu_tree[$link_id];
+    }
+    /** @var \Drupal\Core\Menu\MenuLinkTreeElement $link */
+    foreach ($menu_tree as $link) {
+      $link = $this->findLinkInTree($link->subtree, $link_id);
+      if ($link) {
+        return $link;
+      }
+    }
   }
 
 }

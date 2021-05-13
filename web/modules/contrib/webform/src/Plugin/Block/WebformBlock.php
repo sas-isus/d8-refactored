@@ -210,7 +210,7 @@ class WebformBlock extends BlockBase implements ContainerFactoryPluginInterface 
         return ['#markup' => $this->t('The webform (@webform) is broken or missing.', ['@webform' => $this->configuration['webform_id']])];
       }
       else {
-        return NULL;
+        return [];
       }
     }
 

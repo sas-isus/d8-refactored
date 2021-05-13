@@ -30,7 +30,13 @@ function webform_theme() {
     'webform_help_video_youtube' => [
       'variables' => ['youtube_id' => NULL, 'autoplay' => TRUE],
     ],
-
+    'webform_help_support' => [
+      'variables' => [
+        'account' => [],
+        'membership' => [],
+        'contribution' => [],
+      ],
+    ],
     'webform' => [
       'render element' => 'element',
     ],
