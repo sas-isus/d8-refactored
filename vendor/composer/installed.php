@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'ed52b7a588dc77781819231e1dcc7d24194a7406',
+    'reference' => 'a108b58b42e441beb2465b3d97be701043efe4d4',
     'name' => 'pantheon-systems/example-drops-8-composer',
   ),
   'versions' => 
@@ -1174,6 +1174,15 @@
       ),
       'reference' => '8.x-1.5',
     ),
+    'drupal/mailsystem' => 
+    array (
+      'pretty_version' => '4.3.0',
+      'version' => '4.3.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '8.x-4.3',
+    ),
     'drupal/media' => 
     array (
       'replaced' => 
@@ -1459,6 +1468,15 @@
       array (
       ),
       'reference' => '8.x-1.19',
+    ),
+    'drupal/sendgrid_integration' => 
+    array (
+      'pretty_version' => '1.7.0',
+      'version' => '1.7.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '8.x-1.7',
     ),
     'drupal/serialization' => 
     array (
@@ -1830,6 +1848,15 @@
       ),
       'reference' => '3f0eaf0a40181359470651f1565b3e07e3dd31b8',
     ),
+    'fastglass/sendgrid' => 
+    array (
+      'pretty_version' => '1.0.12',
+      'version' => '1.0.12.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '2f118ad67787899a84a95a870fb90a67949c3b82',
+    ),
     'guzzlehttp/guzzle' => 
     array (
       'pretty_version' => '6.5.4',
@@ -1856,6 +1883,15 @@
       array (
       ),
       'reference' => '239400de7a173fe9901b9ac7c06497751f00727a',
+    ),
+    'html2text/html2text' => 
+    array (
+      'pretty_version' => '4.3.1',
+      'version' => '4.3.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '61ad68e934066a6f8df29a3d23a6460536d0855c',
     ),
     'instaclick/php-webdriver' => 
     array (
@@ -1990,7 +2026,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'ed52b7a588dc77781819231e1dcc7d24194a7406',
+      'reference' => 'a108b58b42e441beb2465b3d97be701043efe4d4',
     ),
     'pantheon-systems/quicksilver-pushback' => 
     array (
@@ -2323,6 +2359,29 @@
       array (
       ),
       'reference' => '58b3a85e7999757d6ad81c787a1fbf5ff6c628c6',
+    ),
+    'sendgrid/sendgrid-php' => 
+    array (
+      'replaced' => 
+      array (
+        0 => '*',
+      ),
+    ),
+    'sendgrid/smtpapi' => 
+    array (
+      'pretty_version' => '0.6.7',
+      'version' => '0.6.7.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'cf63bd353c25f775a1fb2654a0a3fff22f573a37',
+    ),
+    'sendgrid/smtpapi-php' => 
+    array (
+      'replaced' => 
+      array (
+        0 => '*',
+      ),
     ),
     'shama/baton' => 
     array (

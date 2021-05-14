@@ -160,6 +160,7 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
             'Symfony\\Cmf\\Component\\Routing\\' => 30,
             'Symfony\\Bridge\\PsrHttpMessage\\' => 30,
             'Stecman\\Component\\Symfony\\Console\\BashCompletion\\' => 49,
+            'SendGrid\\' => 9,
         ),
         'P' => 
         array (
@@ -186,6 +187,10 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
             'Laminas\\Feed\\' => 13,
             'Laminas\\Escaper\\' => 16,
             'Laminas\\Diactoros\\' => 18,
+        ),
+        'H' => 
+        array (
+            'Html2Text\\' => 10,
         ),
         'G' => 
         array (
@@ -403,6 +408,10 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         array (
             0 => __DIR__ . '/..' . '/stecman/symfony-console-completion/src',
         ),
+        'SendGrid\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fastglass/sendgrid/src',
+        ),
         'Psy\\' => 
         array (
             0 => __DIR__ . '/..' . '/psy/psysh/src',
@@ -470,6 +479,11 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         'Laminas\\Diactoros\\' => 
         array (
             0 => __DIR__ . '/..' . '/laminas/laminas-diactoros/src',
+        ),
+        'Html2Text\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/html2text/html2text/src',
+            1 => __DIR__ . '/..' . '/html2text/html2text/test',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
@@ -634,6 +648,10 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
             'Stack' => 
             array (
                 0 => __DIR__ . '/..' . '/stack/builder/src',
+            ),
+            'Smtpapi' => 
+            array (
+                0 => __DIR__ . '/..' . '/sendgrid/smtpapi/lib',
             ),
         ),
         'E' => 
@@ -4336,6 +4354,23 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         'GuzzleHttp\\TransferStats' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/TransferStats.php',
         'GuzzleHttp\\UriTemplate' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/UriTemplate.php',
         'GuzzleHttp\\Utils' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Utils.php',
+        'Html2Text\\BasicTest' => __DIR__ . '/..' . '/html2text/html2text/test/BasicTest.php',
+        'Html2Text\\BlockquoteTest' => __DIR__ . '/..' . '/html2text/html2text/test/BlockquoteTest.php',
+        'Html2Text\\ConstructorTest' => __DIR__ . '/..' . '/html2text/html2text/test/ConstructorTest.php',
+        'Html2Text\\DefinitionListTest' => __DIR__ . '/..' . '/html2text/html2text/test/DefinitionListTest.php',
+        'Html2Text\\DelTest' => __DIR__ . '/..' . '/html2text/html2text/test/DelTest.php',
+        'Html2Text\\Html2Text' => __DIR__ . '/..' . '/html2text/html2text/src/Html2Text.php',
+        'Html2Text\\HtmlCharsTest' => __DIR__ . '/..' . '/html2text/html2text/test/HtmlCharsTest.php',
+        'Html2Text\\ImageTest' => __DIR__ . '/..' . '/html2text/html2text/test/ImageTest.php',
+        'Html2Text\\InsTest' => __DIR__ . '/..' . '/html2text/html2text/test/InsTest.php',
+        'Html2Text\\LinkTest' => __DIR__ . '/..' . '/html2text/html2text/test/LinkTest.php',
+        'Html2Text\\ListTest' => __DIR__ . '/..' . '/html2text/html2text/test/ListTest.php',
+        'Html2Text\\PreTest' => __DIR__ . '/..' . '/html2text/html2text/test/PreTest.php',
+        'Html2Text\\PrintTest' => __DIR__ . '/..' . '/html2text/html2text/test/PrintTest.php',
+        'Html2Text\\SearchReplaceTest' => __DIR__ . '/..' . '/html2text/html2text/test/SearchReplaceTest.php',
+        'Html2Text\\SpanTest' => __DIR__ . '/..' . '/html2text/html2text/test/SpanTest.php',
+        'Html2Text\\StrToUpperTest' => __DIR__ . '/..' . '/html2text/html2text/test/StrToUpperTest.php',
+        'Html2Text\\TableTest' => __DIR__ . '/..' . '/html2text/html2text/test/TableTest.php',
         'Laminas\\Diactoros\\AbstractSerializer' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/AbstractSerializer.php',
         'Laminas\\Diactoros\\CallbackStream' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/CallbackStream.php',
         'Laminas\\Diactoros\\Exception\\DeprecatedMethodException' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/Exception/DeprecatedMethodException.php',
@@ -5758,7 +5793,14 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         'SebastianBergmann\\RecursionContext\\Exception' => __DIR__ . '/..' . '/sebastian/recursion-context/src/Exception.php',
         'SebastianBergmann\\RecursionContext\\InvalidArgumentException' => __DIR__ . '/..' . '/sebastian/recursion-context/src/InvalidArgumentException.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
+        'SendGrid\\API' => __DIR__ . '/..' . '/fastglass/sendgrid/src/API.php',
+        'SendGrid\\Client' => __DIR__ . '/..' . '/fastglass/sendgrid/src/Client.php',
+        'SendGrid\\Email' => __DIR__ . '/..' . '/fastglass/sendgrid/src/Email.php',
+        'SendGrid\\Exception' => __DIR__ . '/..' . '/fastglass/sendgrid/src/Exception.php',
+        'SendGrid\\Response' => __DIR__ . '/..' . '/fastglass/sendgrid/src/Response.php',
         'SessionUpdateTimestampHandlerInterface' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/SessionUpdateTimestampHandlerInterface.php',
+        'Smtpapi' => __DIR__ . '/..' . '/sendgrid/smtpapi/lib/Smtpapi.php',
+        'Smtpapi\\Header' => __DIR__ . '/..' . '/sendgrid/smtpapi/lib/Smtpapi/Header.php',
         'Stack\\Builder' => __DIR__ . '/..' . '/stack/builder/src/Stack/Builder.php',
         'Stack\\StackedHttpKernel' => __DIR__ . '/..' . '/stack/builder/src/Stack/StackedHttpKernel.php',
         'Stecman\\Component\\Symfony\\Console\\BashCompletion\\Completion' => __DIR__ . '/..' . '/stecman/symfony-console-completion/src/Completion.php',

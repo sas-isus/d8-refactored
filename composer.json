@@ -68,6 +68,7 @@
         "drupal/redirect": "^1.1",
         "drupal/role_delegation": "^1.1",
         "drupal/search_api": "^1.15",
+        "drupal/sendgrid_integration": "^1.7",
         "drupal/simple_sitemap": "^3.4",
         "drupal/taxonomy_menu": "^3.4",
         "drupal/token": "^1.6",
