@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '00552734a3337f68f4909e0ba0f095ee3f409056',
+    'reference' => '31a048683770130c497936d56ece1119b24c76dc',
     'name' => 'pantheon-systems/example-drops-8-composer',
   ),
   'versions' => 
@@ -409,6 +409,15 @@
       array (
         0 => '8.9.16',
       ),
+    ),
+    'drupal/captcha' => 
+    array (
+      'pretty_version' => '1.2.0',
+      'version' => '1.2.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '8.x-1.2',
     ),
     'drupal/ckeditor' => 
     array (
@@ -1046,6 +1055,15 @@
         0 => '8.9.16',
       ),
     ),
+    'drupal/honeypot' => 
+    array (
+      'pretty_version' => '2.0.1',
+      'version' => '2.0.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '2.0.1',
+    ),
     'drupal/image' => 
     array (
       'replaced' => 
@@ -1420,6 +1438,15 @@
       array (
         0 => '8.9.16',
       ),
+    ),
+    'drupal/recaptcha' => 
+    array (
+      'pretty_version' => '3.0.0',
+      'version' => '3.0.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '8.x-3.0',
     ),
     'drupal/redirect' => 
     array (
@@ -1857,6 +1884,15 @@
       ),
       'reference' => '2f118ad67787899a84a95a870fb90a67949c3b82',
     ),
+    'google/recaptcha' => 
+    array (
+      'pretty_version' => '1.2.4',
+      'version' => '1.2.4.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '614f25a9038be4f3f2da7cbfd778dc5b357d2419',
+    ),
     'guzzlehttp/guzzle' => 
     array (
       'pretty_version' => '6.5.4',
@@ -2026,7 +2062,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '00552734a3337f68f4909e0ba0f095ee3f409056',
+      'reference' => '31a048683770130c497936d56ece1119b24c76dc',
     ),
     'pantheon-systems/quicksilver-pushback' => 
     array (
