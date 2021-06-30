@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -23,7 +22,6 @@ elements: |
       authenticated: 'Authenticated (authenticated)'
       administrator: 'Administrator (administrator)'
       other: Other
-  
 css: ''
 javascript: ''
 settings:

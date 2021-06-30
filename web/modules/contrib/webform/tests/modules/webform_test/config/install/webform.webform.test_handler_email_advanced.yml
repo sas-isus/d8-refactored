@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -56,7 +55,6 @@ elements: |
     '#title': Notes
     '#private': true
     '#default_value': 'These notes are private.'
-  
 css: ''
 javascript: ''
 settings:

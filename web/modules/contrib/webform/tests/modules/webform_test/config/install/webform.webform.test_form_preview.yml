@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -52,7 +51,6 @@ elements: |
       '#format_attributes':
         class:
           - format-attributes-class
-  
 css: |
   .format-attributes-class {
     border: 1px dashed #ccc;

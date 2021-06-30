@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -346,7 +345,6 @@ elements: |
     element_100:
       '#type': textfield
       '#title': 'Element #100'
-  
 css: ''
 javascript: ''
 settings:

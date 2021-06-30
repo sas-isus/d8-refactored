@@ -28,6 +28,15 @@ Steps for creating a new release
     phpcs --standard=DrupalPractice --extensions=php,module,inc,install,test,profile,theme,js,css,info modules/sandbox/webform > ~/webform-php-best-practice.txt
     cat ~/webform-php-best-practice.txt
 
+    # Install PHP version compatibility (One-time)
+    cd /var/www/sites/d8_webform
+    composer require --dev phpcompatibility/php-compatibility
+
+    # Check PHP version compatibility
+    cd /var/www/sites/d8_webform/web
+    phpcs --runtime-set testVersion 8.0 --standard=../vendor/phpcompatibility/php-compatibility/PHPCompatibility --extensions=php,module,inc,install,test,profile,theme modules/sandbox/webform > ~/webform-php-compatibility.txt
+    cat ~/webform-php-compatibility.txt
+
 [JavaScript](https://www.drupal.org/node/2873849)
 
     # Install Eslint. (One-time)

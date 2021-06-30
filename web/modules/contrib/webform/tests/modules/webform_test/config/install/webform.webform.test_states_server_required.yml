@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -334,7 +333,6 @@ elements: |
         visible:
           ':input[name="currency_trigger"]':
             checked: true
-  
   address_trigger_details:
     '#type': details
     '#title': address_trigger
@@ -448,7 +446,6 @@ elements: |
         required:
           ':input[name="composite_sub_elements_required_trigger"]':
             value: b
-  
 css: ''
 javascript: ''
 settings:

@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -19,7 +18,6 @@ elements: |
   test:
     '#type': textfield
     '#title': 'First input'
-  
 css: ''
 javascript: ''
 settings:

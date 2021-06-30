@@ -209,15 +209,6 @@ trait WebformEntityReferenceTrait {
   /**
    * {@inheritdoc}
    */
-  public function getExportDefaultOptions() {
-    return [
-      'entity_reference_items' => ['id', 'title', 'url'],
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $export_options) {
     if (isset($form['entity_reference'])) {
       return;

@@ -45,7 +45,7 @@ function webform_cards_entity_base_field_info(EntityTypeInterface $entity_type) 
  */
 function webform_cards_menu_local_actions_alter(&$local_actions) {
   if (!\Drupal::moduleHandler()->moduleExists('webform_ui')) {
-    $local_actions['entity.webform_ui.element.card'];
+    unset($local_actions['entity.webform_ui.element.card']);
   }
 }
 
@@ -389,7 +389,7 @@ function webform_cards_form_webform_settings_form_alter(array &$form, FormStateI
 }
 
 /**
- * Implements hook_form_FORM_ID_alter() for webform settings:form.
+ * Implements hook_form_FORM_ID_alter() for webform settings form.
  *
  * @see \Drupal\webform\EntitySettings\WebformEntitySettingsGeneralForm
  * @see /admin/structure/webform/manage/{webform}/settings/form
@@ -457,6 +457,37 @@ function webform_cards_form_webform_settings_form_form_alter(array &$form, FormS
       ],
     ],
   ]);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for webform settings submissions.
+ *
+ * @see \Drupal\webform\EntitySettings\WebformEntitySettingsSubmissionsForm
+ * @see /admin/structure/webform/manage/{webform}/settings/form
+ */
+function webform_cards_form_webform_settings_submissions_form_alter(array &$form, FormStateInterface $form_state) {
+  /** @var \Drupal\webform\EntitySettings\WebformEntitySettingsSubmissionsForm $form_object */
+  $form_object = $form_state->getFormObject();
+  $webform = $form_object->getEntity();
+
+  /** @var \Drupal\webform_cards\WebformCardsManagerInterface $webform_cards_manager */
+  $webform_cards_manager = \Drupal::service('webform_cards.manager');
+
+  // Check if the webform has cards.
+  if ($webform_cards_manager->hasCards($webform)) {
+    $form['draft_settings']['draft_container']['draft_auto_save']['#default_value'] = 0;
+    $form['draft_settings']['draft_container']['draft_auto_save']['#disabled'] = TRUE;
+    $form['draft_settings']['draft_container']['draft_multiple']['#weight'] = -1;
+    $form['draft_settings']['draft_container']['draft_auto_save_message'] = [
+      '#type' => 'webform_message',
+      '#message_message' => t('The automatic saving of drafts is not supported by cards. Please try using the <a href=":href">Webform autosave module</a>.', [':href' => 'https://www.drupal.org/project/webformautosave']),
+      '#message_type' => 'info',
+      '#message_close' => TRUE,
+      '#message_storage' => WebformMessage::STORAGE_SESSION,
+      '#message_id' => 'webform_card_draft_auto_save',
+      '#weight' => 0,
+    ];
+  }
 }
 
 /**

@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -74,7 +73,6 @@ elements: |
             checked: true
           ':input[name="visible_slide_textfield"]':
             filled: true
-  
 css: ''
 javascript: ''
 settings:

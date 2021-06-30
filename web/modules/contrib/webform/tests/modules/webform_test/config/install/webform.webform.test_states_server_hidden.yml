@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -139,7 +138,6 @@ elements: |
         invisible:
           ':input[name="trigger_checkbox"]':
             checked: true
-  
 css: ''
 javascript: ''
 settings:
@@ -327,5 +325,7 @@ handlers:
     status: true
     conditions: {  }
     weight: 0
-    settings: {  }
+    settings:
+      format: yaml
+      submission: false
 variants: {  }

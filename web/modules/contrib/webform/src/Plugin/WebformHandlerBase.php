@@ -27,6 +27,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 abstract class WebformHandlerBase extends PluginBase implements WebformHandlerInterface {
 
+  use WebformPluginSettingsTrait;
+
   /**
    * The webform.
    *

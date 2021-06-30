@@ -122,7 +122,7 @@ class WebformEntityTranslationTest extends WebformBrowserTestBase {
 
     // Check default elements.
     $this->drupalGet('/admin/structure/webform/manage/test_translation/translate/fr/add');
-    $this->assertRaw('<textarea lang="fr" data-drupal-selector="edit-translation-config-names-webformwebformtest-translation-elements" aria-describedby="edit-translation-config-names-webformwebformtest-translation-elements--description" class="js-webform-codemirror webform-codemirror yaml form-textarea" data-webform-codemirror-mode="text/x-yaml" id="edit-translation-config-names-webformwebformtest-translation-elements" name="translation[config_names][webform.webform.test_translation][elements]" rows="52" cols="60">variant:
+    $this->assertRaw('<textarea lang="fr" data-drupal-selector="edit-translation-config-names-webformwebformtest-translation-elements" aria-describedby="edit-translation-config-names-webformwebformtest-translation-elements--description" class="js-webform-codemirror webform-codemirror yaml form-textarea" data-webform-codemirror-mode="text/x-yaml" id="edit-translation-config-names-webformwebformtest-translation-elements" name="translation[config_names][webform.webform.test_translation][elements]" rows="65" cols="60">variant:
   &#039;#title&#039;: Variant
 textfield:
   &#039;#title&#039;: &#039;Text field&#039;
@@ -159,6 +159,10 @@ address:
   &#039;#country__title&#039;: Country
 token:
   &#039;#title&#039;: &#039;Computed (token)&#039;
+autocomplete_options:
+  &#039;#title&#039;: &#039;Autocomplete (options)&#039;
+autocomplete_custom:
+  &#039;#title&#039;: &#039;Autocomplete (custom)&#039;
 actions:
   &#039;#title&#039;: &#039;Submit button(s)&#039;
   &#039;#submit__label&#039;: &#039;Send message&#039;</textarea>

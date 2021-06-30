@@ -62,6 +62,9 @@ class WebformSubmissionTokenOperationsTest extends WebformBrowserTestBase {
     $this->assertRaw('Submission information');
     $this->assertRaw('<label>textfield</label>');
 
+    // Check that the 'Delete submission' link has token appended to it.
+    $this->assertLinkByHref($webform_submission->getTokenUrl('delete')->setAbsolute(FALSE)->toString());
+
     // Check token view access denied.
     $webform->setSetting('token_view', FALSE)->save();
     $this->drupalLogin($normal_user);
@@ -69,6 +72,7 @@ class WebformSubmissionTokenOperationsTest extends WebformBrowserTestBase {
     $this->assertResponse(403);
     $this->assertNoRaw('Submission information');
     $this->assertNoRaw('<label>textfield</label>');
+
 
     /**************************************************************************/
     /* Update */

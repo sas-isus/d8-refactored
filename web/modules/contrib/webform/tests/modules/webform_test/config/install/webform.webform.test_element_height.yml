@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -63,18 +62,11 @@ elements: |
     '#feet__min': 3
     '#feet__max': 10
     '#default_value': 120
-  height_select_min_max:
-    '#type': webform_height
-    '#title': height_select_min_max
-    '#height_type': select
-    '#feet__min': 3
-    '#feet__max': 10
-    '#default_value': 120
   height_number_step:
     '#type': webform_height
     '#title': height_number_step
     '#height_type': select
-    '#inches__step': .5
+    '#inches__step': 0.5
     '#default_value': 60.5
   height_number_empty:
     '#type': webform_height
@@ -92,7 +84,6 @@ elements: |
     '#title': height_select_empty_required
     '#height_type': select
     '#required': true
-  
 css: ''
 javascript: ''
 settings:
@@ -275,9 +266,12 @@ handlers:
   debug:
     id: debug
     label: Debug
+    notes: ''
     handler_id: debug
     status: true
     conditions: {  }
     weight: 1
-    settings: {  }
+    settings:
+      format: yaml
+      submission: false
 variants: {  }

@@ -44,7 +44,7 @@ class WebformElementTermsOfServiceTest extends WebformElementBrowserTestBase {
 
     // Check validation.
     $this->drupalPostForm('/webform/test_element_terms_of_service', [], 'Preview');
-    $this->assertRaw('I agree to the {terms of service}. (default) field is required.');
+    $this->assertRaw('I agree to the terms of service. (default) field is required.');
 
     // Check preview.
     $edit = [

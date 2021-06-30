@@ -50,11 +50,27 @@
       // Add '.form-item--error-message' class to all errors.
       $(this.currentForm).find('strong.error').addClass('form-item--error-message');
 
-      // Move all radios, checkbox, and datelist errors to parent container.
-      $(this.currentForm).find('.form-checkboxes, .form-radios, .form-type-datelist .container-inline, .form-type-tel, .webform-type-webform-height .form--inline').each(function () {
+      // Move all radios, checkboxes, and datelist errors to appear after
+      // the parent container.
+      $(this.currentForm).find('.form-checkboxes, .form-radios, .form-type-datelist .container-inline, .form-type-tel, .webform-type-webform-height .form--inline, .js-webform-tableselect').each(function () {
         var $container = $(this);
         var $errorMessages = $container.find('strong.error.form-item--error-message');
         $errorMessages.insertAfter($container);
+      });
+
+      // Move checkbox errors to appear as the last item in the
+      // parent container.
+      $(this.currentForm).find('.form-type-checkbox').each(function () {
+        var $container = $(this);
+        var $errorMessages = $container.find('strong.error.form-item--error-message');
+        $container.append($errorMessages);
+      });
+      
+      // Move all likert errors to question <label>.
+      $(this.currentForm).find('.webform-likert-table tbody tr').each(function () {
+        var $row = $(this);
+        var $errorMessages = $row.find('strong.error.form-item--error-message');
+        $errorMessages.appendTo($row.find('td:first-child'));
       });
 
       // Move error after field suffix.
@@ -62,6 +78,22 @@
         var $fieldSuffix = $(this);
         var $errorMessages = $fieldSuffix.prev('strong.error.form-item--error-message');
         $errorMessages.insertAfter($fieldSuffix);
+      });
+
+      // Add custom clear error handling to checkboxes to remove the
+      // error message, when any checkbox is checked.
+      $(this.currentForm).find('.form-checkboxes').once('webform-clientside-validation-form-checkboxes').each(function () {
+        var $container = $(this);
+        $container.find('input:checkbox').click( function () {
+          var state = $container.find('input:checkbox:checked').length ? 'hide' : 'show';
+          var $message = $container.next('strong.error.form-item--error-message');
+          $message[state]();
+
+          // Ensure the message is set. This code addresses an expected bug
+          // where the error message is emptied when it is toggled.
+          var message = $container.find('[data-msg-required]').data('msg-required');
+          $message.html(message);
+        });
       });
     };
   });

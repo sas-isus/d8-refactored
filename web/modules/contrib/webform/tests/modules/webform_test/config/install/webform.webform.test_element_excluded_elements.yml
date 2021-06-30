@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -38,7 +37,6 @@ elements: |
     '#default_value':
       webform_excluded_elements: webform_excluded_elements
       webform_excluded_elements_markup: webform_excluded_elements_markup
-  
 css: ''
 javascript: ''
 settings:
@@ -226,5 +224,7 @@ handlers:
     status: true
     conditions: {  }
     weight: 0
-    settings: {  }
+    settings:
+      format: yaml
+      submission: false
 variants: {  }

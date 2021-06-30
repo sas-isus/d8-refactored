@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -40,7 +39,6 @@ elements: |
       '#type': datelist
       '#title': datelist_basic
       '#multiple': true
-  
 css: ''
 javascript: ''
 settings:
@@ -228,5 +226,7 @@ handlers:
     status: true
     conditions: {  }
     weight: 0
-    settings: {  }
+    settings:
+      format: yaml
+      submission: false
 variants: {  }

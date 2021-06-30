@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -103,7 +102,6 @@ elements: |
       '#type': textfield
       '#title': dependent_details_textfield
       '#default_value': '{dependent_details_textfield}'
-  
 css: ''
 javascript: ''
 settings:
@@ -291,5 +289,7 @@ handlers:
     status: true
     conditions: {  }
     weight: 0
-    settings: {  }
+    settings:
+      format: yaml
+      submission: false
 variants: {  }

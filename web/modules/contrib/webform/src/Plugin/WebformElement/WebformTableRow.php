@@ -361,6 +361,13 @@ class WebformTableRow extends WebformElementBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function preview() {
+    return [];
+  }
+
+  /**
    * Get child elements incremented with a new index.
    *
    * @param string $element_key

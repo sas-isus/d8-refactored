@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -61,7 +60,6 @@ elements: |
     '#field_suffix': suffix
     fieldset_markup:
       '#markup': '<p>This is some markup</p>'
-  
 css: ''
 javascript: ''
 settings:

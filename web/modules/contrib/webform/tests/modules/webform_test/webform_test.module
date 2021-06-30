@@ -146,6 +146,7 @@ function _webform_test_get_element_preview($type, array $options = []) {
   static $skipped = [
     'webform_example_element',
     'webform_example_composite',
+    'webform_test_offcanvas_width_element',
   ];
 
   // Skip certain elements that should never be included in test forms.
@@ -163,6 +164,12 @@ function _webform_test_get_element_preview($type, array $options = []) {
 
   $element = $webform_element->preview();
   if (empty($element)) {
+    return FALSE;
+  }
+
+  // Skip custom options.
+  // @see \Drupal\webform_options_custom\Entity\WebformOptionsCustom::getPreview
+  if (isset($element['#type']) && $element['#type'] === 'webform_options_custom') {
     return FALSE;
   }
 

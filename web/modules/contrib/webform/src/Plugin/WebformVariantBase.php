@@ -20,6 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class WebformVariantBase extends PluginBase implements WebformVariantInterface {
 
   use WebformEntityInjectionTrait;
+  use WebformPluginSettingsTrait;
 
   /**
    * The webform variant ID.

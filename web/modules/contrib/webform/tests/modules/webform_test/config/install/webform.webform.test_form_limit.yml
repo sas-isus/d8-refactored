@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -36,10 +35,10 @@ elements: |
         remaining:webform:source_entity: [webform_submission:remaining:webform:source_entity]<br/>
         limit:user:source_entity: [webform_submission:limit:user:source_entity]<br/>
         remaining:user:source_entity: [webform_submission:remaining:user:source_entity]<br/>
+        
   name:
     '#type': textfield
     '#title': Name
-  
 css: ''
 javascript: ''
 settings:

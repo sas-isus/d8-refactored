@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '31a048683770130c497936d56ece1119b24c76dc',
+    'reference' => '8b678ac1aaaa02fefd1e0d1db978fbf705a53dad',
     'name' => 'pantheon-systems/example-drops-8-composer',
   ),
   'versions' => 
@@ -157,12 +157,12 @@
     ),
     'cweagans/composer-patches' => 
     array (
-      'pretty_version' => '1.7.0',
-      'version' => '1.7.0.0',
+      'pretty_version' => '1.7.1',
+      'version' => '1.7.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'ae02121445ad75f4eaff800cc532b5e6233e2ddf',
+      'reference' => '9888dcc74993c030b75f3dd548bb5e20cdbd740c',
     ),
     'dflydev/dot-access-configuration' => 
     array (
@@ -783,17 +783,17 @@
     ),
     'drupal/ctools' => 
     array (
-      'pretty_version' => '3.6.0',
-      'version' => '3.6.0.0',
+      'pretty_version' => '3.7.0',
+      'version' => '3.7.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-3.6',
+      'reference' => '8.x-3.7',
     ),
     'drupal/ctools_block' => 
     array (
-      'pretty_version' => '3.6.0',
-      'version' => '3.6.0.0',
+      'pretty_version' => '3.7.0',
+      'version' => '3.7.0.0',
       'aliases' => 
       array (
       ),
@@ -849,12 +849,12 @@
     ),
     'drupal/ds' => 
     array (
-      'pretty_version' => '3.12.0',
-      'version' => '3.12.0.0',
+      'pretty_version' => '3.13.0',
+      'version' => '3.13.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-3.12',
+      'reference' => '8.x-3.13',
     ),
     'drupal/dynamic_page_cache' => 
     array (
@@ -881,21 +881,21 @@
     ),
     'drupal/editor_advanced_link' => 
     array (
-      'pretty_version' => '1.8.0',
-      'version' => '1.8.0.0',
+      'pretty_version' => '1.9.0',
+      'version' => '1.9.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-1.8',
+      'reference' => '8.x-1.9',
     ),
     'drupal/entity_browser' => 
     array (
-      'pretty_version' => '2.5.0',
-      'version' => '2.5.0.0',
+      'pretty_version' => '2.6.0',
+      'version' => '2.6.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-2.5',
+      'reference' => '8.x-2.6',
     ),
     'drupal/entity_reference' => 
     array (
@@ -924,12 +924,12 @@
     ),
     'drupal/externalauth' => 
     array (
-      'pretty_version' => '1.3.0',
-      'version' => '1.3.0.0',
+      'pretty_version' => '1.4.0',
+      'version' => '1.4.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-1.3',
+      'reference' => '8.x-1.4',
     ),
     'drupal/extlink' => 
     array (
@@ -1782,12 +1782,12 @@
     ),
     'drupal/webform' => 
     array (
-      'pretty_version' => '5.26.0',
-      'version' => '5.26.0.0',
+      'pretty_version' => '5.27.0',
+      'version' => '5.27.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-5.26',
+      'reference' => '8.x-5.27',
     ),
     'drupal/workbench' => 
     array (
@@ -1931,12 +1931,12 @@
     ),
     'instaclick/php-webdriver' => 
     array (
-      'pretty_version' => '1.4.7',
-      'version' => '1.4.7.0',
+      'pretty_version' => '1.4.9',
+      'version' => '1.4.9.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'b5f330e900e9b3edfc18024a5ec8c07136075712',
+      'reference' => '961b12178cb71f8667afaf2f66ab3e000e060e1c',
     ),
     'jcalderonzumba/gastonjs' => 
     array (
@@ -2062,7 +2062,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '31a048683770130c497936d56ece1119b24c76dc',
+      'reference' => '8b678ac1aaaa02fefd1e0d1db978fbf705a53dad',
     ),
     'pantheon-systems/quicksilver-pushback' => 
     array (

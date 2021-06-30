@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -38,7 +37,6 @@ elements: |
     '#autocomplete_existing': true
     '#autocomplete_limit': 5
     '#autocomplete_match': 1
-  
 css: ''
 javascript: ''
 settings:

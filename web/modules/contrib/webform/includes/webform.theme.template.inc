@@ -376,6 +376,11 @@ function template_preprocess_webform_submission_information(array &$variables) {
     else {
       $base_route_name = 'webform_submission.delete_form';
     }
+    // Append token to delete URL.
+    $token = \Drupal::request()->query->get('token');
+    if ($webform->getSetting('token_delete') && $token === $webform_submission->getToken()) {
+      $route_options['query']['token'] = $token;
+    }
     $url = $request_handler->getUrl($webform_submission, $source_entity, $base_route_name, $route_options);
     $variables['delete'] = [
       '#type' => 'link',
@@ -715,6 +720,7 @@ function template_preprocess_webform_section(array &$variables) {
   $variables['title_display'] = isset($element['#title_display']) ? $element['#title_display'] : NULL;
   $variables['title_tag'] = isset($element['#title_tag']) ? $element['#title_tag'] : 'h2';
   $variables['title_attributes'] = isset($element['#title_attributes']) ? $element['#title_attributes'] : [];
+  $variables['description_display'] = isset($element['#description_display']) ? $element['#description_display'] : 'before';
   $variables['children'] = $element['#children'];
   $variables['required'] = !empty($element['#required']) ? $element['#required'] : NULL;
 

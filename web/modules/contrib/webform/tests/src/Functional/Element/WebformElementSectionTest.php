@@ -35,6 +35,18 @@ class WebformElementSectionTest extends WebformElementBrowserTestBase {
     // Check section title_display: invisible.
     $this->assertRaw('<h2 class="visually-hidden webform-section-title">webform_section_title_invisible</h2>');
 
+    // Check section description_display: default.
+    $this->assertPattern('/Display default description.+name="webform_section_description_display_default_textfield"/ms');
+
+    // Check section description_display: before.
+    $this->assertPattern('/Display before description.+name="webform_section_description_display_before_textfield"/ms');
+
+    // Check section description_display: after.
+    $this->assertPattern('/name="webform_section_description_display_after_textfield".+Display after description/ms');
+
+    // Check section description_display: invisible.
+    $this->assertRaw('<div class="description"><div id="edit-webform-section-description-display-invisible--description" class="webform-element-description visually-hidden">Display invisible description.</div>');
+
     // Check change default title tag.
     \Drupal::configFactory()->getEditable('webform.settings')
       ->set('element.default_section_title_tag', 'address')

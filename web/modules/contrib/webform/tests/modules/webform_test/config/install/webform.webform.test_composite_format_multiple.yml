@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -712,7 +711,6 @@ elements: |
             phone: '+1 212-333-4444'
             ext: 0
         '#format_items': table
-  
 css: ''
 javascript: ''
 settings:

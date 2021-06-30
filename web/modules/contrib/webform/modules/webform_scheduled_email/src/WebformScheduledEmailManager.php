@@ -167,14 +167,13 @@ class WebformScheduledEmailManager implements WebformScheduledEmailManagerInterf
     /** @var \Drupal\webform_scheduled_email\Plugin\WebformHandler\ScheduleEmailWebformHandler $handler */
     $handler = $webform->getHandler($handler_id);
 
-    $configuration = $handler->getConfiguration();
-    if (empty($configuration['settings']['send'])) {
+    $send = $handler->getSetting('send');
+    if (empty($send)) {
       return FALSE;
     }
 
     // Get send +/- days.
-    $send = $configuration['settings']['send'];
-    $days = (!empty($configuration['settings']['days'])) ? $configuration['settings']['days'] : 0;
+    $days = $handler->getSetting('days') ?: 0;
 
     // ISSUE:
     // [webform_submission:completed:html_date] token is not being replaced
@@ -216,7 +215,7 @@ class WebformScheduledEmailManager implements WebformScheduledEmailManagerInterf
       $webform = $webform_submission->getWebform();
       /** @var \Drupal\webform_scheduled_email\Plugin\WebformHandler\ScheduleEmailWebformHandler $handler */
       $handler = $webform->getHandler($handler_id);
-      $handler_configuration = $handler->getConfiguration();
+      $handler_settings = $handler->getSettings();
 
       // Check send date and set timestamp.
       $send_iso_date = $this->getSendDate($webform_submission, $handler_id);
@@ -228,13 +227,13 @@ class WebformScheduledEmailManager implements WebformScheduledEmailManagerInterf
 
       // Check submission state and unschedule.
       $state = $webform_submission->getState();
-      if (!in_array($state, $handler_configuration['settings']['states']) && $handler_configuration['settings']['unschedule']) {
+      if (!in_array($state, $handler_settings['states']) && $handler_settings['unschedule']) {
         $this->unschedule($webform_submission, $handler_id);
         return WebformScheduledEmailManagerInterface::EMAIL_UNSCHEDULED;
       }
 
       // Check if action should be triggered in the past.
-      if (!empty($handler_configuration['settings']['ignore_past']) && $send_timestamp < $this->time->getRequestTime()) {
+      if (!empty($handler_settings['ignore_past']) && $send_timestamp < $this->time->getRequestTime()) {
         $this->unschedule($webform_submission, $handler_id);
         return WebformScheduledEmailManagerInterface::EMAIL_IGNORED;
       }

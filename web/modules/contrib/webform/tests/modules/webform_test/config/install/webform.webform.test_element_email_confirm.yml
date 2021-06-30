@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -38,12 +37,11 @@ elements: |
     '#title': email_confirm_required
     '#required': true
     '#required_error': 'Email address is required'
-    '#default_value': 'example@example.com'
+    '#default_value': example@example.com
   email_confirm_flexbox:
     '#type': webform_email_confirm
     '#title': email_confirm_flexbox
     '#flexbox': 1
-  
 css: ''
 javascript: ''
 settings:
@@ -231,5 +229,7 @@ handlers:
     status: true
     conditions: {  }
     weight: 1
-    settings: {  }
+    settings:
+      format: yaml
+      submission: false
 variants: {  }

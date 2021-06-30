@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -21,7 +20,6 @@ elements: |
     '#title': webform_image_file_attachment
     '#file_extensions': gif
     '#attachment_image_style': thumbnail
-  
 css: ''
 javascript: ''
 settings:

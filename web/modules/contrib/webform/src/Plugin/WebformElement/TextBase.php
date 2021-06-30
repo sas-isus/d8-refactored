@@ -135,6 +135,11 @@ abstract class TextBase extends WebformElementBase {
         $element['#attributes']['data-webform-pattern-error'] = WebformHtmlHelper::toPlainText($element['#pattern_error']);
       }
     }
+
+    // Minlength attribute.
+    if (isset($element['#minlength'])) {
+      $element['#attributes']['minlength'] = $element['#minlength'];
+    }
   }
 
   /**
@@ -278,6 +283,8 @@ abstract class TextBase extends WebformElementBase {
     $input_mask = $element['#input_mask'];
     $input_masks = [
       "'alias': 'currency'" => '$ 0.00',
+      "'alias': 'currency_negative'" => '-$ 0.00',
+      "'alias': 'currency_positive_negative'" => '$ 0.00',
     ];
     return (isset($input_masks[$input_mask]) && $input_masks[$input_mask] === $value) ? TRUE : FALSE;
   }
@@ -351,9 +358,19 @@ abstract class TextBase extends WebformElementBase {
   protected function getInputMasks() {
     $input_masks = [
       "'alias': 'currency'" => [
-        'title' => $this->t('Currency'),
+        'title' => $this->t('Currency (+)'),
         'example' => '$ 9.99',
         'pattern' => '^\$ [0-9]{1,3}(,[0-9]{3})*.\d\d$',
+      ],
+      "'alias': 'currency_negative'" => [
+        'title' => $this->t('Currency (-)'),
+        'example' => '-$ 9.99',
+        'pattern' => '^(-\$ [0-9]{1,3}(,[0-9]{3})*.\d\d|\$ 0.00)$',
+      ],
+      "'alias': 'currency_positive_negative'" => [
+        'title' => $this->t('Currency (+/-)'),
+        'example' => '$ 9.99',
+        'pattern' => '^[-]?\$ [0-9]{1,3}(,[0-9]{3})*.\d\d$',
       ],
       "'alias': 'datetime'" => [
         'title' => $this->t('Date'),

@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -35,7 +34,34 @@ elements: |
     '#title_tag': h5
     '#title_attributes':
       style: 'color: red'
-  
+  webform_section_description_display_default:
+    '#type': webform_section
+    '#title': webform_section_description_display_default
+    '#description': 'Display default description.'
+    webform_section_description_display_default_textfield:
+      '#type': textfield
+      '#title': webform_section_description_display_default_textfield
+  webform_section_description_display_before:
+    '#type': webform_section
+    '#title': webform_section_description_display_before
+    '#description': 'Display before description.'
+    '#description_display': before
+    webform_section_description_display_before_textfield:
+      '#type': textfield
+      '#title': webform_section_description_display_before_textfield
+  webform_section_description_display_after:
+    '#type': webform_section
+    '#title': webform_section_description_display_after
+    '#description': 'Display after description.'
+    '#description_display': after
+    webform_section_description_display_after_textfield:
+      '#type': textfield
+      '#title': webform_section_description_display_after_textfield
+  webform_section_description_display_invisible:
+    '#type': webform_section
+    '#title': webform_section_description_display_invisible
+    '#description': 'Display invisible description.'
+    '#description_display': invisible
 css: ''
 javascript: ''
 settings:

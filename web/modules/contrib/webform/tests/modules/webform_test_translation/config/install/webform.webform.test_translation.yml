@@ -63,6 +63,19 @@ elements: |
     '#type': webform_computed_token
     '#title': 'Computed (token)'
     '#value': 'Site name: [site:name]'
+  autocomplete_options:
+    '#type': autocomplete
+    '#title': 'Autocomplete (options)'
+    '#format_items': comma
+    '#autocomplete_items': test_translation
+  autocomplete_custom:
+    '#type': autocomplete
+    '#title': 'Autocomplete (custom)'
+    '#format_items': comma
+    '#autocomplete_items':
+      - Seven
+      - Eight
+      - Nine
   actions:
     '#type': webform_actions
     '#title': 'Submit button(s)'

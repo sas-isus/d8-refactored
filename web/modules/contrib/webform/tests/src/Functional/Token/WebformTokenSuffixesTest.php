@@ -64,6 +64,22 @@ class WebformTokenSuffixesTest extends WebformBrowserTestBase {
         'message' => 'Basic token with decoded HTML markup',
         'options' => [],
       ],
+      // :urlencode.
+      [
+        'site_name' => 'Two words',
+        'text' => '[site:name:urlencode]',
+        'expected' => 'Two+words',
+        'message' => 'Basic token with url encode',
+        'options' => [],
+      ],
+      // :rawurlencode.
+      [
+        'site_name' => 'Two words',
+        'text' => '[site:name:rawurlencode]',
+        'expected' => 'Two%20words',
+        'message' => 'Basic token with raw url encode',
+        'options' => [],
+      ],
       // :xmlencode.
       [
         'site_name' => '<b>Testing</b>',

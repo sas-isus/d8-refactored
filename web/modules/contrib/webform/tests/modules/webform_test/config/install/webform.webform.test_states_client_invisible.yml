@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -86,7 +85,7 @@ elements: |
       invisible:
         ':input[name="trigger"]':
           checked: true
-  'webform_entity_print_attachment:pdf':
+  webform_entity_print_attachment_pdf:
     '#type': webform_entity_print_attachment
     '#title': 'Attachment PDF'
     '#default_value': Loremipsum
@@ -259,7 +258,7 @@ elements: |
   date:
     '#type': date
     '#title': Date
-    '#default_value': '2013-03-16T13:06:41-0400'
+    '#default_value': '2022-11-06T09:35:54-0500'
     '#states':
       invisible:
         ':input[name="trigger"]':
@@ -268,7 +267,7 @@ elements: |
     '#type': datetime
     '#title': Date/time
     '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2419131">Issue #2419131: #states attribute does not work on #type datetime</a>'
-    '#default_value': '2028-03-18T15:58:00-0400'
+    '#default_value': '2035-11-08T21:25:29-0500'
     '#states':
       invisible:
         ':input[name="trigger"]':
@@ -276,7 +275,7 @@ elements: |
   datelist:
     '#type': datelist
     '#title': 'Date list'
-    '#default_value': '2031-12-15T00:45:18-0500'
+    '#default_value': '2020-01-15T09:55:30-0500'
     '#states':
       invisible:
         ':input[name="trigger"]':
@@ -377,6 +376,14 @@ elements: |
     '#type': managed_file
     '#title': File
     '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br /><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a><br /><a href="https://www.drupal.org/node/2346893">Issue #2346893: Duplicate Ajax wrapper around a file field</a><br /><a href="https://www.drupal.org/node/2482783">Issue #2482783: File upload errors not set or shown correctly</a>'
+    '#states':
+      invisible:
+        ':input[name="trigger"]':
+          checked: true
+  webform_height:
+    '#type': webform_height
+    '#title': 'Height (feet/inches)'
+    '#default_value': 47
     '#states':
       invisible:
         ':input[name="trigger"]':
@@ -734,11 +741,11 @@ elements: |
   webform_term_checkboxes:
     '#type': webform_term_checkboxes
     '#title': 'Term checkboxes'
-    '#vocabulary': second
+    '#vocabulary': tags
     '#default_value':
-      - 161
-      - 101
-      - 177
+      - Loremipsum
+      - Oratione
+      - Dixisset
     '#states':
       invisible:
         ':input[name="trigger"]':
@@ -746,8 +753,8 @@ elements: |
   webform_term_select:
     '#type': webform_term_select
     '#title': 'Term select'
-    '#vocabulary': second
-    '#default_value': 161
+    '#vocabulary': tags
+    '#default_value': Loremipsum
     '#states':
       invisible:
         ':input[name="trigger"]':
@@ -815,13 +822,6 @@ elements: |
       invisible:
         ':input[name="trigger"]':
           checked: true
-  webform_variant:
-    '#type': webform_variant
-    '#title': 'Variant'
-    '#states':
-      invisible:
-        ':input[name="trigger"]':
-          checked: true
   webform_video_file:
     '#type': webform_video_file
     '#title': 'Video file'
@@ -829,7 +829,6 @@ elements: |
       invisible:
         ':input[name="trigger"]':
           checked: true
-
 css: ''
 javascript: ''
 settings:
@@ -1017,5 +1016,7 @@ handlers:
     status: true
     conditions: {  }
     weight: 0
-    settings: {  }
+    settings:
+      format: yaml
+      submission: false
 variants: {  }

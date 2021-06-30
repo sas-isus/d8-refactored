@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -20,29 +19,29 @@ elements: |
     '#type': textfield
     '#title': textfield
     '#tree': '#tree'
-    '#array_parents': { }
+    '#array_parents': {  }
     '#weight': 0
     '#after_build':
-      - 'webform_test_ignored_element_callback'
+      - webform_test_ignored_element_callback
     '#element_validate':
-      - 'webform_test_ignored_element_callback'
+      - webform_test_ignored_element_callback
     '#post_render':
-      - 'webform_test_ignored_element_callback'
+      - webform_test_ignored_element_callback
     '#pre_render':
-      - 'webform_test_ignored_element_callback'
+      - webform_test_ignored_element_callback
     '#process':
-      - 'webform_test_ignored_element_callback'
+      - webform_test_ignored_element_callback
     '#submit':
-      - 'webform_test_ignored_element_callback'
+      - webform_test_ignored_element_callback
     '#validate':
-      - 'webform_test_ignored_element_callback'
+      - webform_test_ignored_element_callback
     '#value_callback':
-      - 'webform_test_ignored_element_callback'
+      - webform_test_ignored_element_callback
   actions:
     '#type': actions
     '#title': actions
     '#pre_render':
-      - 'webform_test_ignored_element_callback'
+      - webform_test_ignored_element_callback
   select_other:
     '#title': select_other
     '#type': webform_select_other
@@ -51,16 +50,16 @@ elements: |
       Two: Two
       Three: Three
     '#other__element_validate':
-      - 'webform_test_ignored_element_callback'
+      - webform_test_ignored_element_callback
     '#other__pre_render':
-      - 'webform_test_ignored_element_callback'
+      - webform_test_ignored_element_callback
   name:
     '#title': name
     '#type': webform_name
     '#first__element_validate':
-      - 'webform_test_ignored_element_callback'
+      - webform_test_ignored_element_callback
     '#first__pre_render':
-      - 'webform_test_ignored_element_callback'
+      - webform_test_ignored_element_callback
   custom_composite:
     '#type': webform_custom_composite
     '#title': custom_composite
@@ -69,8 +68,7 @@ elements: |
         '#type': textfield
         '#title': custom_composite_textfield
         '#pre_render':
-          - 'webform_test_ignored_element_callback'
-  
+          - webform_test_ignored_element_callback
 css: ''
 javascript: ''
 settings:

@@ -29,6 +29,9 @@ class WebformExcludedColumns extends WebformExcludedBase {
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = WebformEntity::load($element['#webform_id'])
       ?: \Drupal::service('webform.request')->getCurrentWebform();
+    if (!$webform) {
+      return [];
+    }
 
     $options = [];
 

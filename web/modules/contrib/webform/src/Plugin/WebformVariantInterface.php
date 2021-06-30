@@ -17,7 +17,7 @@ use Drupal\webform\WebformInterface;
  * @see \Drupal\webform\Plugin\WebformVariantManagerInterface
  * @see plugin_api
  */
-interface WebformVariantInterface extends PluginInspectionInterface, ConfigurableInterface, ContainerFactoryPluginInterface, PluginFormInterface, WebformEntityInjectionInterface {
+interface WebformVariantInterface extends PluginInspectionInterface, ConfigurableInterface, ContainerFactoryPluginInterface, PluginFormInterface, WebformEntityInjectionInterface, WebformPluginSettingsInterface {
 
   /**
    * Returns a render array summarizing the configuration of the webform variant.

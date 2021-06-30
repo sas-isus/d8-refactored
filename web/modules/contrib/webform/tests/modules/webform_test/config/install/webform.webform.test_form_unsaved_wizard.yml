@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -25,10 +24,9 @@ elements: |
   page_02:
     '#type': webform_wizard_page
     '#title': page_2
-    testfield_1:
+    testfield_2:
       '#type': textfield
       '#title': textfield_2
-  
 css: ''
 javascript: ''
 settings:

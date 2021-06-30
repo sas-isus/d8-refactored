@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -42,7 +41,6 @@ elements: |
     '#required': true
     '#default_value': 'Hello <b>World!!!</b>'
     '#format': false
-  
 css: ''
 javascript: ''
 settings:
@@ -230,5 +228,7 @@ handlers:
     status: true
     conditions: {  }
     weight: 0
-    settings: {  }
+    settings:
+      format: yaml
+      submission: false
 variants: {  }

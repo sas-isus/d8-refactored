@@ -71,7 +71,7 @@ class WebformSanitizeSubmissionsCommands extends DrushCommands implements Saniti
         $this->database->truncate('webform_submission_log')->execute();
       }
       $this->entityTypeManager->getStorage('webform_submission')->resetCache();
-      $this->logger()->success(dt('Webform submission tables truncated.'));
+      $this->logger()->notice(dt('Webform submission tables truncated.'));
     }
   }
 

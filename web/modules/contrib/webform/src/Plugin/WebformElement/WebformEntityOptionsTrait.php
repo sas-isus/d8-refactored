@@ -71,4 +71,16 @@ trait WebformEntityOptionsTrait {
     return parent::getElementSelectorSourceValues($element);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getExportDefaultOptions() {
+    return [
+      'entity_reference_items' => ['id', 'title', 'url'],
+      'options_single_format' => 'compact',
+      'options_multiple_format' => 'compact',
+      'options_item_format' => 'label',
+    ];
+  }
+
 }

@@ -152,6 +152,15 @@ class WebformLikert extends FormElement {
       }
 
       foreach ($answers as $answer_key => $answer) {
+        $answer_attributes = ['aria-labelledby' => $question_id];
+
+        // Add required attributes to input without setting the <label>
+        // to required.
+        if ($element['#required']) {
+          $answer_attributes['required'] ='required';
+          $answer_attributes['aria-required'] = 'true';
+        }
+
         $row[$answer_key] = [
           '#parents' => [$element['#name'], $question_key],
           '#type' => 'radio',
@@ -162,7 +171,7 @@ class WebformLikert extends FormElement {
           // value is NULL.
           // @see \Drupal\Core\Render\Element\Radio::preRenderRadio
           '#value' => ($value === NULL) ? FALSE : (string) $value,
-          '#attributes' => ['aria-labelledby' => $question_id],
+          '#attributes' => $answer_attributes,
         ];
 
         // Wrap title in span.webform-likert-label.visually-hidden

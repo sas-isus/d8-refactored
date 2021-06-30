@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -43,7 +42,7 @@ elements: |
     '#type': vertical_tabs
     '#title': 'My Vertical Tabs'
     '#title_display': before
-    '#require': TRUE
+    '#require': true
     '#description': 'This is a description'
     '#help': 'This is a help'
     '#more': 'This is a more'
@@ -91,7 +90,6 @@ elements: |
     textfield_03:
       '#type': textfield
       '#title': textfield_03
-
 css: ''
 javascript: ''
 settings:

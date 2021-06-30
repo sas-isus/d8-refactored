@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -28,7 +27,6 @@ elements: |
       required:
         ':input[name="trigger_required"]':
           checked: true
-  
 css: ''
 javascript: ''
 settings:

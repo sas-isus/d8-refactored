@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -157,7 +156,6 @@ elements: |
         Two: Two
         Three: Three
       '#wrapper_type': container
-
 css: ''
 javascript: ''
 settings:
@@ -345,5 +343,7 @@ handlers:
     status: true
     conditions: {  }
     weight: 1
-    settings: {  }
+    settings:
+      format: yaml
+      submission: false
 variants: {  }

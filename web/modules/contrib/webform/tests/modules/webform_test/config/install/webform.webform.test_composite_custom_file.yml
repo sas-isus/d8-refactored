@@ -1,4 +1,3 @@
-uuid: b754b5b4-0b50-4a42-a23c-30f95cd9870e
 langcode: en
 status: open
 dependencies:
@@ -37,7 +36,6 @@ elements: |
       managed_file:
         '#type': managed_file
         '#title': managed_file
-  
 css: ''
 javascript: ''
 settings:
@@ -225,7 +223,9 @@ handlers:
     status: true
     conditions: {  }
     weight: -49
-    settings: {  }
+    settings:
+      format: yaml
+      submission: false
   email:
     id: email
     label: Email
@@ -264,5 +264,3 @@ handlers:
       theme_name: ''
       parameters: {  }
 variants: {  }
-_core:
-  default_config_hash: l67ofWFfSw0nP4K6ZBRppS9Dv_uBzGiAeEUKwW7-IwA

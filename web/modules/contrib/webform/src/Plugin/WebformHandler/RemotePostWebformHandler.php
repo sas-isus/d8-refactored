@@ -151,8 +151,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
    * {@inheritdoc}
    */
   public function getSummary() {
-    $configuration = $this->getConfiguration();
-    $settings = $configuration['settings'];
+    $settings = $this->getSettings();
 
     if (!$this->isResultsEnabled()) {
       $settings['updated_url'] = '';
@@ -537,7 +536,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     }
 
     // If debugging is enabled, display the request and response.
-    $this->debug(t('Remote post successful!'), $state, $request_url, $request_method, $request_type, $request_options, $response, 'warning');
+    $this->debug($this->t('Remote post successful!'), $state, $request_url, $request_method, $request_type, $request_options, $response, 'warning');
 
     // Replace [webform:handler] tokens in submission data.
     // Data structured for [webform:handler:remote_post:completed:key] tokens.
@@ -591,7 +590,9 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     // Append uploaded file name, uri, and base64 data to data.
     $webform = $this->getWebform();
     foreach ($data as $element_key => $element_value) {
-      if (empty($element_value)) {
+      // Ignore empty and not equal to zero values.
+      // @see https://stackoverflow.com/questions/732979/php-whats-an-alternative-to-empty-where-string-0-is-not-treated-as-empty
+      if (empty($element_value) && $element_value !== 0 && $element_value !== '0') {
         continue;
       }
 

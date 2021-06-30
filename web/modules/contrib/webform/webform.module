@@ -260,23 +260,33 @@ function webform_menu_local_tasks_alter(&$data, $route_name, RefinableCacheableD
   }
 
   // Allow webform query string parameters to be transferred
-  // from canonical to test URL.
+  // from a canonical URL to a test URL.
+  //
+  // Please note: This behavior is only applicable when a user can
+  // test a webform.
   $route_names = [
-    'entity.webform.canonical', 'entity.webform.test_form',
-    'entity.node.canonical', 'entity.node.webform.test_form',
+    'entity.webform.test_form' => 'entity.webform.canonical',
+    'entity.node.webform.test_form' => 'entity.node.canonical',
   ];
-  if (in_array($route_name, $route_names)) {
-    if ($query = \Drupal::request()->query->all()) {
-      foreach ($route_names as $route_name) {
-        if (isset($data['tabs'][0][$route_name])) {
-          $url =& $data['tabs'][0][$route_name]['#link']['url'];
-          $url->setOption('query', $query);
+  if (in_array($route_name, $route_names) || array_key_exists($route_name, $route_names)) {
+    $query = \Drupal::request()->query->all();
+    $has_test_tab = FALSE;
+    foreach ($route_names as $test_route_name => $view_route_name) {
+      if (isset($data['tabs'][0][$test_route_name])
+        && isset($data['tabs'][0][$test_route_name])) {
+        $has_test_tab = TRUE;
+        if ($query) {
+          $data['tabs'][0][$test_route_name]['#link']['url']
+            ->setOption('query', $query);
+          $data['tabs'][0][$view_route_name]['#link']['url']
+            ->setOption('query', $query);
         }
       }
     }
-
     // Query string to cache context webform canonical and test routes.
-    $cacheability->addCacheContexts(['url.query_args']);
+    if ($has_test_tab) {
+      $cacheability->addCacheContexts(['url.query_args']);
+    }
   }
 }
 
@@ -304,6 +314,7 @@ function webform_token_info_alter(&$data) {
     '<ul>' .
     '<li>' . t('<code>:clear</code> removes the token when it is not replaced.') . '</li>' .
     '<li>' . t('<code>:urlencode</code> URL encodes returned value.') . '</li>' .
+    '<li>' . t('<code>:rawurlencode</code> Raw URL encodes returned value with only hex digits.') . '</li>' .
     '<li>' . t('<code>:xmlencode</code> XML encodes returned value.') . '</li>' .
     '<li>' . t('<code>:htmldecode</code> decodes HTML entities in returned value.') . '<br/><b>' . t('This suffix has security implications.') . '</b><br/>' . t('Use <code>:htmldecode</code> with <code>:striptags</code>.') . '</li>' .
     '<li>' . t('<code>:striptags</code> removes all HTML tags from returned value.') . '</li>' .

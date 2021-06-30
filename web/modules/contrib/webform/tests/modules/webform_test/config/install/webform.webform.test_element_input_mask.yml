@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -20,6 +19,18 @@ elements: |
     '#type': textfield
     '#title': currency
     '#input_mask': '''alias'': ''currency'''
+    '#default_value': '$ 1.00'
+    '#required': true
+  currency_negative:
+    '#type': textfield
+    '#title': currency_negative
+    '#input_mask': '''alias'': ''currency_negative'''
+    '#default_value': '-$ 1.00'
+    '#required': true
+  currency_positive_negative:
+    '#type': textfield
+    '#title': currency_positive_negative
+    '#input_mask': '''alias'': ''currency_positive_negative'''
     '#default_value': '$ 1.00'
     '#required': true
   datetime:
@@ -82,7 +93,6 @@ elements: |
     '#type': textfield
     '#title': module
     '#input_mask': '999'
-  
 css: ''
 javascript: ''
 settings:
@@ -270,5 +280,7 @@ handlers:
     status: true
     conditions: {  }
     weight: 1
-    settings: {  }
+    settings:
+      format: yaml
+      submission: false
 variants: {  }

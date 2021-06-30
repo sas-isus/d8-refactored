@@ -94,13 +94,13 @@
             "type": "package",
             "package": {
                 "name": "ckeditor/autogrow",
-                "version": "4.14.1",
+                "version": "4.16.1",
                 "type": "drupal-library",
                 "extra": {
                     "installer-name": "ckeditor.autogrow"
                 },
                 "dist": {
-                    "url": "https://download.ckeditor.com/autogrow/releases/autogrow_4.14.1.zip",
+                    "url": "https://download.ckeditor.com/autogrow/releases/autogrow_4.16.1.zip",
                     "type": "zip"
                 },
                 "require": {
@@ -130,13 +130,13 @@
             "type": "package",
             "package": {
                 "name": "ckeditor/fakeobjects",
-                "version": "4.14.1",
+                "version": "4.16.1",
                 "type": "drupal-library",
                 "extra": {
                     "installer-name": "ckeditor.fakeobjects"
                 },
                 "dist": {
-                    "url": "https://download.ckeditor.com/fakeobjects/releases/fakeobjects_4.14.1.zip",
+                    "url": "https://download.ckeditor.com/fakeobjects/releases/fakeobjects_4.16.1.zip",
                     "type": "zip"
                 },
                 "require": {
@@ -148,13 +148,13 @@
             "type": "package",
             "package": {
                 "name": "ckeditor/image",
-                "version": "4.14.1",
+                "version": "4.16.1",
                 "type": "drupal-library",
                 "extra": {
                     "installer-name": "ckeditor.image"
                 },
                 "dist": {
-                    "url": "https://download.ckeditor.com/image/releases/image_4.14.1.zip",
+                    "url": "https://download.ckeditor.com/image/releases/image_4.16.1.zip",
                     "type": "zip"
                 },
                 "require": {
@@ -166,13 +166,13 @@
             "type": "package",
             "package": {
                 "name": "ckeditor/link",
-                "version": "4.14.1",
+                "version": "4.16.1",
                 "type": "drupal-library",
                 "extra": {
                     "installer-name": "ckeditor.link"
                 },
                 "dist": {
-                    "url": "https://download.ckeditor.com/link/releases/link_4.14.1.zip",
+                    "url": "https://download.ckeditor.com/link/releases/link_4.16.1.zip",
                     "type": "zip"
                 },
                 "require": {
@@ -184,13 +184,13 @@
             "type": "package",
             "package": {
                 "name": "codemirror/codemirror",
-                "version": "5.53.2",
+                "version": "5.61.1",
                 "type": "drupal-library",
                 "extra": {
                     "installer-name": "codemirror"
                 },
                 "dist": {
-                    "url": "https://github.com/components/codemirror/archive/5.53.2.zip",
+                    "url": "https://github.com/components/codemirror/archive/5.61.1.zip",
                     "type": "zip"
                 },
                 "require": {
@@ -292,13 +292,13 @@
             "type": "package",
             "package": {
                 "name": "jquery/inputmask",
-                "version": "5.0.5",
+                "version": "5.0.6",
                 "type": "drupal-library",
                 "extra": {
                     "installer-name": "jquery.inputmask"
                 },
                 "dist": {
-                    "url": "https://github.com/RobinHerbots/jquery.inputmask/archive/5.0.5.zip",
+                    "url": "https://github.com/RobinHerbots/jquery.inputmask/archive/5.0.6.zip",
                     "type": "zip"
                 },
                 "require": {
@@ -382,13 +382,13 @@
             "type": "package",
             "package": {
                 "name": "jquery/timepicker",
-                "version": "1.13.14",
+                "version": "1.13.18",
                 "type": "drupal-library",
                 "extra": {
                     "installer-name": "jquery.timepicker"
                 },
                 "dist": {
-                    "url": "https://github.com/jonthornton/jquery-timepicker/archive/1.13.14.zip",
+                    "url": "https://github.com/jonthornton/jquery-timepicker/archive/1.13.18.zip",
                     "type": "zip"
                 },
                 "require": {

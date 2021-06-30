@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -119,7 +118,6 @@ elements: |
     '#options':
       1: Administrator
       0: Anonymous
-  
 css: ''
 javascript: ''
 settings:

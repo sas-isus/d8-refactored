@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -69,8 +68,7 @@ elements: |
         four: Four
         five: Five
       '#attributes':
-        'data-webform-select-options-disabled': 'one,two,four,five'
-  
+        data-webform-select-options-disabled: 'one,two,four,five'
   select_select2_examples:
     '#type': details
     '#title': 'Select select2'
@@ -373,7 +371,6 @@ elements: |
         three: Three
         four: Four
         five: Five
-  
 css: ''
 javascript: ''
 settings:
@@ -561,5 +558,7 @@ handlers:
     status: true
     conditions: {  }
     weight: 1
-    settings: {  }
+    settings:
+      format: yaml
+      submission: false
 variants: {  }

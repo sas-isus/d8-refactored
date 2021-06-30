@@ -75,7 +75,9 @@ function _webform_test_states($type, array $default_properties = []) {
     $element += $default_properties;
 
     $group = ($webform_element->isContainer($element)) ? 'containers' : 'elements';
-    $data[$group][$element_type] = $element;
+
+    $element_key = str_replace(':', '_', $element_type);
+    $data[$group][$element_key] = $element;
   }
 
   return $data['containers'] + $data['elements'];

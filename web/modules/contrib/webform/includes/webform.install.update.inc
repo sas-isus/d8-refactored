@@ -1439,15 +1439,15 @@ function webform_update_8071() {
     foreach ($handlers as $handler) {
       if ($handler instanceof RemotePostWebformHandler) {
         $has_remote_post = TRUE;
-        $configuration = $handler->getConfiguration();
-        foreach ($configuration['settings'] as $key => $value) {
+        $configuration = $handler->getSettings();
+        foreach ($configuration as $key => $value) {
           if (isset($settings_mapping[$key])) {
-            $configuration['settings'][$settings_mapping[$key]] = $value;
-            unset($configuration['settings'][$key]);
+            $configuration[$settings_mapping[$key]] = $value;
+            unset($configuration[$key]);
           }
         }
-        $configuration['settings'] += $handler->defaultConfiguration();
-        $handler->setConfiguration($configuration);
+        $configuration += $handler->defaultConfiguration();
+        $handler->getSettings($configuration);
       }
     }
     if ($has_remote_post) {
@@ -1918,12 +1918,10 @@ function webform_update_8100() {
     foreach ($handlers as $handler) {
       if ($handler instanceof RemotePostWebformHandler) {
         $has_handler = TRUE;
-        $configuration = $handler->getConfiguration();
-        $settings = $configuration['settings'];
+        $settings = $handler->getSettings();
         if ($settings['excluded_data']) {
           $settings['excluded_data']['locked'] = 'locked';
-          $configuration['settings'] = $settings;
-          $handler->setConfiguration($configuration);
+          $handler->setSettings($settings);
         }
       }
     }

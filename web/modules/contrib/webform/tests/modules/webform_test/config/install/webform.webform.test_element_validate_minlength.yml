@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -27,7 +26,6 @@ elements: |
     '#minlength': 5
     '#required': true
     '#default_value': value
-  
 css: ''
 javascript: ''
 settings:

@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -120,7 +119,6 @@ elements: |
       fieldset_textfield_access:
         '#type': textfield
         '#title': fieldset_textfield_access
-  
 css: ''
 javascript: ''
 settings:

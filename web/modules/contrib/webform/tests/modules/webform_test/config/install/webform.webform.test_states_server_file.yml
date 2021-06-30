@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -26,7 +25,6 @@ elements: |
       required:
         ':input[name="files[trigger_file]"]':
           filled: true
-  
 css: ''
 javascript: ''
 settings:

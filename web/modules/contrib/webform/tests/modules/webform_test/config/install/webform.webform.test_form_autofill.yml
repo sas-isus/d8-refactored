@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -22,7 +21,6 @@ elements: |
   textfield_excluded:
     '#type': textfield
     '#title': textfield_excluded
-  
 css: ''
 javascript: ''
 settings:

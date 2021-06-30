@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -40,11 +39,11 @@ elements: |
     '#description': 'This is a details_closed description.'
     '#open': false
     '#format': details-closed
-    details_value:
+    details_closed_value:
       '#markup': 'This is a details_closed value.'
-    details_textfield:
+    details_closed_textfield:
       '#type': textfield
-      '#title': details_textfield
+      '#title': details_closed_textfield
   details_title_display_invisible:
     '#type': details
     '#title': details_title_display_invisible
@@ -75,7 +74,6 @@ elements: |
     fieldset_title_display_invisible_textfield:
       '#type': textfield
       '#title': fieldset_title_display_invisible_textfield
-  
 css: ''
 javascript: ''
 settings:

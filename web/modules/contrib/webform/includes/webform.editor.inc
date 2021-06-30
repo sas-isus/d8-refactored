@@ -243,15 +243,24 @@ function _webform_parse_file_uuids($text) {
     return [];
   }
 
-  $dom = Html::load($text);
-  $xpath = new \DOMXPath($dom);
-
   $uuids = [];
 
-  // Find all <img> and <a> tags which reference uploaded files.
-  $nodes = $xpath->query('//*[@data-entity-type="file" and @data-entity-uuid]');
-  foreach ($nodes as $node) {
-    $uuids[] = $node->getAttribute('data-entity-uuid');
+  // Look through all images and hyperlinks for files.
+  if (preg_match_all('/<[^>]+data-entity-type[^>]+>/', $text, $matches)) {
+    foreach ($matches[0] as $match) {
+      // Cleanup quotes escaped via YAML.
+      // Please note, calling stripslashes() twice because elements are
+      // double escaped.
+      $match = stripslashes(stripslashes($match));
+
+      // Look for a file and record UUID when found.
+      $dom = Html::load($match);
+      $xpath = new \DOMXPath($dom);
+      $nodes = $xpath->query('//*[@data-entity-type="file" and @data-entity-uuid]');
+      if (count($nodes) && $nodes->item(0)) {
+        $uuids[] = $nodes->item(0)->getAttribute('data-entity-uuid');
+      }
+    }
   }
 
   // Use array_unique() to collect one uuid per uploaded file.

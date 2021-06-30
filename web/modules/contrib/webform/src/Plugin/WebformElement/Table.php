@@ -185,6 +185,10 @@ class Table extends WebformElementBase {
       '#title' => $this->t('Empty text'),
       '#description' => $this->t('Text to display when no rows are present.'),
     ];
+
+    // Unset textarea rows to prevent any conflicts.
+    unset($form['form']['size_container']['rows']);
+
     return $form;
   }
 

@@ -50,7 +50,6 @@ class WebformElementFormatTest extends WebformElementBrowserTestBase {
     $body = $this->getMessageBody($submission, 'email_html');
     $elements = [
       'Checkbox (Value)' => 'Yes',
-      'Radios (Description)' => 'This is the <strong>first</strong> description',
       'Color (Color swatch)' => '<font color="#ffffcc">█</font> #ffffcc',
       'Email (Link)' => '<a href="mailto:example@example.com">example@example.com</a>',
       'Email confirm (Link)' => '<a href="mailto:example@example.com">example@example.com</a>',
@@ -89,7 +88,6 @@ class WebformElementFormatTest extends WebformElementBrowserTestBase {
     $body = $this->getMessageBody($submission, 'email_text');
     $elements = [
       'Checkbox (Value): Yes',
-      'Radios (Description)' => 'This is the *first* description',
       'Color (Color swatch): #ffffcc',
       'Email (Link): example@example.com',
       'Email multiple (Link): example@example.com, test@test.com, random@random.com',
@@ -183,7 +181,7 @@ class WebformElementFormatTest extends WebformElementBrowserTestBase {
       'Checkboxes (And)' => 'One, Two, and Three',
       'Checkboxes (Ordered list)' => '<ol><li>One</li><li>Two</li><li>Three</li></ol>',
       'Checkboxes (Unordered list)' => '<ul><li>One</li><li>Two</li><li>Three</li></ul>',
-      'Checkboxes (Checklist)' => '<span style="font-size: 1.4em; line-height: 1em">☑</span> One<br /><span style="font-size: 1.4em; line-height: 1em">☑</span> Two<br /><span style="font-size: 1.4em; line-height: 1em">☑</span> Three<br />',
+      'Checkboxes (Checklist (☑/☐))' => '<span style="font-size: 1.4em; line-height: 1em">☑</span> One<br /><span style="font-size: 1.4em; line-height: 1em">☑</span> Two<br /><span style="font-size: 1.4em; line-height: 1em">☑</span> Three<br />',
     ];
     foreach ($elements as $label => $value) {
       $this->assertStringContainsString('<b>' . $label . '</b><br />' . $value, $body, new FormattableMarkup('Found @label: @value', [
@@ -217,7 +215,7 @@ class WebformElementFormatTest extends WebformElementBrowserTestBase {
 - One
 - Two
 - Three',
-      'Checkboxes (Checklist):
+      'Checkboxes (Checklist (☑/☐)):
 ☑ One
 ☑ Two
 ☑ Three',

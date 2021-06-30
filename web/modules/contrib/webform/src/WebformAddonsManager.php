@@ -449,6 +449,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'enhancement',
     ];
 
+    // Enhancement: Webform Entity Email.
+    $projects['webform_entity_email'] = [
+      'title' => $this->t('Webform Entity Email'),
+      'description' => $this->t('Allow send a node in a specific display mode.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_entity_email'),
+      'category' => 'enhancement',
+    ];
+
     // Enhancement: Webform Extra Field.
     $projects['webform_extra_field'] = [
       'title' => $this->t('Webform Extra Field'),
@@ -1124,10 +1132,18 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'mail',
     ];
 
+    // Mail: Flexmail.
+    $projects['flexmail'] = [
+      'title' => $this->t('Flexmail'),
+      'description' => $this->t('Provides Flexmail email service webform integration.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/flexmail'),
+      'category' => 'mail',
+    ];
+
     // Mail: Mailboxlayer.
     $projects['mailboxlayer'] = [
       'title' => $this->t('Mailboxlayer'),
-      'description' => $this->t('Integrates the <a href=":href">Mailboxlayer API</a> with the Webforms.', [':href' => 'https://mailboxlayer.com']),
+      'description' => $this->t('Integrates the Mailboxlayer API with the Webforms.'),
       'url' => Url::fromUri('https://www.drupal.org/project/mailboxlayer'),
       'category' => 'mail',
     ];

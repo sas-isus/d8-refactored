@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -85,7 +84,6 @@ elements: |
     signature:
       '#type': webform_signature
       '#title': Signature
-  
 css: ''
 javascript: ''
 settings:

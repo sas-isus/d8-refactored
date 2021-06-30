@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -39,7 +38,6 @@ elements: |
         type: _none
   prepopulate_name:
     '#markup': '<a href="?source_entity_type=user&source_entity_id=1&name=John+Smith&colors[]=red&colors[]=white&users[]=1">Prepopulate elements and source entity using query string parameter ?source_entity_type=user&source_entity_id=1&name=John+Smith&colors[]=red&colors[]=white&users[]=1</a>'
-  
 css: ''
 javascript: ''
 settings:

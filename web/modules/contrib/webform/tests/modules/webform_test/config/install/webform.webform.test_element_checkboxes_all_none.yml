@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -21,26 +20,26 @@ elements: |
     '#title': checkboxes_all
     '#options_all': true
     '#options':
-      one: 'One'
-      two: 'Two'
-      three: 'Three'
+      one: One
+      two: Two
+      three: Three
   checkboxes_none:
     '#type': checkboxes
     '#title': checkboxes_none
     '#options_none': true
     '#options':
-      one: 'One'
-      two: 'Two'
-      three: 'Three'
+      one: One
+      two: Two
+      three: Three
   checkboxes_both:
     '#type': checkboxes
     '#title': checkboxes_both
     '#options_all': true
     '#options_none': true
     '#options':
-      one: 'One'
-      two: 'Two'
-      three: 'Three'
+      one: One
+      two: Two
+      three: Three
   checkboxes_randomize:
     '#type': checkboxes
     '#title': checkboxes_randomize
@@ -48,17 +47,17 @@ elements: |
     '#options_all': true
     '#options_none': true
     '#options':
-      one: 'One'
-      two: 'Two'
-      three: 'Three'
+      one: One
+      two: Two
+      three: Three
   checkboxes_other_none:
     '#type': webform_checkboxes_other
     '#title': checkboxes_other_none
     '#options_none': true
     '#options':
-      one: 'One'
-      two: 'Two'
-      three: 'Three'
+      one: One
+      two: Two
+      three: Three
   webform_entity_checkboxes_all:
     '#type': webform_entity_checkboxes
     '#title': webform_entity_checkboxes_all
@@ -69,7 +68,6 @@ elements: |
       include_anonymous: true
     '#default_value':
       - 1
-  
 css: ''
 javascript: ''
 settings:
@@ -257,5 +255,7 @@ handlers:
     status: true
     conditions: {  }
     weight: 1
-    settings: {  }
+    settings:
+      format: yaml
+      submission: false
 variants: {  }

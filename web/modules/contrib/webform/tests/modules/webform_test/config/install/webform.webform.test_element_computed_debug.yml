@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -60,6 +59,7 @@ elements: |
         {# data.select_other_01 #}
         {# data.datelist_01 #}
         <pre>{{ webform_debug(data|without('computed_twig_data_01', 'computed_twig_data_ajax_01', 'computed_twig_data_02', 'computed_twig_data_ajax_02', 'computed_twig_data_03', 'computed_twig_data_ajax_03') ) }}</pre>
+        
       '#ajax': true
   page_02:
     '#type': webform_wizard_page
@@ -105,6 +105,7 @@ elements: |
         {# data.select_other_02 #}
         {# data.datelist_02 #}
         <pre>{{ webform_debug(data|without('computed_twig_data_01', 'computed_twig_data_ajax_01', 'computed_twig_data_02', 'computed_twig_data_ajax_02', 'computed_twig_data_03', 'computed_twig_data_ajax_03') ) }}</pre>
+        
       '#ajax': true
   page_03:
     '#type': webform_wizard_page
@@ -141,7 +142,7 @@ elements: |
       '#type': webform_computed_twig
       '#title': computed_twig_data_03
       '#template': '<pre>{{ webform_debug(data|without(''computed_twig_data_01'', ''computed_twig_data_ajax_01'', ''computed_twig_data_02'', ''computed_twig_data_ajax_02'', ''computed_twig_data_03'', ''computed_twig_data_ajax_03'') ) }}</pre>'
-    computed_twig_data_ajax_01:
+    computed_twig_data_ajax_03:
       '#type': webform_computed_twig
       '#title': computed_twig_data_ajax_03
       '#template': |
@@ -150,8 +151,8 @@ elements: |
         {# data.select_other_03 #}
         {# data.datelist_03 #}
         <pre>{{ webform_debug(data|without('computed_twig_data_01', 'computed_twig_data_ajax_01', 'computed_twig_data_02', 'computed_twig_data_ajax_02', 'computed_twig_data_03', 'computed_twig_data_ajax_03') ) }}</pre>
+        
       '#ajax': true
-  
 css: ''
 javascript: ''
 settings:

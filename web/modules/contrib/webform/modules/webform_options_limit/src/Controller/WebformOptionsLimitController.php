@@ -128,8 +128,8 @@ class WebformOptionsLimitController extends ControllerBase implements ContainerI
     $handlers = $webform->getHandlers();
     foreach ($handlers as $handler) {
       if ($handler instanceof WebformOptionsLimitHandlerInterface) {
-        $configuration = $handler->getConfiguration();
-        if (empty($configuration['settings']['limit_user'])) {
+        $limit_user = $handler->getSetting('limit_user');
+        if (empty($limit_user)) {
           return TRUE;
         }
       }

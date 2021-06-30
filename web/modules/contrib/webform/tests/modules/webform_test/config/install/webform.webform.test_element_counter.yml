@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -50,13 +49,12 @@ elements: |
       '#counter_maximum_message': '%d character(s) remaining. This is custom text'
     counter_characters_xss:
       '#type': textfield
-      '#title': 'counter_characters_xss'
+      '#title': counter_characters_xss
       '#counter_type': character
       '#counter_minimum': 5
       '#counter_maximum': 10
       '#counter_minimum_message': '<script>alert(''XSS'');</script><em>%d</em> character(s) entered.'
       '#counter_maximum_message': '<script>alert(''XSS'');</script><em>%d</em> character(s) remaining.'
-  
   counter_word:
     '#type': details
     '#title': counter_word
@@ -89,7 +87,6 @@ elements: |
       '#counter_type': word
       '#counter_maximum': 10
       '#counter_maximum_message': '%d character(s) remaining. This is custom text'
-  
 css: ''
 javascript: ''
 settings:
@@ -277,5 +274,7 @@ handlers:
     status: true
     conditions: {  }
     weight: 1
-    settings: {  }
+    settings:
+      format: yaml
+      submission: false
 variants: {  }

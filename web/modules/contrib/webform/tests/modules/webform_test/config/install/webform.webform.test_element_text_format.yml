@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -31,7 +30,6 @@ elements: |
     '#title': text_format_description_more
     '#description': 'This is a description'
     '#more': 'This is more'
-  
 css: ''
 javascript: ''
 settings:

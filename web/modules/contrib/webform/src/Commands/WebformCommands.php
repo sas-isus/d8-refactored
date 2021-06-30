@@ -24,7 +24,7 @@ class WebformCommands extends WebformCommandsBase {
    * @hook validate webform:export
    */
   public function drush_webform_export_validate(CommandData $commandData) {
-    $arguments = $commandData->arguments();
+    $arguments = array_values($commandData->arguments());
     array_shift($arguments);
     call_user_func_array([$this->cliService, 'drush_webform_export_validate'], $arguments);
   }
@@ -71,7 +71,7 @@ class WebformCommands extends WebformCommandsBase {
    * @hook validate webform:import
    */
   public function drush_webform_import_validate(CommandData $commandData) {
-    $arguments = $commandData->arguments();
+    $arguments = array_values($commandData->arguments());
     array_shift($arguments);
     call_user_func_array([$this->cliService, 'drush_webform_import_validate'], $arguments);
   }
@@ -100,7 +100,7 @@ class WebformCommands extends WebformCommandsBase {
    * @hook validate webform:purge
    */
   public function drush_webform_purge_validate(CommandData $commandData) {
-    $arguments = $commandData->arguments();
+    $arguments = array_values($commandData->arguments());
     array_shift($arguments);
     call_user_func_array([$this->cliService, 'drush_webform_purge_validate'], $arguments);
   }
@@ -133,7 +133,7 @@ class WebformCommands extends WebformCommandsBase {
    * @hook validate webform:tidy
    */
   public function drush_webform_tidy_validate(CommandData $commandData) {
-    $arguments = $commandData->arguments();
+    $arguments = array_values($commandData->arguments());
     array_shift($arguments);
     call_user_func_array([$this->cliService, 'drush_webform_tidy_validate'], $arguments);
   }
@@ -167,22 +167,6 @@ class WebformCommands extends WebformCommandsBase {
    */
   public function drush_webform_libraries_status() {
     $this->cliService->drush_webform_libraries_status();
-  }
-
-  /****************************************************************************/
-  // drush webform:libraries:make. DO NOT EDIT.
-  /****************************************************************************/
-
-  /**
-   * Generates libraries YAML to be included in a drush.make.yml files.
-   *
-   * @command webform:libraries:make
-   * @usage webform:libraries:make
-   *   Generates libraries YAML to be included in a drush.make.yml file.
-   * @aliases wflm,webform-libraries-make
-   */
-  public function drush_webform_libraries_make() {
-    $this->cliService->drush_webform_libraries_make();
   }
 
   /****************************************************************************/
@@ -242,7 +226,7 @@ class WebformCommands extends WebformCommandsBase {
    * @hook validate webform:generate
    */
   public function drush_webform_generate_validate(CommandData $commandData) {
-    $arguments = $commandData->arguments();
+    $arguments = array_values($commandData->arguments());
     array_shift($arguments);
     call_user_func_array([$this->cliService, 'drush_webform_generate_validate'], $arguments);
   }
@@ -303,7 +287,7 @@ class WebformCommands extends WebformCommandsBase {
    * @hook validate webform:docs
    */
   public function drush_webform_docs_validate(CommandData $commandData) {
-    $arguments = $commandData->arguments();
+    $arguments = array_values($commandData->arguments());
     array_shift($arguments);
     call_user_func_array([$this->cliService, 'drush_webform_docs_validate'], $arguments);
   }
@@ -328,7 +312,7 @@ class WebformCommands extends WebformCommandsBase {
    * @hook validate webform:composer:update
    */
   public function drush_webform_composer_update_validate(CommandData $commandData) {
-    $arguments = $commandData->arguments();
+    $arguments = array_values($commandData->arguments());
     array_shift($arguments);
     call_user_func_array([$this->cliService, 'drush_webform_composer_update_validate'], $arguments);
   }

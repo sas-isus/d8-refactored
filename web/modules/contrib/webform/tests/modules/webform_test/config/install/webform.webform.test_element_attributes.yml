@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -23,7 +22,7 @@ elements: |
       one
       two
       three
-  
+      
     '#class__description': 'This is a custom class description.'
     '#style__description': 'This is a custom style description.'
     '#attributes__description': 'This is a custom attributes description.'
@@ -34,7 +33,6 @@ elements: |
         - four
       style: 'color: red'
       custom: test
-  
 css: ''
 javascript: ''
 settings:
@@ -222,5 +220,7 @@ handlers:
     status: true
     conditions: {  }
     weight: 0
-    settings: {  }
+    settings:
+      format: yaml
+      submission: false
 variants: {  }

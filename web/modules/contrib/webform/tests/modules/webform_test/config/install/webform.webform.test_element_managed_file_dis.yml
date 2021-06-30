@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -20,7 +19,6 @@ elements: |
     '#type': managed_file
     '#title': managed_file
     '#file_extensions': txt
-  
 css: ''
 javascript: ''
 settings:

@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -23,7 +22,6 @@ elements: |
   comment:
     '#type': textarea
     '#title': Comment
-  
 css: ''
 javascript: ''
 settings:

@@ -260,6 +260,13 @@ class WebformVariant extends WebformElementBase implements WebformElementDisplay
   /**
    * {@inheritdoc}
    */
+  public function preview() {
+    return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
     return NULL;
   }

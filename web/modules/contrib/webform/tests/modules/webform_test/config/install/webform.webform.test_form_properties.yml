@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -31,7 +30,6 @@ elements: |
   q:
     '#type': search
     '#title': 'Search Google'
-  
 css: ''
 javascript: ''
 settings:

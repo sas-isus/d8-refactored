@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -32,12 +31,13 @@ elements: |
     '#title': text_basic_min_max_height
     '#wrap': false
     '#default_value': |
-        Pellentesque habitant morbi tristique senectus
-        et netus et malesuada fames ac turpis egestas.
-        Vestibulum tortor quam, feugiat vitae, ultricies
-        eget, tempor sit amet, ante.
-        Donec eu libero sit amet quam egestas semper. Aenean
-        ultricies mi vitae est. Mauris placerat eleifend leo.
+      Pellentesque habitant morbi tristique senectus
+      et netus et malesuada fames ac turpis egestas.
+      Vestibulum tortor quam, feugiat vitae, ultricies
+      eget, tempor sit amet, ante.
+      Donec eu libero sit amet quam egestas semper. Aenean
+      ultricies mi vitae est. Mauris placerat eleifend leo.
+      
     '#attributes':
       style: 'min-height:100px; max-height:200px'
   yaml_basic:
@@ -93,16 +93,15 @@ elements: |
           </script>
         </body>
       </html>
-  
+      
   twig_basic:
     '#type': webform_codemirror
     '#mode': twig
     '#title': twig_basic
     '#default_value': |
-  
+      
       {% set value = "Hello" %}
       {{ value }}
-  
 css: ''
 javascript: ''
 settings:
@@ -290,5 +289,7 @@ handlers:
     status: true
     conditions: {  }
     weight: 1
-    settings: {  }
+    settings:
+      format: yaml
+      submission: false
 variants: {  }

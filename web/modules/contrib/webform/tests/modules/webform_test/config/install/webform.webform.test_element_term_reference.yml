@@ -1,4 +1,3 @@
-uuid: null
 langcode: en
 status: open
 dependencies:
@@ -121,7 +120,6 @@ elements: |
         '#breadcrumb_delimiter': ' » '
         '#format': breadcrumb
         '#format_items': ul
-
 css: ''
 javascript: ''
 settings:
