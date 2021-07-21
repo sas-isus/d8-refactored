@@ -46,6 +46,7 @@ class ViewsBootstrapCarousel extends StylePluginBase {
     $options['pause'] = ['default' => TRUE];
     $options['wrap'] = ['default' => TRUE];
 
+    $options['display'] = ['default' => 'fields'];
     $options['image'] = ['default' => ''];
     $options['title'] = ['default' => ''];
     $options['description'] = ['default' => ''];
@@ -101,11 +102,26 @@ class ViewsBootstrapCarousel extends StylePluginBase {
     ];
 
     if ($this->usesFields()) {
+      $form['display'] = [
+        '#type' => 'radios',
+        '#title' => $this->t('Display'),
+        '#options' => [
+          'fields' => $this->t('Select by fields'),
+          'content' => $this->t('Display fields as row content'),
+        ],
+        '#description' => $this->t('Displaying fields as row content will output the field rows as unformatted values within each carousel item.'),
+        '#default_value' => $this->options['display'],
+      ];
       $form['image'] = [
         '#type' => 'select',
         '#title' => $this->t('Image'),
         '#options' => $fields,
         '#default_value' => $this->options['image'],
+        '#states' => [
+          'visible' => [
+            ':input[name="style_options[display]"]' => ['value' => 'fields'],
+          ],
+        ],
       ];
 
       $form['title'] = [
@@ -113,6 +129,11 @@ class ViewsBootstrapCarousel extends StylePluginBase {
         '#title' => $this->t('Title'),
         '#options' => $fields,
         '#default_value' => $this->options['title'],
+        '#states' => [
+          'visible' => [
+            ':input[name="style_options[display]"]' => ['value' => 'fields'],
+          ],
+        ],
       ];
 
       $form['description'] = [
@@ -120,6 +141,11 @@ class ViewsBootstrapCarousel extends StylePluginBase {
         '#title' => $this->t('Description'),
         '#options' => $fields,
         '#default_value' => $this->options['description'],
+        '#states' => [
+          'visible' => [
+            ':input[name="style_options[display]"]' => ['value' => 'fields'],
+          ],
+        ],
       ];
     }
 

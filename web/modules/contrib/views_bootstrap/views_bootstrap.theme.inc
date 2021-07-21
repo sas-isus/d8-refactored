@@ -133,7 +133,7 @@ function template_preprocess_views_bootstrap_carousel(array &$vars) {
   $vars['wrap'] = $view->style_plugin->options['wrap'];
 
   // Carousel rows.
-  if ($view->style_plugin->usesFields()) {
+  if ($view->style_plugin->options['display'] != 'content' && $view->style_plugin->usesFields()) {
     $image = $view->style_plugin->options['image'];
     $title = $view->style_plugin->options['title'];
     $description = $view->style_plugin->options['description'];
@@ -148,7 +148,7 @@ function template_preprocess_views_bootstrap_carousel(array &$vars) {
     $vars['rows'][$id] = [];
     $row_attributes = ['class' => []];
     $class = $view->style_plugin->options['row_class'];
-    if ($view->style_plugin->usesFields()) {
+    if ($vars['display'] == 'fields') {
       $vars['rows'][$id]['image'] = $view->style_plugin->getField($id, $image);
       $vars['rows'][$id]['title'] = $view->style_plugin->getField($id, $title);
       $vars['rows'][$id]['description'] = $view->style_plugin->getField($id, $description);
