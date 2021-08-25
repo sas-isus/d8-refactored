@@ -13,6 +13,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\ContentEntityForm;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
@@ -558,6 +559,24 @@ class WebformSubmissionForm extends ContentEntityForm {
     // when this form is embedded in an iframe.
     if ($this->isSharePage() && !$webform->getSetting('ajax', TRUE)) {
       $webform->setSettingOverride('ajax', TRUE);
+    }
+
+    // Apply source entity open/close state to the webform before
+    // it is rendered.
+    $source_entity = $webform_submission->getSourceEntity();
+    if ($webform->isOpen() && $source_entity && $source_entity instanceof FieldableEntityInterface) {
+      foreach ($source_entity->getFieldDefinitions() as $fieldName => $fieldDefinition) {
+        if ($fieldDefinition->getType() === 'webform') {
+          $item = $source_entity->get($fieldName);
+          if ($item->target_id === $webform->id()) {
+            $webform
+              ->setOverride()
+              ->set('open', $item->open)
+              ->set('close', $item->close)
+              ->setStatus($item->status);
+          }
+        }
+      }
     }
   }
 
@@ -2141,7 +2160,11 @@ class WebformSubmissionForm extends ContentEntityForm {
         else {
           $form[$key] = $value;
         }
-        unset($elements[$key]);
+        // Remove the properties from the $elements and $form['elements'] array.
+        unset(
+          $elements[$key],
+          $form['elements'][$key]
+        );
       }
     }
     // Replace token in #attributes.
@@ -2404,7 +2427,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     switch ($confirmation_type) {
       case WebformInterface::CONFIRMATION_PAGE:
         $redirect_url = $this->requestHandler->getUrl($webform, $this->sourceEntity, 'webform.confirmation', $route_options);
-        $this->setTrustedRedirectUrl($form_state, $redirect_url);
+        $form_state->setRedirectUrl($redirect_url);
         return;
 
       case WebformInterface::CONFIRMATION_URL:

@@ -164,6 +164,7 @@ class WebformNodeResultsTest extends WebformNodeBrowserTestBase {
     $edit = [
       'columns[created][checkbox]' => FALSE,
       'columns[changed][checkbox]' => TRUE,
+      'sort' => 'serial',
       'direction' => 'asc',
       'limit' => 20,
       'default' => TRUE,

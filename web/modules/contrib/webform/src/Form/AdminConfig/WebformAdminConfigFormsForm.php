@@ -564,6 +564,9 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       '#default_value' => $settings['default_share_theme_name'],
     ];
 
+    // Bulk operation settings.
+    $form['bulk_form_settings'] = $this->buildBulkOperations($settings, 'webform');
+
     // Dialog settings.
     $form['dialog_settings'] = [
       '#type' => 'details',
@@ -732,6 +735,7 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       + $form_state->getValue('confirmation_settings')
       + $form_state->getValue('share_settings')
       + $form_state->getValue('ajax_settings')
+      + $form_state->getValue('bulk_form_settings')
       + $form_state->getValue('dialog_settings');
 
     // Track if we need to trigger an update of all webform paths

@@ -21,7 +21,9 @@
       // parameter is correct since conditional logic can skip pages.
       // Note: window.history is only supported by IE 10+.
       if (window.history && window.history.replaceState) {
-        var $form = $(context).find('[data-webform-wizard-current-page]');
+        var $form = $(context).hasData('webform-wizard-current-page')
+          ? $(context)
+          : $(context).find('[data-webform-wizard-current-page]');
         // Make sure the form is visible before updating the URL.
         if ($form.length && $form.is(':visible')) {
           // Append the form's current page data attribute to the browser's URL.

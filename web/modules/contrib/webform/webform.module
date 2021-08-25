@@ -516,7 +516,8 @@ function webform_menu_links_discovered_alter(&$links) {
 
     $local_tasks = $local_task_manager->getLocalTasks('entity.webform.collection', 0);
     foreach ($local_tasks['tabs'] as $local_task) {
-      if (!$local_task['#link']['url'] instanceof Url) {
+      if (!isset($local_task['#link']['url'])
+        || !$local_task['#link']['url'] instanceof Url) {
         continue;
       }
 

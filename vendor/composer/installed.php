@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '13582053cb65f55f2c1e7af512c59703c2251a0b',
+    'reference' => 'cdb477d509565518e989937703074246a116ca2c',
     'name' => 'pantheon-systems/example-drops-8-composer',
   ),
   'versions' => 
@@ -272,12 +272,12 @@
     ),
     'drupal/admin_toolbar' => 
     array (
-      'pretty_version' => '1.27.0',
-      'version' => '1.27.0.0',
+      'pretty_version' => '3.0.2',
+      'version' => '3.0.2.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-1.27',
+      'reference' => '3.0.2',
     ),
     'drupal/aggregator' => 
     array (
@@ -1791,12 +1791,12 @@
     ),
     'drupal/webform' => 
     array (
-      'pretty_version' => '5.27.0',
-      'version' => '5.27.0.0',
+      'pretty_version' => '5.28.0',
+      'version' => '5.28.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8.x-5.27',
+      'reference' => '8.x-5.28',
     ),
     'drupal/workbench' => 
     array (
@@ -2071,7 +2071,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '13582053cb65f55f2c1e7af512c59703c2251a0b',
+      'reference' => 'cdb477d509565518e989937703074246a116ca2c',
     ),
     'pantheon-systems/quicksilver-pushback' => 
     array (

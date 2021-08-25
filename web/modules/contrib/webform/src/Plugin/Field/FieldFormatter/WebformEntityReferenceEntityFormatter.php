@@ -184,6 +184,9 @@ class WebformEntityReferenceEntityFormatter extends WebformEntityReferenceFormat
       || preg_match('/\.content_translation_add$/', $route_name)
       || in_array($route_name, ['entity.block_content.canonical']));
 
+    // Same goes for entity add forms.
+    $is_entity_add_form = preg_match('/\.add$/', $route_name);
+
     $is_paragraph = ($items_entity && $items_entity->getEntityTypeId() === 'paragraph');
 
     $is_paragraph_current_source_entity = ($items_main_entity && $request_source_entity)
@@ -192,9 +195,11 @@ class WebformEntityReferenceEntityFormatter extends WebformEntityReferenceFormat
 
     $is_paragraph_entity_edit_form = ($is_entity_edit_form && $is_paragraph && $is_paragraph_current_source_entity);
 
+    $is_paragraph_entity_add_form = ($is_entity_add_form && $is_paragraph);
+
     $elements = [];
     foreach ($this->getEntitiesToView($items, $langcode) as $delta => $entity) {
-      if ($is_paragraph_entity_edit_form) {
+      if ($is_paragraph_entity_edit_form || $is_paragraph_entity_add_form) {
         // Webform can not be nested within node edit form because the nested
         // <form> tags will cause unexpected validation issues.
         $elements[$delta] = [

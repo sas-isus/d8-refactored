@@ -10,11 +10,11 @@ use Drupal\Core\Session\AccountInterface;
  *
  * @Action(
  *   id = "webform_submission_make_unlock_action",
- *   label = @Translation("Unlock selected submission"),
+ *   label = @Translation("Unlock submission"),
  *   type = "webform_submission"
  * )
  */
-class UnlockWebformSubmission extends ActionBase {
+class WebformSubmissionUnlockAction extends ActionBase {
 
   /**
    * {@inheritdoc}

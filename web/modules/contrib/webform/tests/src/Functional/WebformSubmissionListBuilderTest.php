@@ -42,7 +42,6 @@ class WebformSubmissionListBuilderTest extends WebformBrowserTestBase {
 
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = Webform::load('test_submissions');
-    $this->webform = $webform;
 
     /** @var \Drupal\webform\WebformSubmissionInterface[] $submissions */
     $submissions = array_values(\Drupal::entityTypeManager()->getStorage('webform_submission')->loadByProperties(['webform_id' => 'test_submissions']));

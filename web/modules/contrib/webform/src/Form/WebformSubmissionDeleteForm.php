@@ -135,6 +135,7 @@ class WebformSubmissionDeleteForm extends ContentEntityDeleteForm implements Web
    * {@inheritdoc}
    */
   public function getDescription() {
+    // @see \Drupal\webform\Form\WebformSubmissionDeleteMultipleForm::getDescription
     return [
       'title' => [
         '#markup' => $this->t('This action will…'),

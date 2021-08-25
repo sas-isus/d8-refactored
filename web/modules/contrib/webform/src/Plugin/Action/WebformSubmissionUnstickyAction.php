@@ -10,11 +10,11 @@ use Drupal\Core\Session\AccountInterface;
  *
  * @Action(
  *   id = "webform_submission_make_unsticky_action",
- *   label = @Translation("Unstar/unflag selected submission"),
+ *   label = @Translation("Unstar/unflag submission"),
  *   type = "webform_submission"
  * )
  */
-class UnstickyWebformSubmission extends ActionBase {
+class WebformSubmissionUnstickyAction extends ActionBase {
 
   /**
    * {@inheritdoc}

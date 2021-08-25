@@ -44,6 +44,7 @@
  */
 .webform-options-display-buttons,
 .form-composite.webform-fieldset--title-inline .fieldset-wrapper > div.webform-options-display-buttons {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   margin: 0 -5px;

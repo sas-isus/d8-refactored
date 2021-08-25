@@ -45,6 +45,145 @@ class WebformListBuilderTest extends WebformBrowserTestBase {
   }
 
   /**
+   * Tests the webform overview bulk operations.
+   */
+  public function testBulkOperations() {
+    // Add three test webforms.
+    /** @var \Drupal\webform\Entity\Webform[] $webforms */
+    $webforms = [
+      $this->createWebform(['id' => 'one']),
+      $this->createWebform(['id' => 'two']),
+      $this->createWebform(['id' => 'three']),
+    ];
+
+    $this->drupalLogin($this->rootUser);
+
+    // Check bulk operation access.
+    $this->drupalGet('/admin/structure/webform');
+    $this->assertCssSelect('#webform-bulk-form');
+    $this->assertCssSelect('#edit-items-one');
+    $this->assertCssSelect('#edit-items-two');
+    $this->assertCssSelect('#edit-items-three');
+
+    // Check available actions when NOT filtered by archived webforms.
+    $this->drupalGet('/admin/structure/webform');
+    $this->assertCssSelect('option[value="webform_open_action"]');
+    $this->assertCssSelect('option[value="webform_close_action"]');
+    $this->assertCssSelect('option[value="webform_archive_action"]');
+    $this->assertNoCssSelect('option[value="webform_unarchive_action"]');
+    $this->assertCssSelect('option[value="webform_delete_action"]');
+
+    // Check available actions when filtered by archived webforms.
+    $this->drupalGet('/admin/structure/webform', ['query' => ['state' => 'archived']]);
+    $this->assertNoCssSelect('option[value="webform_open_action"]');
+    $this->assertNoCssSelect('option[value="webform_close_action"]');
+    $this->assertNoCssSelect('option[value="webform_archive_action"]');
+    $this->assertCssSelect('option[value="webform_unarchive_action"]');
+    $this->assertCssSelect('option[value="webform_delete_action"]');
+
+    /**************************************************************************/
+    // Disable/Enable.
+    /**************************************************************************/
+
+    // Check bulk operation disable.
+    \Drupal::configFactory()->getEditable('webform.settings')
+      ->set('settings.webform_bulk_form', FALSE)
+      ->save();
+    $this->drupalGet('/admin/structure/webform');
+    $this->assertNoCssSelect('#webform-bulk-form');
+
+    // Re-enable bulk operations.
+    \Drupal::configFactory()->getEditable('webform.settings')
+      ->set('settings.webform_bulk_form', TRUE)
+      ->save();
+
+    /**************************************************************************/
+    // Open/Close.
+    /**************************************************************************/
+
+    // Check webform one is opened.
+    $this->assertTrue($webforms[0]->isOpen());
+
+    // Check webform close action.
+    $edit = [
+      'action' => 'webform_close_action',
+      'items[one]' => TRUE,
+    ];
+    $this->drupalPostForm('/admin/structure/webform', $edit, 'Apply to selected items', [], 'webform-bulk-form');
+    $this->assertRaw('<em class="placeholder">Close webform</em> was applied to 1 item.');
+    $this->assertCssSelect('#edit-items-one');
+    $this->assertCssSelect('#edit-items-two');
+    $this->assertCssSelect('#edit-items-three');
+
+    // Check webform one is now closed.
+    $webforms[0] = $this->reloadWebform('one');
+    $this->assertTrue($webforms[0]->isClosed());
+
+    // Check webform close action.
+    $edit = [
+      'action' => 'webform_open_action',
+      'items[one]' => TRUE,
+    ];
+    $this->drupalPostForm('/admin/structure/webform', $edit, 'Apply to selected items', [], 'webform-bulk-form');
+    $this->assertRaw('<em class="placeholder">Open webform</em> was applied to 1 item.');
+
+    // Check webform one is now open.
+    $webforms[0] = $this->reloadWebform('one');
+    $this->assertTrue($webforms[0]->isOpen());
+
+    /**************************************************************************/
+    // Archive/Restore.
+    /**************************************************************************/
+
+    // Check webform archive action.
+    $edit = [
+      'action' => 'webform_archive_action',
+      'items[one]' => TRUE,
+    ];
+    $this->drupalPostForm('/admin/structure/webform', $edit, 'Apply to selected items', [], 'webform-bulk-form');
+    $this->assertRaw('<em class="placeholder">Archive webform</em> was applied to 1 item.');
+    $this->assertNoCssSelect('#edit-items-one');
+
+    // Check webform one is now archived.
+    $webforms[0] = $this->reloadWebform('one');
+    $this->assertTrue($webforms[0]->isArchived());
+    $this->drupalGet('/admin/structure/webform', ['query' => ['state' => 'archived']]);
+    $this->assertCssSelect('#edit-items-one');
+
+    // Check webform unarchive action.
+    $edit = [
+      'action' => 'webform_unarchive_action',
+      'items[one]' => TRUE,
+    ];
+    $this->drupalPostForm('/admin/structure/webform', $edit, 'Apply to selected items', ['query' => ['state' => 'archived']], 'webform-bulk-form');
+    $this->assertRaw('<em class="placeholder">Restore webform</em> was applied to 1 item.');
+
+    // Check webform one is now archived.
+    $webforms[0] = $this->reloadWebform('one');
+    $this->assertFalse($webforms[0]->isArchived());
+
+    /**************************************************************************/
+    // Delete.
+    /**************************************************************************/
+
+    // Check webform delete action.
+    $edit = [
+      'action' => 'webform_delete_action',
+      'items[one]' => TRUE,
+    ];
+    $this->drupalPostForm('/admin/structure/webform', $edit, 'Apply to selected items', [], 'webform-bulk-form');
+    $edit = [
+      'confirm_input' => TRUE,
+    ];
+    $this->drupalPostForm(NULL, $edit, 'Delete');
+    $this->assertRaw('Deleted 1 item.');
+
+    // Check webform one is now deleted.
+    $webforms[0] = $this->reloadWebform('one');
+    $this->assertNull($webforms[0]);
+  }
+
+  /**
    * Tests the webform overview access.
    */
   public function testAccess() {

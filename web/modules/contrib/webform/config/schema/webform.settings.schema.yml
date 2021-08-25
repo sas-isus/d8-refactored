@@ -242,6 +242,24 @@ webform.settings:
         default_share_theme_name:
           type: string
           label: 'Default shared form theme'
+        webform_bulk_form:
+          type: boolean
+          label: 'Enable webform operations bulk form'
+        webform_bulk_form_actions:
+          type: sequence
+          label: 'Webform operations bulk form actions'
+          sequence:
+            type: string
+            label: Action
+        webform_submission_bulk_form:
+          type: boolean
+          label: 'Enable submission operations bulk form'
+        webform_submission_bulk_form_actions:
+          type: sequence
+          label: 'Webform submission operations bulk form actions'
+          sequence:
+            type: string
+            label: Action
         dialog:
           type: boolean
           label: 'Enable webform dialog support'

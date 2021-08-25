@@ -231,6 +231,21 @@ trait WebformBrowserTestTrait {
     return $storage->load($id);
   }
 
+  /**
+   * Reload a test webform submission.
+   *
+   * @param string $id
+   *   Webform id.
+   *
+   * @return \Drupal\webform\WebformSubmissionInterface|null
+   *   A webform submission.
+   */
+  protected function reloadSubmission($id) {
+    $storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
+    $storage->resetCache([$id]);
+    return $storage->load($id);
+  }
+
   /****************************************************************************/
   // Submission.
   /****************************************************************************/

@@ -232,6 +232,9 @@ class WebformAdminConfigSubmissionsForm extends WebformAdminConfigBaseForm {
       '#description' => $this->t('Enter the amount of submissions to be purged during single cron run. You may want to lower this number if you are facing memory or timeout issues when purging via cron.'),
     ];
 
+    // Bulk operation settings.
+    $form['bulk_form_settings'] = $this->buildBulkOperations($settings, 'webform_submission');
+
     // Submission views.
     $form['views_settings'] = [
       '#type' => 'details',
@@ -272,6 +275,7 @@ class WebformAdminConfigSubmissionsForm extends WebformAdminConfigBaseForm {
       + $form_state->getValue('submission_behaviors')
       + $form_state->getValue('submission_limits')
       + $form_state->getValue('draft_settings')
+      + $form_state->getValue('bulk_form_settings')
       + $form_state->getValue('views_settings');
 
     // Update config and submit form.

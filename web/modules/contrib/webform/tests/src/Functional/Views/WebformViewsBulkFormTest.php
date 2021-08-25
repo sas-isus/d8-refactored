@@ -88,7 +88,8 @@ class WebformViewsBulkFormTest extends WebformBrowserTestBase {
       'action' => 'webform_submission_delete_action',
     ];
     $this->drupalPostForm('/admin/structure/webform/test/views_bulk_form', $edit, 'Apply to selected items');
-    $this->drupalPostForm(NULL, [], 'Delete');
+    $this->drupalPostForm(NULL, ['confirm_input' => TRUE], 'Delete');
+
     $webform_submission = $this->loadSubmission($webform_submission->id());
     $this->assertNull($webform_submission, '1: Webform submission has been deleted');
 

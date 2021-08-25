@@ -551,7 +551,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
 
     // Customize buttons.
     if ($this->customize) {
-      $build['custom_top'] = $this->buildCustomizeButton();
+      $build['customize'] = $this->buildCustomizeButton();
     }
 
     // Display info.
@@ -564,15 +564,16 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
     $build['table']['#sticky'] = TRUE;
     $build['table']['#attributes']['class'][] = 'webform-results-table';
 
-    // Customize.
-    // Only displayed when more than 20 submissions are being displayed.
-    if ($this->customize && isset($build['table']['#rows']) && count($build['table']['#rows']) >= 20) {
-      $build['custom_bottom'] = $this->buildCustomizeButton();
-      if (isset($build['pager'])) {
-        $build['pager']['#weight'] = 10;
-      }
+    // Bulk operations only visible on webform submissions pages.
+    $webform_submission_bulk_form = $this->configFactory->get('webform.settings')->get('settings.webform_submission_bulk_form');
+    if ($webform_submission_bulk_form
+      && !$this->account
+      && $this->webform
+      && $this->webform->access('submission_update_any')) {
+        $build['table'] = \Drupal::formBuilder()->getForm('\Drupal\webform\Form\WebformSubmissionBulkForm', $build['table'], $this->webform->access('submission_delete_any'));
     }
 
+    // Must preload libraries required by (modal) dialogs.
     // Must preload libraries required by (modal) dialogs.
     WebformDialogHelper::attachLibraries($build);
 

@@ -134,9 +134,10 @@ abstract class WebformEntitySettingsBaseForm extends EntityForm {
         $group = (string) $behavior_element['group'];
         if (!isset($element[$group])) {
           $element[$group] = [
+            '#type' => 'container',
+            '#prefix' => '<strong>',
+            '#suffix' => '</strong>',
             '#markup' => $group,
-            '#prefix' => '<div><strong>',
-            '#suffix' => '</strong></div>',
             '#weight' => $weight,
           ];
           $weight += 10;

@@ -6,22 +6,22 @@ use Drupal\Core\Action\ActionBase;
 use Drupal\Core\Session\AccountInterface;
 
 /**
- * Makes a webform submission sticky.
+ * Locks a webform submission.
  *
  * @Action(
- *   id = "webform_submission_make_sticky_action",
- *   label = @Translation("Star/Flag selected submission"),
+ *   id = "webform_submission_make_lock_action",
+ *   label = @Translation("Lock submission"),
  *   type = "webform_submission"
  * )
  */
-class StickyWebformSubmission extends ActionBase {
+class WebformSubmissionLockAction extends ActionBase {
 
   /**
    * {@inheritdoc}
    */
   public function execute($entity = NULL) {
     /** @var \Drupal\webform\WebformSubmissionInterface $entity */
-    $entity->setSticky(TRUE)->save();
+    $entity->setLocked(TRUE)->save();
   }
 
   /**
@@ -29,7 +29,7 @@ class StickyWebformSubmission extends ActionBase {
    */
   public function access($object, AccountInterface $account = NULL, $return_as_object = FALSE) {
     /** @var \Drupal\webform\WebformSubmissionInterface $object */
-    $result = $object->sticky->access('edit', $account, TRUE)
+    $result = $object->locked->access('edit', $account, TRUE)
       ->andIf($object->access('update', $account, TRUE));
 
     return $return_as_object ? $result : $result->isAllowed();

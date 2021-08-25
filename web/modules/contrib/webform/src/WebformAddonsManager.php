@@ -481,6 +481,15 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'enhancement',
     ];
 
+
+    // Enhancement: Webform GeoIP Restriction.
+    $projects['webform_geoip_restriction'] = [
+      'title' => $this->t('Webform GeoIP Restriction'),
+      'description' => $this->t('Adds the possibility of restricting access to webforms by country using the geoip system.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_geoip_restriction'),
+      'category' => 'enhancement',
+    ];
+
     // Enhancement: Webform IP Geo.
     $projects['webform_ip_geo'] = [
       'title' => $this->t('Webform IP Geo'),
@@ -1013,6 +1022,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'integration',
     ];
 
+    // Integrations: OS Tickets Webform Handler.
+    $projects['ostickets'] = [
+      'title' => $this->t('OS Tickets Webform Handler'),
+      'description' => $this->t('Provides a webform handler that will POST OS tickets on submissions.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/ostickets'),
+      'category' => 'integration',
+    ];
+
     // Integrations: Webform Pardot.
     $projects['webform_pardot'] = [
       'title' => $this->t('Webform Pardot'),
@@ -1466,6 +1483,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'submission',
     ];
 
+    // Submissions: Webform Submission Anonymisation.
+    $projects['webform_submission_anonymisation'] = [
+      'title' => $this->t('Webform Submission Anonymisation'),
+      'description' => $this->t('Remove personal datas from webform submissions.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_submission_anonymisation'),
+      'category' => 'submission',
+    ];
+
     // Submissions: Webform Submission Change History.
     $projects['webform_submission_change_history'] = [
       'title' => $this->t('Webform Submission Change History'),
@@ -1662,6 +1687,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
     /**************************************************************************/
     // Web services.
     /**************************************************************************/
+
+    // Web services: Decoupled Kit.
+    $projects['decoupled_kit'] = [
+      'title' => $this->t('Decoupled Kit'),
+      'description' => $this->t('allows to solve some tasks of the decoupled Drupal.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/decoupled_kit'),
+      'category' => 'web_services',
+    ];
 
     // Web services: Gatsby Drupal Webform.
     $projects['gatsby_drupal_webform'] = [

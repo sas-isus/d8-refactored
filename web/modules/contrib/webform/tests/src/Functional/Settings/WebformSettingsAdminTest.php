@@ -106,11 +106,11 @@ class WebformSettingsAdminTest extends WebformBrowserTestBase {
 
     // Check moving #description to #help for webform admin routes.
     $this->drupalPostForm('/admin/structure/webform/config/advanced', ['ui[description_help]' => TRUE], 'Save configuration');
-    $this->assertRaw('<span class="webform-element-help js-webform-element-help" role="tooltip" tabindex="0" data-webform-help="&lt;div class=&quot;webform-element-help--title&quot;&gt;Display element description as help text (tooltip)&lt;/div&gt;&lt;div class=&quot;webform-element-help--content&quot;&gt;If checked, all element descriptions will be moved to help text (tooltip).&lt;/div&gt;"><span aria-hidden="true">?</span></span>');
+    $this->assertRaw('<span class="webform-element-help js-webform-element-help" role="tooltip" tabindex="0" aria-label="Display element description as help text (tooltip)" data-webform-help="&lt;div class=&quot;webform-element-help--title&quot;&gt;Display element description as help text (tooltip)&lt;/div&gt;&lt;div class=&quot;webform-element-help--content&quot;&gt;If checked, all element descriptions will be moved to help text (tooltip).&lt;/div&gt;"><span aria-hidden="true">?</span></span>');
 
     // Check moving #description to #help for webform admin routes.
     $this->drupalPostForm('/admin/structure/webform/config/advanced', ['ui[description_help]' => FALSE], 'Save configuration');
-    $this->assertNoRaw('<span class="webform-element-help js-webform-element-help" role="tooltip" tabindex="0" data-webform-help="&lt;div class=&quot;webform-element-help--title&quot;&gt;Display element description as help text (tooltip)&lt;/div&gt;&lt;div class=&quot;webform-element-help--content&quot;&gt;If checked, all element descriptions will be moved to help text (tooltip).&lt;/div&gt;"><span aria-hidden="true">?</span></span>');
+    $this->assertNoRaw('<span class="webform-element-help js-webform-element-help" role="tooltip" tabindex="0" aria-label="Display element description as help text (tooltip)" data-webform-help="&lt;div class=&quot;webform-element-help--title&quot;&gt;Display element description as help text (tooltip)&lt;/div&gt;&lt;div class=&quot;webform-element-help--content&quot;&gt;If checked, all element descriptions will be moved to help text (tooltip).&lt;/div&gt;"><span aria-hidden="true">?</span></span>');
 
     /* Toolbar */
 

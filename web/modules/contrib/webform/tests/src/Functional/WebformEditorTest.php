@@ -168,7 +168,7 @@ class WebformEditorTest extends WebformBrowserTestBase {
     $this->assertFalse($images[0]->isTemporary());
 
     // Delete the webform.
-    Webform::load('contact')->delete();
+    $this->reloadWebform('contact')->delete();
     $this->reloadImages($images);
 
     // Check that file is temporary after the webform is deleted.

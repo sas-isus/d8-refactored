@@ -94,13 +94,13 @@
             "type": "package",
             "package": {
                 "name": "ckeditor/autogrow",
-                "version": "4.16.1",
+                "version": "4.16.2",
                 "type": "drupal-library",
                 "extra": {
                     "installer-name": "ckeditor.autogrow"
                 },
                 "dist": {
-                    "url": "https://download.ckeditor.com/autogrow/releases/autogrow_4.16.1.zip",
+                    "url": "https://download.ckeditor.com/autogrow/releases/autogrow_4.16.2.zip",
                     "type": "zip"
                 },
                 "require": {
@@ -130,13 +130,13 @@
             "type": "package",
             "package": {
                 "name": "ckeditor/fakeobjects",
-                "version": "4.16.1",
+                "version": "4.16.2",
                 "type": "drupal-library",
                 "extra": {
                     "installer-name": "ckeditor.fakeobjects"
                 },
                 "dist": {
-                    "url": "https://download.ckeditor.com/fakeobjects/releases/fakeobjects_4.16.1.zip",
+                    "url": "https://download.ckeditor.com/fakeobjects/releases/fakeobjects_4.16.2.zip",
                     "type": "zip"
                 },
                 "require": {
@@ -148,13 +148,13 @@
             "type": "package",
             "package": {
                 "name": "ckeditor/image",
-                "version": "4.16.1",
+                "version": "4.16.2",
                 "type": "drupal-library",
                 "extra": {
                     "installer-name": "ckeditor.image"
                 },
                 "dist": {
-                    "url": "https://download.ckeditor.com/image/releases/image_4.16.1.zip",
+                    "url": "https://download.ckeditor.com/image/releases/image_4.16.2.zip",
                     "type": "zip"
                 },
                 "require": {
@@ -166,13 +166,13 @@
             "type": "package",
             "package": {
                 "name": "ckeditor/link",
-                "version": "4.16.1",
+                "version": "4.16.2",
                 "type": "drupal-library",
                 "extra": {
                     "installer-name": "ckeditor.link"
                 },
                 "dist": {
-                    "url": "https://download.ckeditor.com/link/releases/link_4.16.1.zip",
+                    "url": "https://download.ckeditor.com/link/releases/link_4.16.2.zip",
                     "type": "zip"
                 },
                 "require": {

@@ -876,6 +876,7 @@ function template_preprocess_webform_element_help(array &$variables) {
   $attributes['class'][] = 'js-webform-element-help';
   $attributes['role'] = 'tooltip';
   $attributes['tabindex'] = '0';
+  $attributes['aria-label'] = $variables['help_title'] ?: t('Help tooltip');
 
   $content = (is_array($variables['help'])) ? \Drupal::service('renderer')->render($variables['help']) : $variables['help'];
 
