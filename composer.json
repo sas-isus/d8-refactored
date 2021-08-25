@@ -19,6 +19,7 @@
         "cweagans/composer-patches": "^1.0",
         "drupal/address": "~1.0",
         "drupal/admin_toolbar": "^3.0",
+        "drupal/adminimal_admin_toolbar": "^1.11",
         "drupal/anchor_link": "^1.7",
         "drupal/bg_image_formatter": "^1.12",
         "drupal/block_class": "^1.3",
