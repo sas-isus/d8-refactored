@@ -32,7 +32,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'a791966efb10a58e3fb53c6f182a3dc2c8bcacf7',
+    'reference' => '127acde45ee2f917eb95a0a13cf7eaf3baaaac9a',
     'name' => 'pantheon-systems/example-drops-8-composer',
   ),
   'versions' => 
@@ -1928,6 +1928,24 @@ private static $installed = array (
       ),
       'reference' => '2f118ad67787899a84a95a870fb90a67949c3b82',
     ),
+    'gettext/gettext' => 
+    array (
+      'pretty_version' => 'v4.8.5',
+      'version' => '4.8.5.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'ef2e312dff383fc0e4cd62dd39042e1157f137d4',
+    ),
+    'gettext/languages' => 
+    array (
+      'pretty_version' => '2.8.1',
+      'version' => '2.8.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '4ad818b6341e177b7c508ec4c37e18932a7b788a',
+    ),
     'google/recaptcha' => 
     array (
       'pretty_version' => '1.2.4',
@@ -2106,7 +2124,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'a791966efb10a58e3fb53c6f182a3dc2c8bcacf7',
+      'reference' => '127acde45ee2f917eb95a0a13cf7eaf3baaaac9a',
     ),
     'pantheon-systems/quicksilver-pushback' => 
     array (
@@ -2197,6 +2215,24 @@ private static $installed = array (
       array (
       ),
       'reference' => '2e32a6d48972b2c1976ed5d8967145b6cec4a4a9',
+    ),
+    'phpfastcache/riak-client' => 
+    array (
+      'pretty_version' => '3.4.3',
+      'version' => '3.4.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'd771f75d16196006604a30bb15adc1c6a9b0fcc9',
+    ),
+    'phpmailer/phpmailer' => 
+    array (
+      'pretty_version' => 'v6.5.1',
+      'version' => '6.5.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'dd803df5ad7492e1b40637f7ebd258fee5ca7355',
     ),
     'phpoffice/phpspreadsheet' => 
     array (
@@ -2354,6 +2390,15 @@ private static $installed = array (
       ),
       'reference' => '120b605dfeb996808c31b6477290a714d356e822',
     ),
+    'robrichards/xmlseclibs' => 
+    array (
+      'pretty_version' => '3.1.1',
+      'version' => '3.1.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'f8f19e58f26cdb42c54b214ff8a820760292f8df',
+    ),
     'roundcube/plugin-installer' => 
     array (
       'replaced' => 
@@ -2469,6 +2514,294 @@ private static $installed = array (
       array (
         0 => '*',
       ),
+    ),
+    'simplesamlphp/composer-module-installer' => 
+    array (
+      'pretty_version' => 'v1.1.8',
+      'version' => '1.1.8.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '45161b5406f3e9c82459d0f9a5a1dba064953cfa',
+    ),
+    'simplesamlphp/saml2' => 
+    array (
+      'pretty_version' => 'v4.2.4',
+      'version' => '4.2.4.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '8e3ad89b97d2f2f922f67894675e3460feab2209',
+    ),
+    'simplesamlphp/simplesamlphp' => 
+    array (
+      'pretty_version' => 'v1.18.8',
+      'version' => '1.18.8.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'ebb6d15bb8e8b45504adc26fd3872073d1e5cd9b',
+    ),
+    'simplesamlphp/simplesamlphp-module-adfs' => 
+    array (
+      'pretty_version' => 'v0.9.8',
+      'version' => '0.9.8.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'ac2ba46a6b94ed48b527ac190b0fa99bcda8d98e',
+    ),
+    'simplesamlphp/simplesamlphp-module-authcrypt' => 
+    array (
+      'pretty_version' => 'v0.9.3',
+      'version' => '0.9.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '9a2c1a761e2d94394a4f2d3499fd6f0853899530',
+    ),
+    'simplesamlphp/simplesamlphp-module-authfacebook' => 
+    array (
+      'pretty_version' => 'v0.9.3',
+      'version' => '0.9.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '9152731e939ad4a49e0f06da5f0009ebde0d2b5c',
+    ),
+    'simplesamlphp/simplesamlphp-module-authorize' => 
+    array (
+      'pretty_version' => 'v0.9.3',
+      'version' => '0.9.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '0593bfcb84fca9d9133f415246ab8ca51b412c92',
+    ),
+    'simplesamlphp/simplesamlphp-module-authtwitter' => 
+    array (
+      'pretty_version' => 'v0.9.1',
+      'version' => '0.9.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '29a15e58061222632fea9eb2c807aef5e2c0d54a',
+    ),
+    'simplesamlphp/simplesamlphp-module-authwindowslive' => 
+    array (
+      'pretty_version' => 'v0.9.1',
+      'version' => '0.9.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'f40aecec6c0adaedb6693309840c98cec783876e',
+    ),
+    'simplesamlphp/simplesamlphp-module-authx509' => 
+    array (
+      'pretty_version' => 'v0.9.8',
+      'version' => '0.9.8.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '66525b1ec4145ec8d0d0e9db4534624b6be4c1fb',
+    ),
+    'simplesamlphp/simplesamlphp-module-authyubikey' => 
+    array (
+      'pretty_version' => 'v0.9.1',
+      'version' => '0.9.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '8c27bfeb4981d2e6fa40a831e945f40c5a4ad3d2',
+    ),
+    'simplesamlphp/simplesamlphp-module-cas' => 
+    array (
+      'pretty_version' => 'v0.9.1',
+      'version' => '0.9.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '63b72e4600550c507cdfc32fdd208ad59a64321e',
+    ),
+    'simplesamlphp/simplesamlphp-module-cdc' => 
+    array (
+      'pretty_version' => 'v0.9.1',
+      'version' => '0.9.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '16a5bfac7299e04e5feb472af328e07598708166',
+    ),
+    'simplesamlphp/simplesamlphp-module-consent' => 
+    array (
+      'pretty_version' => 'v0.9.6',
+      'version' => '0.9.6.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '2f84d15e96afb5a32b6d1cff93370f501ca7867d',
+    ),
+    'simplesamlphp/simplesamlphp-module-consentadmin' => 
+    array (
+      'pretty_version' => 'v0.9.1',
+      'version' => '0.9.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '466e8d0d751f0080162d78e63ab2e125b24d17a1',
+    ),
+    'simplesamlphp/simplesamlphp-module-discopower' => 
+    array (
+      'pretty_version' => 'v0.9.1',
+      'version' => '0.9.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '006c0617610f1bae11cf4d17e8ce4c509239a60e',
+    ),
+    'simplesamlphp/simplesamlphp-module-exampleattributeserver' => 
+    array (
+      'pretty_version' => 'v1.0.0',
+      'version' => '1.0.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '63e0323e81c32bc3c9eaa01ea45194bb10153708',
+    ),
+    'simplesamlphp/simplesamlphp-module-expirycheck' => 
+    array (
+      'pretty_version' => 'v0.9.3',
+      'version' => '0.9.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '59c59cdf87e2679257b46c07bb4c27666a11cc20',
+    ),
+    'simplesamlphp/simplesamlphp-module-ldap' => 
+    array (
+      'pretty_version' => 'v0.9.10',
+      'version' => '0.9.10.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '78f04cbe41bfb9dcbcdeff4b5f12e67c060e1a77',
+    ),
+    'simplesamlphp/simplesamlphp-module-memcachemonitor' => 
+    array (
+      'pretty_version' => 'v0.9.2',
+      'version' => '0.9.2.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '900b5c6b59913d9013b8dae090841a127ae55ae5',
+    ),
+    'simplesamlphp/simplesamlphp-module-memcookie' => 
+    array (
+      'pretty_version' => 'v1.2.2',
+      'version' => '1.2.2.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '39535304e8d464b7baa1e82cb441fa432947ff57',
+    ),
+    'simplesamlphp/simplesamlphp-module-metarefresh' => 
+    array (
+      'pretty_version' => 'v0.9.6',
+      'version' => '0.9.6.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'e284306a7097297765b5b78a4e28f19f18d4e001',
+    ),
+    'simplesamlphp/simplesamlphp-module-negotiate' => 
+    array (
+      'pretty_version' => 'v0.9.11',
+      'version' => '0.9.11.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'e7c4597110c753a750cd522220fc2a5a34b7c1b8',
+    ),
+    'simplesamlphp/simplesamlphp-module-oauth' => 
+    array (
+      'pretty_version' => 'v0.9.2',
+      'version' => '0.9.2.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'd14d7aca6e699ec12b3f4dd0128373faa1a2cc61',
+    ),
+    'simplesamlphp/simplesamlphp-module-preprodwarning' => 
+    array (
+      'pretty_version' => 'v0.9.2',
+      'version' => '0.9.2.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '8e032de33a75eb44857dc06d886ad94ee3af4638',
+    ),
+    'simplesamlphp/simplesamlphp-module-radius' => 
+    array (
+      'pretty_version' => 'v0.9.3',
+      'version' => '0.9.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '36bd0f39f9a13f7eb96ead97c97c3634aa1c3f2d',
+    ),
+    'simplesamlphp/simplesamlphp-module-riak' => 
+    array (
+      'pretty_version' => 'v0.9.1',
+      'version' => '0.9.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'c1a9d9545cb4e05b9205b34624850bb777aca991',
+    ),
+    'simplesamlphp/simplesamlphp-module-sanitycheck' => 
+    array (
+      'pretty_version' => 'v0.9.1',
+      'version' => '0.9.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '15d6664eae73a233c3c4c72fd8a5c2be72b6ed2a',
+    ),
+    'simplesamlphp/simplesamlphp-module-smartattributes' => 
+    array (
+      'pretty_version' => 'v0.9.1',
+      'version' => '0.9.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'b45d3ecd916e359a9cae05f9ae9df09b5c42f4e6',
+    ),
+    'simplesamlphp/simplesamlphp-module-sqlauth' => 
+    array (
+      'pretty_version' => 'v0.9.3',
+      'version' => '0.9.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'c2dc4fc8aa6d8b2408131e09b39f06d8610ff374',
+    ),
+    'simplesamlphp/simplesamlphp-module-statistics' => 
+    array (
+      'pretty_version' => 'v0.9.6',
+      'version' => '0.9.6.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '03fb6bdbbf5ce0a0cb257208db79aacac227ac10',
+    ),
+    'simplesamlphp/twig-configurable-i18n' => 
+    array (
+      'pretty_version' => 'v2.3.4',
+      'version' => '2.3.4.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'e2bffc7eed3112a0b3870ef5b4da0fd74c7c4b8a',
     ),
     'squizlabs/php_codesniffer' => 
     array (
@@ -2767,6 +3100,15 @@ private static $installed = array (
       ),
       'reference' => '7233ac2bfdde24d672f5305f2b3f6b5d741ef8eb',
     ),
+    'twig/extensions' => 
+    array (
+      'pretty_version' => 'v1.5.4',
+      'version' => '1.5.4.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '57873c8b0c1be51caa47df2cdb824490beb16202',
+    ),
     'twig/twig' => 
     array (
       'pretty_version' => 'v1.42.5',
@@ -2811,6 +3153,15 @@ private static $installed = array (
       array (
       ),
       'reference' => 'd939f7edc24c9a1bb9c0dee5cb05d8e859490725',
+    ),
+    'whitehat101/apr1-md5' => 
+    array (
+      'pretty_version' => 'v1.0.0',
+      'version' => '1.0.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '8b261c9fc0481b4e9fa9d01c6ca70867b5d5e819',
     ),
     'zendframework/zend-diactoros' => 
     array (

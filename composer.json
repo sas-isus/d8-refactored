@@ -94,7 +94,8 @@
         "drupal/xls_serialization": "^1.2",
         "drush/drush": "~8",
         "guzzlehttp/guzzle": "^6.2@dev",
-        "rvtraveller/qs-composer-installer": "^1.1"
+        "rvtraveller/qs-composer-installer": "^1.1",
+        "simplesamlphp/simplesamlphp": "1.18.8"
     },
     "require-dev": {
         "mikey179/vfsstream": "^1.2",
