@@ -1,10 +1,10 @@
 langcode: en
-default_langcode: en
 activate: false
 mail_attr: 'mail'
 unique_id: 'eduPersonPrincipalName'
 user_name: 'eduPersonPrincipalName'
 auth_source: 'default-sp'
+login_link_show: true
 login_link_display_name: 'Federated login'
 header_no_cache: false
 role:
@@ -14,7 +14,7 @@ register_users: true
 allow:
   set_drupal_pwd: true
   default_login: true
-  default_login_roles: []
+  default_login_roles: {  }
   default_login_users: '1'
 logout_goto_url:
 user_register_original:
@@ -23,3 +23,5 @@ sync:
   user_name: true
 autoenablesaml: false
 debug: false
+secure: false
+httponly: false

@@ -53,7 +53,11 @@ class BasicSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('login_link_display_name'),
       '#description' => $this->t('Text to display as the link to the external federated login page.'),
     ];
-
+    $form['basic']['login_link_show'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Display a link to the Federated Login page on the user login form'),
+      '#default_value' => $config->get('login_link_show'),
+    ];
     $form['basic']['header_no_cache'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Use Header with: Cache-Control: no-cache'),
@@ -85,6 +89,24 @@ class BasicSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Determines whether or not the module should automatically create/register new Drupal accounts for users that authenticate using SimpleSAMLphp. Unless you\'ve done some custom work to provision Drupal accounts with the necessary authmap entries you will want this checked.<br /><br />NOTE: If unchecked each user must already have been provisioned a Drupal account correctly linked to the SAML authname attribute (e.g. by creating Drupal users with "Enable this user to leverage SAML authentication" checked). Otherwise they will receive a notice and be denied access.'),
     ];
 
+    $form['security'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Security'),
+      '#collapsible' => FALSE,
+    ];
+    $form['security']['secure'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Cookie only transmitted over HTTPS'),
+      '#default_value' => $config->get('secure'),
+      '#description' => $this->t('Cookie should only be transmitted over a secure HTTPS connection from the client. When set to TRUE, the cookie will only be set if a secure connection exists.'),
+    ];
+    $form['security']['httponly'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Cookie only accessible over HTTP protocol'),
+      '#default_value' => $config->get('httponly'),
+      '#description' => $this->t("Cookie will be made accessible only through the HTTP protocol. This means that the cookie won't be accessible by scripting languages, such as JavaScript."),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -98,7 +120,10 @@ class BasicSettingsForm extends ConfigFormBase {
     $config->set('activate', $form_state->getValue('activate'));
     $config->set('auth_source', $form_state->getValue('auth_source'));
     $config->set('login_link_display_name', $form_state->getValue('login_link_display_name'));
+    $config->set('login_link_show', $form_state->getValue('login_link_show'));
     $config->set('debug', $form_state->getValue('debug'));
+    $config->set('secure', $form_state->getValue('secure'));
+    $config->set('httponly', $form_state->getValue('httponly'));
     $config->set('register_users', $form_state->getValue('register_users'));
     $config->set('header_no_cache', $form_state->getValue('header_no_cache'));
     $config->save();

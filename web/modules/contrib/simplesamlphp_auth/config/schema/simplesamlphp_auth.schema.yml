@@ -1,15 +1,9 @@
 # Schema for the configuration files of the SimpleSAMLphp_auth module.
 
 simplesamlphp_auth.settings:
-  type: mapping
+  type: config_object
   label: 'SimpleSAMLphp Auth Settings'
   mapping:
-    langcode:
-      type: string
-      label: 'Language code'
-    default_langcode:
-      type: string
-      label: 'Site default language code'
     activate:
       type: boolean
       label: 'Activate authentication via SimpleSAMLphp'
@@ -19,6 +13,9 @@ simplesamlphp_auth.settings:
     login_link_display_name:
       type: label
       label: 'Federated Log In Link Display Name'
+    login_link_show:
+      type: boolean
+      label: 'Display a link to the Federated Login page on the user login form'
     user_name:
       type: string
       label: 'SimpleSAMLphp attribute to be used as username for the user'
@@ -28,6 +25,9 @@ simplesamlphp_auth.settings:
     mail_attr:
       type: string
       label: 'SimpleSAMLphp attribute to be used as email address for the user'
+    header_no_cache:
+      type: boolean
+      label: 'Use Header with: Cache-Control: no-cache'
     role:
       type: mapping
       label: 'Role population'
@@ -82,3 +82,9 @@ simplesamlphp_auth.settings:
     debug:
       type: boolean
       label: 'Expand the level of Drupal logging to include debugging information'
+    secure:
+      type: boolean
+      label: 'Cookie only transmitted over HTTPS'
+    httponly:
+      type: boolean
+      label: 'Cookie only accessible over HTTP protocol'

@@ -6932,6 +6932,75 @@
             "install-path": "../../web/modules/contrib/simple_sitemap"
         },
         {
+            "name": "drupal/simplesamlphp_auth",
+            "version": "3.2.0",
+            "version_normalized": "3.2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/simplesamlphp_auth.git",
+                "reference": "8.x-3.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/simplesamlphp_auth-8.x-3.2.zip",
+                "reference": "8.x-3.2",
+                "shasum": "a5a2b10fc873eb8669929ad1a6d9599e47a2ca99"
+            },
+            "require": {
+                "drupal/core": "^8.7|^9.0",
+                "drupal/externalauth": "^1.1",
+                "simplesamlphp/simplesamlphp": "^1.18.2"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-3.2",
+                    "datestamp": "1580423953",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Berdir",
+                    "homepage": "https://www.drupal.org/user/214652"
+                },
+                {
+                    "name": "colan",
+                    "homepage": "https://www.drupal.org/user/58704"
+                },
+                {
+                    "name": "dakku",
+                    "homepage": "https://www.drupal.org/user/97634"
+                },
+                {
+                    "name": "geekwisdom",
+                    "homepage": "https://www.drupal.org/user/1662"
+                },
+                {
+                    "name": "snufkin",
+                    "homepage": "https://www.drupal.org/user/58645"
+                },
+                {
+                    "name": "svendecabooter",
+                    "homepage": "https://www.drupal.org/user/35369"
+                }
+            ],
+            "description": "Allows users to authenticate to a remote SAML identity provider (IdP) via a locally configured SimpleSAMLphp service point (SP).",
+            "homepage": "https://www.drupal.org/project/simplesamlphp_auth",
+            "support": {
+                "source": "https://git.drupalcode.org/project/simplesamlphp_auth"
+            },
+            "install-path": "../../web/modules/contrib/simplesamlphp_auth"
+        },
+        {
             "name": "drupal/taxonomy_menu",
             "version": "3.4.0",
             "version_normalized": "3.4.0.0",

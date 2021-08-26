@@ -74,6 +74,7 @@
         "drupal/search_api": "^1.15",
         "drupal/sendgrid_integration": "^1.7",
         "drupal/simple_sitemap": "^3.4",
+        "drupal/simplesamlphp_auth": "^3.2",
         "drupal/taxonomy_menu": "^3.4",
         "drupal/token": "^1.6",
         "drupal/twig_tweak": "^2.6",

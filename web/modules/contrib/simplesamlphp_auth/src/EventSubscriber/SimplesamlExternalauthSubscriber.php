@@ -10,6 +10,7 @@ use Drupal\externalauth\Event\ExternalAuthEvents;
 use Drupal\externalauth\Event\ExternalAuthLoginEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Psr\Log\LoggerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Event subscriber subscribing to ExternalAuthEvents.
@@ -44,30 +45,39 @@ class SimplesamlExternalauthSubscriber implements EventSubscriberInterface {
    */
   protected $logger;
 
+  /**
+   * The module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
 
   /**
    * {@inheritdoc}
    *
-   * @param SimplesamlphpAuthManager $simplesaml
+   * @param \Drupal\simplesamlphp_auth\Service\SimplesamlphpAuthManager $simplesaml
    *   The SimpleSAML Authentication helper service.
-   * @param SimplesamlphpDrupalAuth $simplesaml_drupalauth
+   * @param \Drupal\simplesamlphp_auth\Service\SimplesamlphpDrupalAuth $simplesaml_drupalauth
    *   The SimpleSAML Drupal Authentication service.
-   * @param ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration factory.
-   * @param LoggerInterface $logger
+   * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler service.
    */
-  public function __construct(SimplesamlphpAuthManager $simplesaml, SimplesamlphpDrupalAuth $simplesaml_drupalauth, ConfigFactoryInterface $config_factory, LoggerInterface $logger) {
+  public function __construct(SimplesamlphpAuthManager $simplesaml, SimplesamlphpDrupalAuth $simplesaml_drupalauth, ConfigFactoryInterface $config_factory, LoggerInterface $logger, ModuleHandlerInterface $module_handler) {
     $this->simplesaml = $simplesaml;
     $this->simplesamlDrupalauth = $simplesaml_drupalauth;
     $this->config = $config_factory->get('simplesamlphp_auth.settings');
     $this->logger = $logger;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
    * React on an ExternalAuth login event.
    *
-   * @param ExternalAuthLoginEvent $event
+   * @param \Drupal\externalauth\Event\ExternalAuthLoginEvent $event
    *   The subscribed event.
    */
   public function externalauthLogin(ExternalAuthLoginEvent $event) {
@@ -88,8 +98,8 @@ class SimplesamlExternalauthSubscriber implements EventSubscriberInterface {
       // SimpleSAMLphp attributes.
       $account_altered = FALSE;
       $attributes = $this->simplesaml->getAttributes();
-      foreach (\Drupal::moduleHandler()->getImplementations('simplesamlphp_auth_user_attributes') as $module) {
-        $return_value = \Drupal::moduleHandler()->invoke($module, 'simplesamlphp_auth_user_attributes', [$account, $attributes]);
+      foreach ($this->moduleHandler->getImplementations('simplesamlphp_auth_user_attributes') as $module) {
+        $return_value = $this->moduleHandler->invoke($module, 'simplesamlphp_auth_user_attributes', [$account, $attributes]);
         if ($return_value instanceof UserInterface) {
           if ($this->config->get('debug')) {
             $this->logger->debug('Drupal user attributes have altered based on SAML attributes by %module module.', [

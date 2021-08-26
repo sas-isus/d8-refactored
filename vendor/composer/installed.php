@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '127acde45ee2f917eb95a0a13cf7eaf3baaaac9a',
+    'reference' => '541c367d32a4eb362617564e87f3e9ed3b5e9a4f',
     'name' => 'pantheon-systems/example-drops-8-composer',
   ),
   'versions' => 
@@ -1560,6 +1560,15 @@
       ),
       'reference' => '8.x-3.10',
     ),
+    'drupal/simplesamlphp_auth' => 
+    array (
+      'pretty_version' => '3.2.0',
+      'version' => '3.2.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '8.x-3.2',
+    ),
     'drupal/simpletest' => 
     array (
       'replaced' => 
@@ -2098,7 +2107,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '127acde45ee2f917eb95a0a13cf7eaf3baaaac9a',
+      'reference' => '541c367d32a4eb362617564e87f3e9ed3b5e9a4f',
     ),
     'pantheon-systems/quicksilver-pushback' => 
     array (

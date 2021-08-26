@@ -29,9 +29,10 @@
  *         notices.
  */
 
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Link;
 
 /**
  * Implements hook_help().
@@ -49,24 +50,44 @@ function simplesamlphp_auth_help($route_name) {
 /**
  * Implements hook_user_logout().
  */
-function simplesamlphp_auth_user_logout($account) {
-
+function simplesamlphp_auth_user_logout(AccountInterface $account) {
   $logout_url = \Drupal::config('simplesamlphp_auth.settings')->get('logout_goto_url');
+  /** @var \Drupal\simplesamlphp_auth\Service\SimplesamlphpAuthManager $simplesaml */
   $simplesaml = \Drupal::service('simplesamlphp_auth.manager');
+  $session = \Drupal::service('session_manager');
 
-  // Have to destroy the session here as some configurations of
-  // SimpleSAMLphp_auth can create infinite loops. By removing IdP auth before
-  // Drupal auth, checks for local authentication will trigger before the
-  // session is destroyed naturally. We must therefore destroy the session
-  // manually here.
-  session_destroy();
+  // Only interfere if this user was logged in through simplesaml.
+  if ($simplesaml->isActivated() && $simplesaml->isAuthenticated()) {
+    // Have to destroy the session here as some configurations of
+    // SimpleSAMLphp_auth can create infinite loops. By removing IdP auth before
+    // Drupal auth, checks for local authentication will trigger before the
+    // session is destroyed naturally. We must therefore destroy the session
+    // manually here.
+    // Copied from user.module method user_logout().
+    $session->destroy();
+    $account->setAccount(new AnonymousUserSession());
 
-  if ($logout_url) {
-    $simplesaml->logout($logout_url);
+    if ($logout_url) {
+      $simplesaml->logout($logout_url);
+    }
+    else {
+      $simplesaml->logout();
+    }
   }
-  else {
-    $simplesaml->logout();
-  }
+}
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function simplesamlphp_auth_entity_extra_field_info() {
+  $fields = [];
+  $fields['user']['user']['form']['simplesamlphp_auth_user_enable'] = [
+    'label' => t('SAML authentication settings'),
+    'description' => '',
+    'weight' => 0,
+    'visible' => TRUE,
+  ];
+  return $fields;
 }
 
 /**
@@ -92,12 +113,12 @@ function simplesamlphp_auth_form_user_form_alter(&$form, FormStateInterface $for
 
   if ($saml_enabled) {
     $form['simplesamlphp_auth_user_enable']['#default_value'] = TRUE;
-    $form['account']['current_pass']['#access'] = FALSE;
 
     // If the user is a simplesamlphp_auth user and is NOT allowed to set their
     // Drupal password, remove the fields from the form.
     $config = \Drupal::config('simplesamlphp_auth.settings');
     if (!$config->get('allow.set_drupal_pwd')) {
+      $form['account']['current_pass']['#access'] = FALSE;
       $form['account']['pass']['#access'] = FALSE;
     }
   }
@@ -127,7 +148,7 @@ function simplesamlphp_auth_form_user_register_form_alter(&$form, FormStateInter
  * @see simplesamlphp_auth_form_user_register_form_alter()
  * @see simplesamlphp_auth_user_form_submit()
  */
-function simplesamlphp_auth_user_form_includes(&$form) {
+function simplesamlphp_auth_user_form_includes(array &$form) {
   $form['simplesamlphp_auth_user_enable'] = [
     '#type' => 'checkbox',
     '#title' => t('Enable this user to leverage SAML authentication'),
@@ -147,11 +168,13 @@ function simplesamlphp_auth_user_form_includes(&$form) {
  */
 function simplesamlphp_auth_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Return without executing if the functionality is not enabled.
-  if (!\Drupal::config('simplesamlphp_auth.settings')->get('activate')) {
+  $config = \Drupal::config('simplesamlphp_auth.settings');
+  \Drupal::service('renderer')->addCacheableDependency($form, $config);
+  if (!$config->get('activate') || !$config->get('login_link_show')) {
     return;
   }
 
-  $label = Drupal::config('simplesamlphp_auth.settings')->get('login_link_display_name');
+  $label = $config->get('login_link_display_name');
   $form['simplesamlphp_auth_login_link'] = [
     '#title' => $label,
     '#type' => 'link',

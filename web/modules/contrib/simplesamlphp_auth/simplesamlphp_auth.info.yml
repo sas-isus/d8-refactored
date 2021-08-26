@@ -1,14 +1,14 @@
 name: SimpleSAMLphp Authentication
 type: module
 description: Allows users to authenticate to a remote SAML identity provider (IdP) via a locally configured SimpleSAMLphp service point (SP).
-# core: 8.x
+core: 8.x
+core_version_requirement: ^8 || ^9
 configure: simplesamlphp_auth.admin_settings
 dependencies:
- - user
- - externalauth
+ - drupal:user
+ - externalauth:externalauth
 
-# Information added by Drupal.org packaging script on 2017-04-13
-version: '8.x-3.0-rc2'
-core: '8.x'
+# Information added by Drupal.org packaging script on 2020-01-30
+version: '8.x-3.2'
 project: 'simplesamlphp_auth'
-datestamp: 1492065547
+datestamp: 1580423955

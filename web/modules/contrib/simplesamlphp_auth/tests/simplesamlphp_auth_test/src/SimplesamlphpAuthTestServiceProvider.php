@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\simplesamlphp_auth_test\SimplesamlphpAuthTestServiceProvider.
- */
-
 namespace Drupal\simplesamlphp_auth_test;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;

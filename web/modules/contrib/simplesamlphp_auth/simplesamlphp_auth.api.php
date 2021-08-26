@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Hooks for simpleSAMLphp Authentication module.
@@ -76,10 +77,9 @@ function hook_simplesamlphp_auth_allow_login($attributes) {
  * @param \Drupal\user\UserInterface $account
  *   The pre-existing Drupal user to be SAML-enabled.
  */
-function hook_simplesamphp_auth_account_authname_alter(&$authname, \Drupal\user\UserInterface $account) {
+function hook_simplesamlphp_auth_account_authname_alter(&$authname, \Drupal\user\UserInterface $account) {
   $authname = $account->mail;
 }
-
 
 /**
  * Hook to map pre-existing Drupal user based on SAML attributes.
@@ -97,12 +97,12 @@ function hook_simplesamphp_auth_account_authname_alter(&$authname, \Drupal\user\
  * @param array $attributes
  *   The SimpleSAMLphp attributes for this user.
  *
- * @return \Drupal\user\UserInterface | bool
+ * @return \Drupal\user\UserInterface|bool
  *   The pre-existing Drupal user to be SAML-enabled, or FALSE if none found.
  */
 function hook_simplesamlphp_auth_existing_user($attributes) {
   $saml_mail = $attributes['mail'];
-  $existing_users = \Drupal::service('entity.manager')->getStorage('user')->loadByProperties(['mail' => $saml_mail]);
+  $existing_users = \Drupal::entityTypeManager()->getStorage('user')->loadByProperties(['mail' => $saml_mail]);
   if ($existing_users) {
     $existing_user = is_array($existing_users) ? reset($existing_users) : FALSE;
     if ($existing_user) {
