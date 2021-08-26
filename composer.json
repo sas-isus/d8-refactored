@@ -133,7 +133,8 @@
         "prepare-for-pantheon": "DrupalProject\\composer\\ScriptHandler::prepareForPantheon",
         "post-install-cmd": [
             "@drupal-scaffold",
-            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles",
+            "rm -rf vendor/simplesamlphp/simplesamlphp/config && ln -sf ../../../web/private/simplesamlphp/config vendor/simplesamlphp/simplesamlphp/config && rm -rf vendor/simplesamlphp/simplesamlphp/metadata && ln -sf ../../../web/private/simplesamlphp/metadata vendor/simplesamlphp/simplesamlphp/metadata"
         ],
         "post-update-cmd": [
             "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
