@@ -62,7 +62,7 @@ if (isset($_ENV['HOME'])) {
 		if (file_exists($_ENV['HOME'] . '/code/vendor/simplesamlphp/simplesamlphp/index.php')) {
 			$settings['simplesamlphp_dir'] = $_ENV['HOME'] . '/code/vendor/simplesamlphp/simplesamlphp';
 		}
-
+	}
 	else {
 		$conf['simplesamlphp_auth_installdir'] = $_ENV['HOME'] . '/code/private/simplesamlphp';
 	}
