@@ -10,3 +10,8 @@ dependencies:
   - drupal:image
   - drupal:file
   - drupal:field
+
+# Information added by Drupal.org packaging script on 2020-05-12
+version: '8.x-4.3'
+project: 'gathercontent'
+datestamp: 1589277256

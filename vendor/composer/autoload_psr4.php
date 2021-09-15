@@ -58,6 +58,7 @@ return array(
     'SimpleSAML\\Module\\riak\\' => array($vendorDir . '/simplesamlphp/simplesamlphp/modules/riak/lib'),
     'SimpleSAML\\Module\\radius\\' => array($vendorDir . '/simplesamlphp/simplesamlphp/modules/radius/lib'),
     'SimpleSAML\\Module\\preprodwarning\\' => array($vendorDir . '/simplesamlphp/simplesamlphp/modules/preprodwarning/lib'),
+    'SimpleSAML\\Module\\oauth\\' => array($vendorDir . '/simplesamlphp/simplesamlphp/modules/oauth/lib'),
     'SimpleSAML\\Module\\negotiate\\' => array($vendorDir . '/simplesamlphp/simplesamlphp/modules/negotiate/lib'),
     'SimpleSAML\\Module\\metarefresh\\' => array($vendorDir . '/simplesamlphp/simplesamlphp/modules/metarefresh/lib'),
     'SimpleSAML\\Module\\ldap\\' => array($vendorDir . '/simplesamlphp/simplesamlphp/modules/ldap/lib'),
