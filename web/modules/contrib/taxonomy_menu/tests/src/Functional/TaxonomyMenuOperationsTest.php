@@ -1,22 +1,33 @@
 <?php
 
-namespace Drupal\taxonomy_menu\Tests;
+namespace Drupal\Tests\taxonomy_menu\Functional;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests the operations of Taxonomy Menu.
  *
  * @group taxonomy_menu
  */
-class TaxonomyMenuOperations extends WebTestBase {
+class TaxonomyMenuOperationsTest extends BrowserTestBase {
+  /**
+   * List of modules.
+   *
+   * {@inheritdoc}
+   */
+  public static $modules = [
+    'taxonomy_menu', 'system', 'menu_ui', 'taxonomy', 'dblog',
+  ];
 
-  public static $modules = ['taxonomy_menu', 'system', 'menu_ui', 'taxonomy', 'dblog'];
+  /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
 
   /**
    * Set up for all tests.
    */
-  function setUp() {
+  public function setUp() {
     parent::setUp();
 
     // Create user with permission to create policy.
@@ -36,9 +47,7 @@ class TaxonomyMenuOperations extends WebTestBase {
     $perms = [
       'administer site configuration',
       'administer taxonomy',
-      'administer menu'
-      //'delete terms in test',
-      //'edit terms in test'
+      'administer menu',
     ];
     $admin_user = $this->drupalCreateUser($perms);
     $this->drupalLogin($admin_user);
@@ -88,32 +97,34 @@ class TaxonomyMenuOperations extends WebTestBase {
   /**
    * Test creation of taxonomy menu functions.
    */
-  function testTaxMenuCreate() {
-
-
+  public function testTaxMenuCreate() {
     // Check menu for taxonomy-based menu items keyed 1, 2, and 3.
     $this->drupalGet('admin/structure/menu/manage/test-menu');
-    $this->assertFieldByName(
-      'links[menu_plugin_id:taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.1][enabled]',
-      NULL,
-      'I should expect to see enabled field for taxonomy term 1'
+
+    // We should expect to see enabled field for taxonomy term 1
+    $this->assertSession()->fieldExists(
+      'links[menu_plugin_id:taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.1][enabled]'
     );
-    $this->assertFieldByName(
-      'links[menu_plugin_id:taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.2][enabled]',
-      NULL,
-      'I should expect to see enabled field for taxonomy term 2'
+
+    // We should expect to see enabled field for taxonomy term 2
+    $this->assertSession()->fieldExists(
+      'links[menu_plugin_id:taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.2][enabled]'
     );
-    $this->assertFieldByName(
-      'links[menu_plugin_id:taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.3][enabled]',
-      NULL,
-      'I should expect to see enabled field for taxonomy term 3'
+
+    // We should expect to see enabled field for taxonomy term 3
+    $this->assertSession()->fieldExists(
+      'links[menu_plugin_id:taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.3][enabled]'
     );
 
     // Check 2 is a parent of 1.
-    $this->assertFieldByName(
-      'links[menu_plugin_id:taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.2][parent]',
-      'taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.1',
-      'I should expect to see taxonomy term 2 have a parent of taxonomy term 1'
+    $this->drupalGet('admin/structure/menu/link/taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.2/edit');
+    // We should expect to see taxonomy term 2 have a parent of taxonomy term 1'
+    $this->assertSession()->fieldExists(
+      'menu_parent'
+    );
+    $this->assertSession()->fieldValueEquals(
+      'menu_parent',
+      'test-menu:taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.1'
     );
 
   }
@@ -121,8 +132,7 @@ class TaxonomyMenuOperations extends WebTestBase {
   /**
    * Test creation of taxonomy term.
    */
-  function testTaxTermCreate() {
-
+  public function testTaxTermCreate() {
     // Create a new term.
     $this->drupalGet('admin/structure/taxonomy/manage/test_tax_vocab/add');
     $edit = [
@@ -132,42 +142,37 @@ class TaxonomyMenuOperations extends WebTestBase {
 
     $this->drupalGet('admin/structure/menu/manage/test-menu');
     // Check for it within the menu.
-    $this->assertFieldByName(
-      'links[menu_plugin_id:taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.4][enabled]',
-      NULL,
-      'I should expect to see enabled field for taxonomy term 4'
+    // We should expect to see enabled field for taxonomy term 4
+    $this->assertSession()->fieldExists(
+      'links[menu_plugin_id:taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.3][enabled]'
     );
   }
 
   /**
    * Test deletion of taxonomy term.
    */
-  function testTaxTermDelete() {
-
+  public function testTaxTermDelete() {
     // Delete a term.
     $this->drupalGet('taxonomy/term/3/delete');
-    $edit = [
-    ];
+    $edit = [];
     $this->drupalPostForm(NULL, $edit, t('Delete'));
 
     // Check for it within the menu.
-    $this->assertNoFieldByName(
-      'links[menu_plugin_id:taxonomy_menu.menu_link.test.3][enabled]',
-      NULL,
-      'I should not expect to see enabled field for taxonomy term 3'
+    // We should not expect to see enabled field for taxonomy term 3
+    $this->assertSession()->fieldNotExists(
+      'enabled'
     );
   }
 
   /**
    * Tests if of menu links from taxonony_menu is expanded.
    */
-  function testTaxMenuLinkExpanded() {
+  public function testTaxMenuLinkExpanded() {
     $this->drupalGet('admin/structure/menu/link/taxonomy_menu.menu_link:taxonomy_menu.menu_link.test_tax_menu.1/edit');
-
-    $this->assertFieldByName(
+    // We should expect to see expanded value for menu based on taxonomy term 1
+    $this->assertSession()->fieldValueEquals(
       'expanded',
-      1,
-      'I should expect to see expanded value for menu based on taxonomy term 1'
+      1
     );
   }
 

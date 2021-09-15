@@ -1,13 +1,19 @@
 <?php
 
-namespace Drupal\taxonomy_menu\Tests;
+namespace Drupal\Tests\taxonomy_menu\Unit;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\UnitTestCase;
 
 /**
+ * Class TaxonomyMenuTest.
+ *
  * Provides automated tests for the taxonomy_menu module.
+ *
+ * @package Drupal\Tests\taxonomy_menu
+ *
+ * @group taxonomy_menu
  */
-class TaxonomyMenuTest extends WebTestBase {
+class TaxonomyMenuTest extends UnitTestCase {
 
   /**
    * {@inheritdoc}
@@ -21,18 +27,11 @@ class TaxonomyMenuTest extends WebTestBase {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function setUp() {
-    parent::setUp();
-  }
-
-  /**
    * Tests taxonomy_menu functionality.
    */
   public function testTaxonomyMenu() {
     // Check that the basic functions of module taxonomy_menu.
-    $this->assertEqual(TRUE, TRUE, 'Test Unit Generated via App Console.');
+    $this->assertEquals(TRUE, TRUE, 'Test Unit Generated via App Console.');
   }
 
 }

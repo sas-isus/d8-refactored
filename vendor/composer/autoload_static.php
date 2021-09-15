@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
+class ComposerStaticInit2962d4f08ac1f7572c408cbe5ade893f
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -173,6 +173,7 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
             'SimpleSAML\\Module\\riak\\' => 23,
             'SimpleSAML\\Module\\radius\\' => 25,
             'SimpleSAML\\Module\\preprodwarning\\' => 33,
+            'SimpleSAML\\Module\\oauth\\' => 24,
             'SimpleSAML\\Module\\negotiate\\' => 28,
             'SimpleSAML\\Module\\metarefresh\\' => 30,
             'SimpleSAML\\Module\\ldap\\' => 23,
@@ -494,6 +495,10 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         'SimpleSAML\\Module\\preprodwarning\\' => 
         array (
             0 => __DIR__ . '/..' . '/simplesamlphp/simplesamlphp/modules/preprodwarning/lib',
+        ),
+        'SimpleSAML\\Module\\oauth\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/simplesamlphp/simplesamlphp/modules/oauth/lib',
         ),
         'SimpleSAML\\Module\\negotiate\\' => 
         array (
@@ -1841,6 +1846,7 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         'Composer\\Installers\\OsclassInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/OsclassInstaller.php',
         'Composer\\Installers\\OxidInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/OxidInstaller.php',
         'Composer\\Installers\\PPIInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PPIInstaller.php',
+        'Composer\\Installers\\PantheonInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PantheonInstaller.php',
         'Composer\\Installers\\PhiftyInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PhiftyInstaller.php',
         'Composer\\Installers\\PhpBBInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PhpBBInstaller.php',
         'Composer\\Installers\\PimcoreInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PimcoreInstaller.php',
@@ -6433,6 +6439,10 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
         'SimpleSAML\\Module\\metarefresh\\ARP' => __DIR__ . '/..' . '/simplesamlphp/simplesamlphp/modules/metarefresh/lib/ARP.php',
         'SimpleSAML\\Module\\metarefresh\\MetaLoader' => __DIR__ . '/..' . '/simplesamlphp/simplesamlphp/modules/metarefresh/lib/MetaLoader.php',
         'SimpleSAML\\Module\\negotiate\\Auth\\Source\\Negotiate' => __DIR__ . '/..' . '/simplesamlphp/simplesamlphp/modules/negotiate/lib/Auth/Source/Negotiate.php',
+        'SimpleSAML\\Module\\oauth\\Consumer' => __DIR__ . '/..' . '/simplesamlphp/simplesamlphp/modules/oauth/lib/Consumer.php',
+        'SimpleSAML\\Module\\oauth\\OAuthServer' => __DIR__ . '/..' . '/simplesamlphp/simplesamlphp/modules/oauth/lib/OAuthServer.php',
+        'SimpleSAML\\Module\\oauth\\OAuthStore' => __DIR__ . '/..' . '/simplesamlphp/simplesamlphp/modules/oauth/lib/OAuthStore.php',
+        'SimpleSAML\\Module\\oauth\\Registry' => __DIR__ . '/..' . '/simplesamlphp/simplesamlphp/modules/oauth/lib/Registry.php',
         'SimpleSAML\\Module\\preprodwarning\\Auth\\Process\\Warning' => __DIR__ . '/..' . '/simplesamlphp/simplesamlphp/modules/preprodwarning/lib/Auth/Process/Warning.php',
         'SimpleSAML\\Module\\radius\\Auth\\Source\\Radius' => __DIR__ . '/..' . '/simplesamlphp/simplesamlphp/modules/radius/lib/Auth/Source/Radius.php',
         'SimpleSAML\\Module\\riak\\Store\\Riak' => __DIR__ . '/..' . '/simplesamlphp/simplesamlphp/modules/riak/lib/Store/Riak.php',
@@ -8281,11 +8291,11 @@ class ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInitbdb0d9447a9c1c43d777de4b1c748856::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2962d4f08ac1f7572c408cbe5ade893f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2962d4f08ac1f7572c408cbe5ade893f::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit2962d4f08ac1f7572c408cbe5ade893f::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit2962d4f08ac1f7572c408cbe5ade893f::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit2962d4f08ac1f7572c408cbe5ade893f::$classMap;
 
         }, null, ClassLoader::class);
     }
