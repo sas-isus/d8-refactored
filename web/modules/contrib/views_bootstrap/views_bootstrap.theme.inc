@@ -131,6 +131,8 @@ function template_preprocess_views_bootstrap_carousel(array &$vars) {
   $vars['indicators'] = $view->style_plugin->options['indicators'];
   $vars['pause'] = $view->style_plugin->options['pause'] ? 'hover' : FALSE;
   $vars['wrap'] = $view->style_plugin->options['wrap'];
+  $vars['columns'] = $view->style_plugin->options['columns'];
+  $vars['breakpoints'] = $view->style_plugin->options['breakpoints'];
 
   // Carousel rows.
   if ($view->style_plugin->options['display'] != 'content' && $view->style_plugin->usesFields()) {

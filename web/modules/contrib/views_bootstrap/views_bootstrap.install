@@ -110,3 +110,34 @@ function views_bootstrap_update_8001(&$sandbox) {
     }
   }
 }
+
+/**
+ * Update Views Bootstrap style configuration for carousels.
+ */
+function views_bootstrap_update_8002(&$sandbox) {
+  $config_factory = \Drupal::configFactory();
+
+  foreach ($config_factory->listAll('views.view.') as $view_config_name) {
+    $view = $config_factory->getEditable($view_config_name);
+    $save = FALSE;
+    $displays = $view->get('display');
+    foreach ($displays as $display_name => &$display) {
+      if (!empty($display['display_options']['style']) && !empty($display['display_options']['style']['options'])) {
+        $style = (string) $display['display_options']['style']['type'];
+        $options = $display['display_options']['style']['options'];
+
+        // Check accordion for 'behavior' option, default 'closed'.
+        if ($style == 'views_bootstrap_carousel' && !array_key_exists('columns', $options)) {
+          $display['display_options']['style']['options']['columns'] = 1;
+          $display['display_options']['style']['options']['breakpoints'] = 'md';
+          \Drupal::logger('views_bootstrap')->notice("Updating options in $display_name for $view_config_name");
+          $save = TRUE;
+        }
+      }
+    }
+    if ($save) {
+      $view->set('display', $displays);
+      $view->save(TRUE);
+    }
+  }
+}

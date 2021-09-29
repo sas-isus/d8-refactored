@@ -342,7 +342,7 @@ class EntityMatcher extends ConfigurableMatcherBase {
       $group .= ' - ' . $bundle_label;
     }
 
-    return $group;
+    return Html::escape($group);
   }
 
 }

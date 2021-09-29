@@ -33,6 +33,11 @@
   $.fn.infiniteScrollInsertView = function ($newView) {
     // Extract the view DOM ID from the view classes.
     var matches = /(js-view-dom-id-\w+)/.exec(this.attr('class'));
+
+    if (!matches) {
+      return;
+    }
+
     var currentViewId = matches[1].replace('js-view-dom-id-', 'views_dom_id:');
 
     // Get the existing ajaxViews object.
@@ -102,6 +107,21 @@
         }
       }
     }
+  };
+
+  /**
+   * Views AJAX pagination filter.
+   *
+   * In case the Entity View Attachment is rendered in a view context,
+   * the default filter function prevents the required 'Use AJAX' setting
+   * to work.
+   *
+   * @return {Boolean}
+   *   Whether to apply the Views AJAX paginator. VIS requires this setting
+   *   for pagination.
+   */
+  Drupal.views.ajaxView.prototype.filterNestedViews = function () {
+    return this.$view.hasClass('view-eva') || !this.$view.parents('.view').length;
   };
 
 })(jQuery, Drupal, Drupal.debounce);

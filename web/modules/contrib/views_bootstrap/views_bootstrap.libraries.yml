@@ -2,6 +2,9 @@ components:
   version: 1.x
   js:
     js/views-bootstrap.js: {}
+  css:
+    layout:
+      css/carousel.css: {}
   dependencies:
     - core/drupal
     - core/jquery
