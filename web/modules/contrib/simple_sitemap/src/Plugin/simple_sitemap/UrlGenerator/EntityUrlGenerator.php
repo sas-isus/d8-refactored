@@ -214,7 +214,10 @@ class EntityUrlGenerator extends EntityUrlGeneratorBase {
    * @inheritdoc
    */
   public function generate($data_set) {
-    $path_data_sets = $this->processDataSet($data_set);
+    if (empty($path_data_sets = $this->processDataSet($data_set))) {
+      return [];
+    }
+    
     $url_variant_sets = [];
     foreach ($path_data_sets as $key => $path_data) {
       if (isset($path_data['url']) && $path_data['url'] instanceof Url) {

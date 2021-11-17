@@ -38,3 +38,13 @@ function simple_sitemap_engines_update_8301() {
     }
   }
 }
+
+/**
+ * Fixing erroneous default submission interval if not yet overwritten.
+ */
+function simple_sitemap_engines_update_8302() {
+  $config = \Drupal::configFactory()->getEditable('simple_sitemap_engines.settings');
+  if ($config->get('submission_interval') === 86400) {
+    $config->set('submission_interval', 24)->save();
+  }
+}

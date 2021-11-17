@@ -44,6 +44,7 @@ function webform_drush_command() {
         'range-latest' => 'Integer specifying the latest X submissions will be downloaded. Used if "range-type" is "latest" or no other range options are provided.',
         'range-start' => 'The submission ID or start date at which to start exporting.',
         'range-end' => 'The submission ID or end date at which to end exporting.',
+        'uid' => 'The ID of the user who submitted the form.',
         'order' => 'The submission order "asc" (default) or "desc".',
         'state' => 'Submission state to be included: "completed", "draft" or "all" (default).',
         'sticky' => 'Flagged/starred submission status.',

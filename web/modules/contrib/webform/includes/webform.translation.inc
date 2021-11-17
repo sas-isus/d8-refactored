@@ -37,7 +37,7 @@ function webform_form_language_content_settings_form_alter(array &$form, FormSta
 function webform_form_locale_translate_edit_form_alter(&$form, FormStateInterface $form_state) {
   // Don't allow YAML to be validated using locale string translation.
   foreach (Element::children($form['strings']) as $key) {
-    $element =& $form['strings'][$key];
+    $element = &$form['strings'][$key];
     if ($element['original']
       && !empty($element['original']['#plain_text'])
       && preg_match("/'#[^']+':/", $element['original']['#plain_text'])

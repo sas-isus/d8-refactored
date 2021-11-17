@@ -505,7 +505,9 @@ abstract class WebformManagedFileBase extends WebformElementBase implements Webf
    *   A file.
    */
   protected function getFile(array $element, $value, array $options) {
-    if (empty($value)) {
+    // The value is an array when the posted back file has not been processed
+    // and it should ignored.
+    if (empty($value) || is_array($value)) {
       return NULL;
     }
     if ($value instanceof FileInterface) {

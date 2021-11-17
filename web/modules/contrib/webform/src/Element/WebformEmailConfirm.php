@@ -167,10 +167,10 @@ class WebformEmailConfirm extends FormElement {
    */
   public static function validateWebformEmailConfirm(&$element, FormStateInterface $form_state, &$complete_form) {
     if (isset($element['flexbox'])) {
-      $mail_element =& $element['flexbox'];
+      $mail_element = &$element['flexbox'];
     }
     else {
-      $mail_element =& $element;
+      $mail_element = &$element;
     }
 
     $mail_1 = trim($mail_element['mail_1']['#value']);

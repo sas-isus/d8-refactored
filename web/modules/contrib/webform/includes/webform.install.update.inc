@@ -10,7 +10,6 @@ use Drupal\Component\Uuid\Php as Uuid;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Database\Database;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 use Drupal\views\Entity\View;
@@ -233,10 +232,10 @@ function webform_update_8011() {
       continue;
     }
 
-    $elements = Yaml::decode($data['elements']);
+    $elements = WebformYaml::decode($data['elements']);
     _webform_update_8011($elements);
 
-    $data['elements'] = Yaml::encode($elements);
+    $data['elements'] = WebformYaml::encode($elements);
     $webform_config->setData($data);
     $webform_config->save();
   }
@@ -303,13 +302,13 @@ function webform_update_8014() {
 
     // Get data, get elements, and update elements #type.
     $data = $webform_config->getRawData();
-    $elements = Yaml::decode($data['elements']);
+    $elements = WebformYaml::decode($data['elements']);
     // Make sure $elements has been decoded into an array.
     if (is_array($elements)) {
       _webform_update_8014($elements);
 
       // Set elements, set data, and save data.
-      $data['elements'] = Yaml::encode($elements);
+      $data['elements'] = WebformYaml::encode($elements);
       $webform_config->setData($data);
       $webform_config->save();
     }
@@ -423,7 +422,7 @@ function webform_update_8021() {
     if (!$webform_option->get('category')) {
       if (file_exists("$config_install_path/webform.webform_options.$id.yml")) {
         $yaml = file_get_contents("$config_install_path/webform.webform_options.$id.yml");
-        $data = Yaml::decode($yaml);
+        $data = WebformYaml::decode($yaml);
         $webform_option->set('category', $data['category']);
         $webform_option->save();
       }
@@ -1058,12 +1057,12 @@ function _webform_update_8046_convert_data(array $data) {
 
   // Append actions element to elements.
   if ($actions_element) {
-    $elements = Yaml::decode($data['elements']);
+    $elements = WebformYaml::decode($data['elements']);
     $elements['actions'] = [
       '#type' => 'webform_actions',
       '#title' => (string) t('Submit button(s)'),
     ] + $actions_element;
-    $data['elements'] = Yaml::encode($elements);
+    $data['elements'] = WebformYaml::encode($elements);
   }
 
   return $data;
@@ -1955,13 +1954,13 @@ function webform_update_8103() {
   $test_date_values = ['1942-06-18', '1940-07-07', '1943-02-25', '1940-10-09'];
   $config = \Drupal::configFactory()->getEditable('webform.settings');
   $data = $config->getRawData();
-  $types = Yaml::decode($data['test']['types']);
+  $types = WebformYaml::decode($data['test']['types']);
   foreach ($test_date_elements as $test_date_element) {
     if (isset($types[$test_date_element]) && $types[$test_date_element] === $test_date_values) {
       unset($types[$test_date_element]);
     }
   }
-  $data['test']['types'] = Yaml::encode($types);
+  $data['test']['types'] = WebformYaml::encode($types);
   $config->setData($data);
   $config->save();
 }
@@ -2172,7 +2171,7 @@ function webform_update_8116() {
  */
 function webform_update_8117() {
   $config = \Drupal::configFactory()->getEditable('webform.settings');
-  $names = Yaml::decode($config->get('test.names'));
+  $names = WebformYaml::decode($config->get('test.names'));
   $names += [
     'postal_code' => ['11111', '12345', '12345-6789'],
   ];
@@ -2264,9 +2263,9 @@ function webform_update_8124() {
     $webform_config = $config_factory->getEditable($webform_config_name);
     $data = $webform_config->getRawData();
     if (strpos($data['elements'], "'#type': hidden") !== FALSE) {
-      $elements = Yaml::decode($data['elements']);
+      $elements = WebformYaml::decode($data['elements']);
       _webform_update_8124($elements);
-      $data['elements'] = Yaml::encode($elements);
+      $data['elements'] = WebformYaml::encode($elements);
 
       $webform_config->setData($data);
       $webform_config->save();
@@ -2424,7 +2423,7 @@ function webform_update_8133() {
   foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
     $webform_config = $config_factory->getEditable($webform_config_name);
     $data = $webform_config->getRawData();
-    $yaml = Yaml::encode($data);
+    $yaml = WebformYaml::encode($data);
     if (strpos($yaml, 'webform_toggle')) {
       return;
     }
@@ -2468,10 +2467,10 @@ function webform_update_8136() {
       continue;
     }
 
-    $elements = Yaml::decode($data['elements']);
+    $elements = WebformYaml::decode($data['elements']);
     _webform_update_8136($elements);
 
-    $data['elements'] = Yaml::encode($elements);
+    $data['elements'] = WebformYaml::encode($elements);
     $webform_config->setData($data);
     $webform_config->save();
   }
@@ -2602,7 +2601,7 @@ function webform_update_8141() {
   $message = NULL;
   if (\Drupal::moduleHandler()->moduleExists('views') && !View::load('webform_submissions')) {
     $config_path = drupal_get_path('module', 'webform') . '/config/optional/views.view.webform_submissions.yml';
-    $data = ['uuid' => (new Uuid())->generate()] + Yaml::decode(file_get_contents($config_path));
+    $data = ['uuid' => (new Uuid())->generate()] + WebformYaml::decode(file_get_contents($config_path));
     \Drupal::configFactory()->getEditable('views.view.webform_submissions')->setData($data)->save(TRUE);
     $message = 'The new webform submissions view has been created.';
   }
@@ -2788,7 +2787,7 @@ function webform_update_8151() {
 
     // Try to decode elements.
     try {
-      $elements = Yaml::decode($elements);
+      $elements = WebformYaml::decode($elements);
     }
     catch (\Exception $exception) {
       continue;
@@ -2813,7 +2812,7 @@ function webform_update_8151() {
       }
     }
     if ($has_computed_element) {
-      $webform_config->set('elements', Yaml::encode($elements));
+      $webform_config->set('elements', WebformYaml::encode($elements));
       $webform_config->save(TRUE);
     }
   }
@@ -2886,7 +2885,7 @@ function webform_update_8155() {
 
     // Try to decode elements.
     try {
-      $elements = Yaml::decode($elements);
+      $elements = WebformYaml::decode($elements);
     }
     catch (\Exception $exception) {
       continue;
@@ -2915,7 +2914,7 @@ function webform_update_8155() {
       }
     }
     if ($has_date_element) {
-      $webform_config->set('elements', Yaml::encode($elements));
+      $webform_config->set('elements', WebformYaml::encode($elements));
       $webform_config->save(TRUE);
     }
   }
@@ -3055,7 +3054,7 @@ function webform_update_8160() {
   $elements = WebformYaml::decode($config->get('elements'));
   if (isset($elements['calculation']) && isset($elements['calculation']['calculation'])) {
     $path = drupal_get_path('module', 'webform') . '/modules/webform_examples/config/install/webform.webform.example_computed_elements.yml';
-    $data = Yaml::decode(file_get_contents($path));
+    $data = WebformYaml::decode(file_get_contents($path));
     $config->set('elements', $data['elements'])->save();
   }
 }
@@ -3318,7 +3317,7 @@ function webform_update_8179() {
 
     // Try to decode elements.
     try {
-      $elements = Yaml::decode($elements);
+      $elements = WebformYaml::decode($elements);
     }
     catch (\Exception $exception) {
       continue;
@@ -3344,7 +3343,7 @@ function webform_update_8179() {
       }
     }
     if ($has_actions_element) {
-      $webform_config->set('elements', Yaml::encode($elements));
+      $webform_config->set('elements', WebformYaml::encode($elements));
       $webform_config->save(TRUE);
     }
   }
@@ -3465,7 +3464,7 @@ function webform_update_8186() {
 
     // Try to decode elements.
     try {
-      $elements = Yaml::decode($elements);
+      $elements = WebformYaml::decode($elements);
     }
     catch (\Exception $exception) {
       continue;
@@ -3502,7 +3501,7 @@ function webform_update_8186() {
     }
 
     if ($has_numeric_element_property) {
-      $webform_config->set('elements', Yaml::encode($elements));
+      $webform_config->set('elements', WebformYaml::encode($elements));
       $webform_config->save(TRUE);
     }
   }
@@ -3954,4 +3953,18 @@ function webform_update_8212() {
 function webform_update_8213() {
   _webform_update_actions();
   _webform_update_admin_settings();
+}
+
+/**
+ * Issue #3216928: Allow Base64 encoded file data to be excluded from remote posts.
+ */
+function webform_update_8214() {
+  _webform_update_webform_handler_settings();
+}
+
+/**
+ * Issue #3240393: Allow the number of webform per page to configurable.
+ */
+function webform_update_8215() {
+  _webform_update_actions();
 }

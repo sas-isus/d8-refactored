@@ -576,7 +576,7 @@ class WebformSubmissionExportImportUploadForm extends ConfirmFormBase {
    * @param mixed|array $context
    *   The batch current context.
    */
-  public static function batchProcess(WebformInterface $webform, EntityInterface $source_entity = NULL, $import_uri = '', array $import_options = [], &$context) {
+  public static function batchProcess(WebformInterface $webform, EntityInterface $source_entity = NULL, $import_uri = '', array $import_options = [], array &$context = []) {
     /** @var \Drupal\webform_submission_export_import\WebformSubmissionExportImportImporterInterface $importer */
     $importer = \Drupal::service('webform_submission_export_import.importer');
     $importer->setWebform($webform);

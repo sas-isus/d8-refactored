@@ -298,7 +298,7 @@ trait WebformSubmissionDevelGenerateTrait {
         $this->generateSubmission($values);
         $feedback = isset($values['feedback']) && is_int($values['feedback']) ? $values['feedback'] : 1000;
         if ($i % $feedback === 0) {
-          $now = $this->time->getRequestTime();
+          $now = $this->time->getCurrentTime();
           $dt_args = [
             '@feedback' => $feedback,
             '@rate' => ($feedback * 60) / ($now - $start),

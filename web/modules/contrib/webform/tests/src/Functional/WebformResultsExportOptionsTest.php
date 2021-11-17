@@ -159,6 +159,13 @@ class WebformResultsExportOptionsTest extends WebformBrowserTestBase {
     $this->assertRaw('Abraham,Lincoln');
     $this->assertNoRaw('Hillary,Clinton');
 
+    // Check uid.
+    $submissions[0]->setOwner($admin_submission_user)->save();
+    $this->getExport($webform, ['uid' => $admin_submission_user->id()]);
+    $this->assertRaw('George,Washington');
+    $this->assertNoRaw('Abraham,Lincoln');
+    $this->assertNoRaw('Hillary,Clinton');
+
     // Check date range.
     $this->getExport($webform, ['range_type' => 'date', 'range_start' => '2000-01-01', 'range_end' => '2001-01-01']);
     $this->assertRaw('George,Washington');

@@ -210,7 +210,7 @@ class EntityHelper {
       $entity_query->condition($keys['bundle'], $bundle_name);
     }
 
-    return $entity_query->execute();
+    return $entity_query->accessCheck(TRUE)->execute();
   }
 
 }

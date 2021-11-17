@@ -83,8 +83,6 @@ elements: |
           '#options':
             Male: Male
             Female: Female
-      '#multiple': true
-      '#multiple__header': true
   webform_likert_example:
     '#type': details
     '#title': Likert

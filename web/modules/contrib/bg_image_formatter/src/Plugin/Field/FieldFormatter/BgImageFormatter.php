@@ -16,9 +16,9 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatter;
+use Laminas\Stdlib\ArrayUtils;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Zend\Stdlib\ArrayUtils;
 
 /**
  * Class BgImageFormatter.

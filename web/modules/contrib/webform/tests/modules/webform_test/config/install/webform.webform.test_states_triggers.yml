@@ -43,10 +43,10 @@ elements: |
       '#markup': 'Checked multiple triggered using AND operator'
       '#states':
         visible:
-          - ':input[name="checked_multiple_and_trigger[one]"]':
-              checked: true
-          - ':input[name="checked_multiple_and_trigger[two]"]':
-              checked: true
+          ':input[name="checked_multiple_and_trigger[one]"]':
+            checked: true
+          ':input[name="checked_multiple_and_trigger[two]"]':
+            checked: true
   checked_multiple_or:
     '#type': details
     '#title': 'Test Trigger: Checked multiple using OR operator'
@@ -64,6 +64,7 @@ elements: |
         visible:
           - ':input[name="checked_multiple_or_trigger[one]"]':
               checked: true
+          - or
           - ':input[name="checked_multiple_or_trigger[two]"]':
               checked: true
   checked_multiple_xor:
@@ -116,20 +117,6 @@ elements: |
         visible:
           ':input[name="filled_trigger"]':
             filled: true
-  collapsed:
-    '#type': details
-    '#title': 'Test Trigger: Collapsed'
-    '#description': 'Below example is not working.'
-    collapsed_trigger:
-      '#type': details
-      '#title': 'Trigger collapsed'
-    collapsed_markup:
-      '#type': webform_markup
-      '#markup': 'Collapsed triggered'
-      '#states':
-        visible:
-          'details[data-webform-key="collapsed_trigger"]':
-            collapsed: true
 css: ''
 javascript: ''
 settings:

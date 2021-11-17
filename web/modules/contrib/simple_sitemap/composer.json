@@ -5,9 +5,9 @@
   "homepage": "https://drupal.org/project/simple_sitemap",
   "authors": [
     {
-      "name": "Pawel Ginalski (gbyte.co)",
-      "email": "contact@gbyte.co",
-      "homepage": "https://www.drupal.org/u/gbyte.co",
+      "name": "Pawel Ginalski (gbyte)",
+      "email": "contact@gbyte.dev",
+      "homepage": "https://www.drupal.org/u/gbyte",
       "role": "Maintainer"
     }
   ],

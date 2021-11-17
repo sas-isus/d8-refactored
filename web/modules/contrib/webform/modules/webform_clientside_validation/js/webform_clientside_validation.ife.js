@@ -37,7 +37,7 @@
       $(context).find(':input[type="date"], :input[type="time"], :input[type="datetime"]')
         .removeAttr('step')
         .removeAttr('min')
-        .removeAttr('min');
+        .removeAttr('max');
     }
   };
 
@@ -65,7 +65,7 @@
         var $errorMessages = $container.find('strong.error.form-item--error-message');
         $container.append($errorMessages);
       });
-      
+
       // Move all likert errors to question <label>.
       $(this.currentForm).find('.webform-likert-table tbody tr').each(function () {
         var $row = $(this);

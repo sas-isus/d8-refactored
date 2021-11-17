@@ -182,7 +182,7 @@ class WebformImageFile extends WebformManagedFileBase {
         'filemime' => $file->getMimeType(),
         // File URIs that are not supported return FALSE, when this happens
         // still use the file's URI as the file's path.
-        'filepath' => \Drupal::service('file_system')->realpath($file->getFileUri()) ?: $file->getFileUri(),
+        'filepath' => \Drupal::service('file_system')->realpath($file_uri) ?: $file_uri,
         // URL is used when debugging or resending messages.
         // @see \Drupal\webform\Plugin\WebformHandler\EmailWebformHandler::buildAttachments
         '_fileurl' => $file_url,

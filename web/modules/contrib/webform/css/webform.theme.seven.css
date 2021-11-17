@@ -123,12 +123,21 @@ pre.webform-codemirror-runmode {
 /**
  * Form action are moved to a dialogs footer and don't need to be visually
  * hidden.
-
+ *
  * @see Drupal.behaviors.dialog.prepareDialogButtons
  */
 .webform-ui-dialog .form-actions input[type=submit],
 .webform-ui-dialog .form-actions a.button {
   display: none !important;
+}
+
+/**
+ * Primary button font color is not white.
+ *
+ * @see https://www.drupal.org/project/webform/issues/3228968
+ */
+.webform-ui-dialog a.button--primary  {
+  color: #fff;
 }
 
 /* System tray divider */

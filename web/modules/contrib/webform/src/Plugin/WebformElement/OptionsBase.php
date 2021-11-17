@@ -270,7 +270,7 @@ abstract class OptionsBase extends WebformElementBase {
       $options__properties = WebformElementHelper::removeIgnoredProperties($options__properties);
 
       foreach ($options__properties as $property => $value) {
-        $option_element =& $element[$option_key];
+        $option_element = &$element[$option_key];
         if (in_array($property, ['#attributes', '#wrapper_attributes', '#label_attributes'])) {
           // Apply attributes.
           $option_element += [$property => []];

@@ -111,7 +111,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
         }
 
         // Process state/negate.
-        list($state, $negate) = $this->processState($original_state);
+        [$state, $negate] = $this->processState($original_state);
 
         // If hide/show we need to make sure that validation is not triggered.
         if (strpos($state, 'visible') === 0) {
@@ -300,6 +300,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
    * @see \Drupal\webform\WebformSubmissionForm::validateForm
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
+    $this->processForm($form, $form_state);
     $this->validateFormRecursive($form, $form_state);
   }
 
@@ -383,13 +384,29 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
   }
 
   /****************************************************************************/
-  // Submit form methods.
+  // Submit form method.
   /****************************************************************************/
 
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $this->processForm($form, $form_state);
+  }
+
+  /****************************************************************************/
+  // Process form methods.
+  /****************************************************************************/
+
+  /**
+   * Process form and unset submission data for form elements that are hidden.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  protected function processForm(array &$form, FormStateInterface $form_state) {
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
     $webform_submission = $form_state->getFormObject()->getEntity();
 
@@ -403,7 +420,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
 
     // Recursive through the form and unset unset submission data for
     // form elements that are hidden.
-    $this->submitFormRecursive($form, $webform_submission, $data, $check_access);
+    $this->processFormRecursive($form, $webform_submission, $data, $check_access);
 
     // Set submission data.
     $webform_submission->setData($data);
@@ -424,7 +441,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
    * @param bool $visible
    *   Flag that determine if the currrent form elements are visible.
    */
-  protected function submitFormRecursive(array $elements, WebformSubmissionInterface $webform_submission, array &$data, $check_access, $visible = TRUE) {
+  protected function processFormRecursive(array $elements, WebformSubmissionInterface $webform_submission, array &$data, $check_access, $visible = TRUE) {
     foreach ($elements as $key => &$element) {
       if (!WebformElementHelper::isElement($element, $key)) {
         continue;
@@ -449,7 +466,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
         $data[$key] = (is_array($data[$key])) ? [] : '';
       }
 
-      $this->submitFormRecursive($element, $webform_submission, $data, $check_access, $element_visible);
+      $this->processFormRecursive($element, $webform_submission, $data, $check_access, $element_visible);
     }
   }
 
@@ -506,7 +523,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
       }
 
       // Process state/negate.
-      list($state, $negate) = $this->processState($state);
+      [$state, $negate] = $this->processState($state);
 
       $result = $this->validateConditions($conditions, $webform_submission);
       // Skip invalid conditions.
@@ -539,7 +556,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
       }
 
       // Process state/negate.
-      list($state, $negate) = $this->processState($state);
+      [$state, $negate] = $this->processState($state);
 
       $result = $this->validateConditions($conditions, $webform_submission);
       // Skip invalid conditions.
@@ -568,7 +585,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
    */
   public function validateState($state, array $conditions, WebformSubmissionInterface $webform_submission) {
     // Process state/negate.
-    list($state, $negate) = $this->processState($state);
+    [$state, $negate] = $this->processState($state);
 
     // Validation conditions.
     $result = $this->validateConditions($conditions, $webform_submission);
@@ -751,7 +768,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
     }
 
     // Process trigger state/negate.
-    list($trigger, $trigger_negate) = $this->processState($trigger);
+    [$trigger, $trigger_negate] = $this->processState($trigger);
 
     // Process triggers (aka remote conditions).
     // @see \Drupal\webform\Element\WebformElementStates::processWebformStates
@@ -833,7 +850,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
           $greater = $trigger_value;
         }
         else {
-          list($greater, $less) = explode(':', $trigger_value);
+          [$greater, $less] = explode(':', $trigger_value);
         }
         $is_greater_than = ($greater === NULL || $greater === '' || floatval($element_value) >= floatval($greater));
         $is_less_than = ($less === NULL || $less === '' || floatval($element_value) <= floatval($less));

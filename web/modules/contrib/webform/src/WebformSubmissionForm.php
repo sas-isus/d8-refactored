@@ -1117,7 +1117,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       && $this->operation === 'add'
       && $this->getWebformSetting('draft') !== WebformInterface::DRAFT_NONE
       && $this->getWebformSetting('draft_multiple', FALSE)
-      && ($previous_draft_total = $this->getStorage()->getTotal($webform, $this->sourceEntity, $this->currentUser(), ['in_draft' => TRUE]))
+      && ($previous_draft_total = $this->getStorage()->getTotal($webform, $this->sourceEntity, $this->currentUser(), ['in_draft' => TRUE, 'check_source_entity' => TRUE]))
     ) {
       if ($previous_draft_total > 1) {
         $this->getMessageManager()->display(WebformMessageManagerInterface::DRAFT_PENDING_MULTIPLE);
@@ -2346,7 +2346,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       $pages = $this->getWebform()->getPages($this->operation);
       foreach ($pages as $page_key => $page) {
         if (isset($form['elements'][$page_key])) {
-          $page_element =& $form['elements'][$page_key];
+          $page_element = &$form['elements'][$page_key];
           $page_element_plugin = $this->elementManager->getElementInstance($page_element);
           if ($page_element_plugin instanceof WebformElementWizardPageInterface) {
             if ($page_key != $current_page) {

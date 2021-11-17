@@ -99,7 +99,9 @@ class WebformTwigExtension extends \Twig_Extension {
    *
    * @see \Drupal\Core\Utility\Token::replace
    */
-  public function webformToken($token, EntityInterface $entity = NULL, array $data = [], array $options = []) {
+  public function webformToken($token, EntityInterface $entity = NULL, array $data = [], array $options = NULL) {
+    $options = $options ?: [];
+
     // Allow the webform_token function to be tested during validation without
     // a valid entity.
     if (!$entity) {

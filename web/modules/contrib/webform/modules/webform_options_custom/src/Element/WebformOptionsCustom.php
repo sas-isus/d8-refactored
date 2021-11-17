@@ -291,7 +291,7 @@ class WebformOptionsCustom extends FormElement implements WebformOptionsCustomIn
     ];
 
     // Get options.
-    $options =& $element['#options'];
+    $options = &$element['#options'];
 
     // Build options by text look up.
     $options_by_text = [];

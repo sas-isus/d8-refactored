@@ -296,6 +296,9 @@ webform.settings:
       type: mapping
       label: 'Form default settings'
       mapping:
+        limit:
+          type: integer
+          label: 'Webforms per page'
         filter_category:
           type: label
           label: 'Filter category'

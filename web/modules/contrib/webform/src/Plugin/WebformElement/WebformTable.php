@@ -262,9 +262,18 @@ class WebformTable extends WebformElementBase {
         $this->t('Header 2'),
       ],
       '#rows' => [
-        ['Row 1 - Col 1', 'Row 1 - Col 2'],
-        ['Row 2 - Col 1', 'Row 2 - Col 2'],
-        ['Row 3 - Col 1', 'Row 3 - Col 2'],
+        [
+          $this->t('Row 1 - Col 1'),
+          $this->t('Row 1 - Col 2'),
+        ],
+        [
+          $this->t('Row 2 - Col 1'),
+          $this->t('Row 2 - Col 2'),
+        ],
+        [
+          $this->t('Row 3 - Col 1'),
+          $this->t('Row 3 - Col 2'),
+        ],
       ],
     ];
   }

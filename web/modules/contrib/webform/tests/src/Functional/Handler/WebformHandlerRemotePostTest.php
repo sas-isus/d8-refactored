@@ -307,6 +307,34 @@ options:
       uuid: $files_uuid
       data: dGhpcyBpcyBhIHNhbXBsZSB0eHQgZmlsZQppdCBoYXMgdHdvIGxpbmVzCg==");
 
+    // Check the file data is NOT appended to form params.
+    $handler = $webform->getHandler('remote_post');
+    $handler->setSetting('file_data', FALSE);
+    $webform->save();
+    $this->drupalPostForm("/admin/structure/webform/manage/test_handler_remote_post_file/submission/$sid/edit", [], t('Save'));
+    $this->assertRaw("form_params:
+  file: 1
+  files:
+    - 2
+  _file:
+    id: $file_id
+    name: file.txt
+    uri: 'private://webform/test_handler_remote_post_file/$sid/file.txt'
+    mime: text/plain
+    uuid: $file_uuid
+  file__id: $file_id
+  file__name: file.txt
+  file__uri: 'private://webform/test_handler_remote_post_file/$sid/file.txt'
+  file__mime: text/plain
+  file__uuid: $file_uuid
+  _files:
+    -
+      id: $files_id
+      name: files.txt
+      uri: 'private://webform/test_handler_remote_post_file/$sid/files.txt'
+      mime: text/plain
+      uuid: $files_uuid");
+
     /**************************************************************************/
     // POST cast.
     /**************************************************************************/

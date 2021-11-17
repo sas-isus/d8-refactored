@@ -129,6 +129,10 @@ class WebformOptionsTest extends WebformBrowserTestBase {
     $this->assertResponse(200);
     $this->drupalGet('/admin/structure/webform/config/options/manage/add');
     $this->assertResponse(200);
+
+    // Check duplicate copies dynamic options.
+    $this->drupalGet('/admin/structure/webform/config/options/time_zones/duplicate');
+    $this->assertRaw('Africa/Abidjan: Africa/Abidjan');
   }
 
 }

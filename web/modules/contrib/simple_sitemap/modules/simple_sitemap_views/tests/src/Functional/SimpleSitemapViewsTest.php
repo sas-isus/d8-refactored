@@ -46,6 +46,11 @@ class SimpleSitemapViewsTest extends SimpleSitemapViewsTestBase {
     $this->assertContains('type', $indexable_arguments);
     $this->assertContains('title', $indexable_arguments);
     $this->assertNotContains('nid', $indexable_arguments);
+
+    // Check the indexing status of the required arguments.
+    $indexable_arguments = $this->sitemapViews->getIndexableArguments($this->testView2, $this->sitemapVariant);
+    $this->assertContains('type', $indexable_arguments);
+    $this->assertContains('%', $indexable_arguments);
   }
 
   /**
@@ -77,6 +82,10 @@ class SimpleSitemapViewsTest extends SimpleSitemapViewsTestBase {
     $args = ['page', $this->node2->getTitle()];
     $this->sitemapViews->addArgumentsToIndex($this->testView, $args);
     $this->assertIndexSize(2);
+
+    // Required arguments must be indexed.
+    $this->sitemapViews->addArgumentsToIndex($this->testView2, ['page', 1]);
+    $this->assertIndexSize(3);
   }
 
   /**
@@ -89,14 +98,22 @@ class SimpleSitemapViewsTest extends SimpleSitemapViewsTestBase {
     $title = $this->node->getTitle();
     $this->sitemapViews->addArgumentsToIndex($this->testView, ['page']);
     $this->sitemapViews->addArgumentsToIndex($this->testView, ['page', $title]);
+    $this->sitemapViews->addArgumentsToIndex($this->testView2, ['page', 1]);
     $this->generator->generateSitemap('backend');
+
+    $url1 = $this->testView->getUrl()->toString();
+    $url2 = $this->testView->getUrl(['page', NULL, NULL])->toString();
+    $url3 = $this->testView->getUrl(['page', $title, NULL])->toString();
+    $url4 = $this->testView2->getUrl()->toString();
+    $url5 = $this->testView2->getUrl(['page', 1])->toString();
 
     // Check that the sitemap contains view display URLs.
     $this->drupalGet($this->defaultSitemapUrl);
-    $test_view_url = $this->testView->getUrl()->toString();
-    $this->assertSession()->responseContains($test_view_url);
-    $this->assertSession()->responseContains("$test_view_url/page");
-    $this->assertSession()->responseContains("$test_view_url/page/$title");
+    $this->assertSession()->responseContains($url1);
+    $this->assertSession()->responseContains($url2);
+    $this->assertSession()->responseContains($url3);
+    $this->assertSession()->responseNotContains($url4);
+    $this->assertSession()->responseContains($url5);
   }
 
   /**

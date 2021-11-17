@@ -182,6 +182,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       'excluded_data' => $excluded_data,
       'custom_data' => '',
       'custom_options' => '',
+      'file_data' => TRUE,
       'cast' => FALSE,
       'debug' => FALSE,
       // States.
@@ -322,6 +323,14 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       ],
       '#default_value' => $this->configuration['type'],
     ];
+    $form['additional']['file_data'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Include files as Base64 encoded post data'),
+      '#description' => $this->t('If checked, uploaded and attached file data will be included using Base64 encoding.'),
+      '#return_value' => TRUE,
+      '#default_value' => $this->configuration['file_data'],
+      '#access' => $this->getWebform()->hasAttachments(),
+    ];
     $form['additional']['cast'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Cast posted element value and custom data'),
@@ -431,6 +440,24 @@ class RemotePostWebformHandler extends WebformHandlerBase {
         '#message_close' => TRUE,
         '#message_id' => 'webform_node.references',
         '#message_storage' => WebformMessage::STORAGE_SESSION,
+        '#states' => [
+          'visible' => [
+            ':input[name="settings[file_data]"]' => ['checked' => TRUE],
+          ],
+        ],
+      ];
+      $form['submission_data']['managed_file_message_no_data'] = [
+        '#type' => 'webform_message',
+        '#message_message' => $this->t('Upload files will include the file\'s id, name and uri.'),
+        '#message_type' => 'warning',
+        '#message_close' => TRUE,
+        '#message_id' => 'webform_node.references',
+        '#message_storage' => WebformMessage::STORAGE_SESSION,
+        '#states' => [
+          'visible' => [
+            ':input[name="settings[file_data]"]' => ['checked' => FALSE],
+          ],
+        ],
       ];
     }
     $form['submission_data']['excluded_data'] = [
@@ -784,7 +811,9 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     $data[$prefix . 'uri'] = $file->getFileUri();
     $data[$prefix . 'mime'] = $file->getMimeType();
     $data[$prefix . 'uuid'] = $file->uuid();
-    $data[$prefix . 'data'] = base64_encode(file_get_contents($file->getFileUri()));
+    if ($this->configuration['file_data']) {
+      $data[$prefix . 'data'] = base64_encode(file_get_contents($file->getFileUri()));
+    }
     return $data;
   }
 

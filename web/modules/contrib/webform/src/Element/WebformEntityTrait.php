@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Element;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\OptGroup;
 use Drupal\webform\Utility\WebformOptionsHelper;
 
@@ -90,6 +91,30 @@ trait WebformEntityTrait {
     $options = WebformOptionsHelper::decodeOptions($options);
 
     $element['#options'] = $options;
+
+    static::setCacheTags($element, $element['#target_type'], $selection_settings['target_bundles'] ?? []);
+  }
+
+  /**
+   * Set the corresponding entity cache tags on the element
+   *
+   * @param array $element
+   *   An element
+   * @param string $target_type
+   *   The target type id
+   * @param array $target_bundles
+   *   The target bundle ids
+   */
+  protected static function setCacheTags(array &$element, $target_type, array $target_bundles = []) {
+    $list_cache_tag = sprintf('%s_list', $target_type);
+
+    if (empty($target_bundles)) {
+      $element['#cache']['tags'] = Cache::mergeTags($element['#cache']['tags'] ?? [], [$list_cache_tag]);
+      return;
+    }
+
+    $tags = Cache::buildTags($list_cache_tag, $target_bundles);
+    $element['#cache']['tags'] = Cache::mergeTags($element['#cache']['tags'] ?? [], $tags);
   }
 
   /**

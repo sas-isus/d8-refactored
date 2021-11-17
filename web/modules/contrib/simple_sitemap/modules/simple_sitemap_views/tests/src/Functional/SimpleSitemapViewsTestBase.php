@@ -41,6 +41,13 @@ abstract class SimpleSitemapViewsTestBase extends SimplesitemapTestBase {
   protected $testView;
 
   /**
+   * Test view 2.
+   *
+   * @var \Drupal\views\ViewExecutable
+   */
+  protected $testView2;
+
+  /**
    * The sitemap variant.
    *
    * @var string
@@ -59,6 +66,9 @@ abstract class SimpleSitemapViewsTestBase extends SimplesitemapTestBase {
 
     $this->testView = Views::getView('simple_sitemap_views_test_view');
     $this->testView->setDisplay('page_1');
+
+    $this->testView2 = Views::getView('simple_sitemap_views_test_view');
+    $this->testView2->setDisplay('page_2');
   }
 
   /**

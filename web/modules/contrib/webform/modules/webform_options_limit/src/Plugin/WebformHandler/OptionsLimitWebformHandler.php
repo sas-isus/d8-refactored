@@ -636,7 +636,7 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
    */
   protected function alterOptionsElement(array &$element, array $limits, array $reached) {
     // Set options element's options labels.
-    $options =& $element['#options'];
+    $options = &$element['#options'];
     $this->alterOptionsElementLabels($options, $limits);
 
     // Disable or remove reached options.
@@ -676,7 +676,7 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
             $limits[$option_value]
           );
           $message_display = $this->configuration['option_message_display'];
-          $option =& $options[$option_value][0];
+          $option = &$options[$option_value][0];
           switch ($message_display) {
             case WebformOptionsLimitHandlerInterface::MESSAGE_DISPLAY_DESCRIPTION:
               list(
@@ -743,7 +743,7 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
    *   An options element's reached options.
    */
   protected function removeOptionsElement(array &$element, array $reached) {
-    $options =& $element['#options'];
+    $options = &$element['#options'];
     $this->removeOptionsElementRecursive($options, $reached);
   }
 

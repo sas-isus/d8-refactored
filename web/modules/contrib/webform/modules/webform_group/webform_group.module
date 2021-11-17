@@ -25,7 +25,7 @@ use Drupal\webform\WebformSubmissionInterface;
  */
 function webform_group_config_schema_info_alter(&$definitions) {
   // Append group roles to webform access schema.
-  $mapping =& $definitions['webform.webform.*']['mapping']['access']['sequence']['mapping'];
+  $mapping = &$definitions['webform.webform.*']['mapping']['access']['sequence']['mapping'];
   $mapping['group_roles'] = [
     'type' => 'sequence',
     'label' => 'Group roles',
@@ -203,7 +203,7 @@ function webform_group_form_webform_settings_access_form_alter(&$form, FormState
  */
 function webform_group_form_webform_ui_element_form_alter(&$form, FormStateInterface $form_state) {
   $default_properties = $form_state->get('default_properties');
-  $custom_default_value =& $form['properties']['custom']['properties']['#default_value'];
+  $custom_default_value = &$form['properties']['custom']['properties']['#default_value'];
 
   $operations = ['create', 'update', 'view'];
   foreach ($operations as $operation) {

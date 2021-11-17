@@ -17,9 +17,9 @@ class WebformListBuilderTest extends WebformBrowserTestBase {
   public static $modules = ['node', 'webform', 'webform_test_submissions'];
 
   /**
-   * Tests the webform overview filter.
+   * Tests the webform overview filter and limit.
    */
-  public function testFilter() {
+  public function testFilterAndLimit() {
     $this->drupalLogin($this->rootUser);
 
     // Check filter default category and state.
@@ -42,6 +42,29 @@ class WebformListBuilderTest extends WebformBrowserTestBase {
     $this->drupalGet('/admin/structure/webform', ['query' => ['category' => '', 'state' => '']]);
     $this->assertOptionSelected('edit-category', '');
     $this->assertOptionSelected('edit-state', '');
+
+    // Clear the filters.
+    \Drupal::configFactory()->getEditable('webform.settings')
+      ->set('form.filter_category', '')
+      ->set('form.filter_state', '')
+      ->save();
+
+    // Check that two webforms are displayed when the limit is 50.
+    $this->drupalGet('/admin/structure/webform');
+    $this->assertFieldByName('items[contact]');
+    $this->assertFieldByName('items[test_submissions]');
+    $this->assertNoCssSelect('.pager');
+
+    // Create 1 extra webform and set the limit to 1.
+    \Drupal::configFactory()->getEditable('webform.settings')
+      ->set('form.limit', 1)
+      ->save();
+
+    // Check the now only one webform is displayed.
+    $this->drupalGet('/admin/structure/webform');
+    $this->assertFieldByName('items[contact]');
+    $this->assertNoFieldByName('items[test_submissions]');
+    $this->assertCssSelect('.pager');
   }
 
   /**

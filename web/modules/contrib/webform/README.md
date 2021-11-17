@@ -45,14 +45,15 @@ INSTALLATION
 
 The installation of this module is like other Drupal modules.
 
- 1. Copy/upload the webform module to the modules directory of your Drupal
-   installation.
+ 1. If your site is [managed via Composer](https://www.drupal.org/node/2718229),
+    use Composer to download the webform module running
+    ```composer require "drupal/webform"```. Otherwise copy/upload the webform
+    module to the modules directory of your Drupal installation.
 
  2. Enable the 'Webform' module and desired sub-modules in 'Extend'.
    (/admin/modules)
 
  3. Set up user permissions. (/admin/people/permissions#module-webform)
-
 
 RECOMMENDED MODULES
 -------------------

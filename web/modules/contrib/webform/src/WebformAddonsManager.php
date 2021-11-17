@@ -269,6 +269,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'element',
     ];
 
+    // Element: Webform Javascript Field.
+    $projects['webform_javascript_field'] = [
+      'title' => $this->t('Webform Javascript Field'),
+      'description' => $this->t('Provides ability to specify JavaScript snippet for Webform components.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_javascript_field'),
+      'category' => 'element',
+    ];
+
     // Element: Webform Layout Container.
     $projects['webform_layout_container'] = [
       'title' => $this->t('Webform Layout Container'),
@@ -699,6 +707,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'integration',
     ];
 
+    // Integrations: (Google) Datalayer Webform.
+    $projects['datalayer_webform'] = [
+      'title' => $this->t('(Google) Datalayer Webform'),
+      'description' => $this->t('Send datalayer events on Webform submission.'),
+      'url' => Url::fromUri('https://www.drupal.org/sandbox/mistermoper/3199908'),
+      'category' => 'integration',
+    ];
+
     // Integrations: Group Webform.
     $projects['group_webform'] = [
       'title' => $this->t('Group Webform'),
@@ -1033,7 +1049,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
     // Integrations: Webform Pardot.
     $projects['webform_pardot'] = [
       'title' => $this->t('Webform Pardot'),
-      'description' => $this->t('Links commerce products to webform elements.'),
+      'description' => $this->t('Provides a webform handler for posting submissions to Pardot.'),
       'url' => Url::fromUri('https://www.drupal.org/project/webform_pardot'),
       'category' => 'integration',
     ];
@@ -1041,7 +1057,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
     // Integrations: Webform Product.
     $projects['webform_product'] = [
       'title' => $this->t('Webform Product'),
-      'description' => $this->t('Provides a webform handler for posting submissions to Pardot.'),
+      'description' => $this->t('Links commerce products to webform elements.'),
       'url' => Url::fromUri('https://github.com/chx/webform_product'),
       'category' => 'integration',
     ];
@@ -1738,7 +1754,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'description' => $this->t('Provide revisions and moderation for Webforms.'),
       'url' => Url::fromUri('https://www.drupal.org/project/config_entity_revisions'),
       'category' => 'workflow',
-      'recommended' => TRUE,
     ];
 
     // Workflow: Maestro.
@@ -1747,7 +1762,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'description' => $this->t('A business process workflow solution that allows you to create and automate a sequence of tasks representing any business, document approval or collaboration process.'),
       'url' => Url::fromUri('https://www.drupal.org/project/maestro'),
       'category' => 'workflow',
-      'recommended' => TRUE,
     ];
 
     // Workflow: Workflows Field.
@@ -1756,8 +1770,16 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'description' => $this->t('A business process workflow solution that allows you to create and automate a sequence of tasks representing any business, document approval or collaboration process.'),
       'url' => Url::fromUri('https://www.drupal.org/project/workflows_field'),
       'category' => 'workflow',
-      'recommended' => TRUE,
     ];
+
+    // Workflow: Webform Workflows Element.
+    $projects['webform_workflows_element'] = [
+      'title' => $this->t('Webform Workflows Element'),
+      'description' => $this->t('provides a new element type for Webforms (D8+) that uses the core Workflows functionality to move submissions through a webform.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_workflows_element'),
+      'category' => 'workflow',
+    ];
+
 
     /**************************************************************************/
     // Development.

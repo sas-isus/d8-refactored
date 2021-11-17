@@ -191,7 +191,7 @@ abstract class WebformSubmissionsDeleteFormBase extends WebformDeleteFormBase {
    * @param mixed|array $context
    *   The batch current context.
    */
-  public function batchProcess(WebformInterface $webform = NULL, EntityInterface $entity = NULL, $max_sid, &$context) {
+  public function batchProcess(WebformInterface $webform = NULL, EntityInterface $entity = NULL, $max_sid = NULL, array &$context = []) {
     // ISSUE:
     // $this->submissionStorage is not being setup via
     // WebformSubmissionsDeleteFormBase::__construct.

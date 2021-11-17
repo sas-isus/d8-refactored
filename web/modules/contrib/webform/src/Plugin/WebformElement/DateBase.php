@@ -231,9 +231,17 @@ abstract class DateBase extends WebformElementBase {
     $form['default']['default_value']['#description'] .= '<br /><br />' . $this->t("You may use tokens. Tokens should use the 'html_date' or 'html_datetime' date format. (i.e. @date_format)", ['@date_format' => '[current-user:field_date_of_birth:date:html_date]']);
 
     // Allow custom date formats to be entered.
-    $form['display']['format']['#type'] = 'webform_select_other';
-    $form['display']['format']['#other__option_label'] = $this->t('Custom date format…');
-    $form['display']['format']['#other__description'] = $this->t('A user-defined date format. See the <a href="http://php.net/manual/function.date.php">PHP manual</a> for available options.');
+    $form['display']['item']['format']['#options']['custom'] = $this->t('Custom HTML/text…');
+    $form['display']['item']['format']['#type'] = 'webform_select_other';
+    $form['display']['item']['format']['#other__option_label'] = $this->t('Custom date format…');
+    $form['display']['item']['format']['#other__description'] = $this->t('A user-defined date format. See the <a href="http://php.net/manual/function.date.php">PHP manual</a> for available options.');
+    $format_custom_states = [
+      'visible' => [':input[name="properties[format][select]"]' => ['value' => 'custom']],
+      'required' => [':input[name="properties[format][select]"]' => ['value' => 'custom']],
+    ];
+    $form['display']['item']['format_html']['#states'] = $format_custom_states;
+    $form['display']['item']['format_text']['#states'] = $format_custom_states;
+    $form['display']['item']['twig']['#states'] = $format_custom_states;
 
     $form['date'] = [
       '#type' => 'fieldset',

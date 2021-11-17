@@ -133,6 +133,19 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       '#open' => TRUE,
       '#tree' => TRUE,
     ];
+    $form['filter_settings']['limit'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Webforms per page'),
+      '#options' => [
+        '10' => '10',
+        '20' => '20',
+        '30' => '30',
+        '40' => '40',
+        '50' => '50',
+      ],
+      '#parents' => ['form', 'limit'],
+      '#default_value' => $config->get('form.limit') ?: 50,
+    ];
     $form['filter_settings']['filter_category'] = [
       '#type' => 'select',
       '#title' => $this->t('Filter webforms default category'),

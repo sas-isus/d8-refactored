@@ -51,7 +51,7 @@ class WebformTableSort extends OptionsBase {
   /**
    * {@inheritdoc}
    */
-  public function getItemDefaultFormat() {
+  public function getItemsDefaultFormat() {
     return 'ol';
   }
 

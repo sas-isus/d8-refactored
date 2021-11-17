@@ -1139,6 +1139,20 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $element_plugin = $this->elementManager->getElementInstance($element);
       $attachments = array_merge($attachments, $element_plugin->getAttachments($element, $webform_submission));
     }
+
+    // For SwiftMailer && Mime Mail use filecontent and not the filepath.
+    // @see \Drupal\swiftmailer\Plugin\Mail\SwiftMailer::attachAsMimeMail
+    // @see \Drupal\mimemail\Utility\MimeMailFormatHelper::mimeMailFile
+    // @see https://www.drupal.org/project/webform/issues/3232756
+    if ($this->moduleHandler->moduleExists('swiftmailer')
+      || $this->moduleHandler->moduleExists('mimemail')) {
+      foreach ($attachments as &$attachment) {
+        if (isset($attachment['filecontent']) && isset($attachment['filepath'])) {
+          unset($attachment['filepath']);
+        }
+      }
+    }
+
     return $attachments;
   }
 

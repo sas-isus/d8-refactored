@@ -65,6 +65,34 @@ elements: |
         martial_status: Single
         employment_status: Unemployed
         age: 20
+  webform_custom_composite_fieldset:
+    '#type': webform_custom_composite
+    '#title': webform_custom_composite_fieldset
+    '#wrapper_type': fieldset
+    '#wrapper_attributes':
+      class:
+        - custom-class
+    '#element':
+      first_name:
+        '#type': textfield
+        '#title': 'First name'
+      last_name:
+        '#type': textfield
+        '#title': 'Last name'
+  webform_custom_composite_container:
+    '#type': webform_custom_composite
+    '#title': webform_custom_composite_container
+    '#wrapper_type': container
+    '#wrapper_attributes':
+      class:
+        - custom-class
+    '#element':
+      first_name:
+        '#type': textfield
+        '#title': 'First name'
+      last_name:
+        '#type': textfield
+        '#title': 'Last name'
 css: ''
 javascript: ''
 settings:

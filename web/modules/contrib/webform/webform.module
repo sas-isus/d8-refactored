@@ -272,8 +272,7 @@ function webform_menu_local_tasks_alter(&$data, $route_name, RefinableCacheableD
     $query = \Drupal::request()->query->all();
     $has_test_tab = FALSE;
     foreach ($route_names as $test_route_name => $view_route_name) {
-      if (isset($data['tabs'][0][$test_route_name])
-        && isset($data['tabs'][0][$test_route_name])) {
+      if (isset($data['tabs'][0][$test_route_name])) {
         $has_test_tab = TRUE;
         if ($query) {
           $data['tabs'][0][$test_route_name]['#link']['url']
@@ -305,7 +304,7 @@ function webform_module_implements_alter(&$implementations, $hook) {
  * Implements hook_token_info_alter().
  */
 function webform_token_info_alter(&$data) {
-  module_load_include('inc', 'webform', 'webform.tokens.inc');
+  module_load_include('inc', 'webform', 'webform.tokens');
 
   // Append learn more about token suffixes to all webform token descriptions.
   // @see \Drupal\webform\WebformTokenManager::replace
@@ -503,57 +502,48 @@ function webform_toolbar_alter(&$items) {
  * Implements hook_menu_links_discovered_alter().
  */
 function webform_menu_links_discovered_alter(&$links) {
+  // Display Webforms as a top-level administration menu item in the toolbar.
   if (\Drupal::config('webform.settings')->get('ui.toolbar_item')) {
     $links['entity.webform.collection']['parent'] = 'system.admin';
     $links['entity.webform.collection']['weight'] = -9;
   }
 
   // Add webform local tasks as admin menu toolbar menu items.
-  // @see admin_toolbar_tools_menu_links_discovered_alter()
   if (\Drupal::moduleHandler()->moduleExists('admin_toolbar_tools')) {
+    // Get local task definitions.
     /** @var \Drupal\Core\Menu\LocalTaskManager $local_task_manager */
     $local_task_manager = \Drupal::service('plugin.manager.menu.local_task');
+    $definitions = $local_task_manager->getDefinitions();
 
-    $local_tasks = $local_task_manager->getLocalTasks('entity.webform.collection', 0);
-    foreach ($local_tasks['tabs'] as $local_task) {
-      if (!isset($local_task['#link']['url'])
-        || !$local_task['#link']['url'] instanceof Url) {
-        continue;
+    // Set default definition.
+    $default_definition = [
+      'provider' => 'webform',
+      'menu_name' => 'admin',
+    ];
+
+    // Get keys to be copied.
+    $keys = ['title', 'route_name', 'weight'];
+    $keys_to_copy = array_combine($keys, $keys);
+
+    $menu_links = [];
+    foreach ($definitions as $task_name => $definition) {
+      if (isset($definition['base_route']) && $definition['base_route'] === 'entity.webform.collection') {
+        $menu_links[$task_name . '.item'] = $default_definition
+          + array_intersect_key($definition, $keys_to_copy)
+          + ['parent' => 'entity.webform.collection'];
       }
-
-      $menu_item_title = $local_task['#link']['title'];
-      $menu_item_route_name = $local_task['#link']['url']->getRouteName();
-      $menu_item_name = $menu_item_route_name . '.item';
-      $links[$menu_item_name] = [
-        'title' => $menu_item_title,
-        'route_name' => $menu_item_route_name,
-        'parent' => 'entity.webform.collection',
-        'weight' => $local_task['#weight'],
-        'provider' => 'webform',
-        'menu_name' => 'admin',
-      ];
-
-      if (\Drupal::config('webform.settings')->get('ui.toolbar_item')) {
-        $local_sub_tasks = $local_task_manager->getLocalTasks($menu_item_route_name, 1);
-        foreach ($local_sub_tasks['tabs'] as $local_sub_task) {
-          if (!$local_task['#link']['url'] instanceof Url) {
-            continue;
-          }
-
-          $menu_sub_item_title = $local_sub_task['#link']['title'];
-          $menu_sub_item_route_name = $local_sub_task['#link']['url']->getRouteName();
-          $menu_sub_item_name = $menu_sub_item_route_name . '.sub_item';
-          $links[$menu_sub_item_name] = [
-            'title' => $menu_sub_item_title,
-            'route_name' => $menu_sub_item_route_name,
-            'parent' => $menu_item_name,
-            'weight' => $local_sub_task['#weight'],
-            'provider' => 'webform',
-            'menu_name' => 'admin',
-          ];
+    }
+    foreach($menu_links as $sub_link_task_name => $sub_link) {
+      foreach ($definitions as $task_name => $definition) {
+        if (isset($definition['parent_id']) && $definition['parent_id'] === preg_replace('/\.item$/', '', $sub_link_task_name)) {
+          $menu_links[$task_name . '.item'] = $default_definition
+            + array_intersect_key($definition, $keys_to_copy)
+            + ['parent' => $sub_link_task_name];
         }
       }
     }
+
+    $links += $menu_links;
   }
 }
 

@@ -151,7 +151,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
         $stats['@missing']++;
         $title = $this->t('<span class="color-warning"><strong>@title @version</strong> (CDN).</span>', $t_args);
         $description = $this->t('Please download the <a href=":homepage_href">@title</a> library from <a href=":download_href">:download_href</a> and copy it to <b>@path</b> or use <a href=":install_href">Drush</a> to install this library.', $t_args);
-        $severity = REQUIREMENT_WARNING;
+        $severity = REQUIREMENT_ERROR;
       }
       else {
         // CDN.
@@ -190,12 +190,15 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
     }
 
     // Description.
-    $description = [
-      'info' => $info,
-    ];
-    if (!$cli && $severity === REQUIREMENT_WARNING) {
-      $description['cdn'] = ['#markup' => $this->t('<a href=":href">Disable CDN warning</a>', [':href' => Url::fromRoute('webform.config.advanced')->toString()])];
+    $description = [];
+    if (!$cli && $severity === REQUIREMENT_ERROR) {
+      $description['cdn'] = [
+        '#markup' => '<hr/>' .
+          $this->t('Relying on a CDN for external libraries can cause unexpected issues with Ajax and BigPipe support. For more information see: <a href=":href">Issue #1988968</a>', [':href' => 'https://www.drupal.org/project/drupal/issues/1988968']) . '<br/>' .
+          $this->t('<a href=":href">Disable CDN warning</a>', [':href' => Url::fromRoute('webform.config.advanced')->toString()]),
+      ];
     }
+    $description['info'] = $info;
 
     return [
       'webform_libraries' => [

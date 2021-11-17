@@ -131,7 +131,7 @@ function simple_sitemap_entity_form_submit($form, FormStateInterface &$form_stat
     }
 
     // Regenerate sitemaps according to user setting.
-    if ($values['simple_sitemap_regenerate_now']) {
+    if (!empty($values['simple_sitemap_regenerate_now'])) {
       $generator->setVariants(TRUE)
         ->rebuildQueue()
         ->generateSitemap();

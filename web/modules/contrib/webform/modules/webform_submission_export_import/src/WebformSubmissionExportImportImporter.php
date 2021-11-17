@@ -425,8 +425,8 @@ class WebformSubmissionExportImportImporter implements WebformSubmissionExportIm
       // Track row specific warnings and errors.
       $stats['warnings'][$index] = [];
       $stats['errors'][$index] = [];
-      $row_warnings =& $stats['warnings'][$index];
-      $row_errors =& $stats['errors'][$index];
+      $row_warnings = &$stats['warnings'][$index];
+      $row_errors = &$stats['errors'][$index];
 
       // Make sure expected number of columns and values are equal.
       if (count($column_names) !== count($values)) {
@@ -578,7 +578,7 @@ class WebformSubmissionExportImportImporter implements WebformSubmissionExportIm
 
     // Set source entity.
     // Load or convert the source entity id to an internal ID.
-    if ($source_entity) {
+    if ($source_entity && !isset($record['entity_type']) && !isset($record['entity_id'])) {
       $record['entity_type'] = $source_entity->getEntityTypeId();
       $record['entity_id'] = $source_entity->id();
     }

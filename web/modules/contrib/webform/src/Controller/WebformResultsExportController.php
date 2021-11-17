@@ -259,7 +259,7 @@ class WebformResultsExportController extends ControllerBase implements Container
    * @param mixed|array $context
    *   The batch current context.
    */
-  public static function batchProcess(WebformInterface $webform, EntityInterface $source_entity = NULL, array $export_options, &$context) {
+  public static function batchProcess(WebformInterface $webform, EntityInterface $source_entity = NULL, array $export_options = [], array &$context = []) {
     /** @var \Drupal\webform\WebformSubmissionExporterInterface $submission_exporter */
     $submission_exporter = \Drupal::service('webform_submission.exporter');
     $submission_exporter->setWebform($webform);

@@ -231,7 +231,7 @@ class WebformHeight extends FormElement {
    * Validates an height element.
    */
   public static function validateWebformHeight(&$element, FormStateInterface $form_state, &$complete_form) {
-    $height_element =& $element['container'];
+    $height_element = &$element['container'];
 
     if ($height_element['feet']['#value'] === '' && $height_element['inches']['#value'] === '') {
       $value = '';

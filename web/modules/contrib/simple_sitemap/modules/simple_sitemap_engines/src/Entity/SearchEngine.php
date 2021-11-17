@@ -26,7 +26,6 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     "label",
  *     "url",
  *     "sitemap_variants",
- *     "last_submitted",
  *   }
  * )
  */

@@ -555,6 +555,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   protected function getTerminusSubmission(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = [], $terminus = 'first') {
     $options += ['in_draft' => FALSE];
     $query = $this->getQuery();
+    $query->accessCheck(TRUE);
     $this->addQueryConditions($query, $webform, $source_entity, $account, $options);
     $query->sort('sid', ($terminus === 'first') ? 'ASC' : 'DESC');
     $query->range(0, 1);
@@ -582,6 +583,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     $webform = $webform_submission->getWebform();
 
     $query = $this->getQuery();
+    $query->accessCheck(TRUE);
     $this->addQueryConditions($query, $webform, $source_entity, $account, $options);
 
     if ($direction === 'previous') {

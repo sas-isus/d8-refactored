@@ -112,6 +112,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     $this->keys = ($query->has('search')) ? $query->get('search') : '';
     $this->category = ($query->has('category')) ? $query->get('category') : $config->get('form.filter_category');
     $this->state = ($query->has('state')) ? $query->get('state') : $config->get('form.filter_state');
+    $this->limit = $config->get('form.limit') ?: 50;
 
     $this->bulkOperations = $config->get('settings.webform_bulk_form') ?: FALSE;
 

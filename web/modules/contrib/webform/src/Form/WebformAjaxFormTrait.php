@@ -135,7 +135,7 @@ trait WebformAjaxFormTrait {
         continue;
       }
 
-      $actions =& $form[$element_key];
+      $actions = &$form[$element_key];
       foreach (Element::children($actions) as $action_key) {
         if (WebformElementHelper::isType($actions[$action_key], 'submit')) {
           $actions[$action_key]['#ajax'] = [
@@ -161,9 +161,11 @@ trait WebformAjaxFormTrait {
     $wrapper_attributes = new Attribute($wrapper_attributes);
 
     $form['#form_wrapper_id'] = $wrapper_id;
-    $form['#prefix'] = '<span id="' . $wrapper_id . '-content"></span>';
+
+    $form += ['#prefix' => '', '#suffix' => ''];
+    $form['#prefix'] .= '<span id="' . $wrapper_id . '-content"></span>';
     $form['#prefix'] .= '<div' . $wrapper_attributes . '>';
-    $form['#suffix'] = '</div>';
+    $form['#suffix'] = '</div>' . $form['#suffix'];
 
     // Add Ajax library which contains 'Scroll to top' Ajax command and
     // Ajax callback for confirmation back to link.
