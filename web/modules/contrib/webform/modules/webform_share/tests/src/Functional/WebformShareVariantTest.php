@@ -41,7 +41,7 @@ class WebformShareVariantTest extends WebformBrowserTestBase {
     $config = \Drupal::configFactory()->getEditable('webform.settings');
     $config->set('settings.default_share', TRUE)->save();
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check default letter and number.
     $this->drupalGet("/webform/test_variant_multiple/share/$library/$version");

@@ -32,9 +32,9 @@ function webform_token_info() {
   $types = [];
   $tokens = [];
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Webform submission.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   $types['webform_submission'] = [
     'name' => t('Webform submissions'),
@@ -72,17 +72,17 @@ function webform_token_info() {
     'description' => t('The URL the user submitted the webform submission.'),
     'type' => 'url',
   ];
-  $webform_submission['view-url'] = [
+  $webform_submission['token-view-url'] = [
     'name' => t('View (token) URL'),
     'description' => t('The URL that can used to view the webform submission. The webform must be configured to allow users to view a submission using a secure token.'),
     'type' => 'url',
   ];
-  $webform_submission['update-url'] = [
+  $webform_submission['token-update-url'] = [
     'name' => t('Update (token) URL'),
     'description' => t('The URL that can used to update the webform submission. The webform must be configured to allow users to update a submission using a secure token.'),
     'type' => 'url',
   ];
-  $webform_submission['delete-url'] = [
+  $webform_submission['token-delete-url'] = [
     'name' => t('Delete (token) URL'),
     'description' => t('The URL that can used to delete the webform submission. The webform must be configured to allow users to delete a submission using a secure token.'),
     'type' => 'url',
@@ -307,9 +307,9 @@ function webform_token_info() {
 
   $tokens['webform_submission'] = $webform_submission;
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Webform.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   $types['webform'] = [
     'name' => t('Webforms'),
@@ -381,9 +381,9 @@ function webform_token_info() {
 
   $tokens['webform'] = $webform;
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Webform role.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   $roles = \Drupal::config('webform.settings')->get('mail.roles');
   if ($roles) {
@@ -408,7 +408,7 @@ function webform_token_info() {
     $tokens['webform_role'] = $webform_role;
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   return ['types' => $types, 'tokens' => $tokens];
 }
@@ -543,10 +543,10 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
           $replacements[$original] = $webform_submission->getSourceUrl()->toString();
           break;
 
-        case 'view-url':
-        case 'update-url':
-        case 'delete-url':
-          $replacements[$original] = $webform_submission->getTokenUrl(str_replace('-url', '', $name))->toString();
+        case 'token-view-url':
+        case 'token-update-url':
+        case 'token-delete-url':
+          $replacements[$original] = $webform_submission->getTokenUrl(preg_replace('/^token-(view|update|delete)-url$/', '\1', $name))->toString();
           break;
 
         case 'token':
@@ -741,14 +741,14 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
       $type = $submitted_to->getEntityType()->get('token_type') ?: $submitted_to->getEntityTypeId();
       $replacements += $token_service->generate($type, $submitted_to_tokens, [$type => $submitted_to], $options, $bubbleable_metadata);
     }
-    foreach (['view-url', 'update-url', 'delete-url', 'source-url'] as $token) {
+    foreach (['token-view-url', 'token-update-url', 'token-delete-url', 'source-url'] as $token) {
       if ($url_tokens = $token_service->findWithPrefix($tokens, $token)) {
         $url = NULL;
         switch ($token) {
-          case 'view-url':
-          case 'update-url':
-          case 'delete-url':
-            $url = $webform_submission->getTokenUrl(str_replace('-url', '', $token));
+          case 'token-view-url':
+          case 'token-update-url':
+          case 'token-delete-url':
+            $url = $webform_submission->getTokenUrl(preg_replace('/^token-(view|update|delete)-url$/', '\1', $token));
             break;
 
           case 'source-url':
@@ -811,7 +811,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
           $element_property = 'title';
         }
         else {
-          list($element_key, $element_property) = explode(':', $key);
+          [$element_key, $element_property] = explode(':', $key);
         }
         $element_property = $element_property ?: 'title';
         $element = $webform->getElement($element_key);
@@ -831,7 +831,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
 
     if (($handler_tokens = $token_service->findWithPrefix($tokens, 'handler'))) {
       foreach ($handler_tokens as $key => $original) {
-        $webform_handler = isset($data['webform_handler']) ? $data['webform_handler'] : [];
+        $webform_handler = $data['webform_handler'] ?? [];
         $parents = explode(':', $key);
         $key_exists = NULL;
         $value = NestedArray::getValue($webform_handler, $parents, $key_exists);
@@ -884,6 +884,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
 function _webform_token_get_submission_value($value_token, array $options, WebformSubmissionInterface $webform_submission, WebformElementManagerInterface $element_manager, BubbleableMetadata $bubbleable_metadata) {
   $submission_data = $webform_submission->getData();
 
+  // phpcs:disable Drupal.Commenting.InlineComment.InvalidEndChar
   // Formats:
   // [html]
   // [values:{element_key}:{format}]
@@ -894,6 +895,7 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   // [values:{element_key}:{format}:{items}:urlencode]
   // [values:{element_key}:{delta}:{format}]
   // [values:{element_key}:{delta}:{sub-element}]
+  // phpcs:enable Drupal.Commenting.InlineComment.InvalidEndChar
   $keys = explode(':', $value_token);
   $element_key = array_shift($keys);
 
@@ -965,9 +967,9 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
     $composite_key = NULL;
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Get value.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   // Set entity reference chaining.
   if ($keys && $keys[0] === 'entity' && $element_plugin instanceof WebformElementEntityReferenceInterface) {
@@ -984,7 +986,7 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
         'taxonomy_term' => 'term',
         'taxonomy_vocabulary' => 'vocabulary',
       ];
-      $entity_token_name = (isset($entity_token_names[$entity_type])) ? $entity_token_names[$entity_type] : $entity_type;
+      $entity_token_name = $entity_token_names[$entity_type] ?? $entity_type;
       $entity_token = implode(':', $keys);
       $token_value = Markup::create(\Drupal::token()->replace(
         "[$entity_token_name:$entity_token]",

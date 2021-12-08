@@ -31,7 +31,7 @@ class WebformElementTextFormatTest extends WebformElementBrowserTestBase {
   protected static $testWebforms = ['test_element_text_format'];
 
   /**
-   * File usage manager.
+   * The file usage service.
    *
    * @var \Drupal\file\FileUsage\FileUsageInterface
    */
@@ -174,9 +174,9 @@ class WebformElementTextFormatTest extends WebformElementBrowserTestBase {
     $this->assertTrue($images[2]->isTemporary());
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Helper functions.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Reload images.

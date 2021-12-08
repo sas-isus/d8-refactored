@@ -48,7 +48,7 @@ function _webform_datetime_date(array &$element, FormStateInterface $form_state,
     return;
   }
 
-  $type = (isset($element['#date_date_element'])) ? $element['#date_date_element'] : 'date';
+  $type = $element['#date_date_element'] ?? 'date';
   switch ($type) {
     case 'datepicker':
       // Convert #type from datepicker to textfield.
@@ -111,7 +111,7 @@ function _webform_datetime_time(array &$element, FormStateInterface $form_state,
     $element['time']['#attributes']['data-max-year']
   );
 
-  $type = (isset($element['#date_time_element'])) ? $element['#date_time_element'] : 'time';
+  $type = $element['#date_time_element'] ?? 'time';
 
   switch ($type) {
     case 'timepicker':

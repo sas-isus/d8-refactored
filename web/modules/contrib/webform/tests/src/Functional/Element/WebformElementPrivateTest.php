@@ -26,7 +26,7 @@ class WebformElementPrivateTest extends WebformElementBrowserTestBase {
 
     $webform = Webform::load('test_element_private');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Login as normal user.
     $this->drupalLogin($normal_user);

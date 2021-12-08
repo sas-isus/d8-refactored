@@ -20,9 +20,9 @@ class WebformSubmissionGenerateTest extends WebformBrowserTestBase {
 
     $webform = Webform::load('contact');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Test tab.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check test form.
     $sid = $this->postSubmissionTest($webform);
@@ -43,9 +43,9 @@ class WebformSubmissionGenerateTest extends WebformBrowserTestBase {
       $this->assertFieldByName($name, $value);
     }
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Test querystring parameter.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check add form classes and empty values.
     $this->drupalGet('/webform/contact');

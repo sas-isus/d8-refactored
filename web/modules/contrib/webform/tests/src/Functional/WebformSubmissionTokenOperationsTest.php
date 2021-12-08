@@ -41,7 +41,7 @@ class WebformSubmissionTokenOperationsTest extends WebformBrowserTestBase {
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
     $webform_submission = WebformSubmission::load($sid);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check confirmation page's operations (view, update, & delete) token URLs.
     foreach ($token_operations as $token_operation) {
@@ -51,9 +51,9 @@ class WebformSubmissionTokenOperationsTest extends WebformBrowserTestBase {
       $this->assertRaw('<a href="' . $link_url . '">' . $link_label . '</a>');
     }
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* View */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check token view access allowed.
     $this->drupalLogin($normal_user);
@@ -73,10 +73,9 @@ class WebformSubmissionTokenOperationsTest extends WebformBrowserTestBase {
     $this->assertNoRaw('Submission information');
     $this->assertNoRaw('<label>textfield</label>');
 
-
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Update */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check token update access allowed.
     $this->drupalLogin($normal_user);
@@ -93,9 +92,9 @@ class WebformSubmissionTokenOperationsTest extends WebformBrowserTestBase {
     $this->assertNoRaw('Submission information');
     $this->assertNoFieldByName('textfield', $webform_submission->getElementData('textfield'));
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Delete */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check token delete access allowed.
     $this->drupalLogin($normal_user);
@@ -108,9 +107,9 @@ class WebformSubmissionTokenOperationsTest extends WebformBrowserTestBase {
     $this->drupalGet($webform_submission->getTokenUrl('delete'));
     $this->assertResponse(403);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Anonymous */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Logout and switch to anonymous user.
     $this->drupalLogout();

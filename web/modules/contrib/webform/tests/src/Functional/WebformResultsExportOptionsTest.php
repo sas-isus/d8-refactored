@@ -33,7 +33,7 @@ class WebformResultsExportOptionsTest extends WebformBrowserTestBase {
       'administer webform submission',
     ]);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = Webform::load('test_submissions');

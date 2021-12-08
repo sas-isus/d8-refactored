@@ -26,9 +26,9 @@ class WebformElementActionsTest extends WebformElementBrowserTestBase {
 
     $webform = Webform::load('test_element_actions');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Test webform actions */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Get form.
     $this->drupalGet('/webform/test_element_actions');
@@ -80,9 +80,9 @@ class WebformElementActionsTest extends WebformElementBrowserTestBase {
     $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/test_element_actions/submission/' . $sid . '/delete?destination=' . $base_path . 'webform/test_element_actions" class="button button--danger custom-delete" style="font-weight: bold" data-custom-delete data-drupal-selector="edit-actions-custom-delete" id="edit-actions-custom-delete" hreflang="en">{Custom delete}</a>');
     $this->assertCssSelect('[id="edit-actions-delete"]');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Test actions buttons */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform = Webform::load('test_element_actions_buttons');
 

@@ -43,7 +43,7 @@ class WebformSettingsFormTitleTest extends WebformBrowserTestBase {
 
     $options = ['query' => ['source_entity_type' => 'node', 'source_entity_id' => $node->id()]];
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check webform title.
     $this->drupalGet('/webform/test_webform');

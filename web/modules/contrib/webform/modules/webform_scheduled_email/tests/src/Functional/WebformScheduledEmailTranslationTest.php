@@ -28,7 +28,7 @@ class WebformScheduledEmailTranslationTest extends WebformNodeBrowserTestBase {
     /** @var \Drupal\webform_scheduled_email\WebformScheduledEmailManagerInterface $scheduled_manager */
     $scheduled_manager = \Drupal::service('webform_scheduled_email.manager');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Scheduled English email.
     $this->drupalPostForm('/webform/' . $webform_schedule->id(), [], 'Submit');

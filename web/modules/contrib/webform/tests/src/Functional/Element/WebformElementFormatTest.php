@@ -35,9 +35,9 @@ class WebformElementFormatTest extends WebformElementBrowserTestBase {
   public function testFormat() {
     $this->drupalLogin($this->rootUser);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Format (single) element as HTML and text */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = Webform::load('test_element_format');
@@ -71,11 +71,13 @@ class WebformElementFormatTest extends WebformElementBrowserTestBase {
       'Date (Default short date)' => '06/18/1942 - 00:00',
       'Time (Value)' => '09:00',
       'Time (Raw value)' => '09:00:00',
+// phpcs:disable
 //      'Entity autocomplete (Raw value)' => 'user:1',
 //      'Entity autocomplete (Link)' => '<a href="http://localhost/webform/user/1" hreflang="en">admin</a>',
 //      'Entity autocomplete (Entity ID)' => '1',
 //      'Entity autocomplete (Label)' => 'admin',
 //      'Entity autocomplete (Label (ID))' => 'admin (1)',
+// phpcs:enable
     ];
     foreach ($elements as $label => $value) {
       $this->assertStringContainsString('<b>' . $label . '</b><br />' . $value, $body, new FormattableMarkup('Found @label: @value', ['@label' => $label, '@value' => $value]));
@@ -111,9 +113,9 @@ class WebformElementFormatTest extends WebformElementBrowserTestBase {
       $this->assertStringContainsString($value, $body, new FormattableMarkup('Found @value', ['@value' => $value]));
     }
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Format managed file element as HTML and text */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $sid = $this->postSubmissionTest($webform);
     /** @var \Drupal\webform\WebformSubmissionInterface $submission */
@@ -124,8 +126,8 @@ class WebformElementFormatTest extends WebformElementBrowserTestBase {
     $elements = [
       'File (Value)' => $this->getSubmissionFileUrl($submission, 'managed_file_value'),
       'File (Raw value)' => $this->getSubmissionFileUrl($submission, 'managed_file_raw'),
-      'File (File)' => '<div><span class="file file--mime-text-plain file--text"><a href="' . $this->getSubmissionFileUrl($submission, 'managed_file_file') . '" type="text/plain; length=43">managed_file_file.txt</a></span>',
-      'File (Link)' => '<span class="file file--mime-text-plain file--text"><a href="' . $this->getSubmissionFileUrl($submission, 'managed_file_link') . '" type="text/plain; length=43">managed_file_link.txt</a></span>',
+      'File (File)' => '<div><span class="file file--mime-text-plain file--text"><a href="' . $this->getSubmissionFileUrl($submission, 'managed_file_file', floatval(\Drupal::VERSION) >= 9.3) . '" type="text/plain; length=43">managed_file_file.txt</a></span>',
+      'File (Link)' => '<span class="file file--mime-text-plain file--text"><a href="' . $this->getSubmissionFileUrl($submission, 'managed_file_link', floatval(\Drupal::VERSION) >= 9.3) . '" type="text/plain; length=43">managed_file_link.txt</a></span>',
       'File (File ID)' => $submission->getElementData('managed_file_id'),
       'File (File name)' => 'managed_file_name.txt',
       'File (File base name (no extension))' => 'managed_file_basename',
@@ -151,17 +153,17 @@ class WebformElementFormatTest extends WebformElementBrowserTestBase {
       'File (File ID): ' . $submission->getElementData('managed_file_id'),
       'File (File name): managed_file_name.txt',
       'File (URL): ' . $this->getSubmissionFileUrl($submission, 'managed_file_url'),
-      'File (File mime type)' => 'text/plain',
-      'File (File size (Bytes))' => '43',
-      'File (File content (Base64))' => 'dGhpcyBpcyBhIHNhbXBsZSB0eHQgZmlsZQppdCBoYXMgdHdvIGxpbmVzCg==',
+      'File (File mime type): text/plain',
+      'File (File size (Bytes)): 43',
+      'File (File content (Base64)): dGhpcyBpcyBhIHNhbXBsZSB0eHQgZmlsZQppdCBoYXMgdHdvIGxpbmVzCg==',
     ];
     foreach ($elements as $value) {
       $this->assertStringContainsString($value, $body, new FormattableMarkup('Found @value', ['@value' => $value]));
     }
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Format multiple element as HTML and text */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     /** @var \Drupal\webform\WebformInterface $webforms */
     $webforms = Webform::load('test_element_format_multiple');
@@ -224,9 +226,9 @@ class WebformElementFormatTest extends WebformElementBrowserTestBase {
       $this->assertStringContainsString($value, $body, new FormattableMarkup('Found @value', ['@value' => $value]));
     }
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Format element using tokens */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     /** @var \Drupal\webform\WebformInterface $webform_format_token */
     $webform_format_token = Webform::load('test_element_format_token');
@@ -308,13 +310,19 @@ class WebformElementFormatTest extends WebformElementBrowserTestBase {
    *   A webform submission.
    * @param string $element_key
    *   The element key.
+   * @param bool $relative
+   *   Whether to return a relative. Used for testing on Drupal 9.3 due to
+   *    https://www.drupal.org/node/3223515.
    *
    * @return string
    *   A submission element's file URL.
    */
-  protected function getSubmissionFileUrl(WebformSubmissionInterface $submission, $element_key) {
+  protected function getSubmissionFileUrl(WebformSubmissionInterface $submission, $element_key, $relative = FALSE) {
     $fid = $submission->getElementData($element_key);
     $file = File::load($fid);
+    if ($relative) {
+      return $file->createFileUrl();
+    }
     return file_create_url($file->getFileUri());
   }
 

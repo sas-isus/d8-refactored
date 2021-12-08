@@ -30,7 +30,7 @@ class WebformElementSignatureJavaScriptTest extends WebformWebDriverTestBase {
 
     $webform = Webform::load('test_element_signature');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalGet($webform->toUrl());
 

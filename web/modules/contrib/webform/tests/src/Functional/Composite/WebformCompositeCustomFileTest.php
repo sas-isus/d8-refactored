@@ -29,7 +29,7 @@ class WebformCompositeCustomFileTest extends WebformElementManagedFileTestBase {
 
     $first_file = $this->files[0];
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Upload file while adding a new row to the composite element.
     $edit = [

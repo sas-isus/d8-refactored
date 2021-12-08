@@ -50,7 +50,7 @@ class WebformNodeResultsTest extends WebformNodeBrowserTestBase {
     /** @var \Drupal\webform\WebformSubmissionStorageInterface $submission_storage */
     $submission_storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform = Webform::load('contact');
 

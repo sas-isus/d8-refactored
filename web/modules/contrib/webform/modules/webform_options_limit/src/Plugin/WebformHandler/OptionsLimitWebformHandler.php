@@ -4,13 +4,9 @@ namespace Drupal\webform_options_limit\Plugin\WebformHandler;
 
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Database\Connection;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\OptGroup;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\Element;
 use Drupal\webform\Element\WebformAjaxElementTrait;
 use Drupal\webform\Element\WebformEntityTrait;
@@ -19,12 +15,9 @@ use Drupal\webform\Plugin\WebformElement\BooleanBase;
 use Drupal\webform\Plugin\WebformElement\OptionsBase;
 use Drupal\webform\Plugin\WebformElement\TableSelect;
 use Drupal\webform\Plugin\WebformElementEntityOptionsInterface;
-use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\Utility\WebformOptionsHelper;
-use Drupal\webform\WebformSubmissionConditionsValidatorInterface;
 use Drupal\webform\WebformSubmissionInterface;
-use Drupal\webform\WebformTokenManagerInterface;
 use Drupal\webform_options_limit\Plugin\WebformOptionsLimitHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -53,6 +46,13 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
   protected $database;
 
   /**
+   * The current user.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $currentUser;
+
+  /**
    * The webform token manager.
    *
    * @var \Drupal\webform\WebformTokenManagerInterface
@@ -76,29 +76,13 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $logger_factory, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, WebformSubmissionConditionsValidatorInterface $conditions_validator, Connection $database, WebformTokenManagerInterface $token_manager, WebformElementManagerInterface $element_manager) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $logger_factory, $config_factory, $entity_type_manager, $conditions_validator);
-    $this->database = $database;
-    $this->tokenManager = $token_manager;
-    $this->elementManager = $element_manager;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('logger.factory'),
-      $container->get('config.factory'),
-      $container->get('entity_type.manager'),
-      $container->get('webform_submission.conditions_validator'),
-      $container->get('database'),
-      $container->get('webform.token_manager'),
-      $container->get('plugin.manager.webform.element')
-    );
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $instance->database = $container->get('database');
+    $instance->currentUser = $container->get('current_user');
+    $instance->tokenManager = $container->get('webform.token_manager');
+    $instance->elementManager = $container->get('plugin.manager.webform.element');
+    return $instance;
   }
 
   /**
@@ -420,6 +404,7 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
         '#states' => [
           'visible' => [
             ':input[name="settings[option_message_display]"]' => ['value' => WebformOptionsLimitHandlerInterface::MESSAGE_DISPLAY_DESCRIPTION],
+            // phpcs:ignore Squiz.Arrays.ArrayDeclaration.NoKeySpecified
             $tableselect_states,
           ],
         ],
@@ -471,9 +456,9 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
     }
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Alter element methods.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * {@inheritdoc}
@@ -529,9 +514,9 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
     $element['#element_validate'][] = [get_called_class(), 'validateElement'];
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Element methods.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Validate webform element limit.
@@ -575,9 +560,9 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
     ];
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Options element methods.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Set an options element's default value.
@@ -667,7 +652,6 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
    *   An options element's option limits.
    */
   protected function alterOptionsElementLabels(array &$options, array $limits) {
-    $message_display = $this->configuration['option_message_display'];
     foreach ($options as $option_value => $option_text) {
       if ($this->isTableSelectElement()) {
         if (isset($limits[$option_value])) {
@@ -679,9 +663,7 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
           $option = &$options[$option_value][0];
           switch ($message_display) {
             case WebformOptionsLimitHandlerInterface::MESSAGE_DISPLAY_DESCRIPTION:
-              list(
-                $option['value'],
-                $option['webform_options_limit']) = explode(' --', $label);
+              [$option['value'], $option['webform_options_limit']] = explode(' --', $label);
               break;
 
             case WebformOptionsLimitHandlerInterface::MESSAGE_DISPLAY_LABEL:
@@ -810,9 +792,9 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
     }
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Boolean element methods.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Set a boolean element's default value.
@@ -931,9 +913,9 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
     }
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Form methods.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * {@inheritdoc}
@@ -943,10 +925,10 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
     Cache::invalidateTags(['webform:' . $this->getWebform()->id()]);
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Summary method.
   // @see \Drupal\webform_options_limit\Controller\WebformOptionsLimitController
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Build summary table.
@@ -1018,9 +1000,9 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
     ];
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Element methods.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Get element.
@@ -1166,9 +1148,9 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
     return ($element) ? OptGroup::flattenOptions($element['#options']) : [];
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Limits methods.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Get an associative array of options limits.
@@ -1197,7 +1179,7 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
       $limit = (isset($this->configuration['limits'][$option_key]))
         ? $this->configuration['limits'][$option_key]
         : $default_limit;
-      $total = (isset($totals[$option_key])) ? $totals[$option_key] : 0;
+      $total = $totals[$option_key] ?? 0;
       $limits[$option_key] = $this->getLimitInformation($option_label, $limit, $total);
     }
     return $limits;
@@ -1357,12 +1339,11 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
 
     // Limit by authenticated or anonymous user.
     if ($this->configuration['limit_user']) {
-      $account = \Drupal::currentUser();
-      if ($account->isAuthenticated()) {
-        $query->condition('s.uid', $account->id());
+      if ($this->currentUser->isAuthenticated()) {
+        $query->condition('s.uid', $this->currentUser->id());
       }
       else {
-        $sids = $this->submissionStorage->getAnonymousSubmissionIds($account);
+        $sids = $this->submissionStorage->getAnonymousSubmissionIds($this->currentUser);
         if ($sids) {
           $query->condition('s.sid', $sids, 'IN');
           $query->condition('s.uid', 0);
@@ -1375,9 +1356,9 @@ class OptionsLimitWebformHandler extends WebformHandlerBase implements WebformOp
     return $query;
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Labels and messages methods.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Get an options or boolean element's limit status message.

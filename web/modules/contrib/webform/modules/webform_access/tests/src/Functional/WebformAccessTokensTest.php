@@ -46,9 +46,9 @@ class WebformAccessTokensTest extends WebformAccessBrowserTestBase {
     $token_manager = \Drupal::service('webform.token_manager');
     $token_data['webform_access'] = $webform_submission;
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // [webform_access:type:TYPE] tokens.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check [webform_access:type:employee] token.
     $result = $token_manager->replace('[webform_access:type:employee]', $webform_submission, $token_data);
@@ -74,9 +74,9 @@ class WebformAccessTokensTest extends WebformAccessBrowserTestBase {
     $result = $token_manager->replace('[webform_access:type:manager]', $webform_submission, $token_data);
     $this->assertEqual('other_user@example.com,manager_admin_custom@test.com', $result);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // [webform_access:type] tokens.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check [webform_access:type] token.
     $result = $token_manager->replace('[webform_access:type]', $webform_submission, $token_data);

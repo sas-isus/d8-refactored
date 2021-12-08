@@ -46,7 +46,7 @@ class WebformSubmissionViewTest extends WebformBrowserTestBase {
       'administer webform submission',
     ]);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $account = User::load(1);
 

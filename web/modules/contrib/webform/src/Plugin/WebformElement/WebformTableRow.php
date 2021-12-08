@@ -37,7 +37,7 @@ class WebformTableRow extends WebformElementBase {
     return $properties;
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * {@inheritdoc}
@@ -82,7 +82,7 @@ class WebformTableRow extends WebformElementBase {
     $webform = $webform_submission->getWebform();
     $parent_key = $element['#webform_parent_key'];
     $parent_element = $webform->getElement($parent_key);
-    $parent_format = (isset($parent_element['#format'])) ? $parent_element['#format'] : 'table';
+    $parent_format = $parent_element['#format'] ?? 'table';
 
     // Remove #states.
     unset($element['#states']);
@@ -275,6 +275,7 @@ class WebformTableRow extends WebformElementBase {
     }
 
     // This is the only way to get the row key for a new element.
+    // phpcs:ignore DrupalPractice.Variables.GetRequestData.SuperglobalAccessedWithVar
     $key = $_POST['key'];
     $parent_key = \Drupal::request()->query->get('parent');
     if (!$form_object->isNew() || !$parent_key) {
@@ -306,9 +307,9 @@ class WebformTableRow extends WebformElementBase {
     return [];
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Helper function.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Get the parent table's next row increment.

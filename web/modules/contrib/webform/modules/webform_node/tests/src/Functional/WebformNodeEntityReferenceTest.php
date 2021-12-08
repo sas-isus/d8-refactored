@@ -40,7 +40,7 @@ class WebformNodeEntityReferenceTest extends WebformNodeBrowserTestBase {
     $this->assertRaw('webform_test_multiple_b');
     $this->assertRaw('textfield_a');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check test form B (B is the default because its weight is -1).
     $this->drupalGet('/node/1/webform/test');
@@ -60,7 +60,7 @@ class WebformNodeEntityReferenceTest extends WebformNodeBrowserTestBase {
     // Check user data is NULL.
     $this->assertNull($user_data->get('webform_node', $this->rootUser->id(), 1));
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Select webform A.
     $this->drupalGet('/node/1/webform/test');
@@ -84,7 +84,7 @@ class WebformNodeEntityReferenceTest extends WebformNodeBrowserTestBase {
     $this->assertRaw('textfield_a');
     $this->assertNoRaw('textfield_b');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Select webform A.
     $this->drupalGet('/node/1/webform/test');
@@ -108,7 +108,7 @@ class WebformNodeEntityReferenceTest extends WebformNodeBrowserTestBase {
     $this->assertRaw('textfield_a');
     $this->assertNoRaw('textfield_b');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Delete the node.
     Node::load(1)->delete();

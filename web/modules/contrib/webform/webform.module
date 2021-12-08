@@ -5,6 +5,7 @@
  * Enables the creation of webforms and questionnaires.
  */
 
+use Drupal\Component\Utility\Mail;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
@@ -20,9 +21,7 @@ use Drupal\file\FileInterface;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Plugin\WebformElement\ManagedFile;
-use Drupal\webform\Utility\Mail;
 use Drupal\webform\Utility\WebformElementHelper;
-use Drupal\webform\Utility\WebformFormHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\WebformInterface;
 
@@ -533,7 +532,7 @@ function webform_menu_links_discovered_alter(&$links) {
           + ['parent' => 'entity.webform.collection'];
       }
     }
-    foreach($menu_links as $sub_link_task_name => $sub_link) {
+    foreach ($menu_links as $sub_link_task_name => $sub_link) {
       foreach ($definitions as $task_name => $definition) {
         if (isset($definition['parent_id']) && $definition['parent_id'] === preg_replace('/\.item$/', '', $sub_link_task_name)) {
           $menu_links[$task_name . '.item'] = $default_definition
@@ -541,6 +540,14 @@ function webform_menu_links_discovered_alter(&$links) {
             + ['parent' => $sub_link_task_name];
         }
       }
+    }
+
+    // Make sure weight are integers and not floats which throw fatal errors
+    // for PostgreSQL.
+    // @see https://www.drupal.org/project/webform/issues/3247861
+    // @see https://www.drupal.org/project/drupal/issues/3248199
+    foreach ($menu_links as &$menu_link) {
+      $menu_link['weight'] = (int) $menu_link['weight'];
     }
 
     $links += $menu_links;
@@ -884,24 +891,9 @@ function webform_webform_access_rules() {
   ];
 }
 
-/**
- * Adds JavaScript to change the state of an element based on another element.
- *
- * @param array $elements
- *   A renderable array element having a #states property as described above.
- * @param string $key
- *   The element property to add the states attribute to.
- *
- * @deprecated Scheduled for removal in Webform 8.x-6.x
- *   Use \Drupal\Core\Form\FormHelper::processStates instead.
- */
-function webform_process_states(array &$elements, $key = '#attributes') {
-  WebformFormHelper::processStates($elements, $key);
-}
-
-/******************************************************************************/
+/* ************************************************************************** */
 // Devel generate info hooks.
-/******************************************************************************/
+/* ************************************************************************** */
 
 /**
  * Implements hook_devel_generate_info_alter().
@@ -923,9 +915,9 @@ function webform_devel_generate_info_alter(array &$generators) {
   }
 }
 
-/******************************************************************************/
+/* ************************************************************************** */
 // Element info hooks.
-/******************************************************************************/
+/* ************************************************************************** */
 
 /**
  * Implements hook_element_info_alter().
@@ -966,7 +958,7 @@ function webform_process_options(&$element, FormStateInterface $form_state, &$co
         continue;
       }
 
-      list($title, $description) = WebformOptionsHelper::splitOption($title);
+      [$title, $description] = WebformOptionsHelper::splitOption($title);
       $element[$key]['#title'] = $title;
       $element[$key]['#webform_element'] = TRUE;
       $element[$key][$description_property_name] = $description;
@@ -1028,9 +1020,9 @@ function webform_process_options(&$element, FormStateInterface $form_state, &$co
   return $element;
 }
 
-/******************************************************************************/
+/* ************************************************************************** */
 // Private functions.
-/******************************************************************************/
+/* ************************************************************************** */
 
 /**
  * Provides custom PHP error handling when webform rendering is validated.

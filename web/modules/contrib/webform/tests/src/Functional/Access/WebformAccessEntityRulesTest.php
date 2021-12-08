@@ -49,9 +49,9 @@ class WebformAccessEntityRulesTest extends WebformBrowserTestBase {
     $uid = $account->id();
     $rid = $account->getRoles(TRUE)[0];
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Test.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalLogin($account);
 
@@ -73,9 +73,9 @@ class WebformAccessEntityRulesTest extends WebformBrowserTestBase {
     $this->drupalGet("webform/$webform_id/test");
     $this->assertResponse(200, 'Webform setting access for test rule.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Administer.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check that user cannot access form settings.
     $this->drupalGet("admin/structure/webform/manage/$webform_id/settings");
@@ -99,9 +99,9 @@ class WebformAccessEntityRulesTest extends WebformBrowserTestBase {
     $this->drupalGet("admin/structure/webform/manage/$webform_id/results/submissions");
     $this->assertResponse(200, 'Webform submissions access allowed for administer rule.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Create.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalLogout();
 
@@ -124,9 +124,9 @@ class WebformAccessEntityRulesTest extends WebformBrowserTestBase {
     $this->drupalGet('/webform/' . $webform->id());
     $this->assertResponse(403, 'Webform returns access denied');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Any.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $any_tests = [
       'webform/{webform}' => 'create',
@@ -203,9 +203,9 @@ class WebformAccessEntityRulesTest extends WebformBrowserTestBase {
       $this->assertResponse(200, "Webform allows access via permission access rules");
     }
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Own.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check own / user specific access rules.
     $access_rules = [

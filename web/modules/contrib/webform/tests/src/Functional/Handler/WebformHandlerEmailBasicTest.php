@@ -32,7 +32,7 @@ class WebformHandlerEmailBasicTest extends WebformBrowserTestBase {
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = Webform::load('test_handler_email');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Create a submission using the test webform's default values.
     $this->postSubmission($webform);

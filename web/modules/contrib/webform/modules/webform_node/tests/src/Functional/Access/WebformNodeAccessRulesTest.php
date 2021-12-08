@@ -38,7 +38,7 @@ class WebformNodeAccessRulesTest extends WebformNodeBrowserTestBase {
     $rid = $account->getRoles(TRUE)[0];
     $uid = $account->id();
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Log in normal user and get their rid.
     $this->drupalLogin($account);

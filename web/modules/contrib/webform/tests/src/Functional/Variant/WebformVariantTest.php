@@ -31,9 +31,9 @@ class WebformVariantTest extends WebformBrowserTestBase {
   public function testWebformVariant() {
     $this->drupalLogin($this->rootUser);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Off-canvas width.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check add off-canvas element width is 800.
     $this->drupalGet('/admin/structure/webform/manage/test_variant/variants/add');

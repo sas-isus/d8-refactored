@@ -41,9 +41,9 @@ class WebformSettingsPrepopulateTest extends WebformBrowserTestBase {
    */
   public function testPrepopulate() {
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Test webform prepopulate (form_prepopulate) */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_prepopulate = Webform::load('test_form_prepopulate');
 
@@ -66,9 +66,9 @@ class WebformSettingsPrepopulateTest extends WebformBrowserTestBase {
     $this->drupalGet('/webform/test_form_prepopulate', ['query' => ['name' => 'John']]);
     $this->assertFieldByName('name', '');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Test webform prepopulate source entity (form_prepopulate_source_entity) */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check prepopulating source entity.
     $this->drupalPostForm('/webform/test_form_prepopulate', [], 'Submit', ['query' => ['source_entity_type' => 'webform', 'source_entity_id' => 'contact']]);
@@ -131,9 +131,9 @@ class WebformSettingsPrepopulateTest extends WebformBrowserTestBase {
     $this->drupalGet('/webform/test_form_prepopulate', ['query' => ['source_entity_type' => 'webform', 'source_entity_id' => 'contact']]);
     $this->assertNoRaw('This webform is not available. Please contact the site administrator.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Test webform_menu_local_tasks_alter() */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalLogin($this->rootUser);
 

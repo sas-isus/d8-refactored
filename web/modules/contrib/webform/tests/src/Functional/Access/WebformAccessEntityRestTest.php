@@ -31,7 +31,7 @@ class WebformAccessEntityRestTest extends WebformBrowserTestBase {
       'access any webform configuration',
     ]);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check anonymous access denied to webform via _format=hal_json.
     $this->drupalGet('/webform/contact', ['query' => ['_format' => 'hal_json']]);

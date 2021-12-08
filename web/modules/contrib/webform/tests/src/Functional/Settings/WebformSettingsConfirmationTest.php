@@ -149,8 +149,10 @@ class WebformSettingsConfirmationTest extends WebformBrowserTestBase {
     $this->postSubmission($webform_confirmation_page);
     $this->assertUrl('webform/test_confirmation_page/confirmation');
 
-    // TODO: (TESTING) Figure out why the inline confirmation link is not including the query string parameters.
+    // phpcs:disable
+    // @todo (TESTING) Figure out why the inline confirmation link is not including the query string parameters.
     // $this->assertRaw('<a href="' . $webform_confirmation_page->toUrl()->toString() . '?custom=param">Back to form</a>');.
+    // phpcs:enable
 
     /* Test confirmation page custom (confirmation_type=page) */
 
@@ -172,7 +174,7 @@ class WebformSettingsConfirmationTest extends WebformBrowserTestBase {
 
     $webform_confirmation_url = Webform::load('test_confirmation_url');
 
-    // Check confirmation URL.
+    // Check confirmation URL using special path <front>.
     $this->postSubmission($webform_confirmation_url);
     $this->assertNoRaw('<h2 class="visually-hidden">Status message</h2>');
     $this->assertUrl('/');
@@ -183,6 +185,41 @@ class WebformSettingsConfirmationTest extends WebformBrowserTestBase {
       ->save();
     $this->postSubmission($webform_confirmation_url);
     $this->assertUrl('/some-internal-path');
+
+    // Check confirmation URL using absolute path.
+    $webform_confirmation_url
+      ->setSetting('confirmation_url', '/some-absolute-path')
+      ->save();
+    $this->postSubmission($webform_confirmation_url);
+    $this->assertUrl('/some-absolute-path');
+
+    // Check confirmation URL using absolute path with querystring.
+    $webform_confirmation_url
+      ->setSetting('confirmation_url', '/some-absolute-path?some=parameter')
+      ->setSetting('confirmation_exclude_token', TRUE)
+      ->save();
+    $this->postSubmission($webform_confirmation_url);
+    $this->assertEqual(parse_url($this->getSession()->getCurrentUrl(), PHP_URL_QUERY), 'some=parameter');
+    $this->postSubmission($webform_confirmation_url, [], NULL, ['query' => ['test' => 'parameter']]);
+    $this->assertEqual(parse_url($this->getSession()->getCurrentUrl(), PHP_URL_QUERY), 'some=parameter&test=parameter');
+
+    // Check confirmation URL using relative path with querystring.
+    $webform_confirmation_url
+      ->setSetting('confirmation_url', 'webform/test_confirmation_url?some=parameter')
+      ->setSetting('confirmation_exclude_token', TRUE)
+      ->save();
+    $this->postSubmission($webform_confirmation_url);
+    $this->assertEqual(parse_url($this->getSession()->getCurrentUrl(), PHP_URL_QUERY), 'some=parameter');
+    $this->postSubmission($webform_confirmation_url, [], NULL, ['query' => ['test' => 'parameter']]);
+    $this->assertEqual(parse_url($this->getSession()->getCurrentUrl(), PHP_URL_QUERY), 'some=parameter&test=parameter');
+
+    // Check confirmation URL using invalid path.
+    $webform_confirmation_url
+      ->setSetting('confirmation_url', 'invalid')
+      ->save();
+    $sid = $this->postSubmission($webform_confirmation_url);
+    $this->assertRaw('Confirmation URL <em class="placeholder">invalid</em> is not valid.');
+    $this->assertUrl('/webform/test_confirmation_url');
 
     /* Test confirmation URL (confirmation_type=url_message) */
 

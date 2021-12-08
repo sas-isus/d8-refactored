@@ -43,7 +43,7 @@ class WebformSubmissionLogTest extends WebformBrowserTestBase {
 
     $webform = Webform::load('test_submission_log');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check submission created.
     $sid_1 = $this->postSubmission($webform);
@@ -131,10 +131,10 @@ class WebformSubmissionLogTest extends WebformBrowserTestBase {
     $this->assertEqual($log->sid, 2);
     $this->assertEqual($log->uid, $admin_user->id());
     $this->assertEqual($log->handler_id, '');
-    /**************************************************************************/
+    /* ********************************************************************** */
     // $this->assertEqual($log->operation, 'submission completed');
     // $this->assertEqual($log->message, 'Test: Submission: Logging: Submission #2 completed using saved draft.');
-    /**************************************************************************/
+    /* ********************************************************************** */
     $this->assertEqual($log->webform_id, 'test_submission_log');
     $this->assertNull($log->entity_type);
     $this->assertNull($log->entity_id);

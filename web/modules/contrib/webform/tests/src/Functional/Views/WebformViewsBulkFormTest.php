@@ -28,7 +28,7 @@ class WebformViewsBulkFormTest extends WebformBrowserTestBase {
       'administer webform submission',
     ]);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalLogin($admin_submission_user);
 

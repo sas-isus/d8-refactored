@@ -36,9 +36,9 @@ class WebformElementTableTest extends WebformElementBrowserTestBase {
 
     $this->drupalGet('/webform/test_element_table');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Rendering.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check default table rendering.
     $this->assertRaw('<table class="js-form-wrapper responsive-enabled" data-drupal-selector="edit-table" id="edit-table" data-striping="1">');
@@ -60,34 +60,34 @@ class WebformElementTableTest extends WebformElementBrowserTestBase {
     $this->assertRaw('<table data-drupal-selector="edit-table-states" class="webform-table responsive-enabled" id="edit-table-states" data-drupal-states="{&quot;invisible&quot;:{&quot;.webform-submission-test-element-table-add-form :input[name=\u0022table_rows\u0022]&quot;:{&quot;value&quot;:&quot;&quot;}}}" data-striping="1">');
     $this->assertRaw('<tr data-drupal-selector="edit-table-states-01" class="webform-table-row js-form-item" data-drupal-states="{&quot;visible&quot;:{&quot;.webform-submission-test-element-table-add-form :input[name=\u0022table_rows\u0022]&quot;:{&quot;value&quot;:{&quot;greater&quot;:&quot;0&quot;}}}}">');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Display.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $edit = [
       'table_basic_01_first_name' => 'Ringo',
       'table_basic_01_last_name' => 'Starr',
-      'table_basic_01_gender' => 'Male',
+      'table_basic_01_gender' => 'Man',
       'table_advanced_01_first_name' => 'John',
       'table_advanced_01_last_name' => 'Lennon',
-      'table_advanced_01_gender' => 'Male',
+      'table_advanced_01_gender' => 'Man',
     ];
     $this->drupalPostForm('/webform/test_element_table', $edit, 'Preview');
 
     // Check data.
     $this->assertRaw("table__1__first_name: John
 table__1__last_name: Smith
-table__1__gender: Male
+table__1__gender: Man
 table__2__first_name: Jane
 table__2__last_name: Doe
-table__2__gender: Female
+table__2__gender: Woman
 table_basic_01_first_name: Ringo
 table_basic_01_last_name: Starr
-table_basic_01_gender: Male
+table_basic_01_gender: Man
 table_advanced_01_address: null
 table_advanced_01_first_name: John
 table_advanced_01_last_name: Lennon
-table_advanced_01_gender: Male
+table_advanced_01_gender: Man
 table_advanced_01_managed_file: null
 table_rows: '1'
 table_advanced_01_textfield: ''
@@ -97,12 +97,12 @@ table_advanced_04_textfield: ''");
 
     // Check default table display.
     $this->assertPattern('#<th>First Name</th>\s+<th>Last Name</th>\s+<th>Gender</th>\s+<th>Markup</th>#');
-    $this->assertPattern('#<td>John</td>\s+<td>Smith</td>\s+<td>Male</td>\s+<td>{markup_1}</td>#');
-    $this->assertPattern('#<td>Jane</td>\s+<td>Doe</td>\s+<td>Female</td>\s+<td>{markup_2}</td>#');
+    $this->assertPattern('#<td>John</td>\s+<td>Smith</td>\s+<td>Man</td>\s+<td>{markup_1}</td>#');
+    $this->assertPattern('#<td>Jane</td>\s+<td>Doe</td>\s+<td>Woman</td>\s+<td>{markup_2}</td>#');
 
     // Check basic table display.
     $this->assertPattern('#<label>table_basic</label>\s+<table class="responsive-enabled" data-striping="1">#');
-    $this->assertPattern('#<tr>\s+<td>Ringo</td>\s+<td>Starr</td>\s+<td>Male</td>\s+<td>{markup_1}</td>\s+</tr>#');
+    $this->assertPattern('#<tr>\s+<td>Ringo</td>\s+<td>Starr</td>\s+<td>Man</td>\s+<td>{markup_1}</td>\s+</tr>#');
 
     // Check advanced table display.
     $this->assertPattern('#<label>table_advanced</label>\s+<div><details class="webform-container webform-container-type-details#');
@@ -111,9 +111,9 @@ table_advanced_04_textfield: ''");
     // Check states table display.
     $this->assertPattern('<div class="webform-element webform-element-type-webform-table js-form-item form-item js-form-type-item form-item-table-states js-form-item-table-states" id="test_element_table--table_states">');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // User interface.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalLogin($this->rootUser);
 

@@ -35,7 +35,7 @@ class WebformNodeVariantTest extends WebformNodeBrowserTestBase {
 number: '1'";
     $node->save();
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalLogin($this->rootUser);
 

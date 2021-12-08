@@ -24,9 +24,9 @@ class WebformElementOtherTest extends WebformElementBrowserTestBase {
   public function testBuildingOtherElements() {
     $this->drupalGet('/webform/test_element_other');
 
-    /**************************************************************************/
-    // select_other
-    /**************************************************************************/
+    /* ********************************************************************** */
+    // select_other.
+    /* ********************************************************************** */
 
     // Check basic select_other.
     $this->assertRaw('<fieldset data-drupal-selector="edit-select-other-basic" class="js-webform-select-other webform-select-other webform-select-other--wrapper fieldgroup form-composite webform-composite-visible-title js-webform-type-webform-select-other webform-type-webform-select-other js-form-item form-item js-form-wrapper form-wrapper" id="edit-select-other-basic">');
@@ -53,9 +53,9 @@ class WebformElementOtherTest extends WebformElementBrowserTestBase {
     $this->assertRaw('<select data-drupal-selector="edit-select-other-zero-select" id="edit-select-other-zero-select" name="select_other_zero[select]" class="form-select">');
     $this->assertRaw('<input data-drupal-selector="edit-select-other-zero-other" type="text" id="edit-select-other-zero-other" name="select_other_zero[other]" value="0" size="60" maxlength="255" placeholder="Enter other…" class="form-text" />');
 
-    /**************************************************************************/
-    // checkboxes_other
-    /**************************************************************************/
+    /* ********************************************************************** */
+    // checkboxes_other.
+    /* ********************************************************************** */
 
     // Check basic checkboxes.
     $this->assertRaw('<span class="fieldset-legend">Checkboxes other basic</span>');
@@ -70,9 +70,9 @@ class WebformElementOtherTest extends WebformElementBrowserTestBase {
     $this->assertRaw('<div id="edit-checkboxes-other-advanced-other--description" class="webform-element-description">Other checkbox description</div>');
     $this->assertRaw('<label for="edit-checkboxes-other-advanced-checkboxes-one" class="option">One<span class="webform-element-help js-webform-element-help"');
 
-    /**************************************************************************/
-    // radios_other
-    /**************************************************************************/
+    /* ********************************************************************** */
+    // radios_other.
+    /* ********************************************************************** */
 
     // Check basic radios_other.
     $this->assertRaw('<span class="fieldset-legend">Radios other basic</span>');
@@ -87,9 +87,9 @@ class WebformElementOtherTest extends WebformElementBrowserTestBase {
     $this->assertRaw('<div id="edit-radios-other-advanced-other--description" class="webform-element-description">Other radio description</div>');
     $this->assertRaw('<label for="edit-radios-other-advanced-radios-one" class="option">One<span class="webform-element-help js-webform-element-help"');
 
-    /**************************************************************************/
-    // wrapper_type
-    /**************************************************************************/
+    /* ********************************************************************** */
+    // wrapper_type.
+    /* ********************************************************************** */
 
     // Check form_item wrapper type.
     $this->assertRaw('<div class="js-webform-select-other webform-select-other js-form-item form-item js-form-type-webform-select-other form-item-wrapper-other-form-element js-form-item-wrapper-other-form-element" id="edit-wrapper-other-form-element">');
@@ -104,9 +104,9 @@ class WebformElementOtherTest extends WebformElementBrowserTestBase {
   public function testProcessingOtherElements() {
     $webform = Webform::load('test_element_other');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Basic input processing.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->postSubmission($webform);
     $this->assertRaw("select_other_basic: Four
@@ -130,9 +130,9 @@ wrapper_other_fieldset: ''
 wrapper_other_form_element: ''
 wrapper_other_container: ''");
 
-    /**************************************************************************/
-    // select_other
-    /**************************************************************************/
+    /* ********************************************************************** */
+    // select_other.
+    /* ********************************************************************** */
 
     // Check select other is required when selected.
     $edit = [
@@ -207,9 +207,9 @@ wrapper_other_container: ''");
     $this->drupalPostForm('/webform/test_element_other', [], 'Submit');
     $this->assertNoRaw('This is a custom required error message.');
 
-    /**************************************************************************/
-    // radios_other
-    /**************************************************************************/
+    /* ********************************************************************** */
+    // radios_other.
+    /* ********************************************************************** */
 
     // Check radios other required when checked.
     $edit = [
@@ -253,9 +253,9 @@ wrapper_other_container: ''");
     $this->assertRaw('radios_other_advanced: One');
     $this->assertNoRaw('radios_other_advanced: Five');
 
-    /**************************************************************************/
-    // checkboxes_other
-    /**************************************************************************/
+    /* ********************************************************************** */
+    // checkboxes_other.
+    /* ********************************************************************** */
 
     // Check checkboxes other required when checked.
     $edit = [

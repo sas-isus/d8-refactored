@@ -28,9 +28,9 @@ class WebformOptionsCustomTest extends WebformBrowserTestBase {
   public function testOptionsCustom() {
     $webform = Webform::load('test_element_options_custom_html');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Webform custom options element.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalGet('/webform/test_element_options_custom_html');
 
@@ -84,14 +84,14 @@ webform_options_custom_html_advanced:
     $this->drupalGet('/webform/javascript/test_element_options_custom_html');
     $this->assertRaw("window.console && window.console.log('Test: HTML advanced loaded.');");
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Webform custom options entity.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalLogin($this->rootUser);
 
     // Get basic HTML with default settings.
-    $this->drupalGet('/admin/structure/webform/config/options_custom/manage/test_html/preview');
+    $this->drupalGet('/admin/structure/webform/options/custom/manage/test_html/preview');
 
     // Check 'data-fill' attribute.
     $this->assertCssSelect('.webform-options-custom--test-html[data-fill]');
@@ -110,7 +110,7 @@ webform_options_custom_html_advanced:
     $webform_options_custom->save();
 
     // Get basic HTML with updated settings.
-    $this->drupalGet('/admin/structure/webform/config/options_custom/manage/test_html/preview');
+    $this->drupalGet('/admin/structure/webform/options/custom/manage/test_html/preview');
 
     // Check no 'data-fill' attribute.
     $this->assertNoCssSelect('.webform-options-custom--test-html[data-fill]');
@@ -121,12 +121,12 @@ webform_options_custom_html_advanced:
     // Check 'data-select-hidden' attribute.
     $this->assertCssSelect('.webform-options-custom--test-html[data-select-hidden]');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Webform custom options Twig.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Get preview has 3 options.
-    $this->drupalGet('/admin/structure/webform/config/options_custom/manage/test_twig/preview');
+    $this->drupalGet('/admin/structure/webform/options/custom/manage/test_twig/preview');
     $this->assertRaw('<td data-option-value="1" style="text-align:center">1</td>');
     $this->assertRaw('<td data-option-value="2" style="text-align:center">2</td>');
     $this->assertRaw('<td data-option-value="3" style="text-align:center">3</td>');

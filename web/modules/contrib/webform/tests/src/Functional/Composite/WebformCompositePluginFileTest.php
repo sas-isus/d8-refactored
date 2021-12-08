@@ -37,9 +37,9 @@ class WebformCompositePluginFileTest extends WebformElementManagedFileTestBase {
     $first_file = $this->files[0];
     $second_file = $this->files[1];
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Single composite with file upload.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Create submission with file.
     $edit = [
@@ -68,9 +68,9 @@ class WebformCompositePluginFileTest extends WebformElementManagedFileTestBase {
     // Check that test file exists.
     $this->assertFileExists($file->getFileUri());
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Multiple composite with file upload.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Create submission with file.
     $edit = [

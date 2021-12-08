@@ -24,7 +24,7 @@ class WebformEntityDeleteMultipleForm extends WebformDeleteMultipleFormBase {
           $this->formatPlural(count($this->selection), 'Affect any fields or nodes which reference this webform', 'Affect any fields or nodes which reference these webform', [
             '@item' => $this->entityType->getSingularLabel(),
             '@items' => $this->entityType->getPluralLabel(),
-          ])
+          ]),
         ],
       ],
     ];

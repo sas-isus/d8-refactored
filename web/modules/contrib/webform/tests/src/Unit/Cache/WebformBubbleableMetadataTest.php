@@ -24,14 +24,13 @@ class WebformBubbleableMetadataTest extends UnitTestCase {
    *   A render array.
    * @param array $expected
    *   The expected render array.
- * @covers ::appendTo
    *
+   * @covers ::appendTo
    * @dataProvider providerTestAppendTo
-   *
    * @see \Drupal\Tests\Core\Cache\CacheableMetadataTest
    */
   public function testAppendTo(WebformBubbleableMetadata $bubbleable_metadata, array $build, array $expected) {
-    // Mock CacheContextsManager::assertValidTokens
+    // Mock CacheContextsManager::assertValidTokens.
     // @see \Drupal\Core\Cache\Cache::mergeContexts
     $cache_contexts_manager = $this->getMockBuilder('Drupal\Core\Cache\Context\CacheContextsManager')
       ->disableOriginalConstructor()
@@ -41,16 +40,17 @@ class WebformBubbleableMetadataTest extends UnitTestCase {
     $container->set('cache_contexts_manager', $cache_contexts_manager);
     \Drupal::setContainer($container);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $bubbleable_metadata->appendTo($build);
-    $this->assertEquals($expected, $build);
+    $this->assertEqualsCanonicalizing($expected, $build);
   }
 
   /**
    * Provides test data for testAppendTo().
    *
    * @return array
+   *   Test data
    */
   public function providerTestAppendTo() {
     return [

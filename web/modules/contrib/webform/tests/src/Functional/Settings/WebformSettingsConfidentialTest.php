@@ -32,7 +32,7 @@ class WebformSettingsConfidentialTest extends WebformBrowserTestBase {
       ->grantPermission('delete own webform submission')
       ->save();
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalLogin($this->rootUser);
 

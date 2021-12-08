@@ -19,9 +19,9 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\WebformInterface;
 use Drupal\Component\Utility\Html;
 
-/******************************************************************************/
+/* ************************************************************************** */
 // Webform entity hooks.
-/******************************************************************************/
+/* ************************************************************************** */
 
 /**
  * Implements hook_webform_insert().
@@ -61,11 +61,11 @@ function webform_webform_delete(WebformInterface $webform) {
   _webform_delete_file_usage($uuids, $webform->getEntityTypeId(), $webform->id(), 0);
 }
 
-/******************************************************************************/
+/* ************************************************************************** */
 // Webform config (settings) hooks.
 // @see \Drupal\webform\Form\AdminConfig\WebformAdminConfigBaseForm::loadConfig
 // @see \Drupal\webform\Form\AdminConfig\WebformAdminConfigBaseForm::saveConfig
-/******************************************************************************/
+/* ************************************************************************** */
 
 /**
  * Update config editor file references.
@@ -99,9 +99,9 @@ function _webform_config_delete(Config $config) {
   _webform_delete_file_usage($uuids, 'config', $config->getName(), 0);
 }
 
-/******************************************************************************/
+/* ************************************************************************** */
 // Config entity functions.
-/******************************************************************************/
+/* ************************************************************************** */
 
 /**
  * Finds all files referenced (data-entity-uuid) by config entity.
@@ -118,9 +118,9 @@ function _webform_get_config_entity_file_uuids(ConfigEntityInterface $entity) {
   return _webform_get_array_file_uuids($entity->toArray());
 }
 
-/******************************************************************************/
+/* ************************************************************************** */
 // Config settings functions.
-/******************************************************************************/
+/* ************************************************************************** */
 
 /**
  * Finds all files referenced (data-entity-uuid) in an associative array.
@@ -138,9 +138,9 @@ function _webform_get_array_file_uuids(array $data) {
   return _webform_parse_file_uuids($text);
 }
 
-/******************************************************************************/
+/* ************************************************************************** */
 // File usage functions.
-/******************************************************************************/
+/* ************************************************************************** */
 
 /**
  * Records file usage of files referenced by formatted text fields.
@@ -223,9 +223,9 @@ function _webform_delete_file_usage(array $uuids, $type, $id, $count) {
   }
 }
 
-/******************************************************************************/
+/* ************************************************************************** */
 // File parsing functions.
-/******************************************************************************/
+/* ************************************************************************** */
 
 /**
  * Parse text for any linked files with data-entity-uuid attributes.

@@ -32,16 +32,16 @@ class WebformResultsDisabledTest extends WebformBrowserTestBase {
 
     // Check that error message is displayed and form is available for admins.
     $this->drupalGet('/webform/test_form_results_disabled');
-    $this->assertRaw(t('This webform is currently not saving any submitted data.'));
+    $this->assertRaw('This webform is currently not saving any submitted data.');
     $this->assertFieldByName('op', 'Submit');
-    $this->assertNoRaw(t('Unable to display this webform. Please contact the site administrator.'));
+    $this->assertNoRaw('Unable to display this webform. Please contact the site administrator.');
 
     // Check that error message not displayed and form is disabled for everyone.
     $this->drupalLogout();
     $this->drupalGet('/webform/test_form_results_disabled');
-    $this->assertNoRaw(t('This webform is currently not saving any submitted data.'));
+    $this->assertNoRaw('This webform is currently not saving any submitted data.');
     $this->assertNoFieldByName('op', 'Submit');
-    $this->assertRaw(t('Unable to display this webform. Please contact the site administrator.'));
+    $this->assertRaw('Unable to display this webform. Please contact the site administrator.');
 
     // Enabled ignore disabled results.
     $webform_results_disabled->setSetting('results_disabled_ignore', TRUE);
@@ -50,8 +50,8 @@ class WebformResultsDisabledTest extends WebformBrowserTestBase {
 
     // Check that no error message is displayed and form is available for admins.
     $this->drupalGet('/webform/test_form_results_disabled');
-    $this->assertNoRaw(t('This webform is currently not saving any submitted data.'));
-    $this->assertNoRaw(t('Unable to display this webform. Please contact the site administrator.'));
+    $this->assertNoRaw('This webform is currently not saving any submitted data.');
+    $this->assertNoRaw('Unable to display this webform. Please contact the site administrator.');
     $this->assertFieldByName('op', 'Submit');
 
     // Check that results tab is not accessible.
@@ -61,8 +61,8 @@ class WebformResultsDisabledTest extends WebformBrowserTestBase {
     // Check that error message not displayed and form is enabled for everyone.
     $this->drupalLogout();
     $this->drupalGet('/webform/test_form_results_disabled');
-    $this->assertNoRaw(t('This webform is currently not saving any submitted data.'));
-    $this->assertNoRaw(t('Unable to display this webform. Please contact the site administrator.'));
+    $this->assertNoRaw('This webform is currently not saving any submitted data.');
+    $this->assertNoRaw('Unable to display this webform. Please contact the site administrator.');
     $this->assertFieldByName('op', 'Submit');
 
     // Unset disabled results.

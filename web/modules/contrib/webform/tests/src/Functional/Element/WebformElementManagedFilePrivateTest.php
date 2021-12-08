@@ -31,7 +31,7 @@ class WebformElementManagedFilePrivateTest extends WebformElementManagedFileTest
 
     $webform = Webform::load('test_element_managed_file');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $elements = $webform->getElementsDecoded();
     $elements['managed_file_single']['#uri_scheme'] = 'private';

@@ -29,7 +29,7 @@ class WebformWizardBasicJavaScriptTest extends WebformWebDriverTestBase {
 
     $webform = Webform::load('test_form_wizard_basic');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check page 1 URL.
     $this->drupalGet('/webform/test_form_wizard_basic');
@@ -76,7 +76,7 @@ class WebformWizardBasicJavaScriptTest extends WebformWebDriverTestBase {
     $assert_session->waitForText('Element 1');
     $this->assertQuery('custom_param=1&page=page_1');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Set the webform to use ajax.
     $webform->setSetting('ajax', TRUE);

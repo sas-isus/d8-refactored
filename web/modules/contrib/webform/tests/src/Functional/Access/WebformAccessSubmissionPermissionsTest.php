@@ -48,9 +48,9 @@ class WebformAccessSubmissionPermissionsTest extends WebformBrowserTestBase {
     $webform_id = 'contact';
     $webform = Webform::load('contact');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Create submission permissions (anonymous).
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $edit = ['subject' => '{subject}', 'message' => '{message}'];
     $sid_1 = $this->postSubmission($webform, $edit);
@@ -68,9 +68,9 @@ class WebformAccessSubmissionPermissionsTest extends WebformBrowserTestBase {
     $this->drupalGet("webform/{$webform_id}/submissions/{$sid_1}");
     $this->assertResponse(403);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Own submission permissions (authenticated).
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalLogin($own_submission_account);
 
@@ -125,9 +125,9 @@ class WebformAccessSubmissionPermissionsTest extends WebformBrowserTestBase {
     $this->drupalGet("/admin/structure/webform/manage/{$webform_id}/results/submissions");
     $this->assertResponse(403);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Any submission permissions.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Login as any user.
     $this->drupalLogin($any_submission_account);
@@ -157,9 +157,9 @@ class WebformAccessSubmissionPermissionsTest extends WebformBrowserTestBase {
     $this->drupalGet('/admin/structure/webform/submissions/manage');
     $this->assertResponse(200);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Own submission permissions (anonymous).
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     /** @var \Drupal\user\RoleInterface $anonymous_role */
     $anonymous_role = Role::load('anonymous');
@@ -202,9 +202,9 @@ class WebformAccessSubmissionPermissionsTest extends WebformBrowserTestBase {
     $this->assertLinkByHref("{$base_path}webform/{$webform_id}/submissions/{$sid_4}");
     $this->assertLinkByHref("{$base_path}webform/{$webform_id}/submissions/{$sid_5}");
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Administer webform or webform submission permission.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalLogin($admin_webform_account);
     $uid = $own_submission_account->id();

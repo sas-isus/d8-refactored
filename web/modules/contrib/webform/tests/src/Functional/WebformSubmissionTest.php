@@ -41,7 +41,7 @@ class WebformSubmissionTest extends WebformBrowserTestBase {
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
     $webform_submission = reset($submissions);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check create submission.
     $this->assertInstanceOf(WebformSubmission::class, $webform_submission);
@@ -100,7 +100,7 @@ class WebformSubmissionTest extends WebformBrowserTestBase {
       'administer webform submission',
     ]);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalLogin($admin_submission_user);
 

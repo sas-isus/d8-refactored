@@ -65,7 +65,7 @@ class WebformLikert extends FormElement {
       }
       else {
         $answer_description_property_name = ($element['#answers_description_display'] === 'help') ? 'help' : 'description';
-        list($answer_title, $answer_description) = WebformOptionsHelper::splitOption($answer);
+        [$answer_title, $answer_description] = WebformOptionsHelper::splitOption($answer);
       }
       $answers[$answer_key] = [
         'description_property_name' => $answer_description_property_name,
@@ -123,10 +123,10 @@ class WebformLikert extends FormElement {
       }
       else {
         $question_description_property_name = ($element['#questions_description_display'] === 'help') ? '#help' : '#description';
-        list($question_title, $question_description) = WebformOptionsHelper::splitOption($question);
+        [$question_title, $question_description] = WebformOptionsHelper::splitOption($question);
       }
 
-      $value = (isset($element['#value'][$question_key])) ? $element['#value'][$question_key] : NULL;
+      $value = $element['#value'][$question_key] ?? NULL;
 
       // Get question id.
       // @see \Drupal\Core\Form\FormBuilder::doBuildForm
@@ -157,7 +157,7 @@ class WebformLikert extends FormElement {
         // Add required attributes to input without setting the <label>
         // to required.
         if ($element['#required']) {
-          $answer_attributes['required'] ='required';
+          $answer_attributes['required'] = 'required';
           $answer_attributes['aria-required'] = 'true';
         }
 

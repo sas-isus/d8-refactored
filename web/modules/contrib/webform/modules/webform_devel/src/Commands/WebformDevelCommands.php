@@ -1,5 +1,7 @@
 <?php
 
+// phpcs:ignoreFile
+
 namespace Drupal\webform_devel\Commands;
 
 use Drupal\Core\Serialization\Yaml;

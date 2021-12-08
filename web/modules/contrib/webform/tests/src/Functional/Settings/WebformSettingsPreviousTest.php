@@ -22,9 +22,9 @@ class WebformSettingsPreviousTest extends WebformBrowserTestBase {
 
     $webform = Webform::load('contact');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Previous submission message.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Create single submission.
     $sid_1 = $this->postSubmissionTest($webform);
@@ -47,12 +47,12 @@ class WebformSettingsPreviousTest extends WebformBrowserTestBase {
     $this->drupalGet('/webform/contact');
     $this->assertRaw('{custom_previous_submission}');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Previous submissions message.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Create second submission.
-    $sid_2 = $this->postSubmissionTest($webform);
+    $this->postSubmissionTest($webform);
 
     // Check default global previous submissions message.
     $this->drupalGet('/webform/contact');

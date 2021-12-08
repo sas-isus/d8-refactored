@@ -46,7 +46,7 @@ class DateList extends DateBase {
     ] + parent::defineDefaultProperties();
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * {@inheritdoc}
@@ -70,7 +70,7 @@ class DateList extends DateBase {
    * {@inheritdoc}
    */
   protected function getElementSelectorInputsOptions(array $element) {
-    $date_parts = (isset($element['#date_part_order'])) ? $element['#date_part_order'] : ['year', 'month', 'day', 'hour', 'minute'];
+    $date_parts = $element['#date_part_order'] ?? ['year', 'month', 'day', 'hour', 'minute'];
 
     $t_args = ['@title' => $this->getAdminLabel($element)];
     $selectors = [

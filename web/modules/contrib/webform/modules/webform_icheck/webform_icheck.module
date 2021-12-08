@@ -70,7 +70,7 @@ function webform_icheck_webform_element_configuration_form_alter(&$form, FormSta
  * Implements hook_webform_element_alter().
  */
 function webform_icheck_webform_element_alter(array &$element, FormStateInterface $form_state, array $context) {
-  $element_type = (isset($element['#type'])) ? $element['#type'] : '';
+  $element_type = $element['#type'] ?? '';
   if (!_webform_icheck_is_supported($element_type)) {
     return;
   }

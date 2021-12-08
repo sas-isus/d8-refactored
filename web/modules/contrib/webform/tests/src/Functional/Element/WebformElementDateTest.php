@@ -12,6 +12,13 @@ use Drupal\webform\Entity\Webform;
 class WebformElementDateTest extends WebformElementBrowserTestBase {
 
   /**
+   * Modules to enable.
+   *
+   * @var array
+   */
+  public static $modules = ['jquery_ui_datepicker'];
+
+  /**
    * Webforms to load.
    *
    * @var array
@@ -24,9 +31,9 @@ class WebformElementDateTest extends WebformElementBrowserTestBase {
   public function testDateElement() {
     $webform = Webform::load('test_element_date');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Render date elements.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalGet('/webform/test_element_date');
 
@@ -72,9 +79,9 @@ class WebformElementDateTest extends WebformElementBrowserTestBase {
     $default_value = \Drupal::service('date.formatter')->format(strtotime('now'), 'html_date');
     $this->assertRaw('<input min="' . $min . '" data-min-year="' . $min_year . '" max="' . $max . '" data-max-year="' . $max_year . '" type="date" data-drupal-selector="edit-date-min-max-dynamic" aria-describedby="edit-date-min-max-dynamic--description" data-drupal-date-format="Y-m-d" id="edit-date-min-max-dynamic" name="date_min_max_dynamic" value="' . $default_value . '" class="form-date" />');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Format date elements.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalPostForm('/webform/test_element_date', [], 'Preview');
 

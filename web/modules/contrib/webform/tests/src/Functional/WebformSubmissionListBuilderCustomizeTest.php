@@ -55,9 +55,9 @@ class WebformSubmissionListBuilderCustomizeTest extends WebformBrowserTestBase {
     /** @var \Drupal\user\UserDataInterface $user_data */
     $user_data = \Drupal::service('user.data');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Customize default table.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check that access is denied to custom results default table.
     $this->drupalLogin($admin_submission_user);
@@ -224,9 +224,9 @@ class WebformSubmissionListBuilderCustomizeTest extends WebformBrowserTestBase {
     $this->assertTableHeaderSort('dob');
     $this->assertRaw('<td>1947-10-26</td>');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Customize user results table.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Switch to admin user.
     $this->drupalLogin($admin_user);
@@ -325,9 +325,9 @@ class WebformSubmissionListBuilderCustomizeTest extends WebformBrowserTestBase {
     $this->assertNoRaw('First name');
     $this->assertNoRaw('Last name');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Customize user results.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalLogin($own_submission_user);
 
@@ -349,9 +349,9 @@ class WebformSubmissionListBuilderCustomizeTest extends WebformBrowserTestBase {
     $this->assertRaw('<th specifier="element__first_name" aria-sort="ascending" class="is-active">');
     $this->assertRaw('<th specifier="element__last_name">');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Webform delete.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Switch to admin user.
     $this->drupalLogin($admin_user);

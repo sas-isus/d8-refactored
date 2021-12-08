@@ -53,7 +53,7 @@ class WebformSubmissionImportExportFunctionalTest extends WebformBrowserTestBase
     $this->drupalPostForm('/admin/structure/webform/manage/test_submission_export_import/results/download', ['exporter' => 'webform_submission_export_import'], 'Download');
     file_put_contents($export_csv_uri, $this->getRawContent());
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Import CSV export without any changes.
     $actual_stats = $importer->import();
@@ -89,6 +89,7 @@ class WebformSubmissionImportExportFunctionalTest extends WebformBrowserTestBase
     $submissions[0]->setNotes('This is a note');
     $submissions[0]->save();
 
+    // phpcs:disable
     // @todo Determine why the below test is failing via DrupalCI.
     return;
 
@@ -143,6 +144,7 @@ class WebformSubmissionImportExportFunctionalTest extends WebformBrowserTestBase
 
     // Check all other values remained the same.
     $this->assertEquals($expected_values, $actual_values);
+    // phpcs:enable
   }
 
   /**
@@ -161,7 +163,7 @@ class WebformSubmissionImportExportFunctionalTest extends WebformBrowserTestBase
     $importer->setWebform($webform);
     $importer->setImportUri($webform_csv_url);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Upload the webform.csv.
     $this->drupalPostForm(
@@ -341,7 +343,6 @@ class WebformSubmissionImportExportFunctionalTest extends WebformBrowserTestBase
       ],
     ];
     // Unset YAML warning which can vary from server to server.
-
     unset(
       $expected_stats['warnings'][2][1],
       $actual_stats['warnings'][2][1]
@@ -415,7 +416,7 @@ class WebformSubmissionImportExportFunctionalTest extends WebformBrowserTestBase
     $this->assertRaw('Submission import completed. (total: 1; created: 0; updated: 1; skipped: 0)');
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Load a webform submission using a property value.

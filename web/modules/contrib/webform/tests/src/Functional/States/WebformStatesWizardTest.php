@@ -27,7 +27,7 @@ class WebformStatesWizardTest extends WebformBrowserTestBase {
   public function testFormStatesValidatorWizard() {
     $webform = Webform::load('test_states_server_wizard');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Go to default #states for page 02 with trigger-checkbox unchecked.
     $this->postSubmission($webform, [], 'Next >');
@@ -118,7 +118,7 @@ page_02_checkbox_unchecked: 1
 page_03_textfield_required: ''
 page_01_trigger_checkbox_computed: 'No'");
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Go to default #states for page 02 with trigger_checkbox checked.
     $this->postSubmission($webform, ['page_01_trigger_checkbox' => TRUE], 'Next >');

@@ -34,9 +34,9 @@ class WebformCompositeFormatTest extends WebformBrowserTestBase {
    */
   public function testFormat() {
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Format composite element as HTML and text */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = Webform::load('test_composite_format');
@@ -136,9 +136,9 @@ Language code: en',
       $this->assertStringContainsString($value, $body, new FormattableMarkup('Found @value', ['@value' => $value]));
     }
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Format composite multiple element as HTML and text */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = Webform::load('test_composite_format_multiple');

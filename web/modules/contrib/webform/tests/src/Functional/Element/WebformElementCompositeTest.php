@@ -26,9 +26,9 @@ class WebformElementCompositeTest extends WebformElementBrowserTestBase {
    */
   public function testComposite() {
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Builder.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform = Webform::load('test_element_composite');
 
@@ -50,12 +50,12 @@ webform_element_composite_advanced:
   last_name:
     '#type': textfield
     '#title': 'Last name'
-  gender:
+  sex:
     '#type': select
     '#options':
       Male: Male
       Female: Female
-    '#title': Gender
+    '#title': Sex
   martial_status:
     '#type': webform_select_other
     '#options': marital_status
@@ -90,12 +90,12 @@ webform_element_composite_advanced:
   last_name:
     '#type': textfield
     '#title': 'Last name'
-  gender:
+  sex:
     '#type': select
     '#options':
       Male: Male
       Female: Female
-    '#title': Gender
+    '#title': Sex
   martial_status:
     '#type': webform_select_other
     '#options': marital_status
@@ -111,17 +111,17 @@ webform_element_composite_advanced:
     '#min': 1
     '#max': 125");
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Wrapper.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalGet('/webform/test_element_composite_wrapper');
 
     // Check fieldset wrapper.
-    $this->assertRaw('<fieldset data-drupal-selector="edit-radios-wrapper-fieldset" id="edit-radios-wrapper-fieldset--wrapper" class="radios--wrapper fieldgroup form-composite webform-composite-visible-title required js-webform-type-radios webform-type-radios js-form-item form-item js-form-wrapper form-wrapper" aria-required="true">');
+    $this->assertRaw('<fieldset data-drupal-selector="edit-radios-wrapper-fieldset" id="edit-radios-wrapper-fieldset--wrapper" class="radios--wrapper fieldgroup form-composite webform-composite-visible-title required js-webform-type-radios webform-type-radios js-form-item form-item js-form-wrapper form-wrapper" aria-required="true" role="radiogroup" aria-labelledby="edit-radios-wrapper-fieldset--wrapper-legend">');
 
     // Check fieldset wrapper with hidden title.
-    $this->assertRaw('<fieldset data-drupal-selector="edit-radios-wrapper-fieldset-hidden-title" id="edit-radios-wrapper-fieldset-hidden-title--wrapper" class="radios--wrapper fieldgroup form-composite webform-composite-hidden-title required js-webform-type-radios webform-type-radios js-form-item form-item js-form-wrapper form-wrapper" aria-required="true">');
+    $this->assertRaw('<fieldset data-drupal-selector="edit-radios-wrapper-fieldset-hidden-title" id="edit-radios-wrapper-fieldset-hidden-title--wrapper" class="radios--wrapper fieldgroup form-composite webform-composite-hidden-title required js-webform-type-radios webform-type-radios js-form-item form-item js-form-wrapper form-wrapper" aria-required="true" role="radiogroup" aria-labelledby="edit-radios-wrapper-fieldset-hidden-title--wrapper-legend">');
 
     // Check form element wrapper.
     $this->assertRaw('<div class="js-form-item form-item js-form-type-radios form-item-radios-wrapper-form-element js-form-item-radios-wrapper-form-element">');
@@ -139,14 +139,16 @@ webform_element_composite_advanced:
     }
 
     // Check wrapper with #states.
-    $this->assertRaw('<fieldset data-drupal-selector="edit-states-fieldset" class="js-webform-states-hidden radios--wrapper fieldgroup form-composite webform-composite-visible-title js-webform-type-radios webform-type-radios js-form-item form-item js-form-wrapper form-wrapper" id="edit-states-fieldset--wrapper" data-drupal-states="{&quot;visible&quot;:{&quot;.webform-submission-test-element-composite-wrapper-add-form :input[name=\u0022states_checkbox\u0022]&quot;:{&quot;checked&quot;:true}}}">');
+    $this->assertRaw('<fieldset data-drupal-selector="edit-states-fieldset" class="js-webform-states-hidden radios--wrapper fieldgroup form-composite webform-composite-visible-title js-webform-type-radios webform-type-radios js-form-item form-item js-form-wrapper form-wrapper" id="edit-states-fieldset--wrapper" data-drupal-states="{&quot;visible&quot;:{&quot;.webform-submission-test-element-composite-wrapper-add-form :input[name=\u0022states_checkbox\u0022]&quot;:{&quot;checked&quot;:true}}}" role="radiogroup" aria-labelledby="edit-states-fieldset--wrapper-legend">');
     $this->assertRaw('<div class="js-webform-states-hidden js-form-item form-item js-form-type-radios form-item-states-form-item js-form-item-states-form-item" data-drupal-states="{&quot;visible&quot;:{&quot;.webform-submission-test-element-composite-wrapper-add-form :input[name=\u0022states_checkbox\u0022]&quot;:{&quot;checked&quot;:true}}}">');
     $this->assertRaw('<div data-drupal-selector="edit-states-container" class="js-webform-states-hidden radios--wrapper fieldgroup form-composite js-form-wrapper form-wrapper" id="edit-states-container--wrapper" data-drupal-states="{&quot;visible&quot;:{&quot;.webform-submission-test-element-composite-wrapper-add-form :input[name=\u0022states_checkbox\u0022]&quot;:{&quot;checked&quot;:true}}}">');
 
     // Below tests are only failing on Drupal.org and pass locally.
     // Check radios 'aria-describedby' with individual descriptions.
+    // phpcs:disable
     // $this->assertRaw('<input data-drupal-selector="edit-radios-wrapper-fieldset-element-descriptions-one" aria-describedby="edit-radios-wrapper-fieldset-element-descriptions-one--description" type="radio" id="edit-radios-wrapper-fieldset-element-descriptions-one" name="radios_wrapper_fieldset_element_descriptions" value="One" class="form-radio" />');
     // $this->assertRaw('<div id="edit-radios-wrapper-fieldset-element-descriptions-one--description" class="webform-element-description">This is a radio description</div>');
+    // phpcs:enable
   }
 
 }

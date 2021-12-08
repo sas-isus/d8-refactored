@@ -32,9 +32,9 @@ class WebformScheduledEmailTest extends WebformNodeBrowserTestBase {
     $yesterday = date($scheduled_manager->getDateFormat(), strtotime('-1 days'));
     $tomorrow = date($scheduled_manager->getDateFormat(), strtotime('+1 days'));
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Submission scheduling.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check scheduled email yesterday.
     $sid = $this->postSubmission($webform_schedule, ['send' => 'yesterday']);
@@ -93,9 +93,9 @@ class WebformScheduledEmailTest extends WebformNodeBrowserTestBase {
     $this->assertText("Test: Handler: Test scheduled email: Submission #$sid: Email not scheduled for Broken handler because [broken] is not a valid date/token.");
     $this->assertEqual($scheduled_manager->total($webform_schedule), 0);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Submission scheduling with date/time.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Change schedule type to 'datetime'.
     \Drupal::configFactory()->getEditable('webform_scheduled_email.settings')
@@ -115,7 +115,7 @@ class WebformScheduledEmailTest extends WebformNodeBrowserTestBase {
       ->set('schedule_type', 'date')
       ->save();
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Check deleting handler removes scheduled emails.
     // @todo Figure out why the below exception is occurring during tests only.
     // "Drupal\Component\Plugin\Exception\PluginNotFoundException: Plugin ID 'tomorrow' was not found. "
@@ -123,11 +123,11 @@ class WebformScheduledEmailTest extends WebformNodeBrowserTestBase {
     // $webform->deleteWebformHandler($handler);
     // $total = \Drupal::database()->select('webform_scheduled_email')->countQuery()->execute()->fetchField();
     // $this->assertEqual($total, 3);
-    /**************************************************************************/
+    /* ********************************************************************** */
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Webform scheduling.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Purge all submissions.
     $this->purgeSubmissions();
@@ -162,7 +162,8 @@ class WebformScheduledEmailTest extends WebformNodeBrowserTestBase {
 
     // Runs Reschedule yesterday submissions which includes all submissions.
     $stats = $scheduled_manager->cron();
-    $this->assertNotEqual($stats['sent'], 6);$this->assertEqual($stats['sent'], 3);
+    $this->assertNotEqual($stats['sent'], 6);
+    $this->assertEqual($stats['sent'], 3);
     $this->assertEqual($scheduled_manager->stats($webform_schedule), [
       'total' => 3,
       'waiting' => 0,
@@ -176,9 +177,9 @@ class WebformScheduledEmailTest extends WebformNodeBrowserTestBase {
     $this->assertEqual($scheduled_manager->waiting($webform_schedule), 6);
     $this->assertEqual($scheduled_manager->ready($webform_schedule), 0);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Webform scheduling with conditions.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Purge all submissions.
     $this->purgeSubmissions();
@@ -221,9 +222,9 @@ class WebformScheduledEmailTest extends WebformNodeBrowserTestBase {
     // Clear yesterday conditions.
     $yesterday_handler->setConditions([]);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Ignore past scheduling.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Purge all submissions.
     $this->purgeSubmissions();
@@ -233,9 +234,9 @@ class WebformScheduledEmailTest extends WebformNodeBrowserTestBase {
     $this->assertEqual($scheduled_manager->total($webform_schedule), 0);
     $this->assertRaw('<em class="placeholder">Test: Handler: Test scheduled email: Submission #' . $sid . '</em>: Email <b>ignored</b> by <em class="placeholder">Last year</em> handler to be sent on <em class="placeholder">2016-01-01</em>.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Source entity scheduling.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Purge all submissions.
     $this->purgeSubmissions();
@@ -327,9 +328,9 @@ class WebformScheduledEmailTest extends WebformNodeBrowserTestBase {
     // Purge all submissions.
     $this->purgeSubmissions();
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Testing.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalLogin($this->rootUser);
 

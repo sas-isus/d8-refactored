@@ -66,7 +66,7 @@ abstract class WebformBulkFormBase extends FormBase {
     $form['#attributes']['class'][] = 'webform-bulk-form';
 
     $options = $this->getBulkOptions();
-    if (empty($options) ) {
+    if (empty($options)) {
       return ['items' => $table];
     }
 
@@ -168,7 +168,7 @@ abstract class WebformBulkFormBase extends FormBase {
   }
 
   /**
-   * Get the entity type's actions
+   * Get the entity type's actions.
    *
    * @return \Drupal\system\ActionConfigEntityInterface[]
    *   An associative array of actions.

@@ -84,8 +84,8 @@ trait WebformTableTrait {
     ];
 
     $form['form']['display_container']['title_display']['#options'] = [
-        'header' => $this->t('Header'),
-      ] + $form['form']['display_container']['title_display']['#options'];
+      'header' => $this->t('Header'),
+    ] + $form['form']['display_container']['title_display']['#options'];
 
     return $form;
   }
@@ -177,7 +177,7 @@ trait WebformTableTrait {
       // checkboxes and radios.
       $element[$key]['#error_no_message'] = TRUE;
 
-      // Add required attribute to table select radios
+      // Add required attribute to table select radios.
       if (!empty($element['#required']) && empty($element['#multiple'])) {
         $element[$key]['#attributes']['required'] = TRUE;
       }

@@ -61,9 +61,9 @@ class WebformNodeAccessPermissionsTest extends WebformNodeBrowserTestBase {
     $node = $this->createWebformNode('contact', ['uid' => $submission_own_node_account->id()]);
     $nid = $node->id();
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Own submission permissions (authenticated).
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalLogin($submission_own_account);
 
@@ -116,9 +116,9 @@ class WebformNodeAccessPermissionsTest extends WebformNodeBrowserTestBase {
     $this->drupalGet("node/{$nid}/webform/results/submissions");
     $this->assertResponse(403);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Any submission permissions.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Login as any user.
     $this->drupalLogin($submission_any_account);
@@ -133,9 +133,9 @@ class WebformNodeAccessPermissionsTest extends WebformNodeBrowserTestBase {
     $this->drupalGet("node/{$nid}/webform/submission/{$sid_1}");
     $this->assertResponse(200);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Own submission node permissions.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Login as own node user.
     $this->drupalLogin($submission_own_node_account);
@@ -158,9 +158,9 @@ class WebformNodeAccessPermissionsTest extends WebformNodeBrowserTestBase {
     $this->drupalGet("node/{$nid}/webform/submissions/{$sid_1}/delete");
     $this->assertResponse(200);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Any submission node permissions.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Login as any node user.
     $this->drupalLogin($submission_any_node_account);

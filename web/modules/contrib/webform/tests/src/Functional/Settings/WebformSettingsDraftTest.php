@@ -35,9 +35,9 @@ class WebformSettingsDraftTest extends WebformBrowserTestBase {
       'administer webform submission',
     ]);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Draft access.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check access denied to review drafts when disabled.
     $this->drupalGet('/webform/contact/drafts');
@@ -51,9 +51,9 @@ class WebformSettingsDraftTest extends WebformBrowserTestBase {
     $this->drupalGet('/webform/test_form_draft_anonymous/drafts');
     $this->assertResponse(200);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Autosave for anonymous draft to authenticated draft.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_ids = [
       'test_form_draft_authenticated' => 'Test: Webform: Draft authenticated',
@@ -144,9 +144,9 @@ class WebformSettingsDraftTest extends WebformBrowserTestBase {
       $this->assertFieldByName('comment', '');
     }
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Convert anonymous draft to authenticated draft.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform = Webform::load('test_form_draft_anonymous');
 
@@ -214,9 +214,9 @@ class WebformSettingsDraftTest extends WebformBrowserTestBase {
     // Check that submission is still anonymous.
     $this->assertEqual($webform_submission->getOwnerId(), 0);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Export.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalLogin($admin_submission_user);
 
@@ -241,9 +241,9 @@ class WebformSettingsDraftTest extends WebformBrowserTestBase {
     $this->assertRaw('You have an existing draft');
     $this->assertRaw('<label>Name</label>' . PHP_EOL . '        John Smith');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Test webform draft multiple.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $config = \Drupal::configFactory()->getEditable('webform.settings');
     $this->drupalLogin($normal_user);
@@ -353,9 +353,9 @@ class WebformSettingsDraftTest extends WebformBrowserTestBase {
     $total = $webform_submission_storage->getTotal($webform, NULL, NULL, ['in_draft' => TRUE]);
     $this->assertEqual($total_drafts + 1, $total);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Test webform submission form reset draft.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalLogin($this->rootUser);
 

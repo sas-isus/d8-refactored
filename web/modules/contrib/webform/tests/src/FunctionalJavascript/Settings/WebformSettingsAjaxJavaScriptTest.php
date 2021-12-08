@@ -34,9 +34,9 @@ class WebformSettingsAjaxJavaScriptTest extends WebformWebDriverTestBase {
 
     $assert_session = $this->assertSession();
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Test Ajax. (test_ajax)
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_ajax = Webform::load('test_ajax');
 
@@ -68,9 +68,9 @@ class WebformSettingsAjaxJavaScriptTest extends WebformWebDriverTestBase {
     // Check that text field is blank.
     $assert_session->fieldValueEquals('textfield', '');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Test Ajax confirmation inline. (test_ajax_confirmation_inline)
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_ajax_confirmation_inline = Webform::load('test_ajax_confirmation_inline');
 
@@ -90,9 +90,9 @@ class WebformSettingsAjaxJavaScriptTest extends WebformWebDriverTestBase {
     $assert_session->responseNotContains('This is a custom inline confirmation message.');
     $assert_session->responseContains('This webform will display the confirmation inline when submitted.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Test Ajax confirmation message. (test_ajax_confirmation_message)
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_ajax_confirmation_message = Webform::load('test_ajax_confirmation_message');
 
@@ -104,9 +104,9 @@ class WebformSettingsAjaxJavaScriptTest extends WebformWebDriverTestBase {
     $assert_session->responseContains('This is a <b>custom</b> confirmation message.');
     $assert_session->responseContains('This webform will display a confirmation message when submitted.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Test Ajax confirmation message. (test_ajax_confirmation_modal)
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_ajax_confirmation_modal = Webform::load('test_ajax_confirmation_modal');
 
@@ -117,9 +117,9 @@ class WebformSettingsAjaxJavaScriptTest extends WebformWebDriverTestBase {
     // Check confirmation modal.
     $assert_session->responseContains('This is a <b>custom</b> confirmation modal.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Test Ajax confirmation page. (test_ajax_confirmation_page)
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_ajax_confirmation_page = Webform::load('test_ajax_confirmation_page');
 
@@ -130,9 +130,9 @@ class WebformSettingsAjaxJavaScriptTest extends WebformWebDriverTestBase {
     // Check confirmation page message.
     $assert_session->responseContains('This is a custom confirmation page.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Test Ajax confirmation url. (test_ajax_confirmation_url)
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_ajax_confirmation_url = Webform::load('test_ajax_confirmation_url');
 
@@ -143,9 +143,9 @@ class WebformSettingsAjaxJavaScriptTest extends WebformWebDriverTestBase {
     // Check current page is <front>.
     $this->assertSession()->addressEquals('/');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Test Ajax confirmation url with message. (test_ajax_confirmation_url_msg)
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_ajax_confirmation_url_msg = Webform::load('test_ajax_confirmation_url_msg');
 

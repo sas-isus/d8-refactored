@@ -34,9 +34,9 @@ class WebformElementAddressTest extends WebformElementBrowserTestBase {
 
     $webform = Webform::load('test_element_address');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Rendering.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalGet('/webform/test_element_address');
 
@@ -54,9 +54,9 @@ class WebformElementAddressTest extends WebformElementBrowserTestBase {
       $this->assertRaw('<div class="description"><div id="edit-address-advanced--wrapper--description" class="webform-element-description">This is a description</div>');
     }
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Processing.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check submitted value.
     $sid = $this->postSubmission($webform);
@@ -125,9 +125,9 @@ address_multiple:
   Mountain View, CA 94043
   United States');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Schema.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $field_storage = FieldStorageConfig::create([
       'entity_type' => 'node',

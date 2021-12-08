@@ -64,7 +64,7 @@ class WebformTokenManager implements WebformTokenManagerInterface {
    *
    * @see webform_token_info_alter()
    */
-  static protected $suffixes = [
+  protected static $suffixes = [
     // Removes the token when not replaced.
     'clear',
     // Decodes HTML entities.
@@ -210,9 +210,9 @@ class WebformTokenManager implements WebformTokenManagerInterface {
     $options += $token_options;
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Token elements.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * {@inheritdoc}
@@ -283,9 +283,9 @@ class WebformTokenManager implements WebformTokenManagerInterface {
     }
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Token validation.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * {@inheritdoc}
@@ -337,7 +337,7 @@ class WebformTokenManager implements WebformTokenManagerInterface {
    * Element is not being based by reference since the #value is being altered.
    */
   public static function validateElement($element, FormStateInterface $form_state, &$complete_form) {
-    $value = isset($element['#value']) ? $element['#value'] : $element['#default_value'];
+    $value = $element['#value'] ?? $element['#default_value'];
 
     if (!mb_strlen($value)) {
       return $element;
@@ -358,9 +358,9 @@ class WebformTokenManager implements WebformTokenManagerInterface {
     token_element_validate($element, $form_state);
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Suffix handling.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Get an array of supported token suffixes.

@@ -10,7 +10,6 @@ use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformDateHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\WebformInterface;
-use Drupal\webform\WebformTokenManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -26,22 +25,12 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
   protected $tokenManager;
 
   /**
-   * Constructs a WebformEntitySettingsFormForm.
-   *
-   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
-   *   The webform token manager.
-   */
-  public function __construct(WebformTokenManagerInterface $token_manager) {
-    $this->tokenManager = $token_manager;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('webform.token_manager')
-    );
+    $instance = parent::create($container);
+    $instance->tokenManager = $container->get('webform.token_manager');
+    return $instance;
   }
 
   /**
@@ -162,17 +151,16 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       '#default_value' => $settings['form_exception_message'],
     ];
     $form['form_settings']['token_tree_link'] = $this->tokenManager->buildTreeElement();
-    $form['form_settings']['form_attributes'] = [
+    $form['form_settings']['form_attributes_container'] = [
       '#type' => 'details',
       '#title' => $this->t('Form attributes'),
       '#open' => TRUE,
     ];
-    $elements = $webform->getElementsDecoded();
-    $form['form_settings']['form_attributes']['attributes'] = [
+    $form['form_settings']['form_attributes_container']['form_attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Form'),
       '#classes' => $this->config('webform.settings')->get('settings.form_classes'),
-      '#default_value' => (isset($elements['#attributes'])) ? $elements['#attributes'] : [],
+      '#default_value' => $settings['form_attributes'] ?: [],
     ];
 
     // Form behaviors.
@@ -208,7 +196,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
     if ($settings['ajax']) {
       $form['form_behaviors']['form_submit_back']['#default'] = TRUE;
       $form['form_behaviors']['form_submit_back']['#disabled'] = TRUE;
-      $form['form_behaviors']['form_submit_back']['#description'] .= '<br/><br/><em>' . t('This behavior is not supoported when Ajax is enabled.') . '</em>';
+      $form['form_behaviors']['form_submit_back']['#description'] .= '<br/><br/><em>' . $this->t('This behavior is not supoported when Ajax is enabled.') . '</em>';
     }
     // Disable warning about drafts.
     if ($settings['draft'] !== WebformInterface::DRAFT_NONE) {
@@ -621,28 +609,23 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
 
     // Custom settings.
     $properties = WebformElementHelper::getProperties($webform->getElementsDecoded());
-    // Set default properties.
-    $properties += [
-      '#method' => '',
-      '#action' => '',
-    ];
     $form['custom_settings'] = [
       '#type' => 'details',
       '#title' => $this->t('Form custom settings'),
-      '#open' => array_filter($properties) ? TRUE : FALSE,
+      '#open' => (array_filter($properties) || $settings['form_method']) ? TRUE : FALSE,
       '#access' => !$this->moduleHandler->moduleExists('webform_ui') || $this->currentUser()->hasPermission('edit webform source'),
     ];
-    $form['custom_settings']['method'] = [
+    $form['custom_settings']['form_method'] = [
       '#type' => 'select',
       '#title' => $this->t('Form method'),
-      '#description' => $this->t('The HTTP method with which the form will be submitted.') . '<br /><br />' .
-        '<em>' . $this->t('Selecting a custom POST or GET method will automatically disable wizards, previews, drafts, submissions, limits, purging, confirmations, emails, computed elements, and handlers.') . '</em>',
+      '#description' => $this->t('The HTTP method with which the form will be submitted.')
+        . '<br /><br /><em>' . $this->t('Selecting a custom POST or GET method will automatically disable wizards, previews, drafts, submissions, limits, purging, confirmations, emails, computed elements, and handlers.') . '</em>',
       '#options' => [
         '' => $this->t('POST (Default)'),
         'post' => $this->t('POST (Custom)'),
         'get' => $this->t('GET (Custom)'),
       ],
-      '#default_value' => $properties['#method'],
+      '#default_value' => $settings['form_method'],
     ];
     $form['custom_settings']['method_message'] = [
       '#type' => 'webform_message',
@@ -654,36 +637,27 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
         ],
       ],
     ];
-
-    $form['custom_settings']['action'] = [
+    $form['custom_settings']['form_action'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Form action'),
       '#description' => $this->t('The URL or path to which the webform will be submitted.'),
       '#states' => [
         'invisible' => [
-          ':input[name="method"]' => ['value' => ''],
+          ':input[name="form_method"]' => ['value' => ''],
         ],
         'optional' => [
-          ':input[name="method"]' => ['value' => ''],
+          ':input[name="form_method"]' => ['value' => ''],
         ],
       ],
-      '#default_value' => $properties['#action'],
+      '#default_value' => $settings['form_action'],
     ];
-    // Unset properties that are webform settings.
-    unset(
-      $properties['#method'],
-      $properties['#action'],
-      $properties['#novalidate'],
-      $properties['#attributes']
-    );
     $form['custom_settings']['custom'] = [
       '#type' => 'webform_codemirror',
       '#mode' => 'yaml',
       '#title' => $this->t('Form custom properties'),
-      '#description' =>
-        $this->t('Properties do not have to prepended with a hash (#) character, the hash character will be automatically added to the custom properties.') .
-        '<br /><br />' .
-        $this->t('These properties and callbacks are not allowed: @properties.', ['@properties' => WebformArrayHelper::toString(WebformArrayHelper::addPrefix(WebformElementHelper::$ignoredProperties))]),
+      '#description' => $this->t('Properties do not have to prepended with a hash (#) character, the hash character will be automatically added to the custom properties.')
+        . '<br /><br />'
+        . $this->t('These properties and callbacks are not allowed: @properties.', ['@properties' => WebformArrayHelper::toString(WebformArrayHelper::addPrefix(WebformElementHelper::$ignoredProperties))]),
       '#default_value' => WebformArrayHelper::removePrefix($properties),
     ];
 
@@ -738,44 +712,16 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
     $elements = WebformElementHelper::removeProperties($elements);
 
     $properties = [];
-
-    // Unset custom method and action.
-    unset(
-      $properties['#method'],
-      $properties['#action']
-    );
-
-    // Set custom method and action.
-    if (!empty($values['method'])) {
-      $properties['#method'] = $values['method'];
-      if (!empty($values['action'])) {
-        $properties['#action'] = $values['action'];
-      }
-    }
-
     // Set custom properties.
     if (!empty($values['custom'])) {
       $properties += WebformArrayHelper::addPrefix($values['custom']);
     }
-
-    // Set custom attributions.
-    if (!empty($values['attributes'])) {
-      $properties['#attributes'] = $values['attributes'];
-    }
-
-    // Prepend form properties to elements.
+    // Prepend custom form properties to elements.
     $elements = $properties + $elements;
-
     // Save elements.
     $webform->setElements($elements);
-
-    // Remove custom properties and attributes.
-    unset(
-      $values['method'],
-      $values['action'],
-      $values['attributes'],
-      $values['custom']
-    );
+    // Remove custom properties.
+    unset($values['custom']);
 
     // Remove main properties.
     unset(

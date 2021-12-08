@@ -197,9 +197,9 @@ class WebformTranslationManager implements WebformTranslationManagerInterface {
     return $mapper->getLangcode();
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Translatable properties helpers.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Remove untranslatable properties form an element.
@@ -208,8 +208,9 @@ class WebformTranslationManager implements WebformTranslationManagerInterface {
    *   An element.
    */
   protected function removeUnTranslatablePropertiesFromElement(array &$element) {
-    $translatable_properties = $this->getTranslatableProperties();
 
+    $element_type = $element['#type'] ?? NULL;
+    $translatable_properties = $this->getTranslatableProperties($element_type);
     $element_plugin = $this->elementManager->getElementInstance($element);
     foreach ($element as $property_key => $property_value) {
       $translatable_property_key = $property_key;
@@ -239,16 +240,22 @@ class WebformTranslationManager implements WebformTranslationManagerInterface {
   /**
    * Get translated properties from element manager.
    *
+   * @param string $type
+   *   The element type.
+   *
    * @return array
    *   An array of translated properties prefixed with a hashes (#).
    */
-  protected function getTranslatableProperties() {
-    if ($this->translatableProperties) {
-      return $this->translatableProperties;
+  protected function getTranslatableProperties($type) {
+    if (isset($this->translatableProperties[$type])) {
+      return $this->translatableProperties[$type];
     }
 
-    $this->translatableProperties = WebformArrayHelper::addPrefix($this->elementManager->getTranslatableProperties());
-    return $this->translatableProperties;
+    $element_plugin = $this->elementManager->createInstance($type);
+    $translatable_properties = $element_plugin->getTranslatableProperties();
+    $translatable_properties = array_combine($translatable_properties, $translatable_properties);
+    $this->translatableProperties[$type] = WebformArrayHelper::addPrefix($translatable_properties);
+    return $this->translatableProperties[$type];
   }
 
 }

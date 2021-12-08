@@ -1,3 +1,4 @@
+uuid: null
 langcode: en
 status: open
 dependencies:
@@ -36,7 +37,8 @@ elements: |
   help_xss:
     '#type': textfield
     '#title': help_xss
-    '#help': '{This is an example of help with <b>XSS <script>alert("XSS")</b>}'
+    '#help_title': '{This is an example of help title with <b>XSS <script>alert("XSS")</script></b> <img src="x" onerror="confirm(document.domain)" />}'
+    '#help': '{This is an example of help content with <b>XSS <script>alert("XSS")</script></b> <img src="x" onerror="confirm(document.domain)" />}'
   help_empty:
     '#type': textfield
     '#title': help_empty
@@ -136,6 +138,7 @@ elements: |
     '#help_display': element_after
     help_after_details:
       '#markup': '{This is markup}'
+
 css: ''
 javascript: ''
 settings:
@@ -156,7 +159,7 @@ settings:
   form_previous_submissions: true
   form_confidential: false
   form_confidential_message: ''
-  form_remote_addr: true
+  form_disable_remote_addr: false
   form_convert_anonymous: false
   form_prepopulate: false
   form_prepopulate_source_entity: false
@@ -177,6 +180,9 @@ settings:
   form_access_denied_message: ''
   form_access_denied_attributes: {  }
   form_file_limit: ''
+  form_method: ''
+  form_action: ''
+  form_attributes: {  }
   share: false
   share_node: false
   share_theme_name: ''

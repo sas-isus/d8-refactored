@@ -44,4 +44,5 @@ class WebformAutocomplete extends Textfield {
   protected function defineTranslatableProperties() {
     return array_merge(parent::defineTranslatableProperties(), ['autocomplete_items']);
   }
+
 }

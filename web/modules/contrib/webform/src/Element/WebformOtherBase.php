@@ -8,6 +8,7 @@ use Drupal\Core\Form\OptGroup;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\webform\Utility\WebformElementHelper;
+use Drupal\webform\Utility\WebformFormHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 
 /**
@@ -207,7 +208,7 @@ abstract class WebformOtherBase extends FormElement {
     $element['#attached']['library'][] = 'webform/webform.element.other';
 
     // Process states.
-    webform_process_states($element, '#wrapper_attributes');
+    WebformFormHelper::processStates($element, '#wrapper_attributes');
 
     return $element;
   }
@@ -246,7 +247,7 @@ abstract class WebformOtherBase extends FormElement {
 
     // Display missing other or missing value error.
     if (Element::isVisibleElement($element)) {
-      $required_error_title = (isset($element['#title'])) ? $element['#title'] : NULL;
+      $required_error_title = $element['#title'] ?? NULL;
       if ($other_is_empty) {
         WebformElementHelper::setRequiredError($element['other'], $form_state, $required_error_title);
       }
@@ -296,9 +297,9 @@ abstract class WebformOtherBase extends FormElement {
     }
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Helper functions.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Get the element type.

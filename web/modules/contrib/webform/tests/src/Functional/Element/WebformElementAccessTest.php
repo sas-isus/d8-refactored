@@ -52,7 +52,7 @@ class WebformElementAccessTest extends WebformElementBrowserTestBase {
 
     $webform = Webform::load('test_element_access');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check user from USER:1 to admin submission user.
     $elements = $webform->get('elements');

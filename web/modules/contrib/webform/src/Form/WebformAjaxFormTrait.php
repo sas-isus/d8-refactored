@@ -22,7 +22,7 @@ use Drupal\webform\WebformSubmissionForm;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * Trait class for Webform Ajax support.
+ * Trait for webform ajax support.
  */
 trait WebformAjaxFormTrait {
 
@@ -190,7 +190,7 @@ trait WebformAjaxFormTrait {
    *   to a URL
    */
   public function submitAjaxForm(array &$form, FormStateInterface $form_state) {
-    $scroll_top_target = (isset($form['#webform_ajax_scroll_top'])) ? $form['#webform_ajax_scroll_top'] : 'form';
+    $scroll_top_target = $form['#webform_ajax_scroll_top'] ?? 'form';
 
     if ($form_state->hasAnyErrors()) {
       // Display validation errors and scroll to the top of the page.
@@ -388,14 +388,14 @@ trait WebformAjaxFormTrait {
     }
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Drupal.announce handling.
   //
   // Announcements are stored in the user session because the $form_state
   // is already serialized (and can't be altered) when announcements
   // are added to Ajax response.
   // @see \Drupal\webform\Form\WebformAjaxFormTrait::submitAjaxForm
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Queue announcement with Ajax response.

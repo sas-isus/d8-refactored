@@ -29,9 +29,9 @@ class WebformWizardValidateTest extends WebformWizardTestBase {
   public function testWizardValidate() {
     $this->drupalGet('/webform/test_form_wizard_validate');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Basic validation.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check validation errors.
     $this->drupalPostForm('/webform/test_form_wizard_validate', [], 'Next >');
@@ -78,9 +78,9 @@ wizard_2_select_other: two
 wizard_2_datelist:
   - '2002-02-02T02:20:00+1100'");
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Composite validation.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check validation errors.
     $this->drupalPostForm('/webform/test_form_wizard_validate_comp', [], 'Next >');

@@ -30,9 +30,9 @@ class WebformGroupElementAccessTest extends WebformGroupBrowserTestBase {
 
     $group->save();
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Webform node not related to any group.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Logout.
     $this->drupalLogout();
@@ -67,9 +67,9 @@ class WebformGroupElementAccessTest extends WebformGroupBrowserTestBase {
     $this->assertNoFieldByName('member');
     $this->assertNoFieldByName('custom');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Webform node related to a group.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Add webform node to group.
     $group->addContent($node, 'group_node:webform');

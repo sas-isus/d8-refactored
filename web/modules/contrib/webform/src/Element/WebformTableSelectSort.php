@@ -219,7 +219,7 @@ class WebformTableSelectSort extends Table {
             '#return_value' => $key,
             '#default_value' => isset($value[$key]) ? $key : NULL,
             '#attributes' => $element['#attributes'],
-            '#ajax' => isset($element['#ajax']) ? $element['#ajax'] : NULL,
+            '#ajax' => $element['#ajax'] ?? NULL,
           ];
           $element[$key]['weight'] = [
             '#type' => 'weight',

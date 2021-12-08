@@ -55,9 +55,9 @@ class WebformExcludedColumns extends WebformExcludedBase {
 
     foreach ($elements as $key => $element) {
       $options[$key] = [
-        'title' => $element['#admin_title'] ?:$element['#title'] ?: $key,
+        'title' => $element['#admin_title'] ?: $element['#title'] ?: $key,
         'name' => $key,
-        'type' => isset($element['#type']) ? $element['#type'] : '',
+        'type' => $element['#type'] ?? '',
       ];
     }
     return $options;

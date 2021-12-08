@@ -203,9 +203,9 @@ class WebformHandlerTest extends WebformBrowserTestBase {
     // Check that post load is not executed when saving results is disabled.
     $this->assertNoRaw('Invoked test: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:postLoad');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Handler.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check update handler.
     $this->drupalPostForm('/admin/structure/webform/manage/test_handler_test/handlers/test/edit', [], 'Save');
@@ -221,9 +221,9 @@ class WebformHandlerTest extends WebformBrowserTestBase {
     $this->assertRaw('The webform handler was successfully added.');
     $this->assertRaw('Invoked test: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:createHandler');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Single handler.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check test handler is executed.
     $this->drupalGet('/webform/test_handler_test/test');
@@ -258,9 +258,9 @@ class WebformHandlerTest extends WebformBrowserTestBase {
     $this->assertResponse(403);
     $this->assertRaw('The <em class="placeholder">missing</em> email/handler for the <em class="placeholder">Test: Handler: Test invoke methods</em> webform does not exist.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Off-canvas width.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check add off-canvas element width is 800.
     $this->drupalGet('/admin/structure/webform/manage/test_handler_test/handlers/add');

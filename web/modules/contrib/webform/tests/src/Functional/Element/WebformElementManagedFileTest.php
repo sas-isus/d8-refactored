@@ -91,6 +91,7 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
     $this->assertFieldByName('files[managed_file_multiple_two][]');
     $this->assertFieldByName('managed_file_multiple_two_upload_button');
 
+    // phpcs:disable
     // Check that only two files can be uploaded.
     // @todo Determine how to submit multiple files.
     /*
@@ -108,6 +109,7 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
     $this->assertNoFieldByName('files[managed_file_multiple_two][]');
     $this->assertNoFieldByName('managed_file_multiple_two_upload_button');
     */
+    // phpcs:enable
 
     /* File placeholder */
 
@@ -197,9 +199,9 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
 
     $webform = Webform::load('test_element_managed_file');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Test immediately delete file.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Upload files.
     $sid = $this->postSubmissionTest($webform);
@@ -217,9 +219,9 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
     $managed_file_single = $this->fileLoad($submission->getElementData('managed_file_single'));
     $this->assertNull($managed_file_single);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Test disabling immediately deleted temporary managed files.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Disable deleting of temporary files.
     $config = \Drupal::configFactory()->getEditable('webform.settings');
@@ -236,9 +238,9 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
     $this->assertNotNull($managed_file_single);
     $this->assertTrue($managed_file_single->isTemporary());
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Test disabling unused files marked temporary.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Disable deleting of temporary files.
     $config = \Drupal::configFactory()->getEditable('webform.settings');
@@ -284,9 +286,10 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
     $this->assertEqual(0, \Drupal::database()->query('SELECT COUNT(fid) AS total FROM {file_usage}')->fetchField());
   }
 
-  /****************************************************************************/
-  // Helper functions. From: \Drupal\file\Tests\FileFieldTestBase::getTestFile
-  /****************************************************************************/
+  /* ************************************************************************ */
+  // Helper functions.
+  // @see \Drupal\file\Tests\FileFieldTestBase::getTestFile
+  /* ************************************************************************ */
 
   /**
    * Check file upload.
@@ -337,7 +340,10 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
       $this->assertRaw('<ul>');
     }
     // @todo Remove once Drupal 9.1.x is only supported.
-    if (floatval(\Drupal::VERSION) >= 9.1) {
+    if (floatval(\Drupal::VERSION) >= 9.3) {
+      $this->assertRaw('<span class="file file--mime-text-plain file--text"><a href="' . $file->createFileUrl() . '" type="text/plain">' . $file->getFilename() . '</a></span>');
+    }
+    elseif (floatval(\Drupal::VERSION) >= 9.1) {
       $this->assertRaw('<span class="file file--mime-text-plain file--text"><a href="' . file_create_url($file->getFileUri()) . '" type="text/plain">' . $file->getFilename() . '</a></span>');
     }
     else {

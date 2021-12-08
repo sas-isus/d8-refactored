@@ -32,7 +32,6 @@ class WebformElementEntityAutocompleteTest extends WebformElementBrowserTestBase
    */
   public function testEntityReferenceTest() {
     $node_1 = $this->drupalCreateNode(['title' => 'node 01']);
-    $node_2 = $this->drupalCreateNode(['title' => 'node 02']);
 
     $vocabulary = Vocabulary::create([
       'vid' => 'tags',
@@ -45,7 +44,7 @@ class WebformElementEntityAutocompleteTest extends WebformElementBrowserTestBase
     ]);
     $term_1->save();
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform = Webform::load('test_element_entity_autocomplete');
 

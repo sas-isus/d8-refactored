@@ -22,7 +22,7 @@ abstract class BooleanBase extends WebformElementBase {
     ] + parent::defineDefaultProperties();
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * {@inheritdoc}

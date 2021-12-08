@@ -42,10 +42,10 @@ class WebformHandlerEmailStatesTest extends WebformBrowserTestBase {
     // Check updated email.
     $this->drupalPostForm("/admin/structure/webform/manage/test_handler_email_states/submission/$sid/edit", [], 'Save');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // @todo Fix random test failure that can't be reproduced locally.
     // $this->assertRaw('Debug: Email: Submission updated');
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check that custom (aka no states) is only visible on the 'Resend' tab.
     $this->drupalGet("/admin/structure/webform/manage/test_handler_email_states/submission/$sid/resend");

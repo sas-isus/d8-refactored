@@ -24,9 +24,9 @@ class WebformGroupUserInterfaceTest extends WebformGroupBrowserTestBase {
   public function testGroupUserInterfaceAccess() {
     $this->drupalLogin($this->rootUser);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Webform.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check 'Webform Access' integration.
     // @see webform_group_form_webform_settings_access_form_alter()
@@ -44,9 +44,9 @@ class WebformGroupUserInterfaceTest extends WebformGroupBrowserTestBase {
     $this->debug($access_rules);
     $this->assertEqual($access_rules['create']['group_roles'], ['member']);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Element.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check 'Element' integration.
     // @see webform_group_form_webform_ui_element_form_alter()
@@ -63,9 +63,9 @@ class WebformGroupUserInterfaceTest extends WebformGroupBrowserTestBase {
     $element = $webform->getElement('name');
     $this->assertEqual($element['#access_create_group_roles'], ['member']);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Handler.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check that group roles must be enabled for 'Email Handler' integration.
     // @see webform_group_form_webform_handler_form_alter()

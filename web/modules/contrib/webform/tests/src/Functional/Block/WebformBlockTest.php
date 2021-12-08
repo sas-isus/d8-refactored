@@ -35,33 +35,33 @@ class WebformBlockTest extends WebformBrowserTestBase {
     ]);
 
     // Check contact webform.
-    $this->drupalGet('/<front>');
+    $this->drupalGet('<front>');
     $this->assertRaw('webform-submission-contact-add-form');
 
     // Check contact webform with default data.
     $block->getPlugin()->setConfigurationValue('default_data', "name: 'John Smith'");
     $block->save();
-    $this->drupalGet('/<front>');
+    $this->drupalGet('<front>');
     $this->assertRaw('webform-submission-contact-add-form');
     $this->assertFieldByName('name', 'John Smith');
 
     // Check confirmation inline webform.
     $block->getPlugin()->setConfigurationValue('webform_id', 'test_confirmation_inline');
     $block->save();
-    $this->drupalPostForm('/<front>', [], 'Submit');
+    $this->drupalPostForm('<front>', [], 'Submit');
     $this->assertRaw('This is a custom inline confirmation message.');
 
     // Check confirmation message webform displayed on front page.
     $block->getPlugin()->setConfigurationValue('webform_id', 'test_confirmation_message');
     $block->save();
-    $this->drupalPostForm('/<front>', [], 'Submit');
+    $this->drupalPostForm('<front>', [], 'Submit');
     $this->assertRaw('This is a <b>custom</b> confirmation message.');
     $this->assertUrl('/user/login');
 
     // Check confirmation message webform display on webform URL.
     $block->getPlugin()->setConfigurationValue('redirect', TRUE);
     $block->save();
-    $this->drupalPostForm('/<front>', [], 'Submit');
+    $this->drupalPostForm('<front>', [], 'Submit');
     $this->assertRaw('This is a <b>custom</b> confirmation message.');
     $this->assertUrl('webform/test_confirmation_message');
 

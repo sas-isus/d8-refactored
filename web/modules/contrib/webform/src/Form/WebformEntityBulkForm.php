@@ -7,7 +7,7 @@ namespace Drupal\webform\Form;
  */
 class WebformEntityBulkForm extends WebformBulkFormBase {
 
- /**
+  /**
    * {@inheritdoc}
    */
   protected $entityTypeId = 'webform';

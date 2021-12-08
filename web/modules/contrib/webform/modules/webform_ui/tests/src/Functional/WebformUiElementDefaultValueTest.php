@@ -25,9 +25,9 @@ class WebformUiElementDefaultValueTest extends WebformBrowserTestBase {
 
     $this->drupalLogin($this->rootUser);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Single text field.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check validation when trying to set default value.
     $this->drupalPostForm('/admin/structure/webform/manage/contact/element/add/textfield', [], 'Set default value');
@@ -47,9 +47,9 @@ class WebformUiElementDefaultValueTest extends WebformBrowserTestBase {
     $this->drupalPostForm(NULL, ['default_value' => '{default value}'], 'Update default value');
     $this->assertFieldByName('properties[default_value]', '{default value}');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Multiple text field.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check set default value generates a multiple textfield element.
     $edit = [
@@ -64,9 +64,9 @@ class WebformUiElementDefaultValueTest extends WebformBrowserTestBase {
     $this->drupalPostForm(NULL, ['default_value[items][0][_item_]' => '{default value}'], 'Update default value');
     $this->assertFieldByName('properties[default_value]', '{default value}');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Single address (composite) field.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check set default value generates a single address element.
     $edit = [

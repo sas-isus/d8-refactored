@@ -29,9 +29,9 @@ class WebformSettingsScheduleTest extends WebformBrowserTestBase {
    */
   public function testSchedule() {
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Test webform opening (status=scheduled) */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_opening = Webform::load('test_form_opening');
 
@@ -67,9 +67,9 @@ class WebformSettingsScheduleTest extends WebformBrowserTestBase {
     $this->assertNoRaw('This form has not yet been opened to submissions.');
     $this->assertNoRaw('Only submission administrators are allowed to access this webform and create new submissions.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Test webform closed (status=closed) */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_closed = Webform::load('test_form_closed');
 

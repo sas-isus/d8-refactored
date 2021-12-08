@@ -26,7 +26,7 @@ class WebformThirdPartySettingsTest extends WebformBrowserTestBase {
 
     $this->drupalLogin($this->rootUser);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check honeypot (custom) third party setting does not exist.
     $this->assertNull($webform->getThirdPartySetting('honeypot', 'honeypot'));

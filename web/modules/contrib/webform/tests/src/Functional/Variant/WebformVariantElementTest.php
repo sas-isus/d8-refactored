@@ -41,7 +41,7 @@ class WebformVariantElementTest extends WebformBrowserTestBase {
     $variant_user = $this->drupalCreateUser(['administer webform', 'edit webform variants']);
     $admin_user = $this->drupalCreateUser(['administer webform']);
 
-    /***************************************************************************/
+    /* *********************************************************************** */
 
     // Check that the variant element is visible to users with
     // 'edit webform variants' permission.

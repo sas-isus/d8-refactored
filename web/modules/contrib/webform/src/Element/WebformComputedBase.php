@@ -91,9 +91,9 @@ abstract class WebformComputedBase extends FormElement implements WebformCompute
     $element += ['#element_validate' => []];
     array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformComputed']);
 
-    /**************************************************************************/
-    // Ajax support
-    /**************************************************************************/
+    /* ********************************************************************** */
+    // Ajax support.
+    /* ********************************************************************** */
 
     // Enabled Ajax support only for computed elements associated with a
     // webform submission form.
@@ -172,9 +172,9 @@ abstract class WebformComputedBase extends FormElement implements WebformCompute
     }
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Form/Ajax callbacks.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Set computed element's value.
@@ -295,9 +295,9 @@ abstract class WebformComputedBase extends FormElement implements WebformCompute
     return $element;
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Form/Ajax helpers and callbacks.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Get an element's value mode/type.

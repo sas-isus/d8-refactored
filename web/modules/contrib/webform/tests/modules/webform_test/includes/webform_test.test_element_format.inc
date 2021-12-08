@@ -51,13 +51,13 @@ function webform_test_test_element_format(WebformInterface $webform, $composite 
     'advanced_elements' => [],
   ];
   foreach ($definitions as $element_type => $definition) {
-    if (in_array($element_type, $skipped_element_types)) {
+    if (in_array($element_type, $skipped_element_types) || !isset($elements[$element_type])) {
       continue;
     }
 
     $webform_element = $elements[$element_type];
     $element = _webform_test_get_element_preview($element_type, ['issues' => FALSE]);
-    if (!$element || !$webform_element->isInput($element)) {
+    if (!$element || !$webform_element || !$webform_element->isInput($element)) {
       continue;
     }
 

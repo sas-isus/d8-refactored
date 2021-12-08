@@ -36,7 +36,7 @@ class EntityAutocomplete extends WebformElementBase implements WebformElementEnt
       + $this->defineDefaultMultipleProperties();
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * {@inheritdoc}

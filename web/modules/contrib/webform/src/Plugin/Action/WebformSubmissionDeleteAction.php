@@ -14,4 +14,4 @@ use Drupal\Core\Action\Plugin\Action\DeleteAction;
  *   confirm_form_route_name = "webform_submission.multiple_delete_confirm"
  * )
  */
-class WebformSubmissionDeleteAction extends DeleteAction { }
+class WebformSubmissionDeleteAction extends DeleteAction {}

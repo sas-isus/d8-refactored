@@ -44,12 +44,12 @@ use Drupal\webform_options_custom\WebformOptionsCustomInterface;
  *     "label" = "label",
  *   },
  *   links = {
- *     "add-form" = "/admin/structure/webform/config/options_custom/manage/add",
- *     "edit-form" = "/admin/structure/webform/config/options_custom/manage/{webform_options_custom}/edit",
- *     "source-form" = "/admin/structure/webform/config/options_custom/manage/{webform_options_custom}/source",
- *     "duplicate-form" = "/admin/structure/webform/config/options_custom/manage/{webform_options_custom}/duplicate",
- *     "delete-form" = "/admin/structure/webform/config/options_custom/manage/{webform_options_custom}/delete",
- *     "collection" = "/admin/structure/webform/config/options_custom/manage",
+ *     "add-form" = "/admin/structure/webform/options/custom/manage/add",
+ *     "edit-form" = "/admin/structure/webform/options/custom/manage/{webform_options_custom}/edit",
+ *     "source-form" = "/admin/structure/webform/options/custom/manage/{webform_options_custom}/source",
+ *     "duplicate-form" = "/admin/structure/webform/options/custom/manage/{webform_options_custom}/duplicate",
+ *     "delete-form" = "/admin/structure/webform/options/custom/manage/{webform_options_custom}/delete",
+ *     "collection" = "/admin/structure/webform/options/custom/manage",
  *   },
  *   config_export = {
  *     "id",
@@ -334,9 +334,9 @@ class WebformOptionsCustom extends ConfigEntityBase implements WebformOptionsCus
     // Set default #options.
     if (empty($element['#options'])) {
       $element['#options'] = [
-        'one' => t('One -- This is the number 1.'),
-        'two' => t('Two -- This is the number 2.'),
-        'three' => t('Three -- This is the number 3.'),
+        'one' => $this->t('One -- This is the number 1.'),
+        'two' => $this->t('Two -- This is the number 2.'),
+        'three' => $this->t('Three -- This is the number 3.'),
       ];
     }
 

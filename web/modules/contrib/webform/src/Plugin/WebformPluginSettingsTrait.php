@@ -30,7 +30,7 @@ trait WebformPluginSettingsTrait {
    */
   public function getSetting($key) {
     $configuration = $this->getConfiguration();
-    return (isset($configuration['settings'][$key])) ? $configuration['settings'][$key] : NULL;
+    return $configuration['settings'][$key] ?? NULL;
   }
 
   /**

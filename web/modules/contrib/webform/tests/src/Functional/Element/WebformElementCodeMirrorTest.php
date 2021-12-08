@@ -21,9 +21,9 @@ class WebformElementCodeMirrorTest extends WebformElementBrowserTestBase {
    */
   public function testCodeMirror() {
 
-    /**************************************************************************/
-    // code:text
-    /**************************************************************************/
+    /* ********************************************************************** */
+    // code:text.
+    /* ********************************************************************** */
 
     // Check Text.
     $this->drupalGet('/webform/test_element_codemirror');
@@ -35,9 +35,9 @@ class WebformElementCodeMirrorTest extends WebformElementBrowserTestBase {
     $this->assertRaw('<label for="edit-text-basic-no-wrap">text_basic_no_wrap</label>');
     $this->assertRaw('<textarea data-drupal-selector="edit-text-basic-no-wrap" wrap="off" class="js-webform-codemirror webform-codemirror text form-textarea" data-webform-codemirror-mode="text/plain" id="edit-text-basic-no-wrap" name="text_basic_no_wrap" rows="5" cols="60">');
 
-    /**************************************************************************/
-    // code:yaml
-    /**************************************************************************/
+    /* ********************************************************************** */
+    // code:yaml.
+    /* ********************************************************************** */
 
     // Check YAML.
     $this->drupalGet('/webform/test_element_codemirror');
@@ -72,9 +72,9 @@ yaml_decode_value:
     $this->drupalPostForm('/webform/test_element_codemirror', $edit, 'Submit');
     $this->assertNoRaw('<em class="placeholder">yaml_basic</em> is not valid.');
 
-    /**************************************************************************/
-    // code:html
-    /**************************************************************************/
+    /* ********************************************************************** */
+    // code:html.
+    /* ********************************************************************** */
 
     // Check HTML.
     $this->drupalGet('/webform/test_element_codemirror');
@@ -97,9 +97,9 @@ yaml_decode_value:
     $this->assertNoRaw('<em class="placeholder">html_basic</em> is not valid.');
     $this->assertNoRaw('expected &#039;&gt;&#039;');
 
-    /**************************************************************************/
-    // code:twig
-    /**************************************************************************/
+    /* ********************************************************************** */
+    // code:twig.
+    /* ********************************************************************** */
 
     // Check disabled Twig editor.
     $this->drupalGet('/webform/test_element_codemirror');

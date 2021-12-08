@@ -40,7 +40,7 @@ class WebformOptionsTest extends WebformBrowserTestBase {
       'administer users',
     ]);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalLogin($normal_user);
 
@@ -118,20 +118,20 @@ class WebformOptionsTest extends WebformBrowserTestBase {
     $this->assertEqual(reset($options), 'Switzerland');
 
     // Check admin user access denied.
-    $this->drupalGet('/admin/structure/webform/config/options/manage');
+    $this->drupalGet('/admin/structure/webform/options/manage');
     $this->assertResponse(403);
-    $this->drupalGet('/admin/structure/webform/config/options/manage/add');
+    $this->drupalGet('/admin/structure/webform/options/manage/add');
     $this->assertResponse(403);
 
     // Check admin user access.
     $this->drupalLogin($admin_user);
-    $this->drupalGet('/admin/structure/webform/config/options/manage');
+    $this->drupalGet('/admin/structure/webform/options/manage');
     $this->assertResponse(200);
-    $this->drupalGet('/admin/structure/webform/config/options/manage/add');
+    $this->drupalGet('/admin/structure/webform/options/manage/add');
     $this->assertResponse(200);
 
     // Check duplicate copies dynamic options.
-    $this->drupalGet('/admin/structure/webform/config/options/time_zones/duplicate');
+    $this->drupalGet('/admin/structure/webform/options/time_zones/duplicate');
     $this->assertRaw('Africa/Abidjan: Africa/Abidjan');
   }
 

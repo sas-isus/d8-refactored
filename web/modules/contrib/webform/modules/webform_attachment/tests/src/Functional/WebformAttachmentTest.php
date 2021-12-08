@@ -29,9 +29,9 @@ class WebformAttachmentTest extends WebformBrowserTestBase {
 
     $this->drupalLogin($this->rootUser);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Email.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_id = 'test_attachment_email';
     $webform_attachment_email = Webform::load($webform_id);
@@ -78,9 +78,9 @@ class WebformAttachmentTest extends WebformBrowserTestBase {
     $this->drupalGet("/webform/$webform_id/submissions/$sid/attachment/email/attachment-$attachment_date.xml");
     $this->assertResponse(404, 'Page not found when not an attachment element is specified');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Token.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_id = 'test_attachment_token';
     $webform_attachment_token = Webform::load('test_attachment_token');
@@ -102,9 +102,9 @@ class WebformAttachmentTest extends WebformBrowserTestBase {
     $this->drupalGet("/webform/$webform_id/submissions/$sid/attachment/webform_attachment_token_download/test_token.txt");
     $this->assertRaw('textfield: Some text');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Twig.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_id = 'test_attachment_twig';
     $webform_attachment_twig = Webform::load('test_attachment_twig');
@@ -127,9 +127,9 @@ class WebformAttachmentTest extends WebformBrowserTestBase {
     $this->assertRaw('<?xml version="1.0"?>
 <textfield>Some text</textfield>');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // URL.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_id = 'test_attachment_url';
     $webform_attachment_url = Webform::load('test_attachment_url');
@@ -156,9 +156,9 @@ class WebformAttachmentTest extends WebformBrowserTestBase {
     $this->drupalGet("/webform/$webform_id/submissions/$sid/attachment/webform_attachment_url_download/MAINTAINERS.txt");
     $this->assertRaw('https://www.drupal.org/contribute');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Access.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Switch to anonymous user.
     $this->drupalLogout();
@@ -215,9 +215,9 @@ class WebformAttachmentTest extends WebformBrowserTestBase {
     $this->drupalGet("/webform/$webform_id/submissions/$sid/attachment/private/private.txt");
     $this->assertResponse(200, 'Access allowed to private.txt');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Sanitize.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_attachment_santize = Webform::load('test_attachment_sanitize');
 
@@ -226,9 +226,9 @@ class WebformAttachmentTest extends WebformBrowserTestBase {
     $element = $webform_attachment_santize->getElement('webform_attachment_token');
     $this->assertEqual(WebformAttachmentToken::getFileName($element, $webform_submission), 'some-text.txt');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // States (enabled/disabled).
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_id = 'test_attachment_states';
     $webform_attachment_states = Webform::load($webform_id);

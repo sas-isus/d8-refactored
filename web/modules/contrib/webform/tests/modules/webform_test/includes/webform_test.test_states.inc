@@ -83,9 +83,9 @@ function _webform_test_states($type, array $default_properties = []) {
   return $data['containers'] + $data['elements'];
 }
 
-/******************************************************************************/
+/* ************************************************************************** */
 // Generate #states API issues webform as Markdown for docs/issues.md.
-/******************************************************************************/
+/* ************************************************************************** */
 
 /**
  * Get #states API issues as Markdown.

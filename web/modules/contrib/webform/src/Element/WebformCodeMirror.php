@@ -233,9 +233,9 @@ class WebformCodeMirror extends Textarea {
     return (isset(static::$modes[$mode])) ? static::$modes[$mode] : static::$modes['text'];
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Language/markup validation callback.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Validate HTML.
@@ -339,7 +339,7 @@ class WebformCodeMirror extends Textarea {
       $value = $element['#value'];
       $data = Yaml::decode($value);
       if (!is_array($data) && $value) {
-        throw new \Exception(t('YAML must contain an associative array of elements.'));
+        throw new \Exception('YAML must contain an associative array of elements.');
       }
       return NULL;
     }

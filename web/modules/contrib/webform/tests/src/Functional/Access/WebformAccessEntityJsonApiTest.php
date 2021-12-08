@@ -32,7 +32,7 @@ class WebformAccessEntityJsonApiTest extends WebformBrowserTestBase {
       'access any webform configuration',
     ]);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check anonymous access denied to webform.
     $this->drupalGet("jsonapi/webform/webform/$uuid");

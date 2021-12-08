@@ -37,9 +37,9 @@ class WebformEmailProviderTest extends WebformBrowserTestBase {
     $this->assertRaw('Provided by the Webform module.');
     $this->assertRaw("Webform PHP mailer: Sends the message as plain text or HTML, using PHP's native mail() function.");
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Mail System.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Install mailsystem.module.
     \Drupal::service('module_installer')->install(['mailsystem']);
@@ -58,9 +58,9 @@ class WebformEmailProviderTest extends WebformBrowserTestBase {
     // Uninstall mailsystem.module.
     \Drupal::service('module_installer')->uninstall(['mailsystem']);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // SMTP.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Install smtp.module.
     \Drupal::service('module_installer')->install(['smtp']);

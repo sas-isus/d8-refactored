@@ -53,7 +53,7 @@ class WebformNodeTest extends WebformNodeBrowserTestBase {
 
     $normal_user = $this->drupalCreateUser();
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check table names.
     $this->assertEqual($entity_reference_manager->getTableNames(), [
@@ -61,9 +61,9 @@ class WebformNodeTest extends WebformNodeBrowserTestBase {
       "node_revision__webform" => 'webform',
     ]);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Webform node basic.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check contact webform.
     $this->drupalGet('/node/' . $node->id());
@@ -76,9 +76,9 @@ class WebformNodeTest extends WebformNodeBrowserTestBase {
     $this->drupalGet('/node/' . $node->id());
     $this->assertFieldByName('name', 'John Smith');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Webform closed.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform->setStatus(WebformInterface::STATUS_CLOSED);
     $webform->save();
@@ -97,9 +97,9 @@ class WebformNodeTest extends WebformNodeBrowserTestBase {
     $webform->save();
     $this->drupalLogout();
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Webform node open and closed.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check contact webform closed.
     $node->webform->status = WebformInterface::STATUS_CLOSED;
@@ -120,9 +120,9 @@ class WebformNodeTest extends WebformNodeBrowserTestBase {
     $this->postNodeSubmission($node);
     $this->assertRaw('This is a custom inline confirmation message.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Webform node scheduled.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check scheduled to open.
     $node->webform->target_id = 'contact';
@@ -179,9 +179,9 @@ class WebformNodeTest extends WebformNodeBrowserTestBase {
     $this->drupalGet('/node/' . $node->id());
     $this->assertRaw('{Custom closed message}');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Submission limit (test_form_limit).
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Set per source entity total and user limit.
     // @see \Drupal\webform\Tests\WebformSubmissionFormSettingsTest::testSettings
@@ -267,9 +267,9 @@ class WebformNodeTest extends WebformNodeBrowserTestBase {
     $this->assertRaw('3 webform + source entity submission(s)');
     $this->assertRaw('3 webform + source entity limit');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Prepopulate source entity.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_contact = Webform::load('contact');
 
@@ -303,9 +303,9 @@ class WebformNodeTest extends WebformNodeBrowserTestBase {
       $this->assertEqual($submission->getSourceEntity()->id(), $node->id());
     }
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Check displaying link to webform.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Set webform reference to be displayed as a link.
     $display_options = [

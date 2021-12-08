@@ -49,7 +49,7 @@ class WebformFieldTest extends WebformBrowserTestBase {
 
     $this->drupalLogin($this->rootUser);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check that webform select menu is visible.
     $this->drupalGet('/node/add/page');

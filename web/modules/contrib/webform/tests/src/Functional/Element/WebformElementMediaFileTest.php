@@ -67,9 +67,10 @@ class WebformElementMediaFileTest extends WebformElementManagedFileTestBase {
     $this->assertRaw('<source src="' . $this->getAbsoluteUrl('/system/files/webform/test_element_media_file/_sid_/video_file_mp4.mp4') . '" type="video/mp4">');
   }
 
-  /****************************************************************************/
-  // Helper functions. From: \Drupal\file\Tests\FileFieldTestBase::getTestFile
-  /****************************************************************************/
+  /* ************************************************************************ */
+  // Helper functions.
+  // @see \Drupal\file\Tests\FileFieldTestBase::getTestFile
+  /* ************************************************************************ */
 
   /**
    * Check file upload.

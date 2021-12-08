@@ -59,9 +59,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
    */
   public function testFormStatesValidatorRequired() {
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // required.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform = Webform::load('test_states_server_required');
 
@@ -69,9 +69,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->postSubmission($webform);
     $this->assertRaw('New submission added to Test: Form API #states server-side required validation.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // multiple_triggers.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check required multiple dependents 'AND' and 'OR' operator.
     $edit = [
@@ -84,9 +84,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->assertRaw('dependent_textfield_required_or field is required.');
     $this->assertNoRaw('dependent_textfield_required_xor field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // multiple_dependents.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check required multiple dependents 'OR' operator.
     $edit = [
@@ -109,9 +109,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('dependent_textfield_required_xor field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // required_hidden_trigger.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $edit = [
       'required_hidden_trigger' => TRUE,
@@ -119,9 +119,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('required_hidden_dependent_required field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // minlength_hidden_trigger.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $edit = [
       'minlength_hidden_trigger' => TRUE,
@@ -134,11 +134,12 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
       'minlength_hidden_dependent' => 'X',
     ];
     $this->postSubmission($webform, $edit);
+    //  phpcs:ignore
     // $this->assertRaw('<em class="placeholder">minlength_hidden_dependent</em> cannot be less than <em class="placeholder">5</em> characters');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // checkboxes_trigger.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check required checkboxes.
     $edit = [
@@ -147,9 +148,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('checkboxes_dependent_required field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // checkboxes_other_trigger.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check required checkboxes other checkbox.
     $edit = [
@@ -166,9 +167,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('checkboxes_other_dependent_required field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // text_format_trigger.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check required text_format.
     $edit = [
@@ -177,9 +178,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('text_format_dependent_required field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // select_other_trigger.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check required webform_select_other select #options.
     $edit = [
@@ -196,9 +197,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('select_other_dependent_required field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // select_other_multiple_trigger.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check required webform_select_other_multiple select #options.
     $edit = [
@@ -207,9 +208,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('select_other_multiple_dependent_required field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // select_values_trigger.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check required select_values_trigger select option 'one'.
     $edit = [
@@ -225,9 +226,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('select_values_trigger_dependent_required field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // email_confirm_trigger.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check required webform_email_confirm.
     $edit = [
@@ -237,9 +238,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('email_confirm_dependent_required field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // likert_trigger.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check required webform_likert.
     $edit = [
@@ -248,9 +249,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('likert_dependent_required field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // datelist_trigger.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check required datelist.
     $edit = [
@@ -265,9 +266,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('datelist_dependent_required field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // datetime_trigger.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check required datetime.
     $edit = [
@@ -277,9 +278,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('datetime_dependent_required field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // currency_trigger.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check required currency input mask.
     $edit = [
@@ -289,9 +290,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('currency_dependent_required field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // address_trigger.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check required address.
     $edit = [
@@ -305,9 +306,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('address_dependent_required field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // composite_required.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check required composite.
     $edit = [
@@ -347,9 +348,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->assertRaw('postal_code_b field is required.');
     $this->assertRaw('country_b field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // custom.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform = Webform::load('test_states_server_custom');
 
@@ -407,9 +408,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->assertNoRaw('dependent_between field is required.');
     $this->assertRaw('dependent_not_between field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // multiple element.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform = Webform::load('test_states_server_multiple');
 
@@ -421,9 +422,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     // Check multiple error.
     $this->assertRaw('textfield_multiple field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // composite element.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform = Webform::load('test_states_server_comp');
 
@@ -452,23 +453,23 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->assertRaw('webform_name_nested_last field is required.');
     $this->assertRaw(' <input data-drupal-selector="edit-webform-name-nested-last" type="text" id="edit-webform-name-nested-last" name="webform_name_nested[last]" value="" size="60" maxlength="255" class="form-text error" aria-invalid="true" data-drupal-states="{&quot;required&quot;:{&quot;.webform-submission-test-states-server-comp-add-form :input[name=\u0022webform_name_nested_trigger\u0022]&quot;:{&quot;checked&quot;:true}}}" />');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // file_trigger.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform = Webform::load('test_states_server_file');
 
     // Check required error.
-    $files = $this->getTestFiles('text');;
+    $files = $this->getTestFiles('text');
     $edit = [
       'files[trigger_file]' => \Drupal::service('file_system')->realpath($files[0]->uri),
     ];
     $this->postSubmission($webform, $edit);
     $this->assertRaw('textfield_dependent_required field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // likert element.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform = Webform::load('test_states_server_likert');
 
@@ -486,9 +487,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->assertNoRaw('q1 field is required.');
     $this->assertNoRaw('q2 field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // nested containers.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform = Webform::load('test_states_server_containers');
 
@@ -532,9 +533,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->assertRaw('visible_custom_textfield field is required.');
     $this->assertRaw('visible_slide_custom_textfield field is required.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // nested conditions.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform = Webform::load('test_states_server_nested');
 
@@ -564,9 +565,9 @@ class WebformStatesServerTest extends WebformBrowserTestBase {
     $this->assertRaw('<label for="edit-page-2-target" class="js-form-required form-required">page_2_target: [a and b] or c = required</label>');
     $this->assertRaw('<input data-drupal-selector="edit-page-2-target" type="text" id="edit-page-2-target" name="page_2_target" value="" size="60" maxlength="255" class="form-text required" required="required" aria-required="true" />');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // test_states_crosspage.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform = Webform::load('test_states_crosspage');
 

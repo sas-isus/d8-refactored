@@ -29,9 +29,9 @@ class WebformSubmissionApiTest extends WebformBrowserTestBase {
 
     $contact_webform = Webform::load('contact');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Basic form.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check submitting a simple webform.
     $values = [
@@ -89,9 +89,9 @@ class WebformSubmissionApiTest extends WebformBrowserTestBase {
     $webform_submission = WebformSubmissionForm::submitFormValues($values);
     $this->assertInstanceOf(WebformSubmissionInterface::class, $webform_submission);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Multistep form.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $test_form_wizard_advanced_webform = Webform::load('test_form_wizard_advanced');
 
@@ -101,7 +101,7 @@ class WebformSubmissionApiTest extends WebformBrowserTestBase {
       'data' => [
         'first_name' => 'Ringo',
         'last_name' => 'Starr',
-        'gender' => 'Male',
+        'sex' => 'Male',
         'email' => 'example@example.com',
         'phone' => '123-456-7890',
         'comments' => 'Huius, Lyco, oratione locuples, rebus ipsis ielunior. Duo Reges: constructio interrete. Sed haec in pueris; Sed utrum hortandus es nobis, Luci, inquit, an etiam tua sponte propensus es? Sapiens autem semper beatus est et est aliquando in dolore; Immo videri fortasse. Paulum, cum regem Persem captum adduceret, eodem flumine invectio? Et ille ridens: Video, inquit, quid agas;',
@@ -130,7 +130,7 @@ class WebformSubmissionApiTest extends WebformBrowserTestBase {
       'data' => [
         'first_name' => 'Ringo',
         'last_name' => 'Starr',
-        'gender' => 'INVALID',
+        'sex' => 'INVALID',
         'email' => 'example@example.com',
         'phone' => '123-456-7890',
         'comments' => 'Huius, Lyco, oratione locuples, rebus ipsis ielunior. Duo Reges: constructio interrete. Sed haec in pueris; Sed utrum hortandus es nobis, Luci, inquit, an etiam tua sponte propensus es? Sapiens autem semper beatus est et est aliquando in dolore; Immo videri fortasse. Paulum, cum regem Persem captum adduceret, eodem flumine invectio? Et ille ridens: Video, inquit, quid agas;',
@@ -140,12 +140,12 @@ class WebformSubmissionApiTest extends WebformBrowserTestBase {
     WebformElementHelper::convertRenderMarkupToStrings($errors);
     // $this->debug($errors);
     $this->assertEqual($errors, [
-      'gender' => 'An illegal choice has been detected. Please contact the site administrator.',
+      'sex' => 'An illegal choice has been detected. Please contact the site administrator.',
     ]);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Submission limit form.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalLogin($normal_user);
 

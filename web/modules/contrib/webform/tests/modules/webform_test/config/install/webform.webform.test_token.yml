@@ -1,3 +1,4 @@
+uuid: null
 langcode: en
 status: open
 dependencies:
@@ -63,7 +64,7 @@ elements: |
       Submitter name: [webform_submission:user:account-name]
       Submitter mail: [webform_submission:user:mail]
       Token: [webform_submission:token]
-      Update URL: [webform_submission:update-url]
+      Update URL: [webform_submission:token-update-url]
       URL: [webform_submission:url]
       URL Edit Webform: [webform_submission:url:edit-form]
       UUID: [webform_submission:uuid]
@@ -125,6 +126,7 @@ elements: |
       Summary: [webform_submission:node:summary]
       Title: [webform_submission:node:title]
       URL: [webform_submission:node:url]
+  
 css: ''
 javascript: ''
 settings:
@@ -145,7 +147,7 @@ settings:
   form_previous_submissions: true
   form_confidential: false
   form_confidential_message: ''
-  form_remote_addr: true
+  form_disable_remote_addr: false
   form_convert_anonymous: false
   form_prepopulate: false
   form_prepopulate_source_entity: false
@@ -166,6 +168,9 @@ settings:
   form_access_denied_message: ''
   form_access_denied_attributes: {  }
   form_file_limit: ''
+  form_method: ''
+  form_action: ''
+  form_attributes: {  }
   share: false
   share_node: false
   share_theme_name: ''
@@ -325,7 +330,7 @@ handlers:
       from_options: {  }
       from_name: _default
       subject: _default
-      body: '<a href="[webform_submission:update-url]">[webform_submission:update-url]</a>'
+      body: '<a href="[webform_submission:token-update-url]">[webform_submission:token-update-url]</a>'
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true

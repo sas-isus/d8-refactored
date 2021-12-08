@@ -85,6 +85,27 @@ class WebformElementHelper {
   }
 
   /**
+   * Gets properties of a structured array element (keys beginning with '#').
+   *
+   * @param array $element
+   *   An element array to return properties for.
+   *
+   * @return array
+   *   An array of property keys for the element.
+   */
+  public static function properties(array $element) {
+    // Prevent "Exception: Notice: Trying to access array offset on value
+    // of type int" by removing all numeric keys.
+    // This issue is trigged when an element's YAML #option have numeric keys.
+    foreach ($element as $key => $value) {
+      if (is_int($key)) {
+        unset($element[$key]);
+      }
+    }
+    return Element::properties($element);
+  }
+
+  /**
    * Determine if an element and its key is a renderable array.
    *
    * @param array|mixed $element
@@ -586,7 +607,7 @@ class WebformElementHelper {
   public static function getFlattened(array $elements) {
     $flattened_elements = [];
     foreach ($elements as $key => &$element) {
-      if (!WebformElementHelper::isElement($element, $key)) {
+      if (!self::isElement($element, $key)) {
         continue;
       }
 
@@ -663,18 +684,18 @@ class WebformElementHelper {
     }
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Validate callbacks to trigger or suppress validation.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // ISSUE: Hidden elements still need to call #element_validate because
   // certain elements, including managed_file, checkboxes, password_confirm,
   // etc…, will also massage the submitted values via #element_validate.
   //
   // SOLUTION: Call #element_validate for all hidden elements but suppresses
   // #element_validate errors.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Set element validate callback.

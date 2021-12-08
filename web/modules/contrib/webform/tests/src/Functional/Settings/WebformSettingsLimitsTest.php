@@ -50,7 +50,7 @@ class WebformSettingsLimitsTest extends WebformBrowserTestBase {
 
     $webform_limit = Webform::load('test_form_limit');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalGet('/webform/test_form_limit');
 
@@ -180,9 +180,9 @@ class WebformSettingsLimitsTest extends WebformBrowserTestBase {
     $this->assertRaw('0 user submission(s)');
     $this->assertRaw('0 webform submission(s)');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Wait.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_limit_wait = Webform::load('test_form_limit_wait');
 

@@ -44,7 +44,7 @@ webform.admin.dialog:
     js/webform.admin.js: {}
   dependencies:
     - core/drupal.dialog.ajax
-    - webform/jquery.ui.dialog
+    - webform/drupal.dialog
     - webform/webform.ajax
     - webform/webform.form
     - webform/webform.form.tabs
@@ -185,7 +185,6 @@ webform.confirmation.modal:
     - core/drupal.dialog
     - core/drupal.dialog.position
     - core/jquery.once
-    - core/jquery.ui.dialog
     - webform/webform.confirmation
 
 # Contextual
@@ -205,7 +204,14 @@ webform.dialog:
     js/webform.dialog.js: {}
   dependencies:
     - core/drupal.dialog.ajax
-    - webform/jquery.ui.dialog
+    - webform/drupal.dialog
+
+drupal.dialog:
+  version: VERSION
+  js:
+    js/webform.drupal.dialog.js: {}
+  dependencies:
+    - core/drupal.dialog
 
 # Help.
 
@@ -321,7 +327,7 @@ webform.tooltip:
   dependencies:
     - core/drupal
     - core/jquery.once
-    - core/jquery.ui.tooltip
+    - webform/libraries.tippyjs
 
 # Theme
 
@@ -342,6 +348,18 @@ webform.theme.bartik:
   css:
     theme:
       css/webform.theme.bartik.css: {}
+
+webform.theme.gin:
+  version: VERSION
+  css:
+    theme:
+      css/webform.theme.gin.css: {}
+
+webform.theme.olivero:
+  version: VERSION
+  css:
+    theme:
+      css/webform.theme.olivero.css: {}
 
 webform.theme.seven:
   version: VERSION
@@ -399,12 +417,15 @@ webform.form.submit_once:
 
 webform.form.tabs:
   version: VERSION
+  css:
+    component:
+      css/webform.form.tabs.css: {}
   js:
     js/webform.form.tabs.js: {}
   dependencies:
     - core/drupal
     - core/jquery.once
-    - core/jquery.ui.tabs
+    - webform/libraries.tabby
 
 webform.form.unsaved:
   version: VERSION
@@ -611,8 +632,11 @@ webform.element.date:
   js:
     js/webform.element.date.js: {}
   dependencies:
-    - core/drupal.date
     - core/drupalSettings
+    - core/drupal.date
+    - core/modernizr
+    - core/jquery.once
+    - jquery_ui_datepicker/datepicker
 
 webform.element.datelist:
   version: VERSION
@@ -648,6 +672,17 @@ webform.element.details.toggle:
     - core/drupal.announce
     - core/jquery.once
 
+webform.element.excluded_elements:
+  version: VERSION
+  css:
+    component:
+      css/webform.element.excluded_elements.css: {}
+  js:
+    js/webform.element.excluded_elements.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery.once
+
 webform.element.file.button:
   version: VERSION
   css:
@@ -670,7 +705,7 @@ webform.element.help:
   dependencies:
     - core/drupal
     - core/jquery.once
-    - core/jquery.ui.tooltip
+    - webform/libraries.tippyjs
 
 webform.element.html_editor:
   version: VERSION
@@ -706,7 +741,6 @@ webform.element.image_file.modal:
     - core/drupalSettings
     - core/drupal.dialog.ajax
     - core/jquery.once
-    - core/jquery.ui.dialog
 
 webform.element.inputmask:
   version: VERSION
@@ -773,6 +807,12 @@ webform.element.message:
   dependencies:
     - core/drupal
     - core/jquery.once
+
+webform.element.message.info:
+  version: VERSION
+  css:
+    component:
+      css/webform.element.message.info.css: {}
 
 webform.element.multiple:
   version: VERSION
@@ -887,8 +927,8 @@ webform.element.states:
     js/webform.element.states.js: {}
   dependencies:
     - core/drupal
+    - core/drupal.autocomplete
     - core/jquery.once
-    - core/jquery.ui.autocomplete
 
 webform.element.telephone:
   version: VERSION
@@ -916,7 +956,6 @@ webform.element.terms_of_service:
     - core/drupal
     - core/drupal.dialog.ajax
     - core/jquery.once
-    - core/jquery.ui.dialog
 
 webform.element.text_format:
   version: VERSION
@@ -976,15 +1015,6 @@ webform.composite.telephone:
   dependencies:
     - webform/webform.composite
 
-# jQuery UI.
-
-jquery.ui.dialog:
-  version: VERSION
-  js:
-    js/webform.jquery.ui.dialog.js: {}
-  dependencies:
-    - core/jquery.ui.dialog
-
 # Contrib Module.
 
 imce.input:
@@ -1004,6 +1034,7 @@ libraries.choices:
     name: MIT
     url: https://github.com/jshjohnson/Choices/blob/master/LICENSE
     gpl-compatible: true
+  directory: choices
   cdn:
     /libraries/choices/: https://cdn.jsdelivr.net/gh/jshjohnson/Choices@v9.0.1/
   css:
@@ -1021,6 +1052,7 @@ libraries.codemirror.text:
     name: MIT
     url: http://codemirror.net/LICENSE
     gpl-compatible: true
+  directory: &webform_codemirror_directory codemirror
   cdn: &webform_codemirror_cdn
     /libraries/codemirror/lib/: https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/
     /libraries/codemirror/: https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/
@@ -1035,6 +1067,7 @@ libraries.codemirror.text:
 libraries.codemirror.yaml:
   version: *webform_codemirror_version
   license: *webform_codemirror_license
+  directory: *webform_codemirror_directory
   cdn: *webform_codemirror_cdn
   js:
     /libraries/codemirror/mode/yaml/yaml.js: {}
@@ -1044,6 +1077,7 @@ libraries.codemirror.yaml:
 libraries.codemirror.html:
   version: *webform_codemirror_version
   license: *webform_codemirror_license
+  directory: *webform_codemirror_directory
   cdn: *webform_codemirror_cdn
   js:
     /libraries/codemirror/mode/xml/xml.js: {}
@@ -1054,6 +1088,7 @@ libraries.codemirror.html:
 libraries.codemirror.htmlmixed:
   version: *webform_codemirror_version
   license: *webform_codemirror_license
+  directory: *webform_codemirror_directory
   cdn: *webform_codemirror_cdn
   js:
     /libraries/codemirror/mode/xml/xml.js: {}
@@ -1066,6 +1101,7 @@ libraries.codemirror.htmlmixed:
 libraries.codemirror.css:
   version: *webform_codemirror_version
   license: *webform_codemirror_license
+  directory: *webform_codemirror_directory
   cdn: *webform_codemirror_cdn
   js:
     /libraries/codemirror/mode/css/css.js: {}
@@ -1075,6 +1111,7 @@ libraries.codemirror.css:
 libraries.codemirror.javascript:
   version: *webform_codemirror_version
   license: *webform_codemirror_license
+  directory: *webform_codemirror_directory
   cdn: *webform_codemirror_cdn
   js:
     /libraries/codemirror/mode/javascript/javascript.js: {}
@@ -1084,6 +1121,7 @@ libraries.codemirror.javascript:
 libraries.codemirror.php:
   version: *webform_codemirror_version
   license: *webform_codemirror_license
+  directory: *webform_codemirror_directory
   cdn: *webform_codemirror_cdn
   js:
     /libraries/codemirror/mode/php/php.js: {}
@@ -1094,6 +1132,7 @@ libraries.codemirror.php:
 libraries.codemirror.twig:
   version: *webform_codemirror_version
   license: *webform_codemirror_license
+  directory: *webform_codemirror_directory
   cdn: *webform_codemirror_cdn
   js:
     /libraries/codemirror/mode/twig/twig.js: {}
@@ -1119,6 +1158,7 @@ libraries.jquery.inputmask:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php
     gpl-compatible: true
+  directory: jquery.inputmask
   cdn:
     /libraries/jquery.inputmask/: https://cdn.jsdelivr.net/gh/RobinHerbots/Inputmask@5.0.6/
   js:
@@ -1133,6 +1173,7 @@ libraries.jquery.intl-tel-input:
     name: MIT
     url: https://github.com/jackocnr/intl-tel-input/blob/master/LICENSE
     gpl-compatible: true
+  directory: jquery.intl-tel-input
   cdn:
     /libraries/jquery.intl-tel-input/: https://cdn.jsdelivr.net/gh/jackocnr/intl-tel-input@v16.1.0/
   css:
@@ -1152,6 +1193,7 @@ libraries.jquery.rateit:
     name: MIT
     url: https://github.com/gjunge/rateit.js/blob/master/LICENSE.md
     gpl-compatible: true
+  directory: jquery.rateit
   cdn:
     /libraries/jquery.rateit/: https://cdn.jsdelivr.net/gh/gjunge/rateit.js@1.1.3/
   css:
@@ -1169,6 +1211,7 @@ libraries.jquery.select2:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php
     gpl-compatible: true
+  directory: jquery.select2
   cdn:
     /libraries/jquery.select2/dist/: https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/
   css:
@@ -1186,6 +1229,7 @@ libraries.jquery.chosen:
     name: MIT
     url: https://github.com/harvesthq/chosen/blob/master/LICENSE.md
     gpl-compatible: true
+  directory: jquery.chosen
   cdn:
     /libraries/jquery.chosen/: https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/
   css:
@@ -1203,6 +1247,7 @@ libraries.jquery.textcounter:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php
     gpl-compatible: true
+  directory: jquery.textcounter
   cdn:
     /libraries/jquery.textcounter/: https://cdn.jsdelivr.net/gh/ractoon/jQuery-Text-Counter@0.9.0/
   js:
@@ -1217,6 +1262,7 @@ libraries.jquery.timepicker:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php
     gpl-compatible: true
+  directory: jquery.timepicker
   cdn:
     /libraries/jquery.timepicker/: https://cdn.jsdelivr.net/gh/jonthornton/jquery-timepicker@1.13.18/
   css:
@@ -1229,16 +1275,17 @@ libraries.jquery.timepicker:
 
 libraries.progress-tracker:
   remote: https://github.com/NigelOToole/progress-tracker
-  version: '1.4.0'
+  version: '2.0.6'
   license:
     name: MIT
     url: https://github.com/NigelOToole/progress-tracker/blob/master/LICENSE
     gpl-compatible: true
+  directory: progress-tracker
   cdn:
-    /libraries/progress-tracker/: https://cdn.jsdelivr.net/gh/NigelOToole/progress-tracker@v1.4.0/
+    /libraries/progress-tracker/: https://cdn.jsdelivr.net/gh/NigelOToole/progress-tracker@v2.0.6/
   css:
     component:
-      /libraries/progress-tracker/app/styles/progress-tracker.css: {}
+      /libraries/progress-tracker/docs/styles/progress-tracker.css: {}
 
 libraries.signature_pad:
   remote: https://github.com/szimek/signature_pad
@@ -1247,7 +1294,42 @@ libraries.signature_pad:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php
     gpl-compatible: true
+  directory: signature_pad
   cdn:
     /libraries/signature_pad/: https://cdn.jsdelivr.net/gh/szimek/signature_pad@v2.3.0/
   js:
     /libraries/signature_pad/example/js/signature_pad.js: {}
+
+libraries.tabby:
+  remote: https://github.com/cferdinandi/tabby
+  version: '12.0.3'
+  license:
+    name: MIT
+    url: https://github.com/cferdinandi/tabby/blob/master/LICENSE.md
+    gpl-compatible: true
+  directory: tabby
+  cdn:
+    /libraries/tabby/: https://cdn.jsdelivr.net/gh/cferdinandi/tabby@12.0.3/
+  css:
+    component:
+      /libraries/tabby/dist/css/tabby-ui.min.css: {}
+  js:
+    /libraries/tabby/dist/js/tabby.min.js: {}
+
+# Tippy.js 5.x is compatible with Drupal 8.x.
+# Library info is altered to switch to Tippy.js 6.x for Drupal 9.x compatibility.
+# @see webform_library_info_alter()
+libraries.tippyjs:
+  remote: https://github.com/atomiks/tippyjs
+  version: '5.2.1'
+  license:
+    name: MIT
+    url: https://github.com/atomiks/tippyjs/blob/master/LICENSE
+    gpl-compatible: true
+  directory: tippyjs/5.x
+  cdn:
+    /libraries/tippyjs/5.x/: https://unpkg.com/tippy.js@5.2.1/dist/
+  js:
+    /libraries/tippyjs/5.x/tippy-bundle.iife.min.js: {}
+  dependencies:
+    - core/popperjs

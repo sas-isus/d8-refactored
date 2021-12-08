@@ -19,7 +19,7 @@ class WebformGroupRolesElementTest extends WebformGroupBrowserTestBase {
   public function testGroupRolesElement() {
     $webform = Webform::load('test_element_group_roles');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check default element properties.
     $element = [];

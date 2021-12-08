@@ -21,9 +21,9 @@ class WebformElementStatesTest extends WebformElementBrowserTestBase {
    */
   public function testElement() {
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Processing.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check default value handling.
     $this->drupalPostForm('/webform/test_element_states', [], 'Submit');
@@ -83,9 +83,9 @@ states_custom_condition:
       value:
         pattern: '[a-z0-9]+'");
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Rendering.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalGet('/webform/test_element_states');
 
@@ -104,9 +104,9 @@ states_custom_condition:
     $this->assertFieldById('edit-states-empty-actions-add', NULL);
     $this->assertNoFieldById('edit-states-single-actions-add', NULL);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Validation.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check duplicate states validation.
     $edit = ['states_basic[states][0][state]' => 'required'];
@@ -118,9 +118,9 @@ states_custom_condition:
     $this->drupalPostForm('/webform/test_element_states', $edit, 'Submit');
     $this->assertRaw('The <em class="placeholder">Selector 02 (selector_02)</em> element is used more than once within the <em class="placeholder">Required</em> state. To use multiple values within a trigger try using the pattern trigger.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Processing.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check setting first state and adding new state.
     $edit = [
@@ -171,9 +171,9 @@ states_custom_condition:
     $this->assertNoFieldByName('states_empty[states][2][trigger]', 'value');
     $this->assertNoFieldByName('states_empty[states][2][value]', '{value_02}');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Edit source.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check that  'Edit source' button is not available.
     $this->drupalGet('/webform/test_element_states');

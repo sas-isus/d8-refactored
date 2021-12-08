@@ -46,9 +46,9 @@ class WebformRenderingTest extends WebformBrowserTestBase {
   public function testRendering() {
     $webform = Webform::load('test_rendering');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Preview.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $this->drupalPostForm('/webform/test_rendering', [], 'Preview');
 
@@ -72,9 +72,9 @@ class WebformRenderingTest extends WebformBrowserTestBase {
     // Create a submission.
     $sid = $this->postSubmission($webform);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Emails.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Get sent emails.
     $sent_emails = $this->getMails();
@@ -100,9 +100,9 @@ class WebformRenderingTest extends WebformBrowserTestBase {
     $this->assertStringContainsString('text_format_basic_html:', $text_email['params']['body']);
     $this->assertStringContainsString('/{default_value}/', $text_email['params']['body']);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Submission.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check view submission.
     $this->drupalGet("admin/structure/webform/manage/test_rendering/submission/$sid");

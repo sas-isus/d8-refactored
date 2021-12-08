@@ -17,7 +17,7 @@ class WebformBubbleableMetadata extends BubbleableMetadata {
    * replaces all existing cache contexts and tags.
    *
    * @param array $build
-   *   A render array
+   *   A render array.
    *
    * @see \Drupal\Core\Render\BubbleableMetadata::applyTo
    * @see \Drupal\webform\WebformSubmissionForm::buildForm

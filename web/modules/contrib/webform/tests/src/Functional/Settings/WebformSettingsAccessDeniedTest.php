@@ -47,9 +47,9 @@ class WebformSettingsAccessDeniedTest extends WebformBrowserTestBase {
       'webform' => $webform->id(),
     ]);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Redirect.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Set access denied to redirect with message.
     $webform->setSetting('form_access_denied', WebformInterface::ACCESS_DENIED_LOGIN);
@@ -65,9 +65,9 @@ class WebformSettingsAccessDeniedTest extends WebformBrowserTestBase {
     ];
     $this->assertUrl(Url::fromRoute('user.login', [], $route_options));
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Default.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Set default access denied page.
     $webform->setSetting('form_access_denied', WebformInterface::ACCESS_DENIED_DEFAULT);
@@ -78,9 +78,9 @@ class WebformSettingsAccessDeniedTest extends WebformBrowserTestBase {
     $this->assertRaw('You are not authorized to access this page.');
     $this->assertNoRaw('Please login to access <b>Test: Webform: Access Denied</b>.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Page.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Set access denied to display a dedicated page.
     $webform->setSetting('form_access_denied', WebformInterface::ACCESS_DENIED_PAGE);
@@ -91,11 +91,12 @@ class WebformSettingsAccessDeniedTest extends WebformBrowserTestBase {
     // Check custom access denied page.
     $this->drupalGet('/admin/structure/webform/manage/test_form_access_denied');
     $this->assertRaw('<h1>Webform: Access denied</h1>');
-    $this->assertRaw('<div style="border: 1px solid red" class="webform-access-denied">Please login to access <b>Test: Webform: Access Denied</b>.</div>');
+    $this->assertRaw('<div style="border: 1px solid red" class="webform-access-denied">');
+    $this->assertRaw('Please login to access <b>Test: Webform: Access Denied</b>.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Message via a block.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Place block.
     $this->drupalPlaceBlock('webform_block', [
@@ -107,23 +108,26 @@ class WebformSettingsAccessDeniedTest extends WebformBrowserTestBase {
     $webform->save();
 
     // Check block does not displays access denied message.
-    $this->drupalGet('/<front>');
-    $this->assertNoRaw('<div style="border: 1px solid red" class="webform-access-denied">Please login to access <b>Test: Webform: Access Denied</b>.</div>');
+    $this->drupalGet('<front>');
+    $this->assertNoRaw('<div style="border: 1px solid red" class="webform-access-denied">');
+    $this->assertNoRaw('Please login to access <b>Test: Webform: Access Denied</b>.');
 
     // Set access denied to display a message.
     $webform->setSetting('form_access_denied', WebformInterface::ACCESS_DENIED_MESSAGE);
     $webform->save();
 
     // Check block displays access denied message.
-    $this->drupalGet('/<front>');
-    $this->assertRaw('<div style="border: 1px solid red" class="webform-access-denied">Please login to access <b>Test: Webform: Access Denied</b>.</div>');
+    $this->drupalGet('<front>');
+    $this->assertRaw('<div style="border: 1px solid red" class="webform-access-denied">');
+    $this->assertRaw('Please login to access <b>Test: Webform: Access Denied</b>.');
 
     // Login.
     $this->drupalLogin($this->rootUser);
 
     // Check block displays wth webform.
-    $this->drupalGet('/<front>');
-    $this->assertNoRaw('<div class="webform-access-denied">Please login to access <b>Test: Webform: Access Denied</b>.</div>');
+    $this->drupalGet('<front>');
+    $this->assertNoRaw('<div class="webform-access-denied">');
+    $this->assertNoRaw('Please login to access <b>Test: Webform: Access Denied</b>.');
     $this->assertRaw('id="webform-submission-test-form-access-denied-user-1-add-form"');
   }
 
@@ -137,17 +141,17 @@ class WebformSettingsAccessDeniedTest extends WebformBrowserTestBase {
     $sid = $this->postSubmission($webform);
     $this->drupalLogout();
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Redirect.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check submission message is displayed.
     $this->drupalGet("admin/structure/webform/manage/test_form_access_denied/submission/$sid");
     $this->assertRaw("Please login to access <b>Test: Webform: Access Denied: Submission #$sid</b>.");
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Default.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Set default access denied page.
     $webform->setSetting('submission_access_denied', WebformInterface::ACCESS_DENIED_DEFAULT);
@@ -158,9 +162,9 @@ class WebformSettingsAccessDeniedTest extends WebformBrowserTestBase {
     $this->assertRaw('You are not authorized to access this page.');
     $this->assertNoRaw("Please login to access <b>Test: Webform: Access Denied: Submission #$sid</b>.");
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Page.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Set access denied to display a dedicated page.
     $webform->setSetting('submission_access_denied', WebformInterface::ACCESS_DENIED_PAGE);
@@ -172,7 +176,8 @@ class WebformSettingsAccessDeniedTest extends WebformBrowserTestBase {
     $this->drupalGet("admin/structure/webform/manage/test_form_access_denied/submission/$sid");
     $this->assertNoRaw('You are not authorized to access this page.');
     $this->assertRaw('<h1>Webform submission: Access denied</h1>');
-    $this->assertRaw('<div style="border: 1px solid red" class="webform-submission-access-denied">Please login to access <b>Test: Webform: Access Denied: Submission #' . $sid . '</b>.</div>');
+    $this->assertRaw('<div style="border: 1px solid red" class="webform-submission-access-denied">');
+    $this->assertRaw('Please login to access <b>Test: Webform: Access Denied: Submission #' . $sid . '</b>.');
   }
 
 }

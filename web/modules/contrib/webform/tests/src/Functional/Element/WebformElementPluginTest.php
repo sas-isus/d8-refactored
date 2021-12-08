@@ -32,9 +32,9 @@ class WebformElementPluginTest extends WebformElementBrowserTestBase {
   public function testElementPlugin() {
     $this->drupalLogin($this->rootUser);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Dependencies. @see hook_webform_element_info_alter()
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check that managed_file and webform_term-select are not available when
     // dependent modules are not installed.
@@ -51,9 +51,9 @@ class WebformElementPluginTest extends WebformElementBrowserTestBase {
     $this->assertRaw('<td><div class="webform-form-filter-text-source">managed_file</div></td>');
     $this->assertRaw('<td><div class="webform-form-filter-text-source">webform_term_select</div></td>');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Plugin hooks.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Get the webform test element.
     $webform_plugin_test = Webform::load('test_element_plugin');

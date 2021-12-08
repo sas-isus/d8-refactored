@@ -46,7 +46,7 @@ class WebformSubmissionListBuilderBulkOperationsTest extends WebformBrowserTestB
 
     $path = '/admin/structure/webform/manage/' . $webform->id() . '/results/submissions';
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Login the admin submission user.
     $this->drupalLogin($admin_submission_user);
@@ -66,9 +66,9 @@ class WebformSubmissionListBuilderBulkOperationsTest extends WebformBrowserTestB
     $this->assertCssSelect('option[value="webform_submission_make_unlock_action"]');
     $this->assertCssSelect('option[value="webform_submission_delete_action"]');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Access.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Login the update submission user.
     $this->drupalLogin($update_submission_user);
@@ -83,9 +83,9 @@ class WebformSubmissionListBuilderBulkOperationsTest extends WebformBrowserTestB
     // Login the admin submission user.
     $this->drupalLogin($admin_submission_user);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Disable/Enable.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check bulk operation disable.
     \Drupal::configFactory()->getEditable('webform.settings')
@@ -99,9 +99,9 @@ class WebformSubmissionListBuilderBulkOperationsTest extends WebformBrowserTestB
       ->set('settings.webform_submission_bulk_form', TRUE)
       ->save();
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Sticky/Unsticky.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check first submission is NOT sticky.
     $this->assertFalse($submissions[0]->isSticky());
@@ -130,9 +130,9 @@ class WebformSubmissionListBuilderBulkOperationsTest extends WebformBrowserTestB
     $submissions[0] = $this->reloadSubmission($submissions[0]->id());
     $this->assertFalse($submissions[0]->isSticky());
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Lock/Unlock.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check first submission is NOT lock.
     $this->assertFalse($submissions[0]->isLocked());
@@ -161,9 +161,9 @@ class WebformSubmissionListBuilderBulkOperationsTest extends WebformBrowserTestB
     $submissions[0] = $this->reloadSubmission($submissions[0]->id());
     $this->assertFalse($submissions[0]->isLocked());
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Delete.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check submission delete action.
     $edit = [

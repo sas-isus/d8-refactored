@@ -46,14 +46,14 @@ trait WebformEntityTrait {
       return;
     }
 
-    $selection_settings = isset($element['#selection_settings']) ? $element['#selection_settings'] : [];
+    $selection_settings = $element['#selection_settings'] ?? [];
     $selection_handler_options = [
-        'target_type' => $element['#target_type'],
-        'handler' => $element['#selection_handler'],
-        // Set '_webform_settings' used to limit and randomize options.
-        // @see webform_query_entity_reference_alter()
-        '_webform_settings' => $settings,
-      ] + $selection_settings;
+      'target_type' => $element['#target_type'],
+      'handler' => $element['#selection_handler'],
+      // Set '_webform_settings' used to limit and randomize options.
+      // @see webform_query_entity_reference_alter()
+      '_webform_settings' => $settings,
+    ] + $selection_settings;
 
     // Make sure settings has a limit.
     $settings += ['limit' => 0];
@@ -73,6 +73,7 @@ trait WebformEntityTrait {
     // If the selection handler is not using views, then translate
     // the entity reference's options.
     if (!\Drupal::moduleHandler()->moduleExists('views')
+      // phpcs:ignore Drupal.Classes.FullyQualifiedNamespace.UseStatementMissing
       || !($handler instanceof \Drupal\views\Plugin\EntityReferenceSelection\ViewsSelection)) {
       $options = static::translateOptions($options, $element);
     }
@@ -96,14 +97,14 @@ trait WebformEntityTrait {
   }
 
   /**
-   * Set the corresponding entity cache tags on the element
+   * Set the corresponding entity cache tags on the element.
    *
    * @param array $element
-   *   An element
+   *   An element.
    * @param string $target_type
-   *   The target type id
+   *   The target type id.
    * @param array $target_bundles
-   *   The target bundle ids
+   *   The target bundle ids.
    */
   protected static function setCacheTags(array &$element, $target_type, array $target_bundles = []) {
     $list_cache_tag = sprintf('%s_list', $target_type);

@@ -324,7 +324,7 @@
             var $cardStep = $progress.find(cardAttributeName);
 
             // Set card and page step.
-            $cardStep.find('[data-webform-progress-step]').html(card.step);
+            $cardStep.find('[data-webform-progress-step]').attr('data-text', card.step);
             if (card.type === 'page') {
               continue;
             }

@@ -7,7 +7,6 @@
 
   'use strict';
 
-
   /**
    * Move toggle weight element to the first child of the edit form.
    *
@@ -91,7 +90,6 @@
             var $cell = $(this).closest('td');
             var direction = (event.which === 37) ? 'prev' : 'next';
             var $focus;
-
 
             // Move keyboard focus within operations dropbutton.
             if ($(this).closest('.webform-dropbutton').length) {

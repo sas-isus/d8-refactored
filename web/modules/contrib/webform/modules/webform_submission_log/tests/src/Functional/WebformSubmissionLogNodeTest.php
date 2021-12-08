@@ -59,7 +59,7 @@ class WebformSubmissionLogNodeTest extends WebformNodeBrowserTestBase {
     $this->assertResponse(200);
     $this->assertNoRaw('No log messages available.');
     $this->assertRaw('<a href="' . $base_path . 'node/' . $nid . '/webform/submission/' . $sid . '/log">' . $sid . '</a>');
-    $this->assertRaw(t('@title created.', ['@title' => $submission->label()]));
+    $this->assertRaw($this->t('@title created.', ['@title' => $submission->label()]));
 
     // Check webform node submission log tab.
     $this->drupalGet("node/$nid/webform/submission/$sid/log");

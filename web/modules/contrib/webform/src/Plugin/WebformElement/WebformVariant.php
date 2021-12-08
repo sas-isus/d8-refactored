@@ -64,7 +64,7 @@ class WebformVariant extends WebformElementBase implements WebformElementDisplay
     return $properties;
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * {@inheritdoc}

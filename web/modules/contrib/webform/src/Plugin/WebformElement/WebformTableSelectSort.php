@@ -33,7 +33,7 @@ class WebformTableSelectSort extends OptionsBase {
     ] + parent::defineDefaultProperties();
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * {@inheritdoc}

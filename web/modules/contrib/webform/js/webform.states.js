@@ -67,7 +67,6 @@
   // Dependents.
   /* ************************************************************************ */
 
-
   // Apply solution included in #1962800 patch.
   // Issue #1962800: Form #states not working with literal integers as
   // values in IE11.

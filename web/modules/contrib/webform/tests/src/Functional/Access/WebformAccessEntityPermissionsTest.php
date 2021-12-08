@@ -36,7 +36,7 @@ class WebformAccessEntityPermissionsTest extends WebformBrowserTestBase {
       'delete any webform',
     ]);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Login as user who can access own webform.
     $this->drupalLogin($own_account);

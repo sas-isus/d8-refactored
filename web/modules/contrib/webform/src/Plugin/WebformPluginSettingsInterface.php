@@ -26,7 +26,7 @@ interface WebformPluginSettingsInterface {
   public function setSettings(array $settings);
 
   /**
-   * Returns the plugin setting for given key
+   * Returns the plugin setting for given key.
    *
    * @param string $key
    *   The key of the plugin setting to retrieve.

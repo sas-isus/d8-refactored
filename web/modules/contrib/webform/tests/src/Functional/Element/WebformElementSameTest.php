@@ -106,7 +106,7 @@ textfield_multiple_destination:
 
     $webform_submission = WebformSubmission::load($sid);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check textfield source and destination are not equal.
     $this->assertNotEqual(

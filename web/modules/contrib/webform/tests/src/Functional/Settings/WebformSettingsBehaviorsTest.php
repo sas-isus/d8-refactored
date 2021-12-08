@@ -45,9 +45,9 @@ class WebformSettingsBehaviorsTest extends WebformBrowserTestBase {
   public function testSettings() {
     $this->drupalLogin($this->rootUser);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Test webform submit once (form_submit_once) */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_form_submit_once = Webform::load('test_form_submit_once');
 
@@ -81,9 +81,9 @@ class WebformSettingsBehaviorsTest extends WebformBrowserTestBase {
     $this->drupalGet('/webform/test_form_submit_once');
     $this->assertRaw('webform.form.submit_once.js');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Test webform disable back button (form_disable_back) */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_form_disable_back = Webform::load('test_form_disable_back');
 
@@ -117,9 +117,9 @@ class WebformSettingsBehaviorsTest extends WebformBrowserTestBase {
     $this->drupalGet('/webform/test_form_disable_back');
     $this->assertRaw('webform.form.disable_back.js');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Test webform submit back button (test_form_submit_back) */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_form_submit_back = Webform::load('test_form_submit_back');
 
@@ -162,9 +162,9 @@ class WebformSettingsBehaviorsTest extends WebformBrowserTestBase {
     $this->drupalGet('/webform/test_form_submit_back');
     $this->assertNoRaw('webform.form.submit_back.js');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Test webform (client-side) unsaved (form_unsaved) */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_form_unsaved = Webform::load('test_form_unsaved');
 
@@ -198,17 +198,17 @@ class WebformSettingsBehaviorsTest extends WebformBrowserTestBase {
     $this->drupalGet('/webform/test_form_unsaved');
     $this->assertCssSelect('form.js-webform-unsaved', 'Form has .js-webform-unsaved class.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Test webform disable autocomplete (form_disable_autocomplete) */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check webform has autocomplete=off attribute.
     $this->drupalGet('/webform/test_form_disable_autocomplete');
     $this->assertCssSelect('form[autocomplete="off"]', 'Form has autocomplete=off attribute.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Test webform (client-side) novalidate (form_novalidate) */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_form_novalidate = Webform::load('test_form_novalidate');
 
@@ -244,9 +244,9 @@ class WebformSettingsBehaviorsTest extends WebformBrowserTestBase {
     $this->drupalGet('/webform/test_form_novalidate');
     $this->assertCssSelect('form[novalidate="novalidate"]', 'Form has the proper novalidate attribute.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Test required indicator (form_required) */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_form_required = Webform::load('test_form_required');
 
@@ -286,17 +286,17 @@ class WebformSettingsBehaviorsTest extends WebformBrowserTestBase {
     $this->drupalGet('/webform/test_form_required');
     $this->assertNoRaw('Custom required field');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Test autofocus (form_autofocus) */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check webform has autofocus class.
     $this->drupalGet('/webform/test_form_autofocus');
     $this->assertCssSelect('.js-webform-autofocus');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Test webform details toggle (form_details_toggle) */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_form_details_toggle = Webform::load('test_form_details_toggle');
 
@@ -331,9 +331,9 @@ class WebformSettingsBehaviorsTest extends WebformBrowserTestBase {
     $this->drupalGet('/webform/test_form_details_toggle');
     $this->assertNoCssSelect('webform.webform-details-toggle', 'Webform does not have the .webform-details-toggle class.');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     /* Test webform disable inline form errors (test_form_disable_inline_errors) */
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     $webform_form_inline_errors = Webform::load('test_form_disable_inline_errors');
 

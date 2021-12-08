@@ -74,9 +74,9 @@ class WebformSubmissionViewsTest extends WebformBrowserTestBase {
     $uid = $this->rootUser->id();
     $this->drupalLogin($this->rootUser);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Global.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Setup global submissions and user submissions views.
     \Drupal::configFactory()->getEditable('webform.settings')
@@ -136,9 +136,9 @@ class WebformSubmissionViewsTest extends WebformBrowserTestBase {
     $this->assertNoRaw('webform-results-table');
     $this->assertRaw('view-id-webform_submissions view-display-id-embed_default');
 
-    /**************************************************************************/
+    /* ********************************************************************** */
     // Webform.
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Post a submission and save a draft.
     $webform = Webform::load('test_submission_views');

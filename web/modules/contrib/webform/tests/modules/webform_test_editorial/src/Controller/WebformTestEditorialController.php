@@ -1,27 +1,21 @@
 <?php
 
-namespace Drupal\webform_editorial\Controller;
+namespace Drupal\webform_test_editorial\Controller;
 
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
-use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Render\Markup;
-use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Drupal\webform\Plugin\WebformElementManagerInterface;
-use Drupal\webform\WebformHelpManagerInterface;
-use Drupal\webform\WebformLibrariesManagerInterface;
 
 /**
  * Provides route responses for webform editorial.
  */
-class WebformEditorialController extends ControllerBase implements ContainerInjectionInterface {
+class WebformTestEditorialController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
    * Active database connection.
@@ -66,42 +60,17 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
   protected $librariesManager;
 
   /**
-   * Constructs a WebformEditorialController object.
-   *
-   * @param \Drupal\Core\Database\Connection $database
-   *   The database connection to be used.
-   * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   The renderer.
-   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
-   *   The entity field manager.
-   * @param \Drupal\webform\WebformHelpManagerInterface $help_manager
-   *   The webform help manager.
-   * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
-   *   The webform element manager.
-   * @param \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager
-   *   The webform libraries manager.
-   */
-  public function __construct(Connection $database, RendererInterface $renderer, EntityFieldManagerInterface $entity_field_manager, WebformHelpManagerInterface $help_manager, WebformElementManagerInterface $element_manager, WebformLibrariesManagerInterface $libraries_manager) {
-    $this->database = $database;
-    $this->renderer = $renderer;
-    $this->entityFieldManager = $entity_field_manager;
-    $this->helpManager = $help_manager;
-    $this->elementManager = $element_manager;
-    $this->librariesManager = $libraries_manager;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('database'),
-      $container->get('renderer'),
-      $container->get('entity_field.manager'),
-      $container->get('webform.help_manager'),
-      $container->get('plugin.manager.webform.element'),
-      $container->get('webform.libraries_manager')
-    );
+    $instance = parent::create($container);
+    $instance->database = $container->get('database');
+    $instance->renderer = $container->get('renderer');
+    $instance->entityFieldManager = $container->get('entity_field.manager');
+    $instance->helpManager = $container->get('webform.help_manager');
+    $instance->elementManager = $container->get('plugin.manager.webform.element');
+    $instance->librariesManager = $container->get('webform.libraries_manager');
+    return $instance;
   }
 
   /**
@@ -111,7 +80,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
    *   A renderable array containing webform help index page.
    */
   public function index() {
-    $path = drupal_get_path('module', 'webform_editorial') . '/webform_editorial.links.task.yml';
+    $path = drupal_get_path('module', 'webform_test_editorial') . '/webform_test_editorial.links.task.yml';
     $tasks = Yaml::decode(file_get_contents($path));
     $content = [];
     foreach ($tasks as $id => $task) {
@@ -129,9 +98,9 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
     ];
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Help.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Returns webform help editorial.
@@ -146,7 +115,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
       $groups[$group_name] = [];
     }
     foreach ($help as $name => $info) {
-      $group_name = (isset($info['group'])) ? $info['group'] : (string) $this->t('General');
+      $group_name = $info['group'] ?? (string) $this->t('General');
       $groups[$group_name][$name] = $info;
     }
     $groups = array_filter($groups);
@@ -226,9 +195,9 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
     return $this->response($build);
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Videos.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Returns webform videos editorial.
@@ -267,9 +236,9 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
     return $this->response($build);
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Elements.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Returns webform elements editorial.
@@ -316,9 +285,9 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
     return $this->response($build);
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Libraries.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Returns webform libraries.
@@ -353,9 +322,9 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
     return $this->response($build);
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Schema.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Returns webform schema.
@@ -388,9 +357,9 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
     return $this->response($build);
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Drush.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Returns webform drush.
@@ -426,13 +395,6 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
         '#suffix' => '</p>',
         '#markup' => $command['description'],
       ];
-      if ($help = webform_drush_help('drush:' . $command_name)) {
-        $build[$command_name]['help'] = [
-          '#prefix' => '<address>',
-          '#suffix' => '</address>',
-          '#markup' => $help,
-        ];
-      }
 
       $properties = ['arguments', 'options', 'examples'];
       foreach ($properties as $property) {
@@ -455,9 +417,9 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
     return $this->response($build);
   }
 
-  /****************************************************************************/
+  /* ************************************************************************ */
   // Helper methods.
-  /****************************************************************************/
+  /* ************************************************************************ */
 
   /**
    * Build a reusable and styled table for inputs, outputs, and publications.

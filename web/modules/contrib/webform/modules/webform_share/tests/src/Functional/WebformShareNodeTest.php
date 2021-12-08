@@ -39,7 +39,7 @@ class WebformShareNodeTest extends WebformNodeBrowserTestBase {
 
     $this->drupalLogin($this->rootUser);
 
-    /**************************************************************************/
+    /* ********************************************************************** */
 
     // Check share page access denied.
     $this->drupalGet('/webform/contact/share');
