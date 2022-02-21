@@ -49,7 +49,8 @@ class PenncourseService {
             'Authorization-Token: ' . $this->config->get('penncourse_authorization_token')
         ),
         CURLOPT_RETURNTRANSFER => 1,
-        CURLOPT_URL => 'https://esb.isc-seo.upenn.edu/8091/open_data/course_section_search_parameters/'
+        CURLOPT_FOLLOWLOCATION => 1,
+        CURLOPT_URL => 'https://apps.sas.upenn.edu/service/sas-course-api/course_section_search_parameters/'
     ));
 
     $curl_return = curl_exec($curl);
@@ -114,7 +115,8 @@ class PenncourseService {
               'Authorization-Token: ' . $this->config->get('penncourse_authorization_token')
             ),
             CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_URL => 'https://esb.isc-seo.upenn.edu/8091/open_data/course_section_search?course_id=' . $subj_area . '&term=' . $term . '&page_number=' . $page . '&number_of_results_per_page=100'
+            CURLOPT_FOLLOWLOCATION => 1,
+            CURLOPT_URL => 'https://apps.sas.upenn.edu/service/sas-course-api/course_section_search?course_id=' . $subj_area . '&term=' . $term . '&page_number=' . $page . '&number_of_results_per_page=100'
         ));
 
         $curl_return = curl_exec($curl);
@@ -610,7 +612,7 @@ class PenncourseService {
   function buildXlists(array $xlists) {
       $result = '';
       foreach ($xlists as $xlist) {
-          $result .= '<span class="penncourse-course-xlist">' . $xlist->subject . $xlist->course_id . $xlist->section_id . '</span>, ';
+          $result .= '<span class="penncourse-course-xlist">' . $xlist->section_id . '</span>, ';
       }
       // trim the last <br /> from the string
       $result = substr($result, 0, -2);
