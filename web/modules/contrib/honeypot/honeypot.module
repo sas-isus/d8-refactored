@@ -169,7 +169,7 @@ function honeypot_add_form_protection(&$form, FormStateInterface $form_state, ar
     $input = $form_state->getUserInput();
     if (empty($input['honeypot_time'])) {
       $identifier = Crypt::randomBytesBase64();
-      \Drupal::service('keyvalue.expirable')->get('honeypot_time_restriction')->setWithExpire($identifier, time(), 3600 * 24);
+      \Drupal::service('keyvalue.expirable')->get('honeypot_time_restriction')->setWithExpire($identifier, \Drupal::time()->getCurrentTime(), 3600 * 24);
     }
     else {
       $identifier = $input['honeypot_time'];
@@ -189,7 +189,7 @@ function honeypot_add_form_protection(&$form, FormStateInterface $form_state, ar
     if ($account->id() == 0) {
       // TODO D8 - Use DIC? See: http://drupal.org/node/1539454
       // Should this now set 'omit_vary_cookie' instead?
-      Drupal::service('page_cache_kill_switch')->trigger();
+      \Drupal::service('page_cache_kill_switch')->trigger();
     }
   }
 
@@ -262,7 +262,7 @@ function _honeypot_log($form_id, $type) {
       '%form'  => $form_id,
       '@cause' => ($type == 'honeypot') ? t('submission of a value in the honeypot field') : t('submission of the form in less than minimum required time'),
     ];
-    \Drupal::logger('honeypot')->notice(t('Blocked submission of %form due to @cause.', $variables));
+    \Drupal::logger('honeypot')->notice('Blocked submission of %form due to @cause.', $variables);
   }
 }
 
@@ -327,7 +327,7 @@ function honeypot_log_failure($form_id, $type) {
   \Drupal::database()->insert('honeypot_user')
     ->fields([
       'uid' => $uid,
-      'hostname' => Drupal::request()->getClientIp(),
+      'hostname' => \Drupal::request()->getClientIp(),
       'timestamp' => \Drupal::time()->getRequestTime(),
     ])
     ->execute();

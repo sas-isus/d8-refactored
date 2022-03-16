@@ -197,12 +197,13 @@ class Project {
     $releases = array();
     $releases_xml = @$xml->xpath("/project/releases/release[status='published']");
     foreach ($releases_xml as $release) {
+      $release_array = (array) $release;
       $release_info = array();
       $statuses = array();
 
       // Extract general release info.
       foreach ($items as $item) {
-        if (array_key_exists($item, $release)) {
+        if (array_key_exists($item, $release_array)) {
           $value = $release->xpath($item);
           $release_info[$item] = (string)$value[0];
         }
@@ -229,24 +230,26 @@ class Project {
 
       // Extract files.
       $release_info['files'] = array();
-      foreach ($release->files->children() as $file) {
-        // Normalize keys to match the ones in the release info.
-        $item = array(
-          'download_link' => (string) $file->url,
-          'date'          => (string) $file->filedate,
-          'mdhash'        => (string) $file->md5,
-          'filesize'      => (string) $file->size,
-          'archive_type'  => (string) $file->archive_type,
-        );
-        if (!empty($file->variant)) {
-          $item['variant'] = (string) $file->variant;
-        }
-        $release_info['files'][] = $item;
+      if (!empty($release->files)) {
+        foreach ($release->files->children() as $file) {
+          // Normalize keys to match the ones in the release info.
+          $item = array(
+            'download_link' => (string) $file->url,
+            'date'          => (string) $file->filedate,
+            'mdhash'        => (string) $file->md5,
+            'filesize'      => (string) $file->size,
+            'archive_type'  => (string) $file->archive_type,
+          );
+          if (!empty($file->variant)) {
+            $item['variant'] = (string) $file->variant;
+          }
+          $release_info['files'][] = $item;
 
-        // Copy the mdhash from the matching download file into the
-        // root of the release object (make /current structure like /8.x)
-        if ($item['download_link'] == $release_info['download_link'] && !isset($release_info['mdhash'])) {
-          $release_info['mdhash'] = $item['mdhash'];
+          // Copy the mdhash from the matching download file into the
+          // root of the release object (make /current structure like /8.x)
+          if ($item['download_link'] == $release_info['download_link'] && !isset($release_info['mdhash'])) {
+            $release_info['mdhash'] = $item['mdhash'];
+          }
         }
       }
 
@@ -684,8 +687,9 @@ class Project {
       // Download the release node page and get the html as xml to explore it.
       $release_link = $this->parsed['releases'][$version]['release_link'];
       $filename = drush_download_file($release_link, drush_tempnam($project_name));
-      @$dom = \DOMDocument::loadHTMLFile($filename);
-      if ($dom) {
+      @$dom = new \DOMDocument();
+      $success = $dom->loadHTMLFile($filename);
+      if ($success) {
         drush_log(dt("Successfully parsed and loaded the HTML contained in the release notes' page for !project (!version) project.", array('!project' => $project_name, '!version' => $version)), LogLevel::NOTICE);
       }
       else {

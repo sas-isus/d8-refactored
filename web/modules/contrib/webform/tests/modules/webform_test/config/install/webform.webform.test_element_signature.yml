@@ -42,7 +42,11 @@ elements: |
     '#type': webform_signature
     '#title': signature_readonly
     '#readonly': true
-  
+  signature_private:
+    '#type': webform_signature
+    '#title': signature_private
+    '#uri_scheme': private
+
 css: ''
 javascript: ''
 settings:
@@ -147,7 +151,12 @@ settings:
   draft_pending_multiple_message: ''
   confirmation_type: page
   confirmation_title: ''
-  confirmation_message: '[webform_submission:values:signature:html]'
+  confirmation_message: |
+      <h3>signature</h3>
+      [webform_submission:values:signature:html]
+      <h3>signature_private</h3>
+      [webform_submission:values:signature_private:html]
+
   confirmation_url: ''
   confirmation_attributes: {  }
   confirmation_back: true

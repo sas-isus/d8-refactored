@@ -681,7 +681,7 @@ class WebformMultiple extends FormElement {
         $row['_operations_']['add'] = [
           '#type' => 'image_button',
           '#title' => t('Add new @item after @item @number', ['@number' => $row_index + 1, '@item' => $element['#item_label']]),
-          '#src' => drupal_get_path('module', 'webform') . '/images/icons/plus.svg',
+          '#src' => \Drupal::service('extension.list.module')->getPath('webform') . '/images/icons/plus.svg',
           '#limit_validation_errors' => [],
           '#submit' => [[get_called_class(), 'addItemSubmit']],
           '#ajax' => $ajax_settings,
@@ -696,7 +696,7 @@ class WebformMultiple extends FormElement {
         $row['_operations_']['remove'] = [
           '#type' => 'image_button',
           '#title' => t('Remove @item @number', ['@number' => $row_index + 1, '@item' => $element['#item_label']]),
-          '#src' => drupal_get_path('module', 'webform') . '/images/icons/minus.svg',
+          '#src' => \Drupal::service('extension.list.module')->getPath('webform') . '/images/icons/minus.svg',
           '#limit_validation_errors' => [],
           '#submit' => [[get_called_class(), 'removeItemSubmit']],
           '#ajax' => $ajax_settings,

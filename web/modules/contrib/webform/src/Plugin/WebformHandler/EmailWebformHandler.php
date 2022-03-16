@@ -3,7 +3,6 @@
 namespace Drupal\webform\Plugin\WebformHandler;
 
 use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Component\Utility\Mail;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Markup;
@@ -16,6 +15,7 @@ use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\Plugin\WebformHandlerMessageInterface;
 use Drupal\webform\Twig\WebformTwigExtension;
 use Drupal\webform\Utility\WebformElementHelper;
+use Drupal\webform\Utility\WebformMailHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\WebformSubmissionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -1116,58 +1116,14 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    * {@inheritdoc}
    */
   public function sendMessage(WebformSubmissionInterface $webform_submission, array $message) {
+    // Validate message.
+    if (!$this->validateMessage($webform_submission, $message)) {
+      return FALSE;
+    }
+
     $to = $message['to_mail'];
     $from = $message['from_mail'];
-
-    // Remove less than (<) and greater (>) than from name.
-    $message['from_name'] = preg_replace('/[<>]/', '', $message['from_name']);
-
-    if (!empty($message['from_name'])) {
-      $from = Mail::formatDisplayName($message['from_name']) . ' <' . $from . '>';
-    }
-
     $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
-
-    // @todo [Drupal 9.x] Remove below class exists check.
-    // Issue #84883: Unicode::mimeHeaderEncode() doesn't correctly
-    // follow RFC 2047.
-    // @see https://www.drupal.org/project/drupal/issues/84883
-    // Don't send the message if the From address is not valid.
-    if (class_exists('\Symfony\Component\Mime\Address')) {
-      try {
-        // phpcs:ignore Drupal.Classes.FullyQualifiedNamespace.UseStatementMissing
-        \Symfony\Component\Mime\Address::create($from);
-      }
-      catch (\Exception $exception) {
-        if ($this->configuration['debug']) {
-          $t_args = [
-            '%form' => $this->getWebform()->label(),
-            '%handler' => $this->label(),
-            '%from_email' => $from,
-          ];
-          $this->messenger()->addWarning($this->t('%form: Email not sent for %handler handler because the <em>From</em> email (%from_email) is not valid.', $t_args), TRUE);
-        }
-        $context = [
-          '@form' => $this->getWebform()->label(),
-          '@handler' => $this->label(),
-          '@from_email' => $from,
-        ];
-        $this->getLogger('webform_submission')->error("@form: Email not sent for '@handler' handler because the 'From' email (@from_email) is not valid.", $context);
-        return;
-      }
-    }
-
-    // Don't send the message if To, CC, and BCC is empty.
-    if (!$this->hasRecipient($webform_submission, $message)) {
-      if ($this->configuration['debug']) {
-        $t_args = [
-          '%form' => $this->getWebform()->label(),
-          '%handler' => $this->label(),
-        ];
-        $this->messenger()->addWarning($this->t('%form: Email not sent for %handler handler because a <em>To</em>, <em>CC</em>, or <em>BCC</em> email was not provided.', $t_args), TRUE);
-      }
-      return;
-    }
 
     // Render body using webform email message (wrapper) template.
     $build = [
@@ -1244,6 +1200,109 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     }
 
     return $result['send'];
+  }
+
+  /**
+   * Validate webform submission message email addresses.
+   *
+   * Removes invalid and logs 'To', 'Cc', and 'Bcc' email addresses.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   * @param array $message
+   *   An array of message parameters.
+   *
+   * @return bool
+   *   TRUE is webform submission message email addresses are valid.
+   *   FALSE is invalid 'From' email address or no To, Cc, or Bcc
+   *   is assigned.
+   */
+  protected function validateMessage(WebformSubmissionInterface $webform_submission, array &$message) {
+    $email_fields = [
+      'from_mail' => $this->t('From'),
+      'to_mail' => $this->t('To'),
+      'cc_mail' => $this->t('Cc'),
+      'bcc_mail' => $this->t('Bcc'),
+      'reply_to' => $this->t('Reply-to'),
+      'return_path' => $this->t('Return path'),
+      'sender_mail' => $this->t('Sender'),
+    ];
+    foreach ($email_fields as $email_field_name => $email_field_label) {
+      if (empty($message[$email_field_name])) {
+        continue;
+      }
+
+      $email_addresses = preg_split('/\s*,\s*/', $message[$email_field_name]);
+      foreach ($email_addresses as $index => $email_address) {
+        // Remove empty email addresses from missing elements
+        // and do not display or log any warnings.
+        if (empty($email_address)) {
+          unset($email_addresses[$index]);
+          continue;
+        }
+
+        if (WebformMailHelper::validateAddress($email_address)) {
+          continue;
+        }
+
+        // Unset invalid email addresses.
+        unset($email_addresses[$index]);
+
+        // If debugging is enabled then display warning.
+        if ($this->configuration['debug']) {
+          $t_args = [
+            '@type' => $email_field_label,
+            '%form' => $this->getWebform()->label(),
+            '%handler' => $this->label(),
+            '%email' => $email_address,
+          ];
+          if ($email_field_name === 'from_mail') {
+            $this->messenger()->addWarning($this->t('%form: Email not sent for %handler handler because the <em>@type</em> email (%email) is not valid.', $t_args));
+          }
+          else {
+            $this->messenger()->addWarning($this->t('%form: The <em>@type</em> email address (%email) for %handler handler  is not valid.', $t_args));
+          }
+        }
+        // Log unset or invalid email address.
+        $context = [
+          '@type' => $email_field_label,
+          '@form' => $this->getWebform()->label(),
+          '@handler' => $this->label(),
+          '@email' => $email_address,
+        ];
+        if ($email_field_name === 'from_mail') {
+          $this->getLogger('webform_submission')->error("@form: Email not sent for '@handler' handler because the '@type' email (@email) is not valid.", $context);
+          return FALSE;
+        }
+        else {
+          $this->getLogger('webform_submission')->error("@form: The '@type' email address (@email) for '@handler' handler is not valid.", $context);
+        }
+      }
+
+      // Update email addresses.
+      $message[$email_field_name] = implode(',', $email_addresses);
+    }
+
+    // Don't send the message if To, CC, and BCC is empty.
+    if (!$this->hasRecipient($webform_submission, $message)) {
+      // If debugging is enabled then display warning.
+      if ($this->configuration['debug']) {
+        $t_args = [
+          '%form' => $this->getWebform()->label(),
+          '%handler' => $this->label(),
+        ];
+        $this->messenger()->addWarning($this->t('%form: Email not sent for %handler handler because a <em>To</em>, <em>CC</em>, or <em>BCC</em> email was not provided.', $t_args), TRUE);
+      }
+      // Log unset or invalid email address.
+      $context = [
+        '@form' => $this->getWebform()->label(),
+        '@handler' => $this->label(),
+      ];
+      $this->getLogger('webform_submission')->error("@form: Email not sent for @handler handler because a To, CC, or BCC email was not provided", $context);
+      return FALSE;
+    }
+
+    return TRUE;
   }
 
   /**

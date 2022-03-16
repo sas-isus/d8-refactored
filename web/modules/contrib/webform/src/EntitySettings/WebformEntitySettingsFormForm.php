@@ -344,7 +344,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       '#type' => 'checkbox',
       '#title' => $this->t('Link to previous pages in preview'),
       '#description' => $this->t("If checked, the preview page will included 'Edit' buttons for each previous page.") . '<br/><br/>' .
-        '<em>' . $this->t("This settings is only available when 'Enable preview page' is enabled.") . '</em>',
+        '<em>' . $this->t("This setting is only available when 'Enable preview page' is enabled.") . '</em>',
       '#return_value' => TRUE,
       '#default_value' => $settings['wizard_preview_link'],
       '#states' => [

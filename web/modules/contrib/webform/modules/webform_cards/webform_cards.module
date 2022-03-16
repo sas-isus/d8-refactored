@@ -413,8 +413,8 @@ function webform_cards_form_webform_settings_form_form_alter(array &$form, FormS
       ],
       'wizard_preview_link' => [
         '#title' => t('Link to previous pages/cards in preview'),
-        '#description' => t("If checked, the preview page/card will included 'Edit' buttons for each previous page/card.") . '<br/><br/>' .
-        '<em>' . t("This settings is only available when 'Enable preview page/card' is enabled.") . '</em>',
+        '#description' => t("If checked, the preview page/card will include 'Edit' buttons for each previous page/card.") . '<br/><br/>' .
+        '<em>' . t("This setting is only available when 'Enable preview page/card' is enabled.") . '</em>',
       ],
       'wizard_progress_states' => [
         '#title' => t("Update wizard/cards progress bar's pages based on conditions"),

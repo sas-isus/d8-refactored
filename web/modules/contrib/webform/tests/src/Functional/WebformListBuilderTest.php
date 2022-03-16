@@ -20,12 +20,14 @@ class WebformListBuilderTest extends WebformBrowserTestBase {
    * Tests the webform overview filter and limit.
    */
   public function testFilterAndLimit() {
+    $assert_session = $this->assertSession();
+
     $this->drupalLogin($this->rootUser);
 
     // Check filter default category and state.
     $this->drupalGet('/admin/structure/webform');
-    $this->assertOptionSelected('edit-category', '');
-    $this->assertOptionSelected('edit-state', '');
+    $this->assertTrue($assert_session->optionExists('edit-category', '')->hasAttribute('selected'));
+    $this->assertTrue($assert_session->optionExists('edit-state', '')->hasAttribute('selected'));
 
     // Set filter category and state.
     \Drupal::configFactory()->getEditable('webform.settings')
@@ -35,13 +37,13 @@ class WebformListBuilderTest extends WebformBrowserTestBase {
 
     // Check filter customized category and state.
     $this->drupalGet('/admin/structure/webform');
-    $this->assertOptionSelected('edit-category', 'Test: Submissions');
-    $this->assertOptionSelected('edit-state', 'open');
+    $this->assertTrue($assert_session->optionExists('edit-category', 'Test: Submissions')->hasAttribute('selected'));
+    $this->assertTrue($assert_session->optionExists('edit-state', 'open')->hasAttribute('selected'));
 
     // Check customized filter can still be cleared.
     $this->drupalGet('/admin/structure/webform', ['query' => ['category' => '', 'state' => '']]);
-    $this->assertOptionSelected('edit-category', '');
-    $this->assertOptionSelected('edit-state', '');
+    $this->assertTrue($assert_session->optionExists('edit-category', '')->hasAttribute('selected'));
+    $this->assertTrue($assert_session->optionExists('edit-state', '')->hasAttribute('selected'));
 
     // Clear the filters.
     \Drupal::configFactory()->getEditable('webform.settings')
@@ -51,8 +53,8 @@ class WebformListBuilderTest extends WebformBrowserTestBase {
 
     // Check that two webforms are displayed when the limit is 50.
     $this->drupalGet('/admin/structure/webform');
-    $this->assertFieldByName('items[contact]');
-    $this->assertFieldByName('items[test_submissions]');
+    $assert_session->fieldExists('items[contact]');
+    $assert_session->fieldExists('items[test_submissions]');
     $this->assertNoCssSelect('.pager');
 
     // Create 1 extra webform and set the limit to 1.
@@ -62,8 +64,8 @@ class WebformListBuilderTest extends WebformBrowserTestBase {
 
     // Check the now only one webform is displayed.
     $this->drupalGet('/admin/structure/webform');
-    $this->assertFieldByName('items[contact]');
-    $this->assertNoFieldByName('items[test_submissions]');
+    $assert_session->fieldExists('items[contact]');
+    $assert_session->fieldNotExists('items[test_submissions]');
     $this->assertCssSelect('.pager');
   }
 
@@ -71,6 +73,8 @@ class WebformListBuilderTest extends WebformBrowserTestBase {
    * Tests the webform overview bulk operations.
    */
   public function testBulkOperations() {
+    $assert_session = $this->assertSession();
+
     // Add three test webforms.
     /** @var \Drupal\webform\Entity\Webform[] $webforms */
     $webforms = [
@@ -128,12 +132,10 @@ class WebformListBuilderTest extends WebformBrowserTestBase {
     $this->assertTrue($webforms[0]->isOpen());
 
     // Check webform close action.
-    $edit = [
-      'action' => 'webform_close_action',
-      'items[one]' => TRUE,
-    ];
-    $this->drupalPostForm('/admin/structure/webform', $edit, 'Apply to selected items', [], 'webform-bulk-form');
-    $this->assertRaw('<em class="placeholder">Close webform</em> was applied to 1 item.');
+    $this->drupalGet('/admin/structure/webform');
+    $edit = ['action' => 'webform_close_action', 'items[one]' => TRUE];
+    $this->submitForm($edit, 'Apply to selected items', 'webform-bulk-form');
+    $assert_session->responseContains('<em class="placeholder">Close webform</em> was applied to 1 item.');
     $this->assertCssSelect('#edit-items-one');
     $this->assertCssSelect('#edit-items-two');
     $this->assertCssSelect('#edit-items-three');
@@ -143,12 +145,13 @@ class WebformListBuilderTest extends WebformBrowserTestBase {
     $this->assertTrue($webforms[0]->isClosed());
 
     // Check webform close action.
+    $this->drupalGet('/admin/structure/webform');
     $edit = [
       'action' => 'webform_open_action',
       'items[one]' => TRUE,
     ];
-    $this->drupalPostForm('/admin/structure/webform', $edit, 'Apply to selected items', [], 'webform-bulk-form');
-    $this->assertRaw('<em class="placeholder">Open webform</em> was applied to 1 item.');
+    $this->submitForm($edit, 'Apply to selected items', 'webform-bulk-form');
+    $assert_session->responseContains('<em class="placeholder">Open webform</em> was applied to 1 item.');
 
     // Check webform one is now open.
     $webforms[0] = $this->reloadWebform('one');
@@ -159,12 +162,13 @@ class WebformListBuilderTest extends WebformBrowserTestBase {
     /* ********************************************************************** */
 
     // Check webform archive action.
+    $this->drupalGet('/admin/structure/webform');
     $edit = [
       'action' => 'webform_archive_action',
       'items[one]' => TRUE,
     ];
-    $this->drupalPostForm('/admin/structure/webform', $edit, 'Apply to selected items', [], 'webform-bulk-form');
-    $this->assertRaw('<em class="placeholder">Archive webform</em> was applied to 1 item.');
+    $this->submitForm($edit, 'Apply to selected items', 'webform-bulk-form');
+    $assert_session->responseContains('<em class="placeholder">Archive webform</em> was applied to 1 item.');
     $this->assertNoCssSelect('#edit-items-one');
 
     // Check webform one is now archived.
@@ -174,12 +178,11 @@ class WebformListBuilderTest extends WebformBrowserTestBase {
     $this->assertCssSelect('#edit-items-one');
 
     // Check webform unarchive action.
-    $edit = [
-      'action' => 'webform_unarchive_action',
-      'items[one]' => TRUE,
-    ];
-    $this->drupalPostForm('/admin/structure/webform', $edit, 'Apply to selected items', ['query' => ['state' => 'archived']], 'webform-bulk-form');
-    $this->assertRaw('<em class="placeholder">Restore webform</em> was applied to 1 item.');
+    $options = ['query' => ['state' => 'archived']];
+    $this->drupalGet('/admin/structure/webform', $options);
+    $edit = ['action' => 'webform_unarchive_action', 'items[one]' => TRUE];
+    $this->submitForm($edit, 'Apply to selected items', 'webform-bulk-form');
+    $assert_session->responseContains('<em class="placeholder">Restore webform</em> was applied to 1 item.');
 
     // Check webform one is now archived.
     $webforms[0] = $this->reloadWebform('one');
@@ -190,16 +193,12 @@ class WebformListBuilderTest extends WebformBrowserTestBase {
     /* ********************************************************************** */
 
     // Check webform delete action.
-    $edit = [
-      'action' => 'webform_delete_action',
-      'items[one]' => TRUE,
-    ];
-    $this->drupalPostForm('/admin/structure/webform', $edit, 'Apply to selected items', [], 'webform-bulk-form');
-    $edit = [
-      'confirm_input' => TRUE,
-    ];
-    $this->drupalPostForm(NULL, $edit, 'Delete');
-    $this->assertRaw('Deleted 1 item.');
+    $this->drupalGet('/admin/structure/webform');
+    $edit = ['action' => 'webform_delete_action', 'items[one]' => TRUE];
+    $this->submitForm($edit, 'Apply to selected items', 'webform-bulk-form');
+    $edit = ['confirm_input' => TRUE];
+    $this->submitForm($edit, 'Delete');
+    $assert_session->responseContains('Deleted 1 item.');
 
     // Check webform one is now deleted.
     $webforms[0] = $this->reloadWebform('one');
@@ -284,7 +283,7 @@ class WebformListBuilderTest extends WebformBrowserTestBase {
    * @throws \Exception
    *   When the row can't be found.
    */
-  protected function assertLinkNotInRow($row_text, $link) {
+  protected function assertLinkNotInRow($row_text, $link): void {
     $row = $this->getSession()->getPage()->find('css', sprintf('table tr:contains("%s")', $row_text));
     if (!$row) {
       throw new \Exception($this->getSession()->getDriver(), 'table row', 'value', $row_text);

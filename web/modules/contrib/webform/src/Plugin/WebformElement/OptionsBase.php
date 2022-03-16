@@ -238,6 +238,11 @@ abstract class OptionsBase extends WebformElementBase {
 
     // Process custom options properties.
     if ($this->hasProperty('options__properties')) {
+      // Unset #options__properties that are not array to prevent errors.
+      if (isset($element['#options__properties'])
+        && !is_array($element['#options__properties'])) {
+        unset($element['#options__properties']);
+      }
       $this->setElementDefaultCallback($element, 'process');
       $element['#process'][] = [get_class($this), 'processOptionsProperties'];
     }

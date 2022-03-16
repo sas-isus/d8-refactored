@@ -3,6 +3,30 @@ All the notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[2022-03-09] Version 0.6.11
+---------------------------
+**Library - Chore**
+- [PR #119](https://github.com/sendgrid/smtpapi-php/pull/119): push Datadog Release Metric upon deploy success. Thanks to [@eshanholtz](https://github.com/eshanholtz)!
+
+
+[2022-02-09] Version 0.6.10
+---------------------------
+**Library - Chore**
+- [PR #118](https://github.com/sendgrid/smtpapi-php/pull/118): add deploy job to test and deploy gh workflow. Thanks to [@Hunga1](https://github.com/Hunga1)!
+
+
+[2022-01-26] Version 0.6.9
+--------------------------
+**Library - Chore**
+- [PR #117](https://github.com/sendgrid/smtpapi-php/pull/117): migrate to Github actions. Thanks to [@JenniferMah](https://github.com/JenniferMah)!
+
+
+[2022-01-12] Version 0.6.8
+--------------------------
+**Library - Chore**
+- [PR #116](https://github.com/sendgrid/smtpapi-php/pull/116): update license year. Thanks to [@JenniferMah](https://github.com/JenniferMah)!
+
+
 [2020-10-14] Version 0.6.7
 --------------------------
 **Library - Chore**

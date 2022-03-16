@@ -1,15 +1,13 @@
 name: 'CKEditor Anchor Link'
 type: module
-description: 'This plugin module adds the better link dialog and anchor related features to CKEditor in Drupal 8'
-core: 8.x
+description: 'This plugin module adds the better link dialog and anchor related features to CKEditor in Drupal 9'
 package: CKEditor
-# project: anchor_link
 core_version_requirement: ^8 || ^9
 dependencies:
   - drupal:ckeditor
   - drupal:editor
 
-# Information added by Drupal.org packaging script on 2020-02-16
-version: '8.x-1.7'
+# Information added by Drupal.org packaging script on 2022-02-02
+version: '8.x-1.9'
 project: 'anchor_link'
-datestamp: 1581868108
+datestamp: 1643826963

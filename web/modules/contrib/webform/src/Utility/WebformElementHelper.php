@@ -368,7 +368,7 @@ class WebformElementHelper {
     foreach ($attributes_properties as $attributes_property) {
       if (isset($element[$attributes_property]) && isset($element[$attributes_property]['class'])) {
         $index = array_search('js-webform-states-hidden', $element[$attributes_property]['class']);
-        if ($index !== FALSE) {
+        if ($index !== FALSE && $index !== NULL) {
           unset($element[$attributes_property]['class'][$index]);
           $attributes['class'][] = 'js-webform-states-hidden';
           break;

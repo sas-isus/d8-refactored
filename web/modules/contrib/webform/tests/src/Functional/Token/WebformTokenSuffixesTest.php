@@ -108,7 +108,7 @@ class WebformTokenSuffixesTest extends WebformBrowserTestBase {
           ->save();
       }
       $result = $token_manager->replace($test['text'], NULL, [], $test['options']);
-      $this->assertEqual($result, $test['expected'], $test['message']);
+      $this->assertEquals($result, $test['expected'], $test['message']);
     }
 
   }

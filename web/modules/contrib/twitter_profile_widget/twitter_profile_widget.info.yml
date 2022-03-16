@@ -11,7 +11,7 @@ dependencies:
 
 
 
-# Information added by Drupal.org packaging script on 2021-01-19
-version: '3.0.1'
+# Information added by Drupal.org packaging script on 2021-12-01
+version: '3.0.2'
 project: 'twitter_profile_widget'
-datestamp: 1611089106
+datestamp: 1638369402

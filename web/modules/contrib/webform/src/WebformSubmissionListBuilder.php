@@ -1363,6 +1363,14 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
     $query = $submission_storage->getQuery();
     $submission_storage->addQueryConditions($query, $this->webform, $this->sourceEntity, $this->account);
 
+    // If we are viewing all submissions, we want to exclude
+    // any orphaned submissions.
+    if (empty($this->webform)) {
+      /** @var \Drupal\webform\WebformEntityStorageInterface $webform_storage */
+      $webform_storage = $this->entityTypeManager->getStorage('webform');
+      $query->condition('webform_id', $webform_storage->getWebformIds(), 'IN');
+    }
+
     // Filter by key(word).
     if ($keys) {
       // Search values.

@@ -20,22 +20,24 @@ class WebformElementExcludedElementsTest extends WebformElementBrowserTestBase {
    * Test excluded elements element.
    */
   public function testExcludedElements() {
+    $assert_session = $this->assertSession();
+
     $this->drupalGet('/webform/test_element_excluded_elements');
 
     // Check markup is not listed via '#exclude_markup': TRUE.
-    $this->assertNoFieldByName('webform_excluded_elements[tableselect][markup]');
+    $assert_session->fieldNotExists('webform_excluded_elements[tableselect][markup]');
 
     // Check markup is listed via '#exclude_markup': FALSE.
-    $this->assertFieldByName('webform_excluded_elements_markup[tableselect][markup]');
+    $assert_session->fieldExists('webform_excluded_elements_markup[tableselect][markup]');
 
     // Check composite sub element is listed via '#exclude_composite': TRUE.
-    $this->assertNoFieldByName('webform_excluded_elements[tableselect][telephone__type]');
+    $assert_session->fieldNotExists('webform_excluded_elements[tableselect][telephone__type]');
 
     // Check composite sub element is listed via '#exclude_composite': FALSE.
-    $this->assertFieldByName('webform_excluded_elements_telephone[tableselect][telephone__type]');
+    $assert_session->fieldExists('webform_excluded_elements_telephone[tableselect][telephone__type]');
 
     // Check composite sub element title is prepended with the element's title.
-    $this->assertRaw('<td>Type</td>');
+    $assert_session->responseContains('<td>Type</td>');
   }
 
 }

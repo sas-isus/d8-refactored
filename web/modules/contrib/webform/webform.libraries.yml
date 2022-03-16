@@ -1047,6 +1047,7 @@ libraries.choices:
 
 libraries.codemirror.text:
   remote: https://github.com/codemirror/codemirror
+  download: https://github.com/components/codemirror
   version: &webform_codemirror_version '5.61.1'
   license: &webform_codemirror_license
     name: MIT
@@ -1275,17 +1276,17 @@ libraries.jquery.timepicker:
 
 libraries.progress-tracker:
   remote: https://github.com/NigelOToole/progress-tracker
-  version: '2.0.6'
+  version: '2.0.7'
   license:
     name: MIT
     url: https://github.com/NigelOToole/progress-tracker/blob/master/LICENSE
     gpl-compatible: true
   directory: progress-tracker
   cdn:
-    /libraries/progress-tracker/: https://cdn.jsdelivr.net/gh/NigelOToole/progress-tracker@v2.0.6/
+    /libraries/progress-tracker/: https://cdn.jsdelivr.net/gh/NigelOToole/progress-tracker@v2.0.7/
   css:
     component:
-      /libraries/progress-tracker/docs/styles/progress-tracker.css: {}
+      /libraries/progress-tracker/src/styles/progress-tracker.css: {}
 
 libraries.signature_pad:
   remote: https://github.com/szimek/signature_pad

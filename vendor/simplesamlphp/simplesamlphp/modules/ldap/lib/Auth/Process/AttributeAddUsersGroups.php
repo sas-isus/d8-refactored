@@ -61,6 +61,11 @@ class AttributeAddUsersGroups extends BaseFilter
         // Get the users groups from LDAP
         $groups = $this->getGroups($attributes);
 
+        // If there are none, do not proceed
+        if (empty($groups)) {
+            return;
+        }
+
         // Make the array if it is not set already
         if (!isset($attributes[$map['groups']])) {
             $attributes[$map['groups']] = [];
@@ -397,8 +402,8 @@ class AttributeAddUsersGroups extends BaseFilter
             }
 
             // AD queries also seem to return the objects dn by default
-            if (isset($entry['return'])) {
-                $groups[] = $entry['return'];
+            if (isset($entry['dn'])) {
+                $groups[] = $entry['dn'];
                 continue;
             }
 

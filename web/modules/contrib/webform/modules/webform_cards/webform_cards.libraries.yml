@@ -8,7 +8,6 @@ webform_cards:
   dependencies:
     - core/drupal
     - core/jquery.once
-    - core/jquery.ui.effects.shake
     - webform/webform.scroll
 
 webform_cards.admin:

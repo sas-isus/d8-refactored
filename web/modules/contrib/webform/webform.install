@@ -15,7 +15,7 @@ include_once __DIR__ . '/includes/webform.install.requirements.inc';
 include_once __DIR__ . '/includes/webform.install.update.inc';
 
 /**
- * Implements hook_uninstall().
+ * Implements hook_install().
  */
 function webform_install() {
   // Automatically install sub-modules to improve the UX via SimplyTest.me.

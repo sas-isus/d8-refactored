@@ -30,7 +30,7 @@ function _webform_update_admin_settings($reset = FALSE) {
   $admin_config = \Drupal::configFactory()->getEditable('webform.settings');
 
   $current_settings = $admin_config->getRawData();
-  $admin_settings = Yaml::decode(file_get_contents(drupal_get_path('module', 'webform') . '/config/install/webform.settings.yml'));
+  $admin_settings = Yaml::decode(file_get_contents(__DIR__ . '/../config/install/webform.settings.yml'));
   // Note, admin settings are always grouped into associative array,
   // except for the langcode.
   foreach ($admin_settings as $group => $settings) {
@@ -294,7 +294,7 @@ function _webform_update_options_settings() {
  * Update or install any new system.actions.* config entities.
  */
 function _webform_update_actions() {
-  $files = \Drupal::service('file_system')->scanDirectory(drupal_get_path('module', 'webform') . '/config', '/^system.action..*\.yml$/');
+  $files = \Drupal::service('file_system')->scanDirectory(__DIR__ . '/../config', '/^system.action..*\.yml$/');
   foreach ($files as $path => $file) {
     $action_id = str_replace('system.action.', '', $file->name);
     $action = Action::load($action_id);

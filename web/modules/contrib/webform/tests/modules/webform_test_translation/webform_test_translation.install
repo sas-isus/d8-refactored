@@ -41,7 +41,7 @@ function _webform_test_translation_install_config($table_name) {
   while ($record = $result->fetchAssoc()) {
     $data = unserialize($record['data']);
 
-    $filename = drupal_get_path('module', 'webform_test_translation') . '/config/install/language/es/' . $record['name'] . '.yml';
+    $filename = __DIR__ . '/config/install/language/es/' . $record['name'] . '.yml';
     if (!file_exists($filename)) {
       continue;
     }

@@ -34,8 +34,5 @@
     "support": {
         "issues": "https://www.drupal.org/project/issues/views_bootstrap",
         "source": "https://git.drupalcode.org/project/views_bootstrap"
-    },
-    "require": {
-        "drupal/core": "^8 || ^9"
     }
 }

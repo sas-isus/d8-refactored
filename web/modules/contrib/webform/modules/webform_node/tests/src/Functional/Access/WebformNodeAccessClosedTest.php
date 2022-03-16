@@ -21,7 +21,9 @@ class WebformNodeAccessClosedTest extends WebformNodeBrowserTestBase {
   /**
    * Tests webform node closed access.
    */
-  public function testAccessClosedT() {
+  public function testAccessClosed() {
+    $assert_session = $this->assertSession();
+
     $node = $this->createWebformNode('contact');
     $nid = $node->id();
 
@@ -33,15 +35,15 @@ class WebformNodeAccessClosedTest extends WebformNodeBrowserTestBase {
 
     // Check webform node access allowed.
     $this->drupalGet('/node/' . $node->id());
-    $this->assertResponse(200);
-    $this->assertFieldByName('name', $account->getAccountName());
-    $this->assertFieldByName('email', $account->getEmail());
+    $assert_session->statusCodeEquals(200);
+    $assert_session->fieldValueEquals('name', $account->getAccountName());
+    $assert_session->fieldValueEquals('email', $account->getEmail());
 
     // Check webform access allowed with source entity.
     $this->drupalGet('/webform/contact', ['query' => ['source_entity_type' => 'node', 'source_entity_id' => $nid]]);
-    $this->assertResponse(200);
-    $this->assertFieldByName('name', $account->getAccountName());
-    $this->assertFieldByName('email', $account->getEmail());
+    $assert_session->statusCodeEquals(200);
+    $assert_session->fieldValueEquals('name', $account->getAccountName());
+    $assert_session->fieldValueEquals('email', $account->getEmail());
 
     // Close the webform via the node.
     $node->webform->status = FALSE;
@@ -49,17 +51,17 @@ class WebformNodeAccessClosedTest extends WebformNodeBrowserTestBase {
 
     // Check webform node access denied.
     $this->drupalGet('/node/' . $node->id());
-    $this->assertResponse(200);
-    $this->assertNoFieldByName('name', $account->getAccountName());
-    $this->assertNoFieldByName('email', $account->getEmail());
-    $this->assertRaw('Sorry… This form is closed to new submissions.');
+    $assert_session->statusCodeEquals(200);
+    $assert_session->fieldNotExists('name');
+    $assert_session->fieldNotExists('email');
+    $assert_session->responseContains('Sorry… This form is closed to new submissions.');
 
     // Check webform access denied with source entity.
     $this->drupalGet('/webform/contact', ['query' => ['source_entity_type' => 'node', 'source_entity_id' => $nid]]);
-    $this->assertResponse(200);
-    $this->assertNoFieldByName('name', $account->getAccountName());
-    $this->assertNoFieldByName('email', $account->getEmail());
-    $this->assertRaw('Sorry… This form is closed to new submissions.');
+    $assert_session->statusCodeEquals(200);
+    $assert_session->fieldNotExists('name');
+    $assert_session->fieldNotExists('email');
+    $assert_session->responseContains('Sorry… This form is closed to new submissions.');
   }
 
 }

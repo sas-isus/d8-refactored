@@ -80,7 +80,7 @@ class WebformTestEditorialController extends ControllerBase implements Container
    *   A renderable array containing webform help index page.
    */
   public function index() {
-    $path = drupal_get_path('module', 'webform_test_editorial') . '/webform_test_editorial.links.task.yml';
+    $path = __DIR__ . '/../../webform_test_editorial.links.task.yml';
     $tasks = Yaml::decode(file_get_contents($path));
     $content = [];
     foreach ($tasks as $id => $task) {

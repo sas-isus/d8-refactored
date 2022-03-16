@@ -156,12 +156,13 @@ class WebformExcludedElements extends WebformExcludedBase {
     foreach ($form_elements as $key => $form_element) {
       // Append the element.
       $all_form_elements[$key] = $form_element;
-
       // Append composite elements.
       $composite_elements = $form_element['#webform_composite_elements'] ?? [];
       foreach ($composite_elements as $composite_element) {
-        $composite_key = $composite_element['#webform_composite_key'];
-        $all_form_elements[$composite_key] = $composite_element;
+        if (isset($composite_element['#webform_composite_key'])) {
+          $composite_key = $composite_element['#webform_composite_key'];
+          $all_form_elements[$composite_key] = $composite_element;
+        }
       }
     }
 

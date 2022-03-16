@@ -349,6 +349,11 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       $value = preg_replace($pattern, '[\1]', $value);
     }
 
+    // Remove input names which may contain invalid tokens.
+    // For example, a checkboxes options can include colons.
+    // @see https://www.drupal.org/project/webform/issues/3263195
+    $value = preg_replace('/:input\[name="[^"]+"\]/', '', $value);
+
     // Convert all token field deltas to 0 to prevent unexpected
     // token validation errors.
     $value = preg_replace('/:\d+:/', ':0:', $value);

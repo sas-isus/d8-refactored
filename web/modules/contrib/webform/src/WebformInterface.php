@@ -457,6 +457,25 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   public function hasSubmissionLog();
 
   /**
+   * Returns the languages the data is translated to.
+   *
+   * @return \Drupal\Core\Language\LanguageInterface[]
+   *   An associative array of language objects, keyed by language codes.
+   */
+  public function getTranslationLanguages();
+
+  /**
+   * Checks there is a translation for the given language code.
+   *
+   * @param string $langcode
+   *   The language code identifying the translation.
+   *
+   * @return bool
+   *   TRUE if the translation exists, FALSE otherwise.
+   */
+  public function hasTranslation($langcode);
+
+  /**
    * Determine if the current webform is translated.
    *
    * @return bool

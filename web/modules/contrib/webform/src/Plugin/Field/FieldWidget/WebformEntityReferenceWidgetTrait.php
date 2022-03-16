@@ -35,61 +35,6 @@ trait WebformEntityReferenceWidgetTrait {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public static function defaultSettings() {
-    return [
-      'default_data' => TRUE,
-      'webforms' => NULL,
-    ] + parent::defaultSettings();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
-    $element = parent::settingsForm($form, $form_state);
-    $element['default_data'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Enable default submission data (YAML)'),
-      '#description' => $this->t('If checked, site builders will be able to define default submission data (YAML)'),
-      '#default_value' => $this->getSetting('default_data'),
-    ];
-    if ($this->getSetting('webforms') !== NULL) {
-      $element['webforms'] = [
-        '#type' => 'webform_entity_select',
-        '#title' => $this->t('Select webform'),
-        '#description' => $this->t('If left blank all webforms will be listed in the select menu.'),
-        '#select2' => TRUE,
-        '#multiple' => TRUE,
-        '#target_type' => 'webform',
-        '#selection_handler' => 'default:webform',
-        '#default_value' => $this->getSetting('webforms'),
-      ];
-      $this->elementManager->processElement($element['webforms']);
-    }
-    return $element;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function settingsSummary() {
-    $summary = parent::settingsSummary();
-    $summary[] = $this->t('Default submission data: @default_data', ['@default_data' => $this->getSetting('default_data') ? $this->t('Yes') : $this->t('No')]);
-    $webform_ids = $this->getSetting('webforms');
-    if ($webform_ids) {
-      $webforms = Webform::loadMultiple($webform_ids);
-      $webform_labels = [];
-      foreach ($webforms as $webform) {
-        $webform_labels[] = $webform->label();
-      }
-      $summary[] = $this->t('Webforms: @webforms', ['@webforms' => implode('; ', $webform_labels)]);
-    }
-    return $summary;
-  }
-
-  /**
    * Returns the target id element form for a single webform field widget.
    *
    * @param \Drupal\Core\Field\FieldItemListInterface $items

@@ -44,9 +44,9 @@
         <div class="tweet-text">{{ tweet.text|raw }}</div>
         <div class="tweet-time">{{ tweet.time_ago }}</div>
         <ul class="tweet-actions">
-          <li class="tweet-action"><a class="action-link icon-reply2" href="{{ tweet.tweet_reply2 }}" title="Reply">&#x21ba;</a></li>
-          <li class="tweet-action"><a class="action-link icon-retweet" href="{{ tweet.tweet_retweet }}" title="Retweet">&#x21c4;</a></li>
-          <li class="tweet-action"><a class="action-link icon-star" href="{{ tweet.tweet_star }}" title="Favorite">&#x2606;</a></li>
+          <li class="tweet-action"><a class="action-link icon-reply2" href="{{ tweet.tweet_reply2 }}" title="Reply"><img src="{{ reply_icon }}" alt="Speech bubble"/></a></li>
+          <li class="tweet-action"><a class="action-link icon-retweet" href="{{ tweet.tweet_retweet }}" title="Retweet"><img src="{{ retweet_icon }}" alt="Interlocking arrows"/></a></li>
+          <li class="tweet-action"><a class="action-link icon-star" href="{{ tweet.tweet_star }}" title="Favorite"><img src="{{ favorite_icon }}" alt="Heart"/></a></li>
         </ul>
       </div>
     {% endfor %}

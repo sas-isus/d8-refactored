@@ -63,7 +63,7 @@ function webform_access_token_info() {
       'description' => t('The email addresses of <strong>administrators</strong> assigned to the %title access type for the current webform.', ['%title' => $webform_access_type->label()]),
     ];
     $webform_access["type:$webform_access_type_name:all"] = [
-      'name' => t('@label ((Users, custom email addresses, Adminstrators)', $t_args),
+      'name' => t('@label (Users, custom email addresses, Adminstrators)', $t_args),
       'description' => t('The email addresses of <strong>users</strong>, <strong>custom email addresses</strong>, and <strong>administrators</strong> assigned to the %title access type for the current webform.', ['%title' => $webform_access_type->label()]),
     ];
   }

@@ -28,9 +28,11 @@
   {# Carousel indicators #}
   {% if indicators %}
     <ol class="carousel-indicators">
-      {% for key, row in rows if key % columns == 0 %}
+      {% for key, row in rows %}
+        {% if key % columns == 0 %}
         {% set indicator_classes = [loop.first ? 'active'] %}
         <li class="{{ indicator_classes|join(' ') }}" data-target="#{{ id }}" data-slide-to="{{ key/columns }}"></li>
+        {% endif %}
       {% endfor %}
     </ol>
   {% endif %}

@@ -48,6 +48,8 @@ class WebformHandlerEmailAdvancedTest extends WebformBrowserTestBase {
   public function testAdvancedEmailHandler() {
     global $base_url;
 
+    $assert_session = $this->assertSession();
+
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = Webform::load('test_handler_email_advanced');
 
@@ -59,10 +61,10 @@ class WebformHandlerEmailAdvancedTest extends WebformBrowserTestBase {
     // Check handler's custom reply to and return path.
     $this->postSubmissionTest($webform);
     $sent_email = $this->getLastEmail();
-    $this->assertEqual($sent_email['headers']['Return-Path'], 'return_path@example.com');
-    $this->assertEqual($sent_email['headers']['Sender'], 'sender_name <sender_mail@example.com>');
-    $this->assertEqual($sent_email['headers']['Reply-to'], 'reply_to@example.com');
-    $this->assertEqual($sent_email['params']['custom_parameter'], 'test');
+    $this->assertEquals($sent_email['headers']['Return-Path'], 'return_path@example.com');
+    $this->assertEquals($sent_email['headers']['Sender'], 'sender_name <sender_mail@example.com>');
+    $this->assertEquals($sent_email['headers']['Reply-to'], 'reply_to@example.com');
+    $this->assertEquals($sent_email['params']['custom_parameter'], 'test');
     $this->assertArrayNotHasKey('parameters', $sent_email['params']);
 
     $webform
@@ -78,12 +80,12 @@ class WebformHandlerEmailAdvancedTest extends WebformBrowserTestBase {
     // Check no custom reply to and return path.
     $this->postSubmissionTest($webform);
     $sent_email = $this->getLastEmail();
-    $this->assertNotEqual($sent_email['headers']['Return-Path'], 'return_path@example.com');
-    $this->assertNotEqual($sent_email['headers']['Sender'], 'sender_name <sender_mail@example.com>');
-    $this->assertNotEqual($sent_email['headers']['Reply-to'], 'reply_to@example.com');
-    $this->assertEqual($sent_email['headers']['Return-Path'], $sent_email['params']['from_mail']);
-    $this->assertEqual($sent_email['headers']['Sender'], $sent_email['params']['from_mail']);
-    $this->assertEqual($sent_email['headers']['Reply-to'], $sent_email['headers']['From']);
+    $this->assertNotEquals($sent_email['headers']['Return-Path'], 'return_path@example.com');
+    $this->assertNotEquals($sent_email['headers']['Sender'], 'sender_name <sender_mail@example.com>');
+    $this->assertNotEquals($sent_email['headers']['Reply-to'], 'reply_to@example.com');
+    $this->assertEquals($sent_email['headers']['Return-Path'], $sent_email['params']['from_mail']);
+    $this->assertEquals($sent_email['headers']['Sender'], $sent_email['params']['from_mail']);
+    $this->assertEquals($sent_email['headers']['Reply-to'], $sent_email['headers']['From']);
 
     // Check site wide reply to and return path.
     \Drupal::configFactory()->getEditable('webform.settings')
@@ -92,9 +94,9 @@ class WebformHandlerEmailAdvancedTest extends WebformBrowserTestBase {
       ->save();
     $this->postSubmissionTest($webform);
     $sent_email = $this->getLastEmail();
-    $this->assertEqual($sent_email['headers']['Return-Path'], 'default_return_path@example.com');
-    $this->assertEqual($sent_email['headers']['Sender'], 'default_return_path@example.com');
-    $this->assertEqual($sent_email['headers']['Reply-to'], 'default_reply_to@example.com');
+    $this->assertEquals($sent_email['headers']['Return-Path'], 'default_return_path@example.com');
+    $this->assertEquals($sent_email['headers']['Sender'], 'default_return_path@example.com');
+    $this->assertEquals($sent_email['headers']['Reply-to'], 'default_reply_to@example.com');
 
     // Check site wide reply to and return path using tokens.
     \Drupal::configFactory()->getEditable('system.site')
@@ -106,9 +108,9 @@ class WebformHandlerEmailAdvancedTest extends WebformBrowserTestBase {
       ->save();
     $this->postSubmissionTest($webform);
     $sent_email = $this->getLastEmail();
-    $this->assertEqual($sent_email['headers']['Return-Path'], 'system_site@example.com');
-    $this->assertEqual($sent_email['headers']['Sender'], 'system_site@example.com');
-    $this->assertEqual($sent_email['headers']['Reply-to'], 'system_site@example.com');
+    $this->assertEquals($sent_email['headers']['Return-Path'], 'system_site@example.com');
+    $this->assertEquals($sent_email['headers']['Sender'], 'system_site@example.com');
+    $this->assertEquals($sent_email['headers']['Reply-to'], 'system_site@example.com');
 
     // Check site wide sender mail and name.
     \Drupal::configFactory()->getEditable('webform.settings')
@@ -117,7 +119,7 @@ class WebformHandlerEmailAdvancedTest extends WebformBrowserTestBase {
       ->save();
     $this->postSubmissionTest($webform);
     $sent_email = $this->getLastEmail();
-    $this->assertEqual($sent_email['headers']['Sender'], 'Default Sender Name <default_sender_mail@example.com>');
+    $this->assertEquals($sent_email['headers']['Sender'], 'Default Sender Name <default_sender_mail@example.com>');
 
     // Post a new submission using test webform which will automatically
     // upload file.txt.
@@ -137,7 +139,7 @@ class WebformHandlerEmailAdvancedTest extends WebformBrowserTestBase {
     $sent_email = $this->getLastEmail();
 
     // Check email subject with special characters.
-    $this->assertEqual($sent_email['subject'], 'This has "special" \'chararacters\'');
+    $this->assertEquals($sent_email['subject'], 'This has "special" \'chararacters\'');
 
     // Check email body is HTML.
     $this->assertStringContainsString('<b>First name</b><br />John<br /><br />', $sent_email['params']['body']);
@@ -151,25 +153,26 @@ class WebformHandlerEmailAdvancedTest extends WebformBrowserTestBase {
     $this->assertStringNotContainsString('<b>Checkbox/b><br />Yes<br /><br />', $sent_email['params']['body']);
 
     // Check email has attachment.
-    $this->assertEqual($sent_email['params']['attachments'][0]['filecontent'], "this is a sample txt file\nit has two lines\n");
-    $this->assertEqual($sent_email['params']['attachments'][0]['filename'], 'file.txt');
-    $this->assertEqual($sent_email['params']['attachments'][0]['filemime'], 'text/plain');
+    $this->assertEquals($sent_email['params']['attachments'][0]['filecontent'], "this is a sample txt file\nit has two lines\n");
+    $this->assertEquals($sent_email['params']['attachments'][0]['filename'], 'file.txt');
+    $this->assertEquals($sent_email['params']['attachments'][0]['filemime'], 'text/plain');
 
     // Check resend webform includes link to the attachment.
     $this->drupalGet("admin/structure/webform/manage/test_handler_email_advanced/submission/$sid/resend");
-    $this->assertRaw('<strong><a href="' . $base_url . '/system/files/webform/test_handler_email_advanced/6/file.txt">file.txt</a></strong> (text/plain) - 43 bytes');
+    $assert_session->responseContains('<strong><a href="' . $base_url . '/system/files/webform/test_handler_email_advanced/6/file.txt">file.txt</a></strong> (text/plain) - 43 bytes');
 
     // Check resend webform with custom message.
-    $this->drupalPostForm("admin/structure/webform/manage/test_handler_email_advanced/submission/$sid/resend", ['message[body][value]' => 'Testing 123…'], 'Resend message');
+    $this->drupalGet("admin/structure/webform/manage/test_handler_email_advanced/submission/$sid/resend");
+    $this->submitForm(['message[body][value]' => 'Testing 123…'], 'Resend message');
     $sent_email = $this->getLastEmail();
     $this->assertStringNotContainsString('<b>First name</b><br />John<br /><br />', $sent_email['params']['body']);
     $this->debug($sent_email['params']['body']);
-    $this->assertEqual($sent_email['params']['body'], 'Testing 123…');
+    $this->assertEquals($sent_email['params']['body'], 'Testing 123…');
 
     // Check resent email has the same attachment.
-    $this->assertEqual($sent_email['params']['attachments'][0]['filecontent'], "this is a sample txt file\nit has two lines\n");
-    $this->assertEqual($sent_email['params']['attachments'][0]['filename'], 'file.txt');
-    $this->assertEqual($sent_email['params']['attachments'][0]['filemime'], 'text/plain');
+    $this->assertEquals($sent_email['params']['attachments'][0]['filecontent'], "this is a sample txt file\nit has two lines\n");
+    $this->assertEquals($sent_email['params']['attachments'][0]['filename'], 'file.txt');
+    $this->assertEquals($sent_email['params']['attachments'][0]['filemime'], 'text/plain');
 
     $email_handler = $webform->getHandler('email');
 

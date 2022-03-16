@@ -708,9 +708,22 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
         '#attributes' => ['formnovalidate' => 'formnovalidate'],
         '#_validate_form' => TRUE,
       ];
-
+      $form['properties']['default']['actions']['clear_default_value'] = [
+        '#type' => 'submit',
+        '#value' => $this->t('Clear default value'),
+        '#submit' => ['::clearDefaultValue'],
+        '#attributes' => ['formnovalidate' => 'formnovalidate'],
+        '#states' => [
+          'visible' => [':input[name="properties[default_value]"]' => ['filled' => TRUE]],
+        ],
+        '#_validate_form' => TRUE,
+      ];
       if ($this->isAjax()) {
         $form['properties']['default']['actions']['set_default_value']['#ajax'] = [
+          'callback' => '::submitAjaxForm',
+          'event' => 'click',
+        ];
+        $form['properties']['default']['actions']['clear_default_value']['#ajax'] = [
           'callback' => '::submitAjaxForm',
           'event' => 'click',
         ];
@@ -775,6 +788,21 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
     }
 
     $form_state->set('default_value_element', $properties);
+    $form_state->setRebuild(TRUE);
+  }
+
+  /**
+   * Clear default value to be updated.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  public function clearDefaultValue(array &$form, FormStateInterface $form_state) {
+    NestedArray::setValue($form_state->getUserInput(), ['properties', 'default_value'], '');
+    $form_state->set('active_tab', 'advanced');
+    $form_state->set('default_value_element', NULL);
     $form_state->setRebuild(TRUE);
   }
 

@@ -23,6 +23,8 @@ class WebformSettingsAutofillTest extends WebformBrowserTestBase {
    * Test webform submission form autofill.
    */
   public function testAutofill() {
+    $assert_session = $this->assertSession();
+
     $account = $this->drupalCreateUser();
     $this->drupalLogin($account);
 
@@ -30,33 +32,33 @@ class WebformSettingsAutofillTest extends WebformBrowserTestBase {
 
     // Check that elements are empty.
     $this->drupalGet('/webform/test_form_autofill');
-    $this->assertNoRaw('This submission has been autofilled with your previous submission.');
+    $assert_session->responseNotContains('This submission has been autofilled with your previous submission.');
 
     // Check that 'textfield_excluded' is empty.
-    $this->assertFieldByName('textfield_excluded', '');
+    $assert_session->fieldValueEquals('textfield_excluded', '');
 
     // Check that 'textfield_autofill' is empty.
-    $this->assertFieldByName('textfield_autofill', '');
+    $assert_session->fieldValueEquals('textfield_autofill', '');
 
     // Check that 'telephone_excluded' is empty.
-    $this->assertFieldByName('telephone_excluded[type]', '');
-    $this->assertFieldByName('telephone_excluded[phone]', '');
-    $this->assertFieldByName('telephone_excluded[ext]', '');
+    $assert_session->fieldValueEquals('telephone_excluded[type]', '');
+    $assert_session->fieldValueEquals('telephone_excluded[phone]', '');
+    $assert_session->fieldValueEquals('telephone_excluded[ext]', '');
 
     // Check that 'telephone_autofill' is empty.
-    $this->assertFieldByName('telephone_autofill[type]', '');
-    $this->assertFieldByName('telephone_autofill[phone]', '');
-    $this->assertFieldByName('telephone_autofill[ext]', '');
+    $assert_session->fieldValueEquals('telephone_autofill[type]', '');
+    $assert_session->fieldValueEquals('telephone_autofill[phone]', '');
+    $assert_session->fieldValueEquals('telephone_autofill[ext]', '');
 
     // Check that 'telephone_autofill_partial' is empty.
-    $this->assertFieldByName('telephone_autofill_partial[type]', '');
-    $this->assertFieldByName('telephone_autofill_partial[phone]', '');
-    $this->assertFieldByName('telephone_autofill_partial[ext]', '');
+    $assert_session->fieldValueEquals('telephone_autofill_partial[type]', '');
+    $assert_session->fieldValueEquals('telephone_autofill_partial[phone]', '');
+    $assert_session->fieldValueEquals('telephone_autofill_partial[ext]', '');
 
     // Check that 'telephone_autofill_partial_multiple' is empty.
-    $this->assertFieldByName('telephone_autofill_partial_multiple[items][0][_item_][type]', '');
-    $this->assertFieldByName('telephone_autofill_partial_multiple[items][0][_item_][phone]', '');
-    $this->assertFieldByName('telephone_autofill_partial_multiple[items][0][_item_][ext]', '');
+    $assert_session->fieldValueEquals('telephone_autofill_partial_multiple[items][0][_item_][type]', '');
+    $assert_session->fieldValueEquals('telephone_autofill_partial_multiple[items][0][_item_][phone]', '');
+    $assert_session->fieldValueEquals('telephone_autofill_partial_multiple[items][0][_item_][ext]', '');
 
     // Create a submission.
     $edit = [
@@ -81,36 +83,36 @@ class WebformSettingsAutofillTest extends WebformBrowserTestBase {
     $this->drupalGet('/webform/test_form_autofill');
 
     // Check that 'textfield_excluded' is empty.
-    $this->assertNoFieldByName('textfield_excluded', '{textfield_excluded}');
-    $this->assertFieldByName('textfield_excluded', '');
+    $assert_session->fieldValueNotEquals('textfield_excluded', '{textfield_excluded}');
+    $assert_session->fieldValueEquals('textfield_excluded', '');
 
     // Check that 'textfield_autofill' is autofilled.
-    $this->assertFieldByName('textfield_autofill', '{textfield_autofill}');
+    $assert_session->fieldValueEquals('textfield_autofill', '{textfield_autofill}');
 
     // Check that 'telephone_excluded[' is empty.
-    $this->assertFieldByName('telephone_excluded[type]', '');
-    $this->assertFieldByName('telephone_excluded[phone]', '');
-    $this->assertFieldByName('telephone_excluded[ext]', '');
+    $assert_session->fieldValueEquals('telephone_excluded[type]', '');
+    $assert_session->fieldValueEquals('telephone_excluded[phone]', '');
+    $assert_session->fieldValueEquals('telephone_excluded[ext]', '');
 
     // Check that 'telephone__autofill' is autofilled.
-    $this->assertFieldByName('telephone_autofill[type]', 'Cell');
-    $this->assertFieldByName('telephone_autofill[phone]', '+1 222-222-2222');
-    $this->assertFieldByName('telephone_autofill[ext]', '222');
+    $assert_session->fieldValueEquals('telephone_autofill[type]', 'Cell');
+    $assert_session->fieldValueEquals('telephone_autofill[phone]', '+1 222-222-2222');
+    $assert_session->fieldValueEquals('telephone_autofill[ext]', '222');
 
     // Check that 'telephone__autofill_partial' is partially autofilled.
-    $this->assertFieldByName('telephone_autofill_partial[type]', 'Cell');
-    $this->assertFieldByName('telephone_autofill_partial[phone]', '');
-    $this->assertFieldByName('telephone_autofill_partial[ext]', '');
+    $assert_session->fieldValueEquals('telephone_autofill_partial[type]', 'Cell');
+    $assert_session->fieldValueEquals('telephone_autofill_partial[phone]', '');
+    $assert_session->fieldValueEquals('telephone_autofill_partial[ext]', '');
 
     // Check that 'telephone__autofill_partial_multiple' is partially autofilled.
-    $this->assertFieldByName('telephone_autofill_partial_multiple[items][0][_item_][type]', 'Cell');
-    $this->assertFieldByName('telephone_autofill_partial_multiple[items][0][_item_][phone]', '');
-    $this->assertFieldByName('telephone_autofill_partial_multiple[items][0][_item_][ext]', '');
+    $assert_session->fieldValueEquals('telephone_autofill_partial_multiple[items][0][_item_][type]', 'Cell');
+    $assert_session->fieldValueEquals('telephone_autofill_partial_multiple[items][0][_item_][phone]', '');
+    $assert_session->fieldValueEquals('telephone_autofill_partial_multiple[items][0][_item_][ext]', '');
 
     // Check that default configuration message is displayed.
     $this->drupalGet('/webform/test_form_autofill');
-    $this->assertFieldByName('textfield_autofill', '{textfield_autofill}');
-    $this->assertRaw('This submission has been autofilled with your previous submission.');
+    $assert_session->fieldValueEquals('textfield_autofill', '{textfield_autofill}');
+    $assert_session->responseContains('This submission has been autofilled with your previous submission.');
 
     // Clear default autofill message.
     \Drupal::configFactory()->getEditable('webform.settings')
@@ -119,8 +121,8 @@ class WebformSettingsAutofillTest extends WebformBrowserTestBase {
 
     // Check no autofill message is displayed.
     $this->drupalGet('/webform/test_form_autofill');
-    $this->assertFieldByName('textfield_autofill', '{textfield_autofill}');
-    $this->assertNoRaw('This submission has been autofilled with your previous submission.');
+    $assert_session->fieldValueEquals('textfield_autofill', '{textfield_autofill}');
+    $assert_session->responseNotContains('This submission has been autofilled with your previous submission.');
 
     // Set custom automfill message.
     $webform
@@ -129,8 +131,8 @@ class WebformSettingsAutofillTest extends WebformBrowserTestBase {
 
     // Check custom autofill message is displayed.
     $this->drupalGet('/webform/test_form_autofill');
-    $this->assertFieldByName('textfield_autofill', '{textfield_autofill}');
-    $this->assertRaw('{autofill_message}');
+    $assert_session->fieldValueEquals('textfield_autofill', '{textfield_autofill}');
+    $assert_session->responseContains('{autofill_message}');
   }
 
 }

@@ -20,7 +20,7 @@ class WebformElementFormatTest extends WebformElementBrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['node', 'taxonomy', 'file', 'webform', 'webform_image_select'];
+  public static $modules = ['node', 'taxonomy', 'file', 'webform', 'webform_ui', 'webform_image_select'];
 
   /**
    * Webforms to load.
@@ -33,6 +33,8 @@ class WebformElementFormatTest extends WebformElementBrowserTestBase {
    * Tests element format.
    */
   public function testFormat() {
+    $assert_session = $this->assertSession();
+
     $this->drupalLogin($this->rootUser);
 
     /* ********************************************************************** */
@@ -268,6 +270,11 @@ class WebformElementFormatTest extends WebformElementBrowserTestBase {
       $this->assertStringContainsString($value, $body, new FormattableMarkup('Found @value', ['@value' => $value]));
     }
 
+    // Check that the element edit form uses the default format.
+    $this->drupalGet('/admin/structure/webform/manage/test_element_format_token/element/checkboxes/edit');
+    $assert_session->fieldValueEquals('properties[format]', 'value');
+    $assert_session->fieldValueEquals('properties[format_items]', 'comma');
+
     // Check element default format item global setting.
     \Drupal::configFactory()->getEditable('webform.settings')
       ->set('format.checkboxes.item', 'raw')
@@ -281,6 +288,11 @@ class WebformElementFormatTest extends WebformElementBrowserTestBase {
       ->save();
     $body = $this->getMessageBody($webform_format_token_submission, 'email_text');
     $this->assertStringContainsString("default:\n1, 2, and 3", $body);
+
+    // Check that the element edit form uses the overridden default format.
+    $this->drupalGet('/admin/structure/webform/manage/test_element_format_token/element/checkboxes/edit');
+    $assert_session->fieldValueEquals('properties[format]', 'raw');
+    $assert_session->fieldValueEquals('properties[format_items]', 'and');
   }
 
   /**

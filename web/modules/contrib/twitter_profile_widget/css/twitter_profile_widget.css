@@ -15,7 +15,6 @@
 }
 .tweet .tweet-actions .tweet-action {
   display: inline-block;
-  font-size:2em;
 }
 .tweet .tweet-author {
   font-weight: bold;
@@ -44,6 +43,12 @@
 }
 .tweet-actions .action-link {
   color: #2d2a28;
+}
+.tweet-actions .action-link img {
+  width: 2rem;
+  height: 2rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 .view-all {
   color: #BF5700;

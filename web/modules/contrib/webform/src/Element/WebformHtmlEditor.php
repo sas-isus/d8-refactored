@@ -148,7 +148,7 @@ class WebformHtmlEditor extends FormElement {
     // phpcs:ignore Drupal.Classes.FullyQualifiedNamespace.UseStatementMissing
     if (\Drupal::moduleHandler()->moduleExists('imce') && \Drupal\imce\Imce::access()) {
       $element['#attached']['library'][] = 'imce/drupal.imce.ckeditor';
-      $element['#attached']['drupalSettings']['webform']['html_editor']['ImceImageIcon'] = file_create_url(drupal_get_path('module', 'imce') . '/js/plugins/ckeditor/icons/imceimage.png');
+      $element['#attached']['drupalSettings']['webform']['html_editor']['ImceImageIcon'] = file_create_url(\Drupal::service('extension.list.module')->getPath('imce') . '/js/plugins/ckeditor/icons/imceimage.png');
     }
 
     if (!empty($element['#states'])) {

@@ -27,12 +27,17 @@ class TwitterWidgetFormatter extends FormatterBase {
   public function viewElements(FieldItemListInterface $items, $langcode = NULL) {
     $instances = $items->getValue();
     $elements = [];
+    $module_handler = \Drupal::service('module_handler');
+    $module_path = $module_handler->getModule('twitter_profile_widget')->getPath();
     foreach ($instances as $instance) {
       $elements[] = [
         '#theme' => 'twitter_profile_widget',
         '#headline' => (string) $instance['headline'],
         '#tweets' => $this->getTweets($instance),
         '#view_all' => $this->getViewAll($instance),
+        '#reply_icon' => '/' . $module_path . '/assets/reply.svg',
+        '#retweet_icon' => '/' . $module_path . '/assets/retweet.svg',
+        '#favorite_icon' => '/' . $module_path . '/assets/favorite.svg',
       ];
     }
 

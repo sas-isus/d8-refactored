@@ -1,12 +1,11 @@
 ![Twilio SendGrid Logo](twilio_sendgrid_logo.png)
 
-[![BuildStatus](https://api.travis-ci.org/sendgrid/smtpapi-php.png?branch=main)](https://travis-ci.org/sendgrid/smtpapi-php)
+[![BuildStatus](https://github.com/sendgrid/smtpapi-php/actions/workflows/test-and-deploy.yml/badge.svg)](https://github.com/sendgrid/smtpapi-php/actions/workflows/test-and-deploy.yml)
 [![Latest Stable Version](https://poser.pugx.org/sendgrid/smtpapi/version.png)](https://packagist.org/packages/sendgrid/smtpapi)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/sendgrid/smtpapi.svg?style=flat-square)](https://packagist.org/packages/sendgrid/smtpapi )
-[![Email Notifications Badge](https://dx.sendgrid.com/badge/php)](https://dx.sendgrid.com/newsletter/php)
 [![Twitter Follow](https://img.shields.io/twitter/follow/sendgrid.svg?style=social&label=Follow)](https://twitter.com/sendgrid)
 [![GitHub contributors](https://img.shields.io/github/contributors/sendgrid/smtpapi-php.svg)](https://github.com/sendgrid/smtpapi-php/graphs/contributors)
-[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE.md)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 **This module helps build Twilio SendGrid's SMTP API headers.**
 
@@ -45,7 +44,7 @@ Add the following to your `composer.json` file.
 ```json
 {
     "require": {
-        "sendgrid/smtpapi": "^0.6.7"
+        "sendgrid/smtpapi": "^0.6.11"
     }
 }
 ```
@@ -58,9 +57,9 @@ require 'vendor/autoload.php';
 
 #### Alternative: Install package from zip
 
-If you are not using Composer, simply download and install the **[latest packaged release of the library as a zip](https://github.com/sendgrid/smtpapi-php/releases/download/0.6.7/smtpapi-php.zip)**.
+If you are not using Composer, simply download and install the **[latest packaged release of the library as a zip](https://github.com/sendgrid/smtpapi-php/releases/download/0.6.11/smtpapi-php.zip)**.
 
-[**⬇︎ Download Packaged Library ⬇︎**](https://github.com/sendgrid/smtpapi-php/releases/download/0.6.7/smtpapi-php.zip)
+[**⬇︎ Download Packaged Library ⬇︎**](https://github.com/sendgrid/smtpapi-php/releases/download/0.6.11/smtpapi-php.zip)
 
 Then require the library from package:
 
@@ -121,4 +120,4 @@ If you've instead found a bug in the library or would like new features added, g
 
 <a name="license"></a>
 # License
-[The MIT License (MIT)](LICENSE.md)
+[The MIT License (MIT)](LICENSE)

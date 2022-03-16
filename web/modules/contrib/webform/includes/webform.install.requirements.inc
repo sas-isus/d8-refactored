@@ -238,15 +238,15 @@ function webform_requirements($phase) {
     }
     if ($spam_protection) {
       $requirements['webform_spam'] = [
-        'title' => t('Webform: SPAM protection'),
-        'value' => t('Webform SPAM protection module installed.'),
+        'title' => t('Webform: Spam protection'),
+        'value' => t('Webform Spam protection module installed.'),
         'description' => \Drupal::service('renderer')->renderPlain($installed_projects),
       ];
     }
     else {
       $requirements['webform_spam'] = [
-        'title' => t('Webform: SPAM protection'),
-        'value' => t('Webform <a href=":href">SPAM protection module</a> missing. Please install one of the below modules.', [':href' => 'https://www.drupal.org/node/206787']),
+        'title' => t('Webform: Spam protection'),
+        'value' => t('Webform <a href=":href">Spam protection module</a> missing. Please install one of the below modules.', [':href' => 'https://www.drupal.org/node/206787']),
         'description' => \Drupal::service('renderer')->renderPlain($available_projects),
         'severity' => REQUIREMENT_WARNING,
       ];

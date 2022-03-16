@@ -5,7 +5,6 @@ namespace Drupal\webform_ui;
 use Drupal\Core\Entity\BundleEntityFormBase;
 use Drupal\Core\Form\OptGroup;
 use Drupal\Core\Render\Markup;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
@@ -16,6 +15,7 @@ use Drupal\webform\Plugin\WebformElement\WebformElement;
 use Drupal\webform\Plugin\WebformElement\WebformTable;
 use Drupal\webform\Utility\WebformDialogHelper;
 use Drupal\webform\Utility\WebformElementHelper;
+use Drupal\webform\Utility\WebformYaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -217,7 +217,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
     // Rebuild elements to reflect new hierarchy.
     $elements_updated = [];
     // Preserve the original elements root properties.
-    $elements_original = Yaml::decode($webform->get('elements')) ?: [];
+    $elements_original = WebformYaml::decode($webform->get('elements'));
     foreach ($elements_original as $key => $value) {
       if (WebformElementHelper::property($key)) {
         $elements_updated[$key] = $value;

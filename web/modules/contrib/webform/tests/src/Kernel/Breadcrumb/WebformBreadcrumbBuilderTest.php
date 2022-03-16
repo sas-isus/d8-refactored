@@ -463,7 +463,7 @@ class WebformBreadcrumbBuilderTest extends UnitTestCase {
    * @param array $links
    *   An array of breadcrumb links.
    */
-  protected function assertLinks(RouteMatchInterface $route_match, array $links) {
+  protected function assertLinks(RouteMatchInterface $route_match, array $links): void {
     $this->breadcrumbBuilder->applies($route_match);
     $breadcrumb = $this->breadcrumbBuilder->build($route_match);
     $this->assertEquals($links, $breadcrumb->getLinks());

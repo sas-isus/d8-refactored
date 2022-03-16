@@ -46,6 +46,9 @@ function twitter_profile_widget_theme() {
         'headline' => NULL,
         'tweets' => NULL,
         'view_all' => NULL,
+        'reply_icon' => NULL,
+        'retweet_icon' => NULL,
+        'favorite_icon' => NULL,
       ],
     ],
   ];

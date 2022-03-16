@@ -444,8 +444,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t("A flexible SASS component to illustrate the steps in a multi-step process e.g. a multi-step form, a timeline or a quiz."),
       'notes' => $this->t('Progress Tracker is used by multi-step wizard forms.'),
       'homepage_url' => Url::fromUri('http://nigelotoole.github.io/progress-tracker/'),
-      'download_url' => Url::fromUri('https://github.com/NigelOToole/progress-tracker/archive/2.0.6.zip'),
-      'version' => '2.0.6',
+      'download_url' => Url::fromUri('https://github.com/NigelOToole/progress-tracker/archive/2.0.7.zip'),
+      'version' => '2.0.7',
     ];
     $libraries['signature_pad'] = [
       'title' => $this->t('Signature Pad'),
@@ -543,7 +543,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       // Add name to all libraries, so that it can be modified if a ckeditor
       // plugin is installed without the ckeditor.* prefix.
       $libraries[$library_name]['name'] = $library_name;
-      if (strpos($library_name, 'ckeditor.') === 0) {
+      if (strpos($library_name, 'ckeditor.') === 0 && !$this->find($library_name)) {
         $ckeditor_library_name = str_replace('ckeditor.', '', $library_name);
         $library_path = $this->find($ckeditor_library_name);
         if ($library_path) {
@@ -617,6 +617,10 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
     // Get CKEditor semantic version number from the JS file.
     // @see core/core.libraries.yml
     $definition = $this->libraryDiscovery->getLibraryByName('core', 'ckeditor');
+    if (!$definition) {
+      return NULL;
+    }
+
     $ckeditor_version = $definition['js'][0]['version'];
 
     // Parse CKEditor semantic version number from security patches

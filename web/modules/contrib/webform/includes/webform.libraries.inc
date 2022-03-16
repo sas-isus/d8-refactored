@@ -56,10 +56,11 @@ function webform_library_info_alter(&$libraries, $extension) {
     return;
   }
 
+  /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
+  $libraries_manager = \Drupal::service('webform.libraries_manager');
+
   // Use Tippy.js 6.x which is compatible with Drupal 9.x.
   if (isset($libraries['libraries.tippyjs']) && floatval(\Drupal::VERSION) >= 9) {
-    /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
-    $libraries_manager = \Drupal::service('webform.libraries_manager');
     $tippyjs_library = $libraries_manager->getLibrary('tippyjs/6.x');
     $libraries['libraries.tippyjs']['directory'] = 'tippyjs/6.x';
     $libraries['libraries.tippyjs']['version'] = $tippyjs_library['version'];
@@ -72,6 +73,16 @@ function webform_library_info_alter(&$libraries, $extension) {
     && floatval(\Drupal::VERSION) < 9
     && !\Drupal::moduleHandler()->moduleExists('jquery_ui_datepicker')) {
     $libraries['webform.element.date']['dependencies'] = ['core/drupal.date', 'core/drupalSettings'];
+  }
+
+  // If old version of the progress tracker (< 2.0.7) is installed
+  // use the progress-tracker.css in /docs instead of /src.
+  if (isset($libraries['libraries.progress-tracker'])
+    && $libraries_manager->exists('progress-tracker')
+    && !file_exists($libraries_manager->find('progress-tracker') . '/src/styles/progress-tracker.css')) {
+    $libraries['libraries.progress-tracker']['css']['component'] = [
+      '/libraries/progress-tracker/docs/styles/progress-tracker.css' => [],
+    ];
   }
 
   // If chosen_lib.module is installed, then update the dependency.
@@ -100,9 +111,6 @@ function webform_library_info_alter(&$libraries, $extension) {
       }
     }
   }
-
-  /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
-  $libraries_manager = \Drupal::service('webform.libraries_manager');
 
   // Map /library/* paths to CDN.
   // @see webform.libraries.yml.

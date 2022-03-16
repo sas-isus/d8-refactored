@@ -292,7 +292,7 @@ class WebformOptionsCustom extends ConfigEntityBase implements WebformOptionsCus
     }
     elseif (strpos($url, 'http') !== 0) {
       // Map webform_option_custom/images path.
-      $path = drupal_get_path('module', 'webform_options_custom') . '/images/' . $url;
+      $path = \Drupal::service('extension.list.module')->getPath('webform_options_custom') . '/images/' . $url;
       if (file_exists($path)) {
         $url = $base_url . '/' . $path;
       }

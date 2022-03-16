@@ -76,6 +76,10 @@ class WebformThemeNegotiator implements ThemeNegotiatorInterface {
    */
   protected function getActiveTheme(RouteMatchInterface $route_match) {
     $route_name = $route_match->getRouteName();
+    if (empty($route_name)) {
+      return '';
+    }
+
     if (strpos($route_name, 'webform') === FALSE) {
       return '';
     }

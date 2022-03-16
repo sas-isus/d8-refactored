@@ -313,6 +313,16 @@ class WebformElementBase extends PluginBase implements WebformElementInterface, 
     if (!isset($this->defaultProperties)) {
       $properties = $this->defineDefaultProperties();
       $definition = $this->getPluginDefinition();
+      // Apply default format settings to element edit form properties.
+      // This approach prevents having to refactor how default formats
+      // are handled.
+      $config = $this->configFactory->get('webform.settings');
+      if (isset($properties['format'])) {
+        $properties['format'] = $config->get('format.' . $this->getPluginId() . '.item') ?? $properties['format'];
+      }
+      if (isset($properties['format_items'])) {
+        $properties['format_items'] = $config->get('format.' . $this->getPluginId() . '.items') ?? $properties['format_items'];
+      }
       \Drupal::moduleHandler()->alter(
         'webform_element_default_properties',
         $properties,

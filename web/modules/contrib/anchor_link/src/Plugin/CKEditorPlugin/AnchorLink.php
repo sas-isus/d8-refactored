@@ -51,12 +51,12 @@ class AnchorLink extends CKEditorPluginBase {
    */
   public function getButtons() {
     return [
-      'Link' => [
-        'label' => $this->t('Link'),
+      'LinkToAnchor' => [
+        'label' => $this->t('Link to anchor'),
         'image' => drupal_get_path('module', 'anchor_link') . '/js/plugins/link/icons/link.png',
       ],
-      'Unlink' => [
-        'label' => $this->t('Unlink'),
+      'UnlinkAnchor' => [
+        'label' => $this->t('Unlink Anchor'),
         'image' => drupal_get_path('module', 'anchor_link') . '/js/plugins/link/icons/unlink.png',
       ],
       'Anchor' => [

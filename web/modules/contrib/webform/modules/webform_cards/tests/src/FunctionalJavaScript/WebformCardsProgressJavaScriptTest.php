@@ -199,7 +199,7 @@ class WebformCardsProgressJavaScriptTest extends WebformWebDriverTestBase {
    * @param string $expected_query
    *   The expected query string.
    */
-  protected function assertQuery($expected_query = '') {
+  protected function assertQuery($expected_query = ''): void {
     $actual_query = parse_url($this->getSession()->getCurrentUrl(), PHP_URL_QUERY) ?: '';
     $this->assertEquals($expected_query, $actual_query);
   }

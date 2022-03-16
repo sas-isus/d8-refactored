@@ -5,7 +5,6 @@
  * Enables the creation of webforms and questionnaires.
  */
 
-use Drupal\Component\Utility\Mail;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
@@ -21,7 +20,9 @@ use Drupal\file\FileInterface;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Plugin\WebformElement\ManagedFile;
+use Drupal\webform\Plugin\WebformElementFileDownloadAccessInterface;
 use Drupal\webform\Utility\WebformElementHelper;
+use Drupal\webform\Utility\WebformMailHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\WebformInterface;
 
@@ -432,7 +433,7 @@ function webform_mail($key, &$message, $params) {
     // 'From name' is only used when the 'From mail' contains a single
     // email address.
     $from = (!empty($params['from_name']) && strpos($params['from_mail'], ',') === FALSE)
-      ? Mail::formatDisplayName($params['from_name']) . ' <' . $params['from_mail'] . '>'
+      ? WebformMailHelper::formatAddress($params['from_mail'], $params['from_name'])
       : $params['from_mail'];
     $message['from'] = $message['headers']['From'] = $from;
   }
@@ -468,7 +469,7 @@ function webform_mail($key, &$message, $params) {
   $sender_mail = $params['sender_mail'] ?: '';
   $sender_name = $params['sender_name'] ?: $params['from_name'] ?: '';
   if ($sender_mail) {
-    $message['headers']['Sender'] = ($sender_name) ? Mail::formatDisplayName($sender_name) . ' <' . $sender_mail . '>' : $sender_mail;
+    $message['headers']['Sender'] = WebformMailHelper::formatAddress($sender_mail, $sender_name);
   }
 }
 
@@ -603,7 +604,7 @@ function _webform_page_attachments(array &$attachments) {
   $theme_manager = \Drupal::service('webform.theme_manager');
   $active_theme_names = $theme_manager->getActiveThemeNames();
   foreach ($active_theme_names as $active_theme_name) {
-    if (file_exists(drupal_get_path('module', 'webform') . "/css/webform.theme.$active_theme_name.css")) {
+    if (file_exists(__DIR__ . "/css/webform.theme.$active_theme_name.css")) {
       $attachments['#attached']['library'][] = "webform/webform.theme.$active_theme_name";
     }
   }
@@ -786,7 +787,18 @@ function webform_file_access(FileInterface $file, $operation, AccountInterface $
  * Implements hook_file_download().
  */
 function webform_file_download($uri) {
-  return ManagedFile::accessFileDownload($uri);
+  /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $webform_element_manager */
+  $webform_element_manager = \Drupal::service('plugin.manager.webform.element');
+  $webform_elements = $webform_element_manager->getInstances();
+  foreach ($webform_elements as $webform_element) {
+    if ($webform_element->isEnabled() && $webform_element instanceof WebformElementFileDownloadAccessInterface) {
+      $result = $webform_element::accessFileDownload($uri);
+      if ($result !== NULL) {
+        return $result;
+      }
+    }
+  }
+  return NULL;
 }
 
 /**

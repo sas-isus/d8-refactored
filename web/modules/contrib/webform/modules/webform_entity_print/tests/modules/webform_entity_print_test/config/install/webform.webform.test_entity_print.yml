@@ -28,7 +28,15 @@ elements: |
     '#type': webform_image_file
     '#title': image_file
     '#file_extensions': gif
-  
+  signature_public:
+    '#type': webform_signature
+    '#title': signature_public
+    '#uri_scheme': public
+  signature_private:
+    '#type': webform_signature
+    '#title': signature_private
+    '#uri_scheme': private
+
 css: '/** custom webform css **/'
 javascript: ''
 settings:
@@ -135,7 +143,7 @@ settings:
   confirmation_title: ''
   confirmation_message: |
     <p>You can view your submission via <a href="[webform_submission:view-url]">[webform_submission:view-url:relative]</a></p>
-    
+
   confirmation_url: ''
   confirmation_attributes: {  }
   confirmation_back: true

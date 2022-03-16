@@ -58,6 +58,21 @@
         $errorMessages.insertAfter($container);
       });
 
+      // Move all select2 and chosen errors to appear after the parent container.
+      $(this.currentForm).find('.webform-select2 ~ .select2, .webform-chosen ~ .chosen-container').each(function () {
+        var $widget = $(this);
+        var $select = $widget.parent().find('select');
+        var $errorMessages = $widget.parent().find('strong.error.form-item--error-message');
+        if ($select.hasClass('error')) {
+          $errorMessages.insertAfter($widget);
+          $widget.addClass('error');
+        }
+        else {
+          $errorMessages.hide();
+          $widget.removeClass('error');
+        }
+      });
+
       // Move checkbox errors to appear as the last item in the
       // parent container.
       $(this.currentForm).find('.form-type-checkbox').each(function () {

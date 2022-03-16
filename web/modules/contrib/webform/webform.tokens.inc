@@ -63,6 +63,14 @@ function webform_token_info() {
     'name' => t('IP address'),
     'description' => t('The IP address that was used when submitting the webform submission.'),
   ];
+  $webform_submission['source-type'] = [
+    'name' => t('Source entity type'),
+    'description' => t('The source entity type.'),
+  ];
+  $webform_submission['source-id'] = [
+    'name' => t('Source entity type'),
+    'description' => t('The source entity type.'),
+  ];
   $webform_submission['source-title'] = [
     'name' => t('Source URL'),
     'description' => t('The Title of the source entity or webform.'),
@@ -533,6 +541,14 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
 
         case 'language':
           $replacements[$original] = \Drupal::languageManager()->getLanguage($webform_submission->langcode->value)->getName();
+          break;
+
+        case 'source-type':
+          $replacements[$original] = ($source_entity) ? $source_entity->getEntityTypeId() : '';
+          break;
+
+        case 'source-id':
+          $replacements[$original] = ($source_entity) ? $source_entity->id() : '';
           break;
 
         case 'source-title':

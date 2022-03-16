@@ -168,6 +168,21 @@ class WebformEntityStorage extends ConfigEntityStorage implements WebformEntityS
   }
 
   /**
+   * Get all webform ids.
+   *
+   * @return array
+   *   An array containing all webform ids.
+   */
+  public function getWebformIds() {
+    if ($cache = $this->cacheBackend->get('webform_ids')) {
+      return $cache->data;
+    }
+    $webform_ids = array_values($this->getQuery()->execute());
+    $this->cacheBackend->get('webform_ids', $webform_ids, Cache::PERMANENT, ['config:webform_list']);
+    return $webform_ids;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getCategories($template = NULL) {

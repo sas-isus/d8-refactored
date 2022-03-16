@@ -269,6 +269,13 @@ div.webform-form-filter input.webform-form-filter-text {
 }
 
 /**
+ * jQuery UI content.
+ */
+.ui-widget-content a.button--primary {
+  color: #fff;
+}
+
+/**
  * System tray divider.
  */
 .ui-dialog.ui-dialog-off-canvas .ui-resizable-w {

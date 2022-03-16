@@ -78,6 +78,13 @@ class RemotePostWebformHandler extends WebformHandlerBase {
   protected $elementManager;
 
   /**
+   * The current request.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
    * The request stack.
    *
    * @var \Symfony\Component\HttpFoundation\RequestStack
@@ -1060,7 +1067,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     }
 
     // Redirect the current request to the error url.
-    $error_url = $this->configuration['error_url'];
+    $error_url = $this->replaceTokens($this->configuration['error_url'], $this->getWebformSubmission());
     if ($error_url && PHP_SAPI !== 'cli') {
       // Convert error path to URL.
       if (strpos($error_url, '/') === 0) {
@@ -1109,11 +1116,13 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       $status_code = $response->getStatusCode();
       foreach ($this->configuration['messages'] as $message_item) {
         if ((int) $message_item['code'] === (int) $status_code) {
-          return $message_item['message'];
+          return $this->replaceTokens($message_item['message'], $this->getWebformSubmission());
         }
       }
     }
-    return (!empty($this->configuration['message']) && $default) ? $this->configuration['message'] : '';
+    return (!empty($this->configuration['message']) && $default)
+      ? $this->replaceTokens($this->configuration['message'], $this->getWebformSubmission())
+      : '';
   }
 
   /**

@@ -17,7 +17,7 @@ tabs:
       css/tabs.css: {}
   dependencies:
     - core/jquery
-    - core/jquery.once
+    - core/once
     - core/drupal
     - core/drupalSettings
 cards:

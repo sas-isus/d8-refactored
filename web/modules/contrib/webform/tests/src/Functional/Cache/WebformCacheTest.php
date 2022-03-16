@@ -50,7 +50,7 @@ class WebformCacheTest extends WebformBrowserTestBase {
     // '[current-user:mail]' is set via
     // \Drupal\webform\WebformSubmissionForm::setEntity.
     $this->assertFalse(isset($form['elements']['email']['#cache']));
-    $this->assertEqual($form['elements']['email']['#default_value'], '');
+    $this->assertEquals($form['elements']['email']['#default_value'], '');
 
     // Login and check the #cache property.
     $this->drupalLogin($account);
@@ -81,7 +81,7 @@ class WebformCacheTest extends WebformBrowserTestBase {
       'max-age' => -1,
     ]);
     $this->assertFalse(isset($form['elements']['email']['#cache']));
-    $this->assertEqual($form['elements']['email']['#default_value'], $account->getEmail());
+    $this->assertEquals($form['elements']['email']['#default_value'], $account->getEmail());
 
     // Add the '[current-user:mail]' to the name elements' description.
     $element = $webform->getElementDecoded('email')
@@ -106,8 +106,8 @@ class WebformCacheTest extends WebformBrowserTestBase {
       ],
       'max-age' => -1,
     ]);
-    $this->assertEqual($form['elements']['email']['#default_value'], $account->getEmail());
-    $this->assertEqual($form['elements']['email']['#description']['#markup'], $account->getEmail());
+    $this->assertEquals($form['elements']['email']['#default_value'], $account->getEmail());
+    $this->assertEquals($form['elements']['email']['#description']['#markup'], $account->getEmail());
   }
 
 }

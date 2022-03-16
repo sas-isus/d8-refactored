@@ -385,7 +385,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
    * {@inheritdoc}
    */
   public function deleteHandler() {
-    $this->scheduledEmailManager->unschedule($this->webform, $this->getHandlerId());
+    $this->scheduledEmailManager->delete($this->webform, $this->getHandlerId());
   }
 
   /**
