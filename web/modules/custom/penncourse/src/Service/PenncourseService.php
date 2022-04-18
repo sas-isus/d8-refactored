@@ -419,7 +419,7 @@ class PenncourseService {
                   $section_info['course_id'] = $section_record->course_department . $section_record->course_number;
                   $section_info['notes'] = $this->buildNotes($section_record->important_notes);
                   $section_info['fulfills'] = $this->buildNotes($section_record->fulfills_college_requirements);
-                  if ($section_record->course_number > 499) {
+                  if ($section_record->course_number > 4999) {
                       $section_info['level'] = 'graduate';
                   }
                   else {
