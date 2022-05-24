@@ -81,6 +81,7 @@
         "drupal/twig_tweak": "^2.6",
         "drupal/twitter_profile_widget": "^3.0",
         "drupal/unpublished_node_permissions": "^1.0",
+        "drupal/upgrade_status": "^3.14",
         "drupal/video_embed_field": "^2.0",
         "drupal/views_bootstrap": "^3.0",
         "drupal/views_bulk_operations": "^3.10",

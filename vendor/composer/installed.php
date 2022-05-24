@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '10f4c636b83b4a30d4252c97334fc13d2dbb31a6',
+    'reference' => '9abeb2fd0bcaf81ce077f3e29b23c98ea281fb93',
     'name' => 'pantheon-systems/example-drops-8-composer',
   ),
   'versions' => 
@@ -154,6 +154,22 @@
       array (
       ),
       'reference' => '0d38f13051ef05c223a2bb8e962d668e24785196',
+    ),
+    'container-interop/container-interop' => 
+    array (
+      'pretty_version' => '1.2.0',
+      'version' => '1.2.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '79cbf1341c22ec75643d841642dd5d6acd83bdb8',
+    ),
+    'container-interop/container-interop-implementation' => 
+    array (
+      'provided' => 
+      array (
+        0 => '^1.2',
+      ),
     ),
     'cweagans/composer-patches' => 
     array (
@@ -1714,6 +1730,15 @@
         0 => '8.9.20',
       ),
     ),
+    'drupal/upgrade_status' => 
+    array (
+      'pretty_version' => '3.14.0',
+      'version' => '3.14.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '8.x-3.14',
+    ),
     'drupal/user' => 
     array (
       'replaced' => 
@@ -2037,6 +2062,15 @@
       ),
       'reference' => '8a193ac96ebcb3e16b6ee754ac2a889eefacb654',
     ),
+    'laminas/laminas-servicemanager' => 
+    array (
+      'pretty_version' => '3.5.2',
+      'version' => '3.5.2.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '0669e1eec8d9f61e35a5bc5012796d49f418b259',
+    ),
     'laminas/laminas-stdlib' => 
     array (
       'pretty_version' => '3.2.1',
@@ -2045,6 +2079,15 @@
       array (
       ),
       'reference' => '2b18347625a2f06a1a485acfbc870f699dbe51c6',
+    ),
+    'laminas/laminas-text' => 
+    array (
+      'pretty_version' => '2.7.1',
+      'version' => '2.7.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '3601b5eacb06ed0a12f658df860cc0f9613cf4db',
     ),
     'laminas/laminas-zendframework-bridge' => 
     array (
@@ -2091,6 +2134,24 @@
       ),
       'reference' => '2c37c6c520b995b761674de3be8455a381679067',
     ),
+    'mathieuviossat/arraytotexttable' => 
+    array (
+      'pretty_version' => 'v1.0.8',
+      'version' => '1.0.8.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '6b1af924478cb9c3a903269e304fff006fe0dbf4',
+    ),
+    'mglaman/phpstan-drupal' => 
+    array (
+      'pretty_version' => '1.1.4',
+      'version' => '1.1.4.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'f51ff1ad597480944a7d2f255484a4255daa6e13',
+    ),
     'mikey179/vfsstream' => 
     array (
       'pretty_version' => 'v1.6.10',
@@ -2099,6 +2160,24 @@
       array (
       ),
       'reference' => '250c0825537d501e327df879fb3d4cd751933b85',
+    ),
+    'nette/finder' => 
+    array (
+      'pretty_version' => 'v2.5.3',
+      'version' => '2.5.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '64dc25b7929b731e72a1bc84a9e57727f5d5d3e8',
+    ),
+    'nette/utils' => 
+    array (
+      'pretty_version' => 'v3.1.6',
+      'version' => '3.1.6.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '2c8d1628317fddc692d90fd7732e3dd98327dbf0',
     ),
     'nikic/php-parser' => 
     array (
@@ -2116,7 +2195,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '10f4c636b83b4a30d4252c97334fc13d2dbb31a6',
+      'reference' => '9abeb2fd0bcaf81ce077f3e29b23c98ea281fb93',
     ),
     'pantheon-systems/quicksilver-pushback' => 
     array (
@@ -2244,6 +2323,24 @@
       ),
       'reference' => '451c3cd1418cf640de218914901e51b064abb093',
     ),
+    'phpstan/phpstan' => 
+    array (
+      'pretty_version' => '1.4.10',
+      'version' => '1.4.10.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '898c479c39caa727bedf4311dd294a8f4e250e72',
+    ),
+    'phpstan/phpstan-deprecation-rules' => 
+    array (
+      'pretty_version' => '1.0.0',
+      'version' => '1.0.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'e5ccafb0dd8d835dd65d8d7a1a0d2b1b75414682',
+    ),
     'phpunit/php-code-coverage' => 
     array (
       'pretty_version' => '2.2.4',
@@ -2321,6 +2418,7 @@
       'provided' => 
       array (
         0 => '1.0',
+        1 => '^1.0',
       ),
     ),
     'psr/http-message' => 
@@ -3176,11 +3274,25 @@
         0 => '^2.12.0',
       ),
     ),
+    'zendframework/zend-servicemanager' => 
+    array (
+      'replaced' => 
+      array (
+        0 => '^3.4.0',
+      ),
+    ),
     'zendframework/zend-stdlib' => 
     array (
       'replaced' => 
       array (
         0 => '3.2.1',
+      ),
+    ),
+    'zendframework/zend-text' => 
+    array (
+      'replaced' => 
+      array (
+        0 => '2.7.1',
       ),
     ),
   ),
